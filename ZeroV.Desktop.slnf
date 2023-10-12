@@ -1,0 +1,11 @@
+﻿{
+  "solution": {
+    "path": "ZeroV.sln",
+    "projects": [
+      "ZeroV.Desktop\\ZeroV.Desktop.csproj",
+      "ZeroV.Game\\ZeroV.Game.csproj",
+      "ZeroV.Game.Tests\\ZeroV.Game.Tests.csproj",
+      "ZeroV.Resources\\ZeroV.Resources.csproj"
+    ]
+  }
+}
