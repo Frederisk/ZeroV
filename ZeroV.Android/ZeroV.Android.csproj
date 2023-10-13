@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\ZeroV.Android.props" />
+  <PropertyGroup>
+    <TargetFramework>net6.0-android</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>ZeroV.Android</AssemblyName>
+    <RootNamespace>ZeroV.Android</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZeroV.Game\ZeroV.Game.csproj" />
+    <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
+  </ItemGroup>
+</Project>
