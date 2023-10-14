@@ -94,7 +94,7 @@ csharp_style_var_when_type_is_apparent = true:none
 csharp_style_expression_bodied_accessors = true:warning
 csharp_style_expression_bodied_constructors = false:none
 csharp_style_expression_bodied_indexers = true:warning
-csharp_style_expression_bodied_lambdas = true
+csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = true:silent
 csharp_style_expression_bodied_methods = true:silent
 csharp_style_expression_bodied_operators = true:warning
@@ -121,11 +121,11 @@ csharp_style_prefer_readonly_struct_member = true
 
 # Code-block preferences
 csharp_prefer_braces = true:suggestion
-csharp_prefer_simple_using_statement = true:silent
+csharp_prefer_simple_using_statement = true:suggestion
 csharp_style_namespace_declarations = file_scoped:suggestion
-csharp_style_prefer_method_group_conversion = true
-csharp_style_prefer_primary_constructors = true
-csharp_style_prefer_top_level_statements = true
+csharp_style_prefer_method_group_conversion = true:silent
+csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_prefer_top_level_statements = true:silent
 
 # Expression-level preferences
 csharp_prefer_simple_default_expression = true:warning
@@ -159,8 +159,8 @@ csharp_style_allow_embedded_statements_on_same_line_experimental = true
 csharp_new_line_before_catch = false
 csharp_new_line_before_else = false
 csharp_new_line_before_finally = false
-#csharp_new_line_before_members_in_anonymous_types = true
-#csharp_new_line_before_members_in_object_initializers = true # Currently no effect in VS/dotnet format (16.4), and makes Rider confusing
+csharp_new_line_before_members_in_anonymous_types = false # Currently no effect in VS/dotnet format (16.4), and makes Rider confusing
+csharp_new_line_before_members_in_object_initializers = false # Currently no effect in VS/dotnet format (16.4), and makes Rider confusing
 csharp_new_line_before_open_brace = none
 csharp_new_line_between_query_expression_clauses = true
 
