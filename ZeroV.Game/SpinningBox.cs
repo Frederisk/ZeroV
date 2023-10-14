@@ -5,48 +5,39 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 
-namespace ZeroV.Game
-{
-    public partial class SpinningBox : CompositeDrawable
-    {
-        private Container box;
+namespace ZeroV.Game;
 
-        public SpinningBox()
-        {
-            AutoSizeAxes = Axes.Both;
-            Origin = Anchor.Centre;
-        }
+public partial class SpinningBox : CompositeDrawable {
+    private Container box;
 
-        [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
-        {
-            InternalChild = box = new Container
-            {
-                AutoSizeAxes = Axes.Both,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Children = new Drawable[]
-                {
-                    new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                    },
-                    new Sprite
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Texture = textures.Get("logo")
-                    },
-                }
-            };
-        }
+    public SpinningBox() {
+        this.AutoSizeAxes = Axes.Both;
+        this.Origin = Anchor.Centre;
+    }
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            box.Loop(b => b.RotateTo(0).RotateTo(360, 2500));
-        }
+    [BackgroundDependencyLoader]
+    private void load(TextureStore textures) {
+        this.InternalChild = box = new Container {
+            AutoSizeAxes = Axes.Both,
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Children = new Drawable[] {
+                new Box {
+                    RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                },
+                new Sprite {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Texture = textures.Get("logo")
+                },
+            }
+        };
+    }
+
+    protected override void LoadComplete() {
+        base.LoadComplete();
+        this.box.Loop(b => b.RotateTo(0).RotateTo(360, 2500));
     }
 }
