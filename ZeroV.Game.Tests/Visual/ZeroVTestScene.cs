@@ -1,7 +1,9 @@
 using osu.Framework.Testing;
 
 namespace ZeroV.Game.Tests.Visual {
+
     public partial class ZeroVTestScene : TestScene {
+
         protected override ITestSceneTestRunner CreateRunner() => new ZeroVTestSceneTestRunner();
 
         private partial class ZeroVTestSceneTestRunner : ZeroVGameBase, ITestSceneTestRunner {

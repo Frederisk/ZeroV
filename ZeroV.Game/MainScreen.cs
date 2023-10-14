@@ -9,6 +9,7 @@ using osuTK.Graphics;
 namespace ZeroV.Game;
 
 public partial class MainScreen : Screen {
+
     [BackgroundDependencyLoader]
     private void load() {
         this.InternalChildren = new Drawable[] {

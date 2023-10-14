@@ -1,5 +1,6 @@
-using osu.Framework.Graphics;
 using NUnit.Framework;
+
+using osu.Framework.Graphics;
 
 namespace ZeroV.Game.Tests.Visual;
 
