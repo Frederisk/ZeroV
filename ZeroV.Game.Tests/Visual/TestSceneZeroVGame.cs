@@ -17,6 +17,6 @@ public partial class TestSceneZeroVGame : ZeroVTestScene {
         this.game = new ZeroVGame();
         this.game.SetHost(host);
 
-        this.AddGame(game);
+        this.AddGame(this.game);
     }
 }
