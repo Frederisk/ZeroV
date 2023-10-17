@@ -1,3 +1,4 @@
+name: Build All
 on:
   push:
     branches: [main, master]
@@ -6,7 +7,47 @@ on:
 
 jobs:
   build-for-windows:
-    name: Build Windows
+    name: Build for Desktop with Ubuntu
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7
+
+      - name: Install .NET workloads
+        run: dotnet workload install maui-windows
+
+      - name: Compile
+        run: dotnet build ZeroV.Desktop.slnf --configuration Debug
+
+  build-for-ios:
+    name: Build for iOS with macOS
+    # macos-latest is now macos-12
+    # TODO: can be changed to `macos-latest` once `macos-13` becomes latest (currently in beta)
+    runs-on: macos-13
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7
+
+      - name: Install .NET workloads
+        run: dotnet workload install maui-macos
+
+      - name: Compile
+        run: dotnet build ZeroV.iOS.slnf --configuration Debug
+
+  build-for-android:
+    name: Build for Android with Windows
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
@@ -15,9 +56,11 @@ jobs:
 
       - name: Install .NET
         uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7
 
       - name: Install .NET workloads
-        run: dotnet workload install maui-windows
+        run: dotnet workload install maui-android
 
       - name: Compile
-        run: dotnet build ZeroV.Desktop.slnf --configuration Debug
+        run: dotnet build ZeroV.Android.slnf --configuration Debug
