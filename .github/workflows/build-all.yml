@@ -41,7 +41,7 @@ jobs:
           dotnet-version: 7
 
       - name: Install .NET workloads
-        run: dotnet workload install maui-macos
+        run: dotnet workload install maui-ios
 
       - name: Compile
         run: dotnet build ZeroV.iOS.slnf --configuration Debug
