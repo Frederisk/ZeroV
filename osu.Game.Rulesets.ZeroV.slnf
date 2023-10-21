@@ -1,0 +1,9 @@
+﻿{
+  "solution": {
+    "path": "ZeroV.sln",
+    "projects": [
+      "osu.Game.Rulesets.ZeroV\\osu.Game.Rulesets.ZeroV.csproj",
+      "osu.Game.Rulesets.ZeroV.Tests\\osu.Game.Rulesets.ZeroV.Tests.csproj"
+    ]
+  }
+}
