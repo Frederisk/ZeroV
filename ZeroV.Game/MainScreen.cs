@@ -6,6 +6,8 @@ using osu.Framework.Screens;
 
 using osuTK.Graphics;
 
+using ZeroV.Game.Elements;
+
 namespace ZeroV.Game;
 
 public partial class MainScreen : Screen {
@@ -23,8 +25,11 @@ public partial class MainScreen : Screen {
                 Origin = Anchor.TopCentre,
                 Font = FontUsage.Default.With(size: 40)
             },
-            new SpinningBox {
-                Anchor = Anchor.Centre,
+            //new SpinningBox {
+            //    Anchor = Anchor.Centre,
+            //}
+            new BlinkParticles {
+                Anchor = Anchor.Centre
             }
         };
     }

@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using osu.Framework.Allocation;
+using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.Textures;
+using osu.Framework.Input.Events;
+
+using osuTK.Graphics;
+
+namespace ZeroV.Game.Elements;
+internal partial class BlinkParticles : CompositeDrawable {
+
+    private Container? container;
+
+    public BlinkParticles() {
+        this.AutoSizeAxes = Axes.Both;
+        this.Origin = Anchor.Centre;
+    }
+
+    [BackgroundDependencyLoader]
+    private void load(TextureStore textures) {
+        this.container = new Container {
+            AutoSizeAxes = Axes.Both,
+            Origin = Anchor.Centre,
+            Anchor = Anchor.Centre,
+            Children = new Drawable[] {
+                new Box {
+                    Origin = Anchor.Centre,
+                    Anchor = Anchor.Centre,
+                    RelativeSizeAxes = Axes.Both,
+                    Colour= Colour4.Blue,
+                    Rotation = 45
+                },
+                new Sprite {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Texture = textures.Get("logo")
+                },
+            }
+        };
+        this.InternalChild = this.container;
+    }
+
+    protected override Boolean OnTouchDown(TouchDownEvent e) => this.onDown(e);
+    protected override Boolean OnMouseDown(MouseDownEvent e) => this.onDown(e);
+    protected override Boolean OnTabletPenButtonPress(TabletPenButtonPressEvent e) => this.onDown(e);
+
+    private Boolean onDown(UIEvent e) {
+        Drawable child = this.container!.Children[0];
+        child.Colour = child.Colour == Color4.Blue ? Colour4.Red : Color4.Blue;
+        HitTarget?.Invoke();
+        return true;
+    }
+
+    public event Action? HitTarget;
+}
