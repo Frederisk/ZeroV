@@ -300,6 +300,9 @@ dotnet_naming_style.all_upper.word_separator = _
 dotnet_naming_style.camelcase.capitalization = camel_case
 #PascalCase for public and protected members
 dotnet_naming_style.pascalcase.capitalization = pascal_case
+#Begins with _
+dotnet_naming_style.begins_with_underscore.required_prefix = _
+dotnet_naming_style.begins_with_underscore.capitalization = camel_case
 #Begins with I
 dotnet_naming_style.begins_with_i.required_prefix = I
 dotnet_naming_style.begins_with_i.required_suffix =

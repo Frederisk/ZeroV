@@ -36,9 +36,9 @@ public class ZeroVRuleset : Ruleset {
 
     public override IEnumerable<KeyBinding> GetDefaultKeyBindings(Int32 variant = 0) => new[]
     {
-            new KeyBinding(InputKey.W, ZeroVAction.MoveUp),
-            new KeyBinding(InputKey.S, ZeroVAction.MoveDown),
-        };
+        new KeyBinding(InputKey.W, ZeroVAction.MoveUp),
+        new KeyBinding(InputKey.S, ZeroVAction.MoveDown),
+    };
 
     public override Drawable CreateIcon() => new ZeroVRulesetIcon(this);
 

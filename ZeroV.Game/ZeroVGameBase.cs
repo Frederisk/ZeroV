@@ -26,6 +26,6 @@ public partial class ZeroVGameBase : osu.Framework.Game {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.Resources.AddStore(new DllResourceStore(typeof(ZeroVResources).Assembly));
+        this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
     }
 }
