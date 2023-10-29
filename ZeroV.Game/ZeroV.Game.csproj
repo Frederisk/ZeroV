@@ -9,4 +9,7 @@
   <ItemGroup>
     <PackageReference Include="ppy.osu.Framework" Version="2023.1012.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Elements\Particles\" />
+  </ItemGroup>
 </Project>
