@@ -4,6 +4,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input.Events;
 
 using osuTK;
 
@@ -14,9 +15,10 @@ internal partial class Orbit : CompositeDrawable {
     private Box? innerBox;
     private Box? innerLine;
 
+    private Boolean isActivate;
+
     // TODO:
-    //public override Single Height { get;set;
-    //}
+    // public override Single Height { get;set; }
 
     public Orbit() {
         this.AutoSizeAxes = Axes.Both;
@@ -49,5 +51,29 @@ internal partial class Orbit : CompositeDrawable {
             }
         };
         this.InternalChild = this.container;
+    }
+
+    protected override Boolean OnHover(HoverEvent e) => this.OnActivate(e);
+
+    protected override void OnHoverLost(HoverLostEvent e) => this.OnActivateLost(e);
+
+    protected override void OnTouchUp(TouchUpEvent e) => this.OnActivateLost(e);
+
+    protected override Boolean OnTouchDown(TouchDownEvent e) => this.OnActivate(e);
+
+    protected Boolean OnActivate(UIEvent? e) {
+        if (!this.isActivate) {
+            this.innerBox!.Colour = Colour4.Red;
+            this.isActivate = true;
+        }
+        return false;
+    }
+
+    protected Boolean OnActivateLost(UIEvent? e) {
+        if (this.isActivate) {
+            this.innerBox!.Colour = Colour4.Black;
+            this.isActivate = false;
+        }
+        return false;
     }
 }
