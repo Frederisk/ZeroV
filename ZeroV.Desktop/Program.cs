@@ -1,4 +1,4 @@
-﻿using osu.Framework;
+using osu.Framework;
 using osu.Framework.Platform;
 
 using ZeroV.Game;

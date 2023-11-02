@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Objects;

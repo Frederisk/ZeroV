@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 using osu.Framework.Input.Bindings;
 using osu.Game.Rulesets.UI;

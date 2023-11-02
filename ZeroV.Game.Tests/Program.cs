@@ -1,4 +1,4 @@
-﻿using osu.Framework;
+using osu.Framework;
 using osu.Framework.Platform;
 
 namespace ZeroV.Game.Tests;

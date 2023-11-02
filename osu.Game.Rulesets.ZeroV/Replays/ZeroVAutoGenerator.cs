@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Replays;
