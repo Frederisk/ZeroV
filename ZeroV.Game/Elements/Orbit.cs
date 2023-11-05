@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 
 using osuTK;
+using osuTK.Graphics;
 
 namespace ZeroV.Game.Elements;
 
@@ -52,6 +53,33 @@ internal partial class Orbit : CompositeDrawable {
             }
         };
         this.InternalChild = this.container;
+    }
+
+
+    private Int32 touchCount = 0;
+    private Colour4[] colors = new Colour4[] {
+        Colour4.Black,
+        Colour4.Red,
+        Colour4.Orange,
+        Color4.Yellow,
+        Color4.Green,
+        Color4.Cyan,
+        Color4.Blue,
+        Color4.Purple,
+    };
+    private void updateColor() {
+        var colorIndex = this.touchCount % 8;
+        this.innerBox!.Colour = this.colors[colorIndex];
+    }
+
+    public void TouchEnter() {
+        this.touchCount++;
+        this.updateColor();
+    }
+
+    public void TouchLeave() {
+        this.touchCount--;
+        this.updateColor();
     }
 
     //protected override Boolean OnHover(HoverEvent e) => this.OnActivate(e);
