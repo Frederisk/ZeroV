@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-//using System.ComponentModel;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
@@ -9,8 +8,8 @@ using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Input;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 
@@ -20,8 +19,8 @@ using osuTK.Graphics;
 using ZeroV.Game.Elements;
 
 namespace ZeroV.Game;
-internal partial class GameplayScreen : Screen {
 
+internal partial class GameplayScreen : Screen {
     private List<TrackedTouch> touches;
     private List<Orbit> orbits;
 
@@ -48,7 +47,6 @@ internal partial class GameplayScreen : Screen {
                 RelativeSizeAxes = Axes.X,
                 Height = 10,
                 Colour = Color4.Red,
-
             },
             this.orbits[0]
         };
@@ -95,6 +93,7 @@ internal partial class GameplayScreen : Screen {
                         orbit.TouchEnter();
                         this.enteredOrbits.Add(orbit);
                         break;
+
                     case (false, true):
                         orbit.TouchLeave();
                         this.enteredOrbits.Remove(orbit);

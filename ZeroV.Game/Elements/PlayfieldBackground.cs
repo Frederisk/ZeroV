@@ -13,6 +13,7 @@ internal partial class PlayfieldBackground: Box {
 
     public PlayfieldBackground() {
         this.RelativeSizeAxes = Axes.Both;
+        this.Colour = Colour4.OrangeRed;
     }
 
     [BackgroundDependencyLoader]
