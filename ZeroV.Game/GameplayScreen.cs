@@ -10,34 +10,47 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 
 using osuTK;
+using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
 
 namespace ZeroV.Game;
 internal partial class GameplayScreen : Screen {
 
-    private List<Orbit> orbits = new();
-    private List<TrackedTouch> touches = new();
+    private List<TrackedTouch> touches;
+    private List<Orbit> orbits;
 
     public GameplayScreen() {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
+        this.orbits = new List<Orbit>();
+        this.touches = new List<TrackedTouch>();
     }
 
     [BackgroundDependencyLoader]
     private void load() {
-        var testOrbit = new Orbit() {
-            Position = new Vector2(0, 0)
-        };
-        this.orbits.Add(testOrbit);
-
+        this.orbits.Add(
+            new Orbit() {
+                //Position = new Vector2(0, -50),
+            }
+        );
         this.InternalChildren = new Drawable[] {
             new PlayfieldBackground(),
-            testOrbit,
+            new Box() {
+                Origin = Anchor.BottomCentre,
+                Anchor = Anchor.BottomCentre,
+                Position = new Vector2(0, -50),
+                RelativeSizeAxes = Axes.X,
+                Height = 10,
+                Colour = Color4.Red,
+
+            },
+            this.orbits[0]
         };
     }
 
@@ -45,7 +58,6 @@ internal partial class GameplayScreen : Screen {
         var touch = new TrackedTouch(e.Touch.Source, this.orbits);
         touch.UpdatePosition(e.ScreenSpaceTouchDownPosition);
         this.touches.Add(touch);
-
         return true;
     }
 

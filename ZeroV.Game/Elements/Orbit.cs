@@ -15,6 +15,7 @@ internal partial class Orbit : CompositeDrawable {
     private Container? container;
     private Box? innerBox;
     private Box? innerLine;
+    private Box? touchSpace;
 
     private Boolean isActivate;
 
@@ -29,11 +30,18 @@ internal partial class Orbit : CompositeDrawable {
 
     [BackgroundDependencyLoader]
     private void load() {
+        this.touchSpace = new Box {
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomCentre,
+            Colour = Colour4.Yellow,
+            Size = new Vector2(100, 768),
+        };
         this.innerBox = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Colour = Colour4.Black,
-            Size = new Vector2(100, 768),
+            Size = new Vector2(100, 768 - 50),
+            Position = new Vector2(0, -50),
         };
         this.innerLine = new Box {
             Origin = Anchor.BottomCentre,
@@ -41,6 +49,7 @@ internal partial class Orbit : CompositeDrawable {
             Colour = Colour4.White,
             EdgeSmoothness = new Vector2(3, 0),
             Size = new Vector2(4, 768),
+            Position = new Vector2(0, -50),
         };
 
         this.container = new Container() {
@@ -48,6 +57,7 @@ internal partial class Orbit : CompositeDrawable {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Children = new Drawable[] {
+                this.touchSpace,
                 this.innerBox,
                 this.innerLine,
             }
