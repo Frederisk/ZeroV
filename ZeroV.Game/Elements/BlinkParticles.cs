@@ -48,16 +48,16 @@ internal partial class BlinkParticles : CompositeDrawable {
         this.InternalChild = this.container;
     }
 
-    protected override Boolean OnTouchDown(TouchDownEvent e) => this.onDown(e);
-    protected override Boolean OnMouseDown(MouseDownEvent e) => this.onDown(e);
-    protected override Boolean OnTabletPenButtonPress(TabletPenButtonPressEvent e) => this.onDown(e);
+    //protected override Boolean OnTouchDown(TouchDownEvent e) => this.onDown(e);
+    //protected override Boolean OnMouseDown(MouseDownEvent e) => this.onDown(e);
+    //protected override Boolean OnTabletPenButtonPress(TabletPenButtonPressEvent e) => this.onDown(e);
 
-    private Boolean onDown(UIEvent e) {
-        Drawable child = this.container!.Children[0];
-        child.Colour = child.Colour == Color4.Blue ? Colour4.Red : Color4.Blue;
-        HitTarget?.Invoke();
-        return true;
-    }
+    //private Boolean onDown(UIEvent e) {
+    //    Drawable child = this.container!.Children[0];
+    //    child.Colour = child.Colour == Color4.Blue ? Colour4.Red : Color4.Blue;
+    //    HitTarget?.Invoke();
+    //    return true;
+    //}
 
-    public event Action? HitTarget;
+    //public event Action? HitTarget;
 }

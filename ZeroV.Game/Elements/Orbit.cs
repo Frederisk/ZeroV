@@ -22,7 +22,8 @@ internal partial class Orbit : CompositeDrawable {
 
     public Orbit() {
         this.AutoSizeAxes = Axes.Both;
-        this.Origin = Anchor.Centre;
+        this.Origin = Anchor.BottomCentre;
+        this.Anchor = Anchor.BottomCentre;
     }
 
     [BackgroundDependencyLoader]
@@ -53,27 +54,27 @@ internal partial class Orbit : CompositeDrawable {
         this.InternalChild = this.container;
     }
 
-    protected override Boolean OnHover(HoverEvent e) => this.OnActivate(e);
+    //protected override Boolean OnHover(HoverEvent e) => this.OnActivate(e);
 
-    protected override void OnHoverLost(HoverLostEvent e) => this.OnActivateLost(e);
+    //protected override void OnHoverLost(HoverLostEvent e) => this.OnActivateLost(e);
 
-    protected override void OnTouchUp(TouchUpEvent e) => this.OnActivateLost(e);
+    //protected override void OnTouchUp(TouchUpEvent e) => this.OnActivateLost(e);
 
-    protected override Boolean OnTouchDown(TouchDownEvent e) => this.OnActivate(e);
+    //protected override Boolean OnTouchDown(TouchDownEvent e) => this.OnActivate(e);
 
-    protected Boolean OnActivate(UIEvent? e) {
-        if (!this.isActivate) {
-            this.innerBox!.Colour = Colour4.Red;
-            this.isActivate = true;
-        }
-        return false;
-    }
+    //protected Boolean OnActivate(UIEvent? e) {
+    //    if (!this.isActivate) {
+    //        this.innerBox!.Colour = Colour4.Red;
+    //        this.isActivate = true;
+    //    }
+    //    return false;
+    //}
 
-    protected Boolean OnActivateLost(UIEvent? e) {
-        if (this.isActivate) {
-            this.innerBox!.Colour = Colour4.Black;
-            this.isActivate = false;
-        }
-        return false;
-    }
+    //protected Boolean OnActivateLost(UIEvent? e) {
+    //    if (this.isActivate) {
+    //        this.innerBox!.Colour = Colour4.Black;
+    //        this.isActivate = false;
+    //    }
+    //    return false;
+    //}
 }

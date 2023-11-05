@@ -2,6 +2,8 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
 
+using ZeroV.Game.Elements;
+
 namespace ZeroV.Game;
 
 public partial class ZeroVGame : ZeroVGameBase {
@@ -16,6 +18,7 @@ public partial class ZeroVGame : ZeroVGameBase {
 
     protected override void LoadComplete() {
         base.LoadComplete();
-        this.screenStack.Push(new MainScreen());
+        //this.screenStack.Push(new MainScreen());
+        this.screenStack.Push(new GameplayScreen());
     }
 }
