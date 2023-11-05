@@ -3,9 +3,12 @@ using namespace System;
 using namespace System.IO;
 using namespace System.Linq;
 
-param([String]$RootPath = $pwd)
+param(
+    [String]$RootPath = $pwd,
+    [String]$FileName = '*.cs'
+    )
 
-[String[]]$allFiles = Get-ChildItem -Path $RootPath -Name *.cs -File -Recurse | Where-Object -FilterScript { $_ -notmatch '[\\/](?:bin|obj)[\\/]' };
+[String[]]$allFiles = Get-ChildItem -Path $RootPath -Name $FileName -File -Recurse | Where-Object -FilterScript { $_ -notmatch '(?i)(?:^|[\\/])(?:bin|obj)[\\/]' };
 # [FileInfo[]]$allFiles = $allFiles | Where-Object -FilterScript {$_.Name -notmatch 'obj'};
 
 $allFiles | ForEach-Object -Process {
