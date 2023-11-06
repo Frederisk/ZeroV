@@ -1,22 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.Input.Events;
-
-using osuTK.Graphics;
 
 namespace ZeroV.Game.Elements;
-internal partial class BlinkParticles : CompositeDrawable {
 
+internal partial class BlinkParticles : CompositeDrawable {
     private Container? container;
 
     public BlinkParticles() {

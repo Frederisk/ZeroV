@@ -9,8 +9,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 
 namespace ZeroV.Game.Elements;
-internal partial class PlayfieldBackground: Box {
 
+internal partial class PlayfieldBackground : Box {
     public PlayfieldBackground() {
         this.RelativeSizeAxes = Axes.Both;
         this.Colour = Colour4.OrangeRed;
@@ -18,6 +18,5 @@ internal partial class PlayfieldBackground: Box {
 
     [BackgroundDependencyLoader]
     private void load() {
-        
     }
 }
