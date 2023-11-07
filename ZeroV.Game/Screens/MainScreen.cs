@@ -8,7 +8,7 @@ using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
 
-namespace ZeroV.Game;
+namespace ZeroV.Game.Screens;
 
 public partial class MainScreen : Screen {
     [BackgroundDependencyLoader]

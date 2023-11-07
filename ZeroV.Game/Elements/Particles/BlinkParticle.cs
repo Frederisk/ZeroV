@@ -1,3 +1,5 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -5,12 +7,15 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Particles;
 
-internal partial class BlinkParticles : CompositeDrawable {
+internal partial class BlinkParticle : HitableParticle {
+
     private Container? container;
 
-    public BlinkParticles() {
+    public Double StartTime { get; set; }
+
+    public BlinkParticle(Orbit fatherOrbit) : base(fatherOrbit) {
         this.AutoSizeAxes = Axes.Both;
         this.Origin = Anchor.Centre;
     }

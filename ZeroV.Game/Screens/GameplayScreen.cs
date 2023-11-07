@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
+using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -18,9 +19,11 @@ using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
 
-namespace ZeroV.Game;
+namespace ZeroV.Game.Screens;
 
 internal partial class GameplayScreen : Screen {
+    private Track track;
+
     private List<TrackedTouch> touches;
     private List<Orbit> orbits;
 
@@ -52,8 +55,10 @@ internal partial class GameplayScreen : Screen {
         };
     }
 
+    //protected override 
+
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        var touch = new TrackedTouch(e.Touch.Source, this.orbits);
+        TrackedTouch touch = new (e.Touch.Source, this.orbits);
         touch.UpdatePosition(e.ScreenSpaceTouchDownPosition);
         this.touches.Add(touch);
         return true;
@@ -69,6 +74,8 @@ internal partial class GameplayScreen : Screen {
         touch.TouchUp();
         this.touches.Remove(touch);
     }
+
+    //protected void OnStokeStart() {}
 
     private class TrackedTouch {
         private List<Orbit> orbits;
@@ -98,6 +105,9 @@ internal partial class GameplayScreen : Screen {
                         orbit.TouchLeave();
                         this.enteredOrbits.Remove(orbit);
                         break;
+
+                    default:
+                        throw new ApplicationException($"Illegal touch determination status: `{nameof(isHoverd)}` is `{isHoverd}` and `{nameof(isEntered)}` is `{isEntered}`.");
                 }
             }
         }
