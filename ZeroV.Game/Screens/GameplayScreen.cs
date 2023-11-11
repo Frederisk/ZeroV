@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
@@ -25,7 +22,7 @@ internal partial class GameplayScreen : Screen {
     private Track? track;
 
     private List<TrackedTouch> touches;
-    private Container? orbits;
+    private Container<Orbit>? orbits;
 
     public GameplayScreen() {
         this.Anchor = Anchor.BottomCentre;
@@ -35,7 +32,7 @@ internal partial class GameplayScreen : Screen {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.orbits = new Container() {
+        this.orbits = new Container<Orbit>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -58,11 +55,10 @@ internal partial class GameplayScreen : Screen {
         );
     }
 
-    //protected override 
+    //protected override
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        // FIXME: cast the type of `this.orbits.Children` from `Drawable` to `Orbit`.
-        TrackedTouch touch = new(e.Touch.Source, this.orbits!.Children.Cast<Orbit>());
+        TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
         touch.UpdatePosition(e.ScreenSpaceTouchDownPosition);
         this.touches.Add(touch);
         return true;

@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 
 using osu.Framework.Allocation;
-using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Input.Events;
 
 using osuTK;
 using osuTK.Graphics;
@@ -23,7 +20,7 @@ internal partial class Orbit : CompositeDrawable {
     private Box? innerBox;
     private Box? innerLine;
 
-    private Container? particlesContainer;
+    private Container<HitableParticle>? particles;
 
     private Int32 touchCount;
     private Colour4[] colors;
@@ -67,7 +64,7 @@ internal partial class Orbit : CompositeDrawable {
             Size = new Vector2(1, 768 - 50),
             Position = new Vector2(0, -50),
         };
-        this.particlesContainer = new Container() {
+        this.particles = new Container<HitableParticle>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -79,7 +76,7 @@ internal partial class Orbit : CompositeDrawable {
                 this.touchSpace,
                 this.innerBox,
                 this.innerLine,
-                this.particlesContainer,
+                this.particles,
                 // From osu.Game.Rulesets.Mania.UI.PlayfieldCoveringWrapper
                 // Partially hidden
                 new Container {
@@ -128,11 +125,11 @@ internal partial class Orbit : CompositeDrawable {
     }
 
     public void Add(HitableParticle a) {
-        this.particlesContainer?.Add(a);
+        this.particles?.Add(a);
     }
 
     public void Remove(HitableParticle a) {
-        this.particlesContainer?.Remove(a, true);
+        this.particles?.Remove(a, true);
     }
 
     private void updateColor() {

@@ -1,10 +1,7 @@
-using System;
-
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 
 using osuTK;
@@ -12,7 +9,6 @@ using osuTK;
 namespace ZeroV.Game.Elements.Particles;
 
 internal partial class BlinkParticle : HitableParticle {
-
     private Container? container;
 
     //public Double StartTime { get; set; }
@@ -25,7 +21,7 @@ internal partial class BlinkParticle : HitableParticle {
     [BackgroundDependencyLoader]
     private void load(TextureStore _) {
         this.container = new Container {
-            ////AutoSizeAxes = Axes.Both,
+            //AutoSizeAxes = Axes.Both,
             //Origin = Anchor.Centre,
             //Anchor = Anchor.Centre,
             Children = new Drawable[] {
