@@ -7,38 +7,48 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 
+using osuTK;
+
 namespace ZeroV.Game.Elements.Particles;
 
 internal partial class BlinkParticle : HitableParticle {
 
     private Container? container;
 
-    public Double StartTime { get; set; }
+    //public Double StartTime { get; set; }
 
     public BlinkParticle(Orbit fatherOrbit) : base(fatherOrbit) {
-        this.AutoSizeAxes = Axes.Both;
-        this.Origin = Anchor.Centre;
+        //this.AutoSizeAxes = Axes.Both;
+        //this.Origin = Anchor.Centre;
     }
 
     [BackgroundDependencyLoader]
-    private void load(TextureStore textures) {
+    private void load(TextureStore _) {
         this.container = new Container {
-            AutoSizeAxes = Axes.Both,
-            Origin = Anchor.Centre,
-            Anchor = Anchor.Centre,
+            ////AutoSizeAxes = Axes.Both,
+            //Origin = Anchor.Centre,
+            //Anchor = Anchor.Centre,
             Children = new Drawable[] {
+                new Box {
+                    Origin= Anchor.Centre,
+                    Anchor = Anchor.Centre,
+                    Size = new Vector2(52),
+                    Colour= Colour4.Black,
+                    Rotation = 45,
+                },
                 new Box {
                     Origin = Anchor.Centre,
                     Anchor = Anchor.Centre,
-                    RelativeSizeAxes = Axes.Both,
-                    Colour= Colour4.Blue,
-                    Rotation = 45
+                    //RelativeSizeAxes = Axes.Both,
+                    Size = new Vector2(28),
+                    Colour= Colour4.Red,
+                    Rotation = 45,
                 },
-                new Sprite {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Texture = textures.Get("logo")
-                },
+                //new Sprite {
+                //    Anchor = Anchor.Centre,
+                //    Origin = Anchor.Centre,
+                //    Texture = textures.Get("logo")
+                //},
             }
         };
         this.InternalChild = this.container;

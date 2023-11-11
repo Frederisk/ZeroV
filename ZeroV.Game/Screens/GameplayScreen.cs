@@ -22,25 +22,23 @@ using ZeroV.Game.Elements;
 namespace ZeroV.Game.Screens;
 
 internal partial class GameplayScreen : Screen {
-    private Track track;
+    private Track? track;
 
     private List<TrackedTouch> touches;
-    private List<Orbit> orbits;
+    private Container? orbits;
 
     public GameplayScreen() {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
-        this.orbits = new List<Orbit>();
         this.touches = new List<TrackedTouch>();
     }
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.orbits.Add(
-            new Orbit() {
-                //Position = new Vector2(0, -50),
-            }
-        );
+        this.orbits = new Container() {
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomCentre,
+        };
         this.InternalChildren = new Drawable[] {
             new PlayfieldBackground(),
             new Box() {
@@ -51,14 +49,20 @@ internal partial class GameplayScreen : Screen {
                 Height = 10,
                 Colour = Color4.Red,
             },
-            this.orbits[0]
+            this.orbits,
         };
+
+        // TODO: For test
+        this.orbits.Add(
+            new Orbit()
+        );
     }
 
     //protected override 
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        TrackedTouch touch = new (e.Touch.Source, this.orbits);
+        // FIXME: cast the type of `this.orbits.Children` from `Drawable` to `Orbit`.
+        TrackedTouch touch = new(e.Touch.Source, this.orbits!.Children.Cast<Orbit>());
         touch.UpdatePosition(e.ScreenSpaceTouchDownPosition);
         this.touches.Add(touch);
         return true;
@@ -78,12 +82,12 @@ internal partial class GameplayScreen : Screen {
     //protected void OnStokeStart() {}
 
     private class TrackedTouch {
-        private List<Orbit> orbits;
+        private IEnumerable<Orbit> orbits;
         private HashSet<Orbit> enteredOrbits;
 
         public TouchSource Source { get; }
 
-        public TrackedTouch(TouchSource source, List<Orbit> orbits) {
+        public TrackedTouch(TouchSource source, IEnumerable<Orbit> orbits) {
             this.Source = source;
             this.orbits = orbits;
 

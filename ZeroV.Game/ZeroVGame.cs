@@ -7,7 +7,7 @@ using ZeroV.Game.Screens;
 namespace ZeroV.Game;
 
 public partial class ZeroVGame : ZeroVGameBase {
-    private ScreenStack screenStack;
+    private ScreenStack? screenStack;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -19,6 +19,6 @@ public partial class ZeroVGame : ZeroVGameBase {
     protected override void LoadComplete() {
         base.LoadComplete();
         //this.screenStack.Push(new MainScreen());
-        this.screenStack.Push(new GameplayScreen());
+        this.screenStack!.Push(new GameplayScreen());
     }
 }

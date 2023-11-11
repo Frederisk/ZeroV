@@ -13,7 +13,7 @@ namespace ZeroV.Game.Elements;
 internal partial class PlayfieldBackground : Box {
     public PlayfieldBackground() {
         this.RelativeSizeAxes = Axes.Both;
-        this.Colour = Colour4.OrangeRed;
+        this.Colour = Colour4.LightBlue;
     }
 
     [BackgroundDependencyLoader]

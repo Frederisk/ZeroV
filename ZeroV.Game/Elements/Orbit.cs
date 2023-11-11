@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -12,6 +13,8 @@ using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
 
+using ZeroV.Game.Elements.Particles;
+
 namespace ZeroV.Game.Elements;
 
 internal partial class Orbit : CompositeDrawable {
@@ -19,6 +22,8 @@ internal partial class Orbit : CompositeDrawable {
     private Box? touchSpace;
     private Box? innerBox;
     private Box? innerLine;
+
+    private Container? particlesContainer;
 
     private Int32 touchCount;
     private Colour4[] colors;
@@ -50,19 +55,22 @@ internal partial class Orbit : CompositeDrawable {
         this.innerBox = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
-            Colour = Colour4.Black,
+            Colour = Colour4.Azure,
             Size = new Vector2(100, 768 - 50),
             Position = new Vector2(0, -50),
         };
         this.innerLine = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
-            Colour = Colour4.White,
-            EdgeSmoothness = new Vector2(3, 0),
-            Size = new Vector2(4, 768 - 50),
+            Colour = Colour4.Black,
+            EdgeSmoothness = new Vector2(1, 0),
+            Size = new Vector2(1, 768 - 50),
             Position = new Vector2(0, -50),
         };
-
+        this.particlesContainer = new Container() {
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomCentre,
+        };
         this.container = new BufferedContainer() {
             AutoSizeAxes = Axes.Both,
             Origin = Anchor.BottomCentre,
@@ -71,6 +79,7 @@ internal partial class Orbit : CompositeDrawable {
                 this.touchSpace,
                 this.innerBox,
                 this.innerLine,
+                this.particlesContainer,
                 // From osu.Game.Rulesets.Mania.UI.PlayfieldCoveringWrapper
                 // Partially hidden
                 new Container {
@@ -111,6 +120,19 @@ internal partial class Orbit : CompositeDrawable {
             }
         };
         this.InternalChild = this.container;
+
+        // TODO: For Test
+        this.Add(new BlinkParticle(this) {
+            Position = new Vector2(0, -128)
+        });
+    }
+
+    public void Add(HitableParticle a) {
+        this.particlesContainer?.Add(a);
+    }
+
+    public void Remove(HitableParticle a) {
+        this.particlesContainer?.Remove(a, true);
     }
 
     private void updateColor() {
