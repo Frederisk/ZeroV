@@ -109,8 +109,8 @@ internal partial class GameplayScreen : Screen {
                         this.enteredOrbits.Remove(orbit);
                         break;
 
-                    default:
-                        throw new ApplicationException($"Illegal touch determination status: `{nameof(isHoverd)}` is `{isHoverd}` and `{nameof(isEntered)}` is `{isEntered}`.");
+                    // default:
+                    //     throw new ApplicationException($"Illegal touch determination status: `{nameof(isHoverd)}` is `{isHoverd}` and `{nameof(isEntered)}` is `{isEntered}`.");
                 }
             }
         }
