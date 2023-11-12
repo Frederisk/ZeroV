@@ -51,7 +51,10 @@ internal partial class GameplayScreen : Screen {
 
         // TODO: For test
         this.orbits.Add(
-            new Orbit()
+            new Orbit { X = 0, Width = 128 }
+        );
+        this.orbits.Add(
+            new Orbit { X = 100, Width = 256 }
         );
     }
 

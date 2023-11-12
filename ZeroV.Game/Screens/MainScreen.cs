@@ -34,10 +34,10 @@ public partial class MainScreen : Screen {
             //new SpinningBox {
             //    Anchor = Anchor.Centre,
             //}
-            new Orbit {
-                Anchor = Anchor.Centre,
-                //Height = 1024
-            },
+            //new Orbit {
+            //    Anchor = Anchor.Centre,
+            //    //Height = 1024
+            //},
             //new BlinkParticles
             //{
             //    Anchor = Anchor.Centre
