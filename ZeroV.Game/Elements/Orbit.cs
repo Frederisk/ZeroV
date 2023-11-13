@@ -165,7 +165,7 @@ internal partial class Orbit : CompositeDrawable {
         this.innerBox!.Colour = this.colors[colorIndex];
     }
 
-    public void TouchEnter() {
+    public void TouchEnter(Boolean isTouchDown) {
         this.touchCount++;
         this.updateColor();
     }
