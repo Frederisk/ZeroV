@@ -17,8 +17,7 @@ namespace ZeroV.Game.Elements;
 internal partial class Orbit : CompositeDrawable {
     private const Single visual_orbit_offset = -50;
     private BufferedContainer? container;
-    private Box? touchSpace;
-    public Box? TouchSpace => this.touchSpace;
+    public Box? TouchSpace { get; private set; }
     private Box? innerBox;
     private Box? innerLine;
 
@@ -55,7 +54,7 @@ internal partial class Orbit : CompositeDrawable {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.touchSpace = new Box {
+        this.TouchSpace = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Colour = Colour4.Yellow,
@@ -89,7 +88,7 @@ internal partial class Orbit : CompositeDrawable {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Children = new Drawable[] {
-                this.touchSpace,
+                this.TouchSpace,
                 this.innerBox,
                 this.innerLine,
                 this.particles,

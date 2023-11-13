@@ -113,7 +113,7 @@ internal partial class GameplayScreen : Screen {
                         break;
 
                     // default:
-                    //     throw new ApplicationException($"Illegal touch determination status: `{nameof(isHoverd)}` is `{isHoverd}` and `{nameof(isEntered)}` is `{isEntered}`.");
+                    //     throw new ApplicationException($"Illegal touch determination status: `{nameof(isHovered)}` is `{isHovered}` and `{nameof(isEntered)}` is `{isEntered}`.");
                 }
             }
         }
