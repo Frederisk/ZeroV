@@ -20,8 +20,45 @@ namespace ZeroV.Game.Elements;
 public record Note(Double Time);
 
 internal partial class Orbit : CompositeDrawable {
+
+    /// <summary>
+    /// The size of half the particle's Y-axis radius.
+    /// </summary>
+    private const Single visual_half_of_particle_size = 24;
+
+    /// <summary>
+    /// The position beyond the Y-axis at the top of visible orbit.
+    /// </summary>
+    /// <remarks>
+    /// -768 - 24 = -792
+    /// </remarks>
+    private const Single visual_orbit_out_of_top = visual_orbit_top - visual_half_of_particle_size;
+
+    /// <summary>
+    /// The position of the top of visible orbit.
+    /// </summary>
+    private const Single visual_orbit_top = -768;
+
+    /// <summary>
+    /// The position of the bottom of visible orbit. It's also the offset of visible orbit relative to the screen.
+    /// </summary>
     private const Single visual_orbit_offset = -50;
+
+    /// <summary>
+    /// The posotion of the bottom of the screen.
+    /// </summary>
+    private const Single visual_orbit_bottom = 0;
+
+    /// <summary>
+    /// The position beyond the Y-axis at the bottom of visible orbit.
+    /// </summary>
+    private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + visual_half_of_particle_size;
+
     private BufferedContainer? container;
+
+    /// <summary>
+    /// The space used to touch judgment.
+    /// </summary>
     public Box? TouchSpace { get; private set; }
     private Box? innerBox;
     private Box? innerLine;
@@ -31,13 +68,19 @@ internal partial class Orbit : CompositeDrawable {
     private Int32 touchCount;
     public Boolean IsTouching => this.touchCount > 0;
 
-    private Colour4[] colors;
     private Queue<HittableParticle> particleQueue;
     private Queue<Note> notes;
+
     private Double? lastTouchDownTime;
-    private Double starTimeOffset = TimeSpan.FromSeconds(3).TotalMilliseconds;
-    private Vector2 startPoint = new Vector2(0, -768);
-    private Vector2 endPoint = new Vector2(0, 0);
+
+    /// <summary>
+    /// The time before the judgment for the Particle to fall. The shorter the time, the faster the Particle falls.
+    /// </summary>
+    private Double startTimeOffset = TimeSpan.FromSeconds(0.5).TotalMilliseconds;
+
+
+    private Colour4[] colors;
+
 
     public new Single Y => base.Y;
     public new required Single X { get => base.X; set => base.X = value; }
@@ -48,6 +91,7 @@ internal partial class Orbit : CompositeDrawable {
         //this.AutoSizeAxes = Axes.Both;
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
+        // FIXME: Just for test, remove it.
         this.colors = new Colour4[] {
             Colour4.White,
             Colour4.Red,
@@ -161,11 +205,11 @@ internal partial class Orbit : CompositeDrawable {
         };
         this.InternalChild = this.container;
 
-        // TODO: For Test
+        // FIXME: For Test
         this.particleQueue = new Queue<HittableParticle>();
-        this.particleQueue.Enqueue(new BlinkParticle(this) { Position = this.startPoint });
-        this.particleQueue.Enqueue(new BlinkParticle(this) { Position = this.startPoint });
-        this.particleQueue.Enqueue(new BlinkParticle(this) { Position = this.startPoint });
+        this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
+        this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
+        this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
 
         foreach (HittableParticle item in this.particleQueue) {
             this.Add(item);
@@ -173,35 +217,45 @@ internal partial class Orbit : CompositeDrawable {
     }
 
     protected override void Update() {
+        // This method is once-per-frame update.
+        // For a music game, we may need higher-speed judgment and logic processing.
+        // TODO: So, here wo should only deal with something that don't need to be updated that frequently.
+        // Eg. It's redundant to repeat the movement of an Drawable item multiple times within a frame. But it makes sense for touch judgments.
         base.Update();
 
         var time = this.Time.Current;
 
+        // TODO: Maybe we can make it faster?
         if (this.lastTouchDownTime.HasValue) {
             if (this.notes.TryPeek(out Note? note)) {
-                if (time - note.Time < 1000) {
+                if (time - note.Time < 500) {
                     // TODO: judgment note touch
                     this.notes.Dequeue();
 
                     HittableParticle particle = this.particleQueue.Dequeue();
-                    particle.Position = this.startPoint;
+                    particle.Y = visual_orbit_out_of_top;
                 }
             }
 
             this.lastTouchDownTime = null;
         }
 
+        // TODO: `Zip` is so solw (Because there are too many bounds checks insider this method), stop using it.
         foreach ((HittableParticle particle, Note note) in this.particleQueue.Zip(this.notes)) {
-            if (note.Time - this.starTimeOffset > time) {
+            if (note.Time - this.startTimeOffset > time) {
                 break;
             }
-
-            particle.Position =
-                Interpolation.ValueAt(time, this.startPoint, this.endPoint,
-                note.Time - this.starTimeOffset, note.Time);
-
+            // The Particle falls to the judgment line.
+            if (time < note.Time) {
+                particle.Y =
+               Interpolation.ValueAt(time, visual_orbit_out_of_top, visual_orbit_offset,
+               note.Time - this.startTimeOffset, note.Time);
+            }
+            // TODO: The Particle over time, and it move out of the screen and gradually disappear.
+            // FIXME: `note.Time < time` is wrong. Timeouut in a short period of time will only result in a lower rating, not a failure.
             if (note.Time < time) {
                 // TODO: Select a collection where objects can be removed during iteration.
+
             }
         }
     }

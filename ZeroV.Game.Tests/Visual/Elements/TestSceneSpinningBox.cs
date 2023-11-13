@@ -2,7 +2,9 @@ using NUnit.Framework;
 
 using osu.Framework.Graphics;
 
-namespace ZeroV.Game.Tests.Visual;
+using ZeroV.Game.Elements;
+
+namespace ZeroV.Game.Tests.Visual.Elements;
 
 [TestFixture]
 public partial class TestSceneSpinningBox : ZeroVTestScene {

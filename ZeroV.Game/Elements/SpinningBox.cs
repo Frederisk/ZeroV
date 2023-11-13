@@ -5,7 +5,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 
-namespace ZeroV.Game;
+namespace ZeroV.Game.Elements;
 
 public partial class SpinningBox : CompositeDrawable {
     private Container? box;
