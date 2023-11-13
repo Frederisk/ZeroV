@@ -61,15 +61,18 @@ internal partial class GameplayScreen : Screen {
     //protected override
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
-        touch.UpdatePosition(e.ScreenSpaceTouchDownPosition);
-        this.touches.Add(touch);
+        if (this.orbits != null) {
+            TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
+            touch.UpdatePosition(e.ScreenSpaceTouchDownPosition, true);
+            this.touches.Add(touch);
+        }
+
         return true;
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
         TrackedTouch touch = this.touches.Single(t => t.Source == e.Touch.Source);
-        touch.UpdatePosition(e.ScreenSpaceLastTouchPosition);
+        touch.UpdatePosition(e.ScreenSpaceLastTouchPosition, false);
     }
 
     protected override void OnTouchUp(TouchUpEvent e) {
@@ -93,14 +96,14 @@ internal partial class GameplayScreen : Screen {
             this.enteredOrbits = new HashSet<Orbit>();
         }
 
-        public void UpdatePosition(Vector2 position) {
+        public void UpdatePosition(Vector2 position, Boolean isTouchDown) {
             foreach (Orbit orbit in this.orbits) {
                 var isHoverd = orbit.ScreenSpaceDrawQuad.Contains(position);
                 var isEntered = this.enteredOrbits.Contains(orbit);
 
                 switch (isHoverd, isEntered) {
                     case (true, false):
-                        orbit.TouchEnter();
+                        orbit.TouchEnter(isTouchDown);
                         this.enteredOrbits.Add(orbit);
                         break;
 
