@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using osu.Framework.Allocation;
 using osu.Framework.Extensions.Color4Extensions;
@@ -6,6 +8,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Utils;
 
 using osuTK;
 using osuTK.Graphics;
@@ -13,6 +16,8 @@ using osuTK.Graphics;
 using ZeroV.Game.Elements.Particles;
 
 namespace ZeroV.Game.Elements;
+
+public record Note(Double Time);
 
 internal partial class Orbit : CompositeDrawable {
     private const Single visual_orbit_offset = -50;
@@ -27,6 +32,12 @@ internal partial class Orbit : CompositeDrawable {
     public Boolean IsTouching => this.touchCount > 0;
 
     private Colour4[] colors;
+    private Queue<HittableParticle> particleQueue;
+    private Queue<Note> notes;
+    private Double? lastTouchDownTime;
+    private Double starTimeOffset = TimeSpan.FromSeconds(3).TotalMilliseconds;
+    private Vector2 startPoint = new Vector2(0, -768);
+    private Vector2 endPoint = new Vector2(0, 0);
 
     public new Single Y => base.Y;
     public new required Single X { get => base.X; set => base.X = value; }
@@ -38,7 +49,7 @@ internal partial class Orbit : CompositeDrawable {
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
         this.colors = new Colour4[] {
-            Colour4.Black,
+            Colour4.White,
             Colour4.Red,
             Colour4.Orange,
             Color4.Yellow,
@@ -50,6 +61,11 @@ internal partial class Orbit : CompositeDrawable {
         base.Height = 768;
         base.Y = 0;
         this.Alpha = 0.9f;
+
+        this.notes = new();
+        this.notes.Enqueue(new Note(TimeSpan.FromSeconds(7).TotalMilliseconds));
+        this.notes.Enqueue(new Note(TimeSpan.FromSeconds(8).TotalMilliseconds));
+        this.notes.Enqueue(new Note(TimeSpan.FromSeconds(9).TotalMilliseconds));
     }
 
     [BackgroundDependencyLoader]
@@ -146,9 +162,48 @@ internal partial class Orbit : CompositeDrawable {
         this.InternalChild = this.container;
 
         // TODO: For Test
-        this.Add(new BlinkParticle(this) {
-            Position = new Vector2(0, -128)
-        });
+        this.particleQueue = new Queue<HittableParticle>();
+        this.particleQueue.Enqueue(new BlinkParticle(this) { Position = this.startPoint });
+        this.particleQueue.Enqueue(new BlinkParticle(this) { Position = this.startPoint });
+        this.particleQueue.Enqueue(new BlinkParticle(this) { Position = this.startPoint });
+
+        foreach (HittableParticle item in this.particleQueue) {
+            this.Add(item);
+        }
+    }
+
+    protected override void Update() {
+        base.Update();
+
+        var time = this.Time.Current;
+
+        if (this.lastTouchDownTime.HasValue) {
+            if (this.notes.TryPeek(out Note? note)) {
+                if (time - note.Time < 1000) {
+                    // TODO: judgment note touch
+                    this.notes.Dequeue();
+
+                    HittableParticle particle = this.particleQueue.Dequeue();
+                    particle.Position = this.startPoint;
+                }
+            }
+
+            this.lastTouchDownTime = null;
+        }
+
+        foreach ((HittableParticle particle, Note note) in this.particleQueue.Zip(this.notes)) {
+            if (note.Time - this.starTimeOffset > time) {
+                break;
+            }
+
+            particle.Position =
+                Interpolation.ValueAt(time, this.startPoint, this.endPoint,
+                note.Time - this.starTimeOffset, note.Time);
+
+            if (note.Time < time) {
+                // TODO: Select a collection where objects can be removed during iteration.
+            }
+        }
     }
 
     public void Add(HittableParticle a) {
@@ -165,6 +220,10 @@ internal partial class Orbit : CompositeDrawable {
     }
 
     public void TouchEnter(Boolean isTouchDown) {
+        if (isTouchDown) {
+            this.lastTouchDownTime = this.Time.Current;
+        }
+
         this.touchCount++;
         this.updateColor();
     }
