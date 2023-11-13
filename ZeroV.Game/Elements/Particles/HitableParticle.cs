@@ -9,7 +9,7 @@ using osu.Framework.Graphics.Containers;
 
 namespace ZeroV.Game.Elements.Particles;
 
-internal abstract partial class HitableParticle: CompositeDrawable {
+internal abstract partial class HittableParticle: CompositeDrawable {
 
     public virtual Double StartTime {
         get => this.StartTimeBindable.Value;
@@ -20,7 +20,7 @@ internal abstract partial class HitableParticle: CompositeDrawable {
 
     public Orbit FatherOrbit { get; init; }
 
-    public HitableParticle(Orbit fatherOrbit) {
+    public HittableParticle(Orbit fatherOrbit) {
         this.StartTimeBindable = new Bindable<Double>();
         this.FatherOrbit = fatherOrbit;
     }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ZeroV.Game.Elements.Particles;
-internal partial class StrokeParticle : HitableParticle {
+internal partial class StrokeParticle : HittableParticle {
     public StrokeParticle(Orbit fatherOrbit) : base(fatherOrbit) {
     }
 }

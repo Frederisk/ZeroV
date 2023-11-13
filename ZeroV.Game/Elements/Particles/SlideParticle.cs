@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ZeroV.Game.Elements.Particles;
-internal partial class SlideParticle : HitableParticle {
+internal partial class SlideParticle : HittableParticle {
     public SlideParticle(Orbit fatherOrbit) : base(fatherOrbit) {
     }
 }

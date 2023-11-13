@@ -8,7 +8,7 @@ using osuTK;
 
 namespace ZeroV.Game.Elements.Particles;
 
-internal partial class BlinkParticle : HitableParticle {
+internal partial class BlinkParticle : HittableParticle {
     private Container? container;
 
     //public Double StartTime { get; set; }

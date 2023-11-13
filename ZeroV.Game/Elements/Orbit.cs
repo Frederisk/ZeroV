@@ -22,7 +22,7 @@ internal partial class Orbit : CompositeDrawable {
     private Box? innerBox;
     private Box? innerLine;
 
-    private Container<HitableParticle>? particles;
+    private Container<HittableParticle>? particles;
 
     private Int32 touchCount;
     public Boolean IsTouching => this.touchCount > 0;
@@ -80,7 +80,7 @@ internal partial class Orbit : CompositeDrawable {
             Y = visual_orbit_offset,
             // Position = new Vector2(0, visual_orbit_offset),
         };
-        this.particles = new Container<HitableParticle>() {
+        this.particles = new Container<HittableParticle>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -152,11 +152,11 @@ internal partial class Orbit : CompositeDrawable {
         });
     }
 
-    public void Add(HitableParticle a) {
+    public void Add(HittableParticle a) {
         this.particles?.Add(a);
     }
 
-    public void Remove(HitableParticle a) {
+    public void Remove(HittableParticle a) {
         this.particles?.Remove(a, true);
     }
 
