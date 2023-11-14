@@ -18,7 +18,7 @@ using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Screens;
 
-internal partial class GameplayScreen : Screen {
+public partial class GameplayScreen : Screen {
     private Track? track;
 
     private List<TrackedTouch> touches;

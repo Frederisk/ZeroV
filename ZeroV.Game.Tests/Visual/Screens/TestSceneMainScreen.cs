@@ -5,7 +5,7 @@ using osu.Framework.Screens;
 
 using ZeroV.Game.Screens;
 
-namespace ZeroV.Game.Tests.Visual;
+namespace ZeroV.Game.Tests.Visual.Screens;
 
 [TestFixture]
 public partial class TestSceneMainScreen : ZeroVTestScene {
