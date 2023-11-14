@@ -5,7 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ZeroV.Game.Elements.Particles;
-internal partial class SlideParticle : HittableParticle {
+internal partial class SlideParticle : ParticleBase {
     public SlideParticle(Orbit fatherOrbit) : base(fatherOrbit) {
+    }
+
+    public enum SlidingDirection: Int32 {
+        Up = 0,
+        Right = 1,
+        Down = 2,
+        Left = 3,
     }
 }

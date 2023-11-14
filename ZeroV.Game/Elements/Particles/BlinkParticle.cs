@@ -8,7 +8,7 @@ using osuTK;
 
 namespace ZeroV.Game.Elements.Particles;
 
-internal partial class BlinkParticle : HittableParticle {
+internal partial class BlinkParticle : ParticleBase {
     private Container? container;
 
     //public Double StartTime { get; set; }
@@ -19,7 +19,7 @@ internal partial class BlinkParticle : HittableParticle {
     }
 
     [BackgroundDependencyLoader]
-    private void load(TextureStore _) {
+    private void load() {
         this.container = new Container {
             //AutoSizeAxes = Axes.Both,
             //Origin = Anchor.Centre,

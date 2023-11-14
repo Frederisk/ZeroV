@@ -17,8 +17,12 @@ using ZeroV.Game.Elements.Particles;
 
 namespace ZeroV.Game.Elements;
 
+// FIXME: Remove it.
 public record Note(Double Time);
 
+/// <summary>
+/// Orbits that carry particles. It's also the main interactive object in this game.
+/// </summary>
 internal partial class Orbit : CompositeDrawable {
 
     /// <summary>
@@ -63,12 +67,12 @@ internal partial class Orbit : CompositeDrawable {
     private Box? innerBox;
     private Box? innerLine;
 
-    private Container<HittableParticle>? particles;
+    private Container<ParticleBase>? particles;
 
     private Int32 touchCount;
     public Boolean IsTouching => this.touchCount > 0;
 
-    private Queue<HittableParticle> particleQueue;
+    private Queue<ParticleBase> particleQueue;
     private Queue<Note> notes;
 
     private Double? lastTouchDownTime;
@@ -81,7 +85,7 @@ internal partial class Orbit : CompositeDrawable {
 
     private Colour4[] colors;
 
-
+    // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
     public new required Single X { get => base.X; set => base.X = value; }
     public new Single Height => base.Height;
@@ -139,7 +143,7 @@ internal partial class Orbit : CompositeDrawable {
             Y = visual_orbit_offset,
             // Position = new Vector2(0, visual_orbit_offset),
         };
-        this.particles = new Container<HittableParticle>() {
+        this.particles = new Container<ParticleBase>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -206,12 +210,12 @@ internal partial class Orbit : CompositeDrawable {
         this.InternalChild = this.container;
 
         // FIXME: For Test
-        this.particleQueue = new Queue<HittableParticle>();
+        this.particleQueue = new Queue<ParticleBase>();
         this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
         this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
         this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
 
-        foreach (HittableParticle item in this.particleQueue) {
+        foreach (ParticleBase item in this.particleQueue) {
             this.Add(item);
         }
     }
@@ -232,7 +236,7 @@ internal partial class Orbit : CompositeDrawable {
                     // TODO: judgment note touch
                     this.notes.Dequeue();
 
-                    HittableParticle particle = this.particleQueue.Dequeue();
+                    ParticleBase particle = this.particleQueue.Dequeue();
                     particle.Y = visual_orbit_out_of_top;
                 }
             }
@@ -241,7 +245,7 @@ internal partial class Orbit : CompositeDrawable {
         }
 
         // TODO: `Zip` is so solw (Because there are too many bounds checks insider this method), stop using it.
-        foreach ((HittableParticle particle, Note note) in this.particleQueue.Zip(this.notes)) {
+        foreach ((ParticleBase particle, Note note) in this.particleQueue.Zip(this.notes)) {
             if (note.Time - this.startTimeOffset > time) {
                 break;
             }
@@ -260,11 +264,11 @@ internal partial class Orbit : CompositeDrawable {
         }
     }
 
-    public void Add(HittableParticle a) {
+    public void Add(ParticleBase a) {
         this.particles?.Add(a);
     }
 
-    public void Remove(HittableParticle a) {
+    public void Remove(ParticleBase a) {
         this.particles?.Remove(a, true);
     }
 
