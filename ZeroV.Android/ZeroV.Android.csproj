@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\ZeroV.Android.props" />
   <PropertyGroup>
-    <TargetFramework>net7.0-android</TargetFramework>
+    <TargetFramework>net8.0-android</TargetFramework>
     <OutputType>Exe</OutputType>
     <AssemblyName>ZeroV.Android</AssemblyName>
     <RootNamespace>ZeroV.Android</RootNamespace>
