@@ -96,7 +96,7 @@ internal partial class Orbit : CompositeDrawable {
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
         // FIXME: Just for test, remove it.
-        this.colors = new Colour4[] {
+        this.colors = [
             Colour4.White,
             Colour4.Red,
             Colour4.Orange,
@@ -105,7 +105,7 @@ internal partial class Orbit : CompositeDrawable {
             Color4.Cyan,
             Color4.Blue,
             Color4.Purple,
-        };
+        ];
         base.Height = 768;
         base.Y = 0;
         this.Alpha = 0.9f;

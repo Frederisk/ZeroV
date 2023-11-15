@@ -15,11 +15,11 @@ using osuTK.Graphics;
 
 namespace ZeroV.Game.Elements.Particles;
 internal partial class PressParticle: ParticleBase {
-    private Container startContainer;
-    private Container holdContainer;
-    private Container endContainer;
+    private Container? startContainer;
+    private Container? holdContainer;
+    private Container? endContainer;
 
-    private Container container;
+    private Container? container;
 
     public Single EndTime {
         get => this.EndTimeBindable.Value;
@@ -62,7 +62,7 @@ internal partial class PressParticle: ParticleBase {
                 }
             }
         };
-        this.holdContainer = new Container {
+        this.endContainer = new Container {
             Children = new Drawable[] {
                 new Box {
                     Origin= Anchor.Centre,

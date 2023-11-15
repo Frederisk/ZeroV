@@ -21,13 +21,12 @@ namespace ZeroV.Game.Screens;
 public partial class GameplayScreen : Screen {
     private Track? track;
 
-    private List<TrackedTouch> touches;
+    private List<TrackedTouch> touches = [];
     private Container<Orbit>? orbits;
 
     public GameplayScreen() {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
-        this.touches = new List<TrackedTouch>();
     }
 
     [BackgroundDependencyLoader]
@@ -85,15 +84,13 @@ public partial class GameplayScreen : Screen {
 
     private class TrackedTouch {
         private IEnumerable<Orbit> orbits;
-        private HashSet<Orbit> enteredOrbits;
+        private HashSet<Orbit> enteredOrbits = [];
 
         public TouchSource Source { get; }
 
         public TrackedTouch(TouchSource source, IEnumerable<Orbit> orbits) {
             this.Source = source;
             this.orbits = orbits;
-
-            this.enteredOrbits = new HashSet<Orbit>();
         }
 
         public void UpdatePosition(Vector2 position, Boolean isTouchDown) {
