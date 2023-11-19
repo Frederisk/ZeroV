@@ -260,10 +260,18 @@ internal partial class Orbit : CompositeDrawable {
             // The Particle falls to the judgment line.
             if (time < note.Time) {
                 particle.Y =
-               Interpolation.ValueAt(time, visual_orbit_out_of_top, visual_orbit_offset,
-               note.Time - startTimeOffset, note.Time);
+                    Interpolation.ValueAt(time, visual_orbit_out_of_top, visual_orbit_offset,
+                    note.Time - startTimeOffset, note.Time);
             }
-            // TODO: The Particle over time, and it move out of the screen and gradually disappear.
+
+            if (note.Time < time) {
+                particle.Y =
+                    Interpolation.ValueAt(time, visual_orbit_offset, 0,
+                    note.Time, note.Time + this.settings.GoodOffset);
+                particle.Alpha =
+                    Interpolation.ValueAt(time, 1f, 0f, note.Time, note.Time + this.settings.GoodOffset);
+            }
+
             if (note.Time - this.settings.GoodOffset < time) {
                 // TODO: Select a collection where objects can be removed during iteration.
 
