@@ -80,12 +80,6 @@ internal partial class Orbit : CompositeDrawable {
 
     private Double? lastTouchDownTime;
 
-    /// <summary>
-    /// The time before the judgment for the Particle to fall. The shorter the time, the faster the Particle falls.
-    /// </summary>
-    private Double startTimeOffset = TimeSpan.FromSeconds(0.5).TotalMilliseconds;
-
-
     private Colour4[] colors;
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
@@ -231,12 +225,23 @@ internal partial class Orbit : CompositeDrawable {
         base.Update();
 
         var time = this.Time.Current;
+        var startTimeOffset = this.settings.StartTimeOffset;
 
         // TODO: Maybe we can make it faster?
         if (this.lastTouchDownTime.HasValue) {
             if (this.notes.TryPeek(out Note? note)) {
-                if (time - note.Time < 500) {
-                    // TODO: judgment note touch
+                var touchOffset = Double.Abs(time - note.Time);
+                if (touchOffset <= this.settings.GoodOffset) {
+
+                    // TODO: Use Enum
+                    var judgmentResult = touchOffset switch {
+                        _ when touchOffset <= this.settings.MaxPerfectOffset => "MaxPerfect",
+                        _ when touchOffset <= this.settings.PerfectOffset => "Perfect",
+                        _ => "Good"
+                    };
+
+                    // TODO: show judgment result and count.
+
                     this.notes.Dequeue();
 
                     ParticleBase particle = this.particleQueue.Dequeue();
@@ -249,18 +254,17 @@ internal partial class Orbit : CompositeDrawable {
 
         // TODO: `Zip` is so solw (Because there are too many bounds checks insider this method), stop using it.
         foreach ((ParticleBase particle, Note note) in this.particleQueue.Zip(this.notes)) {
-            if (note.Time - this.startTimeOffset > time) {
+            if (note.Time - startTimeOffset > time) {
                 break;
             }
             // The Particle falls to the judgment line.
             if (time < note.Time) {
                 particle.Y =
                Interpolation.ValueAt(time, visual_orbit_out_of_top, visual_orbit_offset,
-               note.Time - this.startTimeOffset, note.Time);
+               note.Time - startTimeOffset, note.Time);
             }
             // TODO: The Particle over time, and it move out of the screen and gradually disappear.
-            // FIXME: `note.Time < time` is wrong. Timeouut in a short period of time will only result in a lower rating, not a failure.
-            if (note.Time < time) {
+            if (note.Time - this.settings.GoodOffset < time) {
                 // TODO: Select a collection where objects can be removed during iteration.
 
             }
