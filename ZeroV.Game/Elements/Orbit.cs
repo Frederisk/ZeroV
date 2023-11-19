@@ -25,6 +25,9 @@ public record Note(Double Time);
 /// </summary>
 internal partial class Orbit : CompositeDrawable {
 
+    [Resolved]
+    private ZeroVGameSettings settings { get; set; } = null!;
+
     /// <summary>
     /// The size of half the particle's Y-axis radius.
     /// </summary>
