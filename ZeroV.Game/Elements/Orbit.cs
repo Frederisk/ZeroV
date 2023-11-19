@@ -272,7 +272,7 @@ internal partial class Orbit : CompositeDrawable {
                     Interpolation.ValueAt(time, 1f, 0f, note.Time, note.Time + this.settings.GoodOffset);
             }
 
-            if (note.Time - this.settings.GoodOffset < time) {
+            if (note.Time + this.settings.GoodOffset < time) {
                 // TODO: Select a collection where objects can be removed during iteration.
 
             }
