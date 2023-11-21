@@ -9,12 +9,18 @@ using ZeroV.Resources;
 
 namespace ZeroV.Game;
 
+/// <summary>
+/// The most basic <see cref="Game"/> that can be used to host osu! components and systems.
+/// This class will not load any kind of UI, allowing it to be used for provide dependencies to test cases without interfering with them.
+/// </summary>
 public partial class ZeroVGameBase : osu.Framework.Game {
     // Anything in this class is shared between the test browser and the game implementation.
     // It allows for caching global dependencies that should be accessible to tests, or changing
     // the screen scaling for all components including the test browser and framework overlays.
 
     protected override Container<Drawable> Content { get; }
+
+    private DependencyContainer? dependencies;
 
     protected ZeroVGameBase() {
         // Ensure game and tests scale with window size and screen DPI.
@@ -27,5 +33,10 @@ public partial class ZeroVGameBase : osu.Framework.Game {
     [BackgroundDependencyLoader]
     private void load() {
         this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
+
+        this.dependencies!.Cache(new ZeroVGameSettings());
     }
+
+    protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
+        this.dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 }

@@ -57,8 +57,6 @@ public partial class GameplayScreen : Screen {
         );
     }
 
-    //protected override
-
     protected override Boolean OnTouchDown(TouchDownEvent e) {
         if (this.orbits is not null) {
             TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
