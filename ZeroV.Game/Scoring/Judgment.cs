@@ -1,7 +1,8 @@
 using System;
 
 namespace ZeroV.Game.Scoring;
-internal static class Judgment {
+
+public static class Judgment {
 
     public static TargetResult JudgeBlink(Double targetTime, Double touchTime) {
         // -: late, +: early,
@@ -56,15 +57,5 @@ internal static class Judgment {
             _ => TargetResult.Perfect,
         };
     }
-
     // TODO: JudgePress
-
-    public enum TargetResult {
-        Miss,
-        BadEarly,
-        BadLate,
-        NormalEarly,
-        NormalLate,
-        Perfect,
-    }
 }

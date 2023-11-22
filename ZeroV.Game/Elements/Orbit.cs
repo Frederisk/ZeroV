@@ -234,7 +234,7 @@ internal partial class Orbit : CompositeDrawable {
                 if (touchOffset <= this.settings.GoodOffset) {
 
                     // TODO: Use Enum
-                    var judgmentResult = touchOffset switch {
+                    var _ = touchOffset switch {
                         _ when touchOffset <= this.settings.MaxPerfectOffset => "MaxPerfect",
                         _ when touchOffset <= this.settings.PerfectOffset => "Perfect",
                         _ => "Good"
