@@ -20,7 +20,7 @@ internal class TestScoringCalculator {
     [Test]
     public void Test1024() {
         for (var i = 0; i < 1024; i++) {
-            this.calculator1024.AddTarget(TargetResult.Perfect);
+            this.calculator1024.AddTarget(TargetResult.MaxPerfect);
             Console.WriteLine(this.calculator1024.DisplayScoring);
         }
         Assert.IsTrue(this.calculator1024.DisplayScoring is 1_000_000);
@@ -29,7 +29,7 @@ internal class TestScoringCalculator {
     [Test]
     public void Test4() {
         for (var i = 0; i < 4; i++) {
-            this.calculator4.AddTarget(TargetResult.Perfect);
+            this.calculator4.AddTarget(TargetResult.MaxPerfect);
             Console.WriteLine(this.calculator4.DisplayScoring);
         }
         Assert.IsTrue(this.calculator4.DisplayScoring is 1_000_000);

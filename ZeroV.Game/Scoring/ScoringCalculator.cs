@@ -1,10 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace ZeroV.Game.Scoring;
 
 public class ScoringCalculator {
-    public required UInt32 ParticleCount { get; init; }
+    public UInt32 ParticleCount { get; init; }
 
     public const Double MAX_SCORING = 1_000_000;
     public UInt32 DisplayScoring => Convert.ToUInt32(this.Scoring);
