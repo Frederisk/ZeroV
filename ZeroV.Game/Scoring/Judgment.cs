@@ -14,13 +14,13 @@ public static class Judgment {
             // ~1000: Miss
             var x when x is < -1000 or > +1000 => TargetResult.Miss,
             // 1000~500: Bad
-            var x when x is < -500 => TargetResult.BadLate,
-            var x when x is > +500 => TargetResult.BadEarly,
+            var x when x is < -500 => TargetResult.NormalLate,
+            var x when x is > +500 => TargetResult.NormalEarly,
             // 500~300: Normal
-            var x when x is < -100 => TargetResult.NormalLate,
-            var x when x is > +100 => TargetResult.NormalEarly,
+            var x when x is < -100 => TargetResult.PerfectLate,
+            var x when x is > +100 => TargetResult.PerfectEarly,
             // 300~0: Perfect
-            _ => TargetResult.Perfect,
+            _ => TargetResult.MaxPerfect,
         };
     }
 
@@ -34,7 +34,7 @@ public static class Judgment {
             // ~1000: Miss
             var x when x is < -1000 or > +1000 => TargetResult.Miss,
             // 1000~0: Perfect
-            _ => TargetResult.Perfect,
+            _ => TargetResult.MaxPerfect,
         };
     }
 
@@ -48,13 +48,13 @@ public static class Judgment {
             // ~1000: Miss
             var x when x is < -1000 or > +1000 => TargetResult.Miss,
             // 1000~800: Bad
-            var x when x is < -800 => TargetResult.BadLate,
-            var x when x is > +800 => TargetResult.BadEarly,
+            var x when x is < -800 => TargetResult.NormalLate,
+            var x when x is > +800 => TargetResult.NormalEarly,
             // 800~400: Normal
-            var x when x is < -400 => TargetResult.NormalLate,
-            var x when x is > +400 => TargetResult.NormalEarly,
+            var x when x is < -400 => TargetResult.PerfectLate,
+            var x when x is > +400 => TargetResult.PerfectEarly,
             // 400~0: Perfect
-            _ => TargetResult.Perfect,
+            _ => TargetResult.MaxPerfect,
         };
     }
     // TODO: JudgePress

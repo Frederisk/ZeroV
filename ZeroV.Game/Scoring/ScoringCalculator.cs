@@ -4,27 +4,36 @@ using System.Diagnostics;
 namespace ZeroV.Game.Scoring;
 
 public class ScoringCalculator {
+    public required UInt32 ParticleCount { get; init; }
+
     public const Double MAX_SCORING = 1_000_000;
-
     public UInt32 DisplayScoring => Convert.ToUInt32(this.Scoring);
-
     public Double Scoring { get; private set; } = 0;
+    public Double BaseScoring { get; private init; }
 
-    private UInt32 particleCount;
-
+    public UInt32 JudgedCount => this.MissCount + this.NormalCount + this.PerfectCount + this.MaxPerfectCount;
     public UInt32 MissCount { get; private set; } = 0;
-    public UInt32 BadEarlyCount { get; private set; } = 0;
-    public UInt32 BadLateCount { get; private set; } = 0;
+
+    public UInt32 NormalCount => this.NormalEarlyCount + this.NormalLateCount;
     public UInt32 NormalEarlyCount { get; private set; } = 0;
     public UInt32 NormalLateCount { get; private set; } = 0;
-    public UInt32 PerfectCount { get; private set; } = 0;
-    public UInt32 BadCount => this.BadEarlyCount + this.BadLateCount;
-    public UInt32 NormalCount => this.NormalEarlyCount + this.NormalLateCount;
-    public UInt32 EarlyCount => this.BadEarlyCount + this.NormalEarlyCount;
-    public UInt32 LateCount => this.BadLateCount + this.NormalLateCount;
+
+    public UInt32 PerfectCount => this.PerfectEarlyCount + this.PerfectLateCount;
+    public UInt32 PerfectEarlyCount { get; private set; } = 0;
+    public UInt32 PerfectLateCount { get; private set; } = 0;
+
+    public UInt32 MaxPerfectCount { get; private set; } = 0;
+
+    public UInt32 EarlyCount => this.NormalEarlyCount + this.PerfectEarlyCount;
+    public UInt32 LateCount => this.NormalLateCount + this.PerfectLateCount;
 
     public UInt32 MaxCombo { get; private set; } = 0;
     public UInt32 CurrentCombo { get; private set; } = 0;
+
+    public Boolean IsFullCombo => this.CurrentCombo == this.JudgedCount;
+    public Boolean IsAllPerfect => (this.PerfectCount + this.MaxPerfectCount) == this.JudgedCount;
+
+    public Boolean IsAllDone => this.JudgedCount == this.ParticleCount;
 
     private Double comboMultiplier => this.CurrentCombo switch {
         0 => throw new InvalidOperationException("CurrentCombo is 0"),
@@ -37,65 +46,72 @@ public class ScoringCalculator {
         _ => 2
     };
 
-    private static Double getTargetMultiplier(TargetResult targetResult) {
-        return targetResult switch {
-            TargetResult.Miss => 0.0,
-            TargetResult.BadEarly or TargetResult.BadLate => 0.1,
-            TargetResult.NormalEarly or TargetResult.NormalLate => 0.5,
-            TargetResult.Perfect => 1.0,
-            _ => throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null)
-        };
-    }
+    // private static Double getTargetMultiplier(TargetResult targetResult) {
+    //     return targetResult switch {
+    //         TargetResult.Miss => 0.0,
+    //         TargetResult.NormalEarly or TargetResult.NormalLate => 0.1,
+    //         TargetResult.PerfectEarly or TargetResult.PerfectLate => 0.5,
+    //         TargetResult.MaxPerfect => 1.0,
+    //         _ => throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null)
+    //     };
+    // }
 
     public void AddTarget(TargetResult targeResult) {
         if (targeResult is TargetResult.Miss) {
             this.MissCount++;
             this.CurrentCombo = 0;
-        } else {
-            this.CurrentCombo++;
-            this.MaxCombo = Math.Max(this.MaxCombo, this.CurrentCombo);
-            switch (targeResult) {
-                case TargetResult.BadEarly:
-                    this.BadEarlyCount++;
-                    break;
-
-                case TargetResult.BadLate:
-                    this.BadLateCount++;
-                    break;
-
-                case TargetResult.NormalEarly:
-                    this.NormalEarlyCount++;
-                    break;
-
-                case TargetResult.NormalLate:
-                    this.NormalLateCount++;
-                    break;
-
-                case TargetResult.Perfect:
-                    this.PerfectCount++;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(targeResult), targeResult, null);
-            }
-            this.Scoring += this.BaseScoring * this.comboMultiplier * getTargetMultiplier(targeResult);
+            return;
         }
+        this.CurrentCombo++;
+        this.MaxCombo = Math.Max(this.MaxCombo, this.CurrentCombo);
+        Double targetMultiplier;
+        switch (targeResult) {
+            case TargetResult.NormalEarly:
+                this.NormalEarlyCount++;
+                targetMultiplier = 0.1;
+                break;
+
+            case TargetResult.NormalLate:
+                this.NormalLateCount++;
+                targetMultiplier = 0.1;
+                break;
+
+            case TargetResult.PerfectEarly:
+                this.PerfectEarlyCount++;
+                targetMultiplier = 0.5;
+                break;
+
+            case TargetResult.PerfectLate:
+                this.PerfectLateCount++;
+                targetMultiplier = 0.5;
+                break;
+
+            case TargetResult.MaxPerfect:
+                this.MaxPerfectCount++;
+                targetMultiplier = 1.0;
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(targeResult), targeResult, null);
+        }
+        this.Scoring += this.BaseScoring * this.comboMultiplier * targetMultiplier;
+        // this.Scoring += this.BaseScoring * this.comboMultiplier * getTargetMultiplier(targeResult);
     }
 
     public ScoringCalculator(UInt32 particleNumber) {
         // if (particleNumber is 0) {
-        //     throw new ArgumentOutOfRangeException(nameof(particleNumber), particleNumber, "particleNumber must be greater than 0");
+        //     throw new ArgumentOutOfRangeException(nameof(particleNumber), particleNumber, "ParticleNumber is 0");
         // }
-        this.particleCount = particleNumber;
-        this.BaseScoring = this.GetBaseScoring();
+        Debug.Assert(particleNumber is not 0);
+
+        this.ParticleCount = particleNumber;
+        this.BaseScoring = this.getBaseScoring();
     }
 
-    public Double BaseScoring { get; private init; }
-
-    public Double GetBaseScoring() {
-        this.CurrentCombo = this.particleCount;
+    private Double getBaseScoring() {
+        this.CurrentCombo = this.ParticleCount;
         Double multiplierSum = 0;
-        for (var i = 0; i < this.particleCount; i++) {
+        for (var i = 0; i < this.ParticleCount; i++) {
             multiplierSum += this.comboMultiplier;
             this.CurrentCombo--;
         }
