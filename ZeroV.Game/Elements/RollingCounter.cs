@@ -127,8 +127,9 @@ public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T>
     /// Creates an <see cref="SpriteText"/> which may be used to display this counter's text.
     /// May not be called if <see cref="CreateText"/> is overridden.
     /// </summary>
-    protected virtual SpriteText CreateSpriteText() => new() {
-        // Font = OsuFont.Numeric.With(size: 40f),
-        Size = new(40f),
-    };
+    protected virtual SpriteText CreateSpriteText() {
+        var text = new SpriteText();
+        text.Font = text.Font.With(size: 50);
+        return text;
+    }
 }
