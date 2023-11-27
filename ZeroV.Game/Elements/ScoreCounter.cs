@@ -32,6 +32,6 @@ public partial class ScoreCounter : RollingCounter<UInt32> {
 
     protected override Double GetProportionalDuration(UInt32 currentValue, UInt32 newValue) => Math.Abs(currentValue - newValue);
     protected override LocalisableString FormatCount(UInt32 count) => count.ToLocalisableString(this.formatString);
-    protected override SpriteText CreateSpriteText()
-        => base.CreateSpriteText().With(spriteText => spriteText.Font = spriteText.Font.With(fixedWidth: true));
+    protected override ZeroVSpriteText CreateSpriteText()
+        => base.CreateSpriteText().With(spriteText => spriteText.IsFixedWidth = true);
 }
