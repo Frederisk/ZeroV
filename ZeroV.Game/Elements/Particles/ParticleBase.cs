@@ -26,7 +26,7 @@ internal abstract partial class ParticleBase: CompositeDrawable {
         this.FatherOrbit = fatherOrbit;
     }
 
-    public Boolean IsRecycable { get; private set; }
+    public Boolean IsRecyclable { get; private set; }
 
     public virtual void Recycle(Orbit fatherOrbit, Single startTime) {
         // TODO: Create appropriate methods to make objects reusable.

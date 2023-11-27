@@ -52,7 +52,7 @@ internal partial class Orbit : CompositeDrawable {
     private const Single visual_orbit_offset = -50;
 
     /// <summary>
-    /// The posotion of the bottom of the screen.
+    /// The position of the bottom of the screen.
     /// </summary>
     private const Single visual_orbit_bottom = 0;
 
@@ -252,7 +252,7 @@ internal partial class Orbit : CompositeDrawable {
             this.lastTouchDownTime = null;
         }
 
-        // TODO: `Zip` is so solw (Because there are too many bounds checks insider this method), stop using it.
+        // TODO: `Zip` is so slow (Because there are too many bounds checks insider this method), stop using it.
         foreach ((ParticleBase particle, Note note) in this.particleQueue.Zip(this.notes)) {
             if (note.Time - startTimeOffset > time) {
                 break;

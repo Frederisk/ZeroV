@@ -36,19 +36,13 @@ internal partial class PressParticle: ParticleBase {
     private void load() {
         this.startContainer = new Container {
             Children = new Drawable[] {
-                new Box {
-                    Origin= Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(52),
                     Colour= Colour4.Black,
-                    Rotation = 45,
                 },
-                new Box {
-                    Origin = Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(28),
                     Colour= Colour4.Orange,
-                    Rotation = 45,
                 },
             }
         };
@@ -64,19 +58,13 @@ internal partial class PressParticle: ParticleBase {
         };
         this.endContainer = new Container {
             Children = new Drawable[] {
-                new Box {
-                    Origin= Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(52),
                     Colour= Colour4.Black,
-                    Rotation = 45,
                 },
-                new Box {
-                    Origin = Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(28),
                     Colour= Colour4.Orange,
-                    Rotation = 45,
                 },
             }
         };

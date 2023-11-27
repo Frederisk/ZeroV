@@ -25,19 +25,13 @@ internal partial class StrokeParticle : ParticleBase {
     private void load() {
         this.container = new Container {
             Children = new Drawable[] {
-                new Box {
-                    Origin= Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(52),
                     Colour= Colour4.LightYellow,
-                    Rotation = 45,
                 },
-                new Box {
-                    Origin = Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(28),
                     Colour= Colour4.White,
-                    Rotation = 45,
                 },
             },
         };

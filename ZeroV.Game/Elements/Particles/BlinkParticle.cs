@@ -24,19 +24,13 @@ internal partial class BlinkParticle : ParticleBase {
             //Origin = Anchor.Centre,
             //Anchor = Anchor.Centre,
             Children = new Drawable[] {
-                new Box {
-                    Origin= Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(52),
                     Colour= Colour4.Black,
-                    Rotation = 45,
                 },
-                new Box {
-                    Origin = Anchor.Centre,
-                    Anchor = Anchor.Centre,
+                new Diamond {
                     Size = new Vector2(28),
                     Colour= Colour4.Red,
-                    Rotation = 45,
                 },
             }
         };
