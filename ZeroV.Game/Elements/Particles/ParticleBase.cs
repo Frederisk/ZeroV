@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using osu.Framework.Bindables;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
 namespace ZeroV.Game.Elements.Particles;
@@ -22,6 +23,8 @@ internal abstract partial class ParticleBase: CompositeDrawable {
     public Orbit FatherOrbit { get; init; }
 
     public ParticleBase(Orbit fatherOrbit) {
+        this.Origin = Anchor.Centre;
+        this.Anchor = Anchor.Centre;
         this.StartTimeBindable = new Bindable<Single>();
         this.FatherOrbit = fatherOrbit;
     }
