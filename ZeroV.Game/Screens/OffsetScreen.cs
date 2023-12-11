@@ -6,9 +6,11 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 
 using osuTK.Graphics;
+using osuTK.Input;
 
 using ZeroV.Game.Elements.Particles;
 
@@ -19,6 +21,8 @@ public partial class OffsetScreen : Screen {
     private BindableDouble offset = new(0);
 
     private BlinkParticle? line;
+    private BlinkParticle? tempDisplayLine;
+    private ZeroVSpriteText? offsetText;
 
     [BackgroundDependencyLoader]
     private void load(ITrackStore trackStore) {
@@ -30,6 +34,18 @@ public partial class OffsetScreen : Screen {
         this.line = new BlinkParticle(null!) {
             RelativePositionAxes = Axes.Both,
         };
+        this.tempDisplayLine = new BlinkParticle(null!) {
+            RelativePositionAxes = Axes.Both,
+        };
+
+        this.offsetText = new ZeroVSpriteText {
+            Anchor = Anchor.Centre,
+            Origin = Anchor.TopCentre,
+            RelativePositionAxes = Axes.Both,
+            Y = 0.25f,
+            FontSize = 64,
+            Text = this.offset.Value + "ms",
+        };
 
         Drawable[] items = [
             // Visual offset
@@ -40,7 +56,7 @@ public partial class OffsetScreen : Screen {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 CornerRadius = 32,
-                Masking= true,
+                Masking = true,
                 Children = [
                     new Box {
                         RelativeSizeAxes = Axes.Both,
@@ -58,14 +74,16 @@ public partial class OffsetScreen : Screen {
                     },
                     new BlinkParticle(null!) {
                         RelativePositionAxes = Axes.Both,
-                        X = 00.00f,
+                        X = 0.00f,
                         Alpha = 0.75f,
                     },
+                    this.tempDisplayLine,
                     this.line,
                 ],
-            }
+            },
             // User interface
             // TODO: Add user interface
+            this.offsetText,
         ];
         this.InternalChildren = items;
     }
@@ -84,19 +102,61 @@ public partial class OffsetScreen : Screen {
         return base.OnExiting(e);
     }
 
-    private const Double bpm = 128;
-    private const Double beat_length = 60000 / bpm;
-    private const Double fourth_beat = beat_length * 4;
-    private Double time => (this.offsetBeatTrack?.CurrentTime ?? 0) - this.offset.Value - 50;
-    private Double timeSinceLastBeat => (this.time % fourth_beat);
-    private Double progress => this.timeSinceLastBeat / fourth_beat;
-    protected override void Update() {
-        this.line!.X = Convert.ToSingle(this.progress < .5 ? this.progress : progress - 1);
+    /// <summary>
+    /// Beat per minute.
+    /// </summary>
+    private const Double bpm = 128; // 128 bpm
 
+    /// <summary>
+    /// One beat length in milliseconds.
+    /// </summary>
+    private const Double beat_length = 60_000 / bpm; // 468.75 ms
+
+    /// <summary>
+    /// One bar length in milliseconds. Its value is 4 * <see cref="beat_length"/>.
+    /// </summary>
+    private const Double four_beats_bar = beat_length * 4; // 1875 ms
+
+    /// <summary>
+    /// Track delay in milliseconds. This value indicates when the first beat of the entire track starts.
+    /// </summary>
+    private const Double track_delay = 50; // 50 ms
+
+    /// <summary>
+    /// Real track beats time total.
+    /// </summary>
+    /// <remarks>
+    /// track.time - offset - track_delay
+    /// </remarks>
+    private Double time => (this.offsetBeatTrack?.CurrentTime ?? 0) - this.offset.Value - track_delay;
+
+    private Double timeSinceLastBeat => (this.time % four_beats_bar);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private Double relativePosition {
+        get {
+            // range: 0 ~ 1.0
+            var relativePositionOfBar = this.timeSinceLastBeat / four_beats_bar;
+            // range: -0.5 ~ +0.5
+            return (relativePositionOfBar < 0.5) ? relativePositionOfBar : (relativePositionOfBar - 1);
+        }
     }
+
+    protected override void Update() {
+        this.line!.X = Convert.ToSingle(this.relativePosition < 0.5 ? this.relativePosition : this.relativePosition - 1);
+    }
+
     private void offsetChanged(ValueChangedEvent<Double> e) {
         // TODD: display offset
-        // this.line?.MoveToX((Single) e.NewValue, 100, Easing.OutQuint);
+        this.offsetText!.Text = e.NewValue + "ms";
+    }
+
+    protected override Boolean OnKeyDown(KeyDownEvent e) {
+        if (e.Key == Key.Space) {
+            BlinkParticle tempLine = new ()
+        }
     }
 
     protected override void Dispose(Boolean isDisposing) {
@@ -104,5 +164,4 @@ public partial class OffsetScreen : Screen {
         this.offset.ValueChanged -= this.offsetChanged;
         base.Dispose(isDisposing);
     }
-
 }
