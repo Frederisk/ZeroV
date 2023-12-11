@@ -1,14 +1,14 @@
 using System;
 
 using osu.Framework.Allocation;
-
-using TriangleShape = osu.Framework.Graphics.Shapes.Triangle;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Sprites;
 
 using osuTK;
+
+using TriangleShape = osu.Framework.Graphics.Shapes.Triangle;
 
 namespace ZeroV.Game.Graphics.Shapes;
 
@@ -17,7 +17,15 @@ namespace ZeroV.Game.Graphics.Shapes;
 /// </summary>
 /// <remarks>
 /// This class is a modified version of <see cref="TriangleShape"/> from osu.Framework.
-/// TODO: Submit a PR to osu.Framework to modify <see cref="TriangleShape"/> to allow overriding <c>toTriangle</c> method.
+/// This category is not the most efficient, please try to use it in situations where performance is not sensitive. <seealso cref="Triangle"/>
+/// <code lang="csharp">
+///  // Note: Do not change the order of vertices. They are ordered in screen-space counter-clockwise fashion.
+///  // See: IPolygon.GetVertices()
+///  public readonly Vector2 P0;
+///  public readonly Vector2 P1;
+///  public readonly Vector2 P2;
+/// </code>
+/// https://github.com/ppy/osu-framework/pull/6078
 /// </remarks>
 internal partial class OrientedTriangle : Sprite {
 
@@ -29,10 +37,12 @@ internal partial class OrientedTriangle : Sprite {
         // RelativeSizeAxes may not behave as expected if this is not done.
         this.Size = Vector2.One;
 
+        // They are ordered in screen-space counter-clockwise fashion.
+        // See: osu.Framework.Graphics.Primitives
         this.ToTriangle = orientation switch {
             Orientation.Up => q => new Triangle((q.TopLeft + q.TopRight) / 2, q.BottomLeft, q.BottomRight),
-            Orientation.Down => q => new Triangle((q.BottomLeft + q.BottomRight) / 2, q.TopLeft, q.TopRight),
-            Orientation.Left => q => new Triangle((q.TopLeft + q.BottomLeft) / 2, q.TopRight, q.BottomRight),
+            Orientation.Down => q => new Triangle((q.BottomLeft + q.BottomRight) / 2, q.TopRight, q.TopLeft),
+            Orientation.Left => q => new Triangle((q.TopLeft + q.BottomLeft) / 2, q.BottomRight, q.TopRight),
             Orientation.Right => q => new Triangle((q.TopRight + q.BottomRight) / 2, q.TopLeft, q.BottomLeft),
             _ => throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null),
         };
