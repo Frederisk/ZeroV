@@ -1,4 +1,4 @@
-﻿namespace ZeroV.Game.Data.Particles;
+namespace ZeroV.Game.Data.Particles;
 
 public enum OrbitShowAndExitAnimation {
     Fade,

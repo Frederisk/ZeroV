@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using NUnit.Framework;
 
@@ -11,7 +11,7 @@ namespace ZeroV.Game.Tests.Visual.Elements;
 
 public partial class TestSceneScoreCounter : ZeroVTestScene {
 
-    private ScoreCounter scoreCounter = [];
+    private ScoreCounter scoreCounter = new();
 
     public TestSceneScoreCounter() {
         this.Add(this.scoreCounter);

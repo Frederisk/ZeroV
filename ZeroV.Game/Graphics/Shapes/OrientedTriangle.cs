@@ -69,7 +69,7 @@ internal partial class OrientedTriangle : Sprite {
             }
 
             renderer.DrawTriangle(this.Texture, source.ToTriangle(this.ScreenSpaceDrawQuad), this.DrawColourInfo.Colour, null, null,
-                new Vector2(this.InflationAmount.X / this.DrawRectangle.Width, InflationAmount.Y / this.DrawRectangle.Height), this.TextureCoords);
+                new Vector2(this.InflationAmount.X / this.DrawRectangle.Width, this.InflationAmount.Y / this.DrawRectangle.Height), this.TextureCoords);
         }
 
         protected override void BlitOpaqueInterior(IRenderer renderer) {

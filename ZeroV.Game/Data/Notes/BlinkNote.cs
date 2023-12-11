@@ -1,3 +1,3 @@
-﻿namespace ZeroV.Game.Data.Particles;
+namespace ZeroV.Game.Data.Particles;
 
 public class BlinkNote : NoteBase { }

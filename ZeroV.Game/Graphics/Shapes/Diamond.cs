@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
