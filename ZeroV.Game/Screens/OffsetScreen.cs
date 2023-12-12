@@ -153,11 +153,11 @@ public partial class OffsetScreen : Screen {
         this.offsetText!.Text = e.NewValue + "ms";
     }
 
-    protected override Boolean OnKeyDown(KeyDownEvent e) {
-        if (e.Key == Key.Space) {
-            BlinkParticle tempLine = new ()
-        }
-    }
+    //protected override Boolean OnKeyDown(KeyDownEvent e) {
+    //    if (e.Key == Key.Space) {
+    //        BlinkParticle tempLine = new();
+    //    }
+    //}
 
     protected override void Dispose(Boolean isDisposing) {
         this.offsetBeatTrack?.Dispose();
