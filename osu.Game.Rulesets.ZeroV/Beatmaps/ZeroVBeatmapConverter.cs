@@ -28,7 +28,7 @@ public class ZeroVBeatmapConverter : BeatmapConverter<ZeroVHitObject> {
     public override Boolean CanConvert() => Beatmap.HitObjects.All(h => h is IHasXPosition and IHasYPosition);
 
     protected override IEnumerable<ZeroVHitObject> ConvertHitObject(HitObject original, IBeatmap beatmap, CancellationToken cancellationToken) {
-        yield return new ZeroVHitObject {
+        yield return new BlinkParticle {
             Samples = original.Samples,
             StartTime = original.StartTime,
             Lane = this.getLane(original)
