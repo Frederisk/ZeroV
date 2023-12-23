@@ -9,43 +9,70 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 
+using osuTK;
 using osuTK.Graphics;
 using osuTK.Input;
 
 using ZeroV.Game.Elements.Particles;
+using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game;
 
 public partial class OffsetScreen : Screen {
-    private Track? offsetBeatTrack;
     private BindableDouble offset = new(0);
 
-    private BlinkParticle? line;
-    private BlinkParticle? tempDisplayLine;
-    private ZeroVSpriteText? offsetText;
+    private Track offsetBeatTrack = null!;
+
+    private BlinkParticle movingLine = null!;
+
+    private Container tempDisplayContainer = null!;
+
+    private ZeroVSpriteText offsetText = null!;
 
     [BackgroundDependencyLoader]
     private void load(ITrackStore trackStore) {
-        // FIXME: Add tracks
-        // this.offsetBeatTrack = trackStore.Get("");
-        this.offsetBeatTrack = trackStore.GetVirtual();
+        // TODO: Load offset
+        this.offsetBeatTrack = trackStore.Get("OffsetBeats.flac");
+        //this.offsetBeatTrack = trackStore.GetVirtual();
         this.offsetBeatTrack.Looping = true;
 
-        this.line = new BlinkParticle(null!) {
+        this.movingLine = new BlinkParticle(null!) {
             RelativePositionAxes = Axes.Both,
         };
-        this.tempDisplayLine = new BlinkParticle(null!) {
-            RelativePositionAxes = Axes.Both,
+
+        this.tempDisplayContainer = new Container {
+            RelativeSizeAxes = Axes.Both,
         };
 
         this.offsetText = new ZeroVSpriteText {
             Anchor = Anchor.Centre,
-            Origin = Anchor.TopCentre,
+            Origin = Anchor.Centre,
             RelativePositionAxes = Axes.Both,
             Y = 0.25f,
             FontSize = 64,
             Text = this.offset.Value + "ms",
         };
+
+        ArrowButton leftArrow = new(OrientedTriangle.Orientation.Left) {
+            Y = 0.25f,
+            X = -0.2f,
+            TouchDown = e => this.offset.Value--,
+        };
+        ArrowButton rightArrow = new(OrientedTriangle.Orientation.Right) {
+            Y = 0.25f,
+            X = +0.2f,
+            TouchDown = e => this.offset.Value++,
+        };
+        //ArrowButton leftFastArrow = new(OrientedTriangle.Orientation.Left) {
+        //    Y = 0.25f,
+        //    X = -0.25f,
+        //    TouchDown = e => this.offset.Value -= 10,
+        //};
+        //ArrowButton rightFastArrow = new(OrientedTriangle.Orientation.Right) {
+        //    Y = 0.25f,
+        //    X = +0.25f,
+        //    TouchDown = e => this.offset.Value += 10,
+        //};
 
         Drawable[] items = [
             // Visual offset
@@ -77,28 +104,31 @@ public partial class OffsetScreen : Screen {
                         X = 0.00f,
                         Alpha = 0.75f,
                     },
-                    this.tempDisplayLine,
-                    this.line,
+                    this.tempDisplayContainer,
+                    this.movingLine,
                 ],
             },
             // User interface
-            // TODO: Add user interface
             this.offsetText,
+            leftArrow,
+            rightArrow,
+            //leftFastArrow,
+            //rightFastArrow,
         ];
         this.InternalChildren = items;
     }
 
     protected override void LoadComplete() {
-        this.offset!.ValueChanged += this.offsetChanged;
+        this.offset.ValueChanged += this.offsetChanged;
         base.LoadComplete();
     }
 
     public override void OnEntering(ScreenTransitionEvent e) {
-        this.offsetBeatTrack?.Start();
+        this.offsetBeatTrack.Start();
     }
 
     public override Boolean OnExiting(ScreenExitEvent e) {
-        this.offsetBeatTrack?.Stop();
+        this.offsetBeatTrack.Stop();
         return base.OnExiting(e);
     }
 
@@ -120,7 +150,7 @@ public partial class OffsetScreen : Screen {
     /// <summary>
     /// Track delay in milliseconds. This value indicates when the first beat of the entire track starts.
     /// </summary>
-    private const Double track_delay = 50; // 50 ms
+    private const Double track_delay = 0; // 0ms // 50; // 50 ms
 
     /// <summary>
     /// Real track beats time total.
@@ -128,12 +158,12 @@ public partial class OffsetScreen : Screen {
     /// <remarks>
     /// track.time - offset - track_delay
     /// </remarks>
-    private Double time => (this.offsetBeatTrack?.CurrentTime ?? 0) - this.offset.Value - track_delay;
+    private Double time => this.offsetBeatTrack.CurrentTime - this.offset.Value - track_delay;
 
     private Double timeSinceLastBeat => (this.time % four_beats_bar);
 
     /// <summary>
-    /// 
+    /// Relative position of the movingLine.
     /// </summary>
     private Double relativePosition {
         get {
@@ -145,23 +175,93 @@ public partial class OffsetScreen : Screen {
     }
 
     protected override void Update() {
-        this.line!.X = Convert.ToSingle(this.relativePosition < 0.5 ? this.relativePosition : this.relativePosition - 1);
+        this.movingLine.X = Convert.ToSingle(this.relativePosition < 0.5 ? this.relativePosition : this.relativePosition - 1);
     }
 
     private void offsetChanged(ValueChangedEvent<Double> e) {
         // TODD: display offset
-        this.offsetText!.Text = e.NewValue + "ms";
+        this.offsetText.Text = e.NewValue + "ms";
     }
 
-    //protected override Boolean OnKeyDown(KeyDownEvent e) {
-    //    if (e.Key == Key.Space) {
-    //        BlinkParticle tempLine = new();
-    //    }
-    //}
+#if DEBUG
+
+    protected override Boolean OnKeyDown(KeyDownEvent e) {
+        if (e.Key == Key.Space) {
+            this.OnTouchDown(null!);
+            return true;
+        } else if (e.Key == Key.Left) {
+            this.offset.Value--;
+            return true;
+        } else if (e.Key == Key.Right) {
+            this.offset.Value++;
+            return true;
+        }
+        return false;
+    }
+
+#endif
+
+    protected override Boolean OnTouchDown(TouchDownEvent e) {
+        BlinkParticle tempLine = new(null!) {
+            RelativePositionAxes = Axes.X,
+            X = (Single)this.relativePosition,
+        };
+
+        this.tempDisplayContainer.Add(tempLine);
+        tempLine.FadeIn(100).ScaleTo(Vector2.One, 300, Easing.OutQuint).Delay(400).FadeOut(500).Expire();
+
+        return true;
+    }
 
     protected override void Dispose(Boolean isDisposing) {
-        this.offsetBeatTrack?.Dispose();
+        this.offsetBeatTrack.Dispose();
         this.offset.ValueChanged -= this.offsetChanged;
         base.Dispose(isDisposing);
+    }
+
+    internal partial class ArrowButton : Container {
+        private readonly OrientedTriangle triangle;
+
+        public Action<TouchDownEvent>? TouchDown;
+
+        public ArrowButton(OrientedTriangle.Orientation orientation) {
+            this.Anchor = Anchor.Centre;
+            this.Origin = Anchor.Centre;
+            this.RelativePositionAxes = Axes.Both;
+            this.Size = new Vector2(64);
+            //this.AutoSizeAxes = Axes.Both;
+            this.triangle = new OrientedTriangle(orientation) {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                RelativePositionAxes = Axes.Both,
+                RelativeSizeAxes = Axes.Both,
+                //Size = new Vector2(64),
+            };
+            this.Add(this.triangle);
+        }
+
+        //protected override Boolean OnHover(HoverEvent e) {
+        //    this.triangle.FadeColour(Color4.White, 100);
+        //    return base.OnHover(e);
+        //}
+
+        //protected override void OnHoverLost(HoverLostEvent e) {
+        //    this.triangle.FadeColour(Color4.LightGray, 100);
+        //    base.OnHoverLost(e);
+        //}
+
+#if DEBUG
+
+        protected override Boolean OnMouseDown(MouseDownEvent e) {
+            this.OnTouchDown(null!);
+            return true;
+        }
+
+#endif
+
+        protected override Boolean OnTouchDown(TouchDownEvent e) {
+            this.TouchDown?.Invoke(e);
+            return true;
+        }
     }
 }
