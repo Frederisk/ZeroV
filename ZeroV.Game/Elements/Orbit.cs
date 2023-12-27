@@ -23,7 +23,7 @@ public record Note(Double Time);
 /// <summary>
 /// Orbits that carry particles. It's also the main interactive object in this game.
 /// </summary>
-internal partial class Orbit : CompositeDrawable {
+public partial class Orbit : CompositeDrawable {
 
     [Resolved]
     private ZeroVGameSettings settings { get; set; } = null!;

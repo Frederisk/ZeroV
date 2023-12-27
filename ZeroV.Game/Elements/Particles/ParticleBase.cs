@@ -11,7 +11,7 @@ using osu.Framework.Graphics.Containers;
 namespace ZeroV.Game.Elements.Particles;
 
 
-internal abstract partial class ParticleBase: CompositeDrawable {
+public abstract partial class ParticleBase: CompositeDrawable {
 
     public virtual Single StartTime {
         get => this.StartTimeBindable.Value;

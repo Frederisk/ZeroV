@@ -1,14 +1,11 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-// using osu.Framework.Graphics.Containers;
-// using osu.Framework.Graphics.Shapes;
-// using osu.Framework.Graphics.Textures;
 
 using osuTK;
 
 namespace ZeroV.Game.Elements.Particles;
 
-internal partial class BlinkParticle : ParticleBase {
+public partial class BlinkParticle : ParticleBase {
     // private Container? container;
     //public Double StartTime { get; set; }
 
