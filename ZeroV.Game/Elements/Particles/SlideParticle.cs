@@ -19,7 +19,7 @@ public partial class SlideParticle : ParticleBase {
     [BackgroundDependencyLoader]
     private void load() {
         const Single inner_size = 0.8f;
-        // const Single inner_diff = 1.0f - inner_size;
+        //const Single inner_diff = 1.0f - inner_size;
         this.InternalChildren = [
             //new InnerTriangle() {
             //    Size = new Vector2(100),
@@ -79,7 +79,7 @@ public partial class SlideParticle : ParticleBase {
                 },
             },
             new Diamond {
-                Size = new Vector2(24),
+                DiameterSize = 24,
                 Colour = Color4.Black,
             },
         ];

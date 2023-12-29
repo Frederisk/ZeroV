@@ -17,12 +17,13 @@ public partial class BlinkParticle : ParticleBase {
     private void load() {
         this.InternalChildren = [
             new Diamond {
+                //DiameterSize = 52,
                 Size = new Vector2(52),
-                Colour= Colour4.Black,
+                Colour = Colour4.Black,
             },
             new Diamond {
-                Size = new Vector2(28),
-                Colour= Colour4.Red,
+                DiameterSize = 28,
+                Colour = Colour4.Red,
             },
         ];
     }

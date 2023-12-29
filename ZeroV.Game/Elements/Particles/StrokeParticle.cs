@@ -14,29 +14,28 @@ using osuTK;
 using osuTK.Graphics;
 
 namespace ZeroV.Game.Elements.Particles;
-internal partial class StrokeParticle : ParticleBase {
-    private Container? container;
 
+public partial class StrokeParticle : ParticleBase {
+    //private Container? container;
 
     public StrokeParticle(Orbit fatherOrbit) : base(fatherOrbit) {
     }
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.container = new Container {
-            Children = new Drawable[] {
-                new Diamond {
-                    Size = new Vector2(52),
-                    Colour= Colour4.LightYellow,
-                },
-                new Diamond {
-                    Size = new Vector2(28),
-                    Colour= Colour4.White,
-                },
+        this.InternalChildren = [
+            new Diamond {
+                DiameterSize = 52,
+                Colour = Colour4.Gray,
             },
-        };
-
-        this.InternalChild = this.container;
+            new Diamond {
+                DiameterSize = 52 * 0.9f,
+                Colour = Colour4.Gold,
+            },
+            new Diamond {
+                DiameterSize = 24,
+                Colour = Colour4.Gray,
+            }
+        ];
     }
-
 }

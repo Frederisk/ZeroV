@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -10,11 +6,11 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 
-using osuTK;
 using osuTK.Graphics;
 
 namespace ZeroV.Game.Elements.Particles;
-internal partial class PressParticle: ParticleBase {
+
+internal partial class PressParticle : ParticleBase {
     private Container? startContainer;
     private Container? holdContainer;
     private Container? endContainer;
@@ -26,10 +22,9 @@ internal partial class PressParticle: ParticleBase {
         set => this.EndTimeBindable.Value = value;
     }
 
-    public Bindable<Single> EndTimeBindable;
+    public Bindable<Single> EndTimeBindable = new();
 
-    public PressParticle(Orbit fatherOrbit): base(fatherOrbit) {
-        this.EndTimeBindable = new Bindable<Single>();
+    public PressParticle(Orbit fatherOrbit) : base(fatherOrbit) {
     }
 
     [BackgroundDependencyLoader]
@@ -37,11 +32,11 @@ internal partial class PressParticle: ParticleBase {
         this.startContainer = new Container {
             Children = new Drawable[] {
                 new Diamond {
-                    Size = new Vector2(52),
+                    DiameterSize = 52,
                     Colour= Colour4.Black,
                 },
                 new Diamond {
-                    Size = new Vector2(28),
+                    DiameterSize = 28,
                     Colour= Colour4.Orange,
                 },
             }
@@ -59,16 +54,15 @@ internal partial class PressParticle: ParticleBase {
         this.endContainer = new Container {
             Children = new Drawable[] {
                 new Diamond {
-                    Size = new Vector2(52),
+                    DiameterSize = 52,
                     Colour= Colour4.Black,
                 },
                 new Diamond {
-                    Size = new Vector2(28),
+                    DiameterSize = 28,
                     Colour= Colour4.Orange,
                 },
             }
         };
-
         this.container = new Container {
             Children = new Drawable[] {
                 this.holdContainer,
@@ -79,5 +73,4 @@ internal partial class PressParticle: ParticleBase {
 
         this.InternalChild = this.container;
     }
-
 }

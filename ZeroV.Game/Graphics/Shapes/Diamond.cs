@@ -7,15 +7,20 @@ using osuTK;
 
 namespace ZeroV.Game;
 
+/// <summary>
+/// A diamond shape. Implemented by <see cref="Box"/> rotated 45 degrees.
+/// </summary>
 public partial class Diamond : Box {
+
     public Diamond() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
         this.Rotation = 45;
     }
 
-    public override Vector2 Size {
+    public new Vector2 Size {
         get => base.Size;
+        [Obsolete("Don't set Size manually. Use DiameterSize instead.")]
         set {
             if (value.X != value.Y) {
                 throw new ArgumentException("Diamonds must be square.");

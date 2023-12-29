@@ -1,6 +1,7 @@
 using osu.Framework.Allocation;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Shapes;
 
 using osuTK.Graphics;
 
@@ -37,6 +38,10 @@ public partial class TestSceneParticles : ZeroVTestScene {
                 Y = 0,
                 X = 192,
                 Direction = SlideParticle.SlidingDirection.Left,
+            },
+            new StrokeParticle(null!) {
+                Y = 128,
+                X = 0,
             },
         ];
         particles.ForEach(this.Add);
