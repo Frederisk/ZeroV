@@ -29,7 +29,8 @@ public partial class Diamond : Box {
         }
     }
 
-    public override Single Width {
+    [Obsolete("Don't set Size manually. Use DiameterSize instead.")]
+    public new Single Width {
         get => base.Width;
         set {
             base.Width = value;
@@ -37,7 +38,8 @@ public partial class Diamond : Box {
         }
     }
 
-    public override Single Height {
+    [Obsolete("Don't set Size manually. Use DiameterSize instead.")]
+    public new Single Height {
         get => base.Height;
         set {
             base.Width = value;

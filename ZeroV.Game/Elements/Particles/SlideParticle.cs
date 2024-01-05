@@ -42,9 +42,9 @@ public partial class SlideParticle : ParticleBase {
                             //                 #
                             //               # y #
                             //             #   *   #
-                            //           #   *   *   #
-                            //         #   *       *   #
-                            //       #   *           *   #
+                            //           #   * | *   #
+                            //         #   * inner *   #
+                            //       #   *     |     *   #
                             //     #   * * * * * * * * *   #
                             //   #             x             #
                             // # # # # # # # # # # # # # # # # #

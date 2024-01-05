@@ -1,76 +1,48 @@
 using System;
 
 using osu.Framework.Allocation;
-using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 
 using osuTK.Graphics;
 
 namespace ZeroV.Game.Elements.Particles;
 
-internal partial class PressParticle : ParticleBase {
-    private Container? startContainer;
-    private Container? holdContainer;
-    private Container? endContainer;
-
-    private Container? container;
-
-    public Single EndTime {
-        get => this.EndTimeBindable.Value;
-        set => this.EndTimeBindable.Value = value;
-    }
-
-    public Bindable<Single> EndTimeBindable = new();
+public partial class PressParticle : ParticleBase {
 
     public PressParticle(Orbit fatherOrbit) : base(fatherOrbit) {
+        this.AutoSizeAxes = Axes.X;
+        this.Origin = Anchor.BottomCentre;
     }
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.startContainer = new Container {
-            Children = new Drawable[] {
-                new Diamond {
-                    DiameterSize = 52,
-                    Colour= Colour4.Black,
-                },
-                new Diamond {
-                    DiameterSize = 28,
-                    Colour= Colour4.Orange,
-                },
-            }
-        };
-        this.holdContainer = new Container {
-            Children = new Drawable[] {
-                new Box {
-                    Origin = Anchor.Centre,
-                    Anchor = Anchor.Centre,
-                    Width = MathF.Sqrt(2*52*52),
-                    Colour = Color4.Black
-                }
-            }
-        };
-        this.endContainer = new Container {
-            Children = new Drawable[] {
-                new Diamond {
-                    DiameterSize = 52,
-                    Colour= Colour4.Black,
-                },
-                new Diamond {
-                    DiameterSize = 28,
-                    Colour= Colour4.Orange,
-                },
-            }
-        };
-        this.container = new Container {
-            Children = new Drawable[] {
-                this.holdContainer,
-                this.startContainer,
-                this.endContainer,
-            }
-        };
-
-        this.InternalChild = this.container;
+        this.InternalChildren = [
+            // hold
+            //new Box {
+            //    Origin = Anchor.BottomCentre,
+            //    Anchor = Anchor.BottomCentre,
+            //    Width = Single.Sqrt(2 * 52 * 52),
+            //},
+            new Box {
+                Origin = Anchor.BottomCentre,
+                Anchor = Anchor.BottomCentre,
+                Width = Single.Sqrt(2 * 52 * 52),
+                RelativeSizeAxes = Axes.Y,
+                Colour = Color4.Pink,
+            },
+            // buttom
+            new Diamond {
+                Anchor = Anchor.BottomCentre,
+                DiameterSize = 52,
+                Colour = Color4.Black,
+            },
+            // top
+            new Diamond {
+                Anchor = Anchor.TopCentre,
+                DiameterSize = 52,
+                Colour = Color4.Black,
+            },
+        ];
     }
 }

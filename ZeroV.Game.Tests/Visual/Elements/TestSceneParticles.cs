@@ -43,6 +43,11 @@ public partial class TestSceneParticles : ZeroVTestScene {
                 Y = 128,
                 X = 0,
             },
+            new PressParticle(null!){
+                Y = 0,
+                X = 320,
+                Height = 256,
+            },
         ];
         particles.ForEach(this.Add);
     }
