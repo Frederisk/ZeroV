@@ -29,11 +29,11 @@ public partial class StrokeParticle : ParticleBase {
                 Colour = Colour4.Gray,
             },
             new Diamond {
-                DiameterSize = 52 * 0.9f,
+                DiameterSize = 52 * 0.88f,
                 Colour = Colour4.Gold,
             },
             new Diamond {
-                DiameterSize = 24,
+                DiameterSize = 28,
                 Colour = Colour4.Gray,
             }
         ];

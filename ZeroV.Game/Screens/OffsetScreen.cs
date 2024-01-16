@@ -183,24 +183,6 @@ public partial class OffsetScreen : Screen {
         this.offsetText.Text = e.NewValue + "ms";
     }
 
-#if DEBUG
-
-    protected override Boolean OnKeyDown(KeyDownEvent e) {
-        if (e.Key == Key.Space) {
-            this.OnTouchDown(null!);
-            return true;
-        } else if (e.Key == Key.Left) {
-            this.offset.Value--;
-            return true;
-        } else if (e.Key == Key.Right) {
-            this.offset.Value++;
-            return true;
-        }
-        return false;
-    }
-
-#endif
-
     protected override Boolean OnTouchDown(TouchDownEvent e) {
         BlinkParticle tempLine = new(null!) {
             RelativePositionAxes = Axes.X,
@@ -239,25 +221,6 @@ public partial class OffsetScreen : Screen {
             };
             this.Add(this.triangle);
         }
-
-        //protected override Boolean OnHover(HoverEvent e) {
-        //    this.triangle.FadeColour(Color4.White, 100);
-        //    return base.OnHover(e);
-        //}
-
-        //protected override void OnHoverLost(HoverLostEvent e) {
-        //    this.triangle.FadeColour(Color4.LightGray, 100);
-        //    base.OnHoverLost(e);
-        //}
-
-#if DEBUG
-
-        protected override Boolean OnMouseDown(MouseDownEvent e) {
-            this.OnTouchDown(null!);
-            return true;
-        }
-
-#endif
 
         protected override Boolean OnTouchDown(TouchDownEvent e) {
             this.TouchDown?.Invoke(e);

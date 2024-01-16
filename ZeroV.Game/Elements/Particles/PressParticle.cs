@@ -18,12 +18,6 @@ public partial class PressParticle : ParticleBase {
     [BackgroundDependencyLoader]
     private void load() {
         this.InternalChildren = [
-            // hold
-            //new Box {
-            //    Origin = Anchor.BottomCentre,
-            //    Anchor = Anchor.BottomCentre,
-            //    Width = Single.Sqrt(2 * 52 * 52),
-            //},
             new Box {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
@@ -31,17 +25,48 @@ public partial class PressParticle : ParticleBase {
                 RelativeSizeAxes = Axes.Y,
                 Colour = Color4.Pink,
             },
+            new Box {
+                Origin = Anchor.BottomCentre,
+                Anchor = Anchor.BottomCentre,
+                Width = 6.1f,
+                RelativeSizeAxes = Axes.Y,
+                Colour = Color4.Black,
+            },
+            new Box {
+                Origin = Anchor.BottomLeft,
+                Anchor = Anchor.BottomLeft,
+                Width = 6.1f,
+                RelativeSizeAxes = Axes.Y,
+                Colour = Color4.Black,
+            },
+            new Box {
+                Origin = Anchor.BottomRight,
+                Anchor = Anchor.BottomRight,
+                Width = 6.1f,
+                RelativeSizeAxes = Axes.Y,
+                Colour = Color4.Black,
+            },
             // buttom
             new Diamond {
                 Anchor = Anchor.BottomCentre,
                 DiameterSize = 52,
                 Colour = Color4.Black,
             },
+            new Diamond {
+                Anchor = Anchor.BottomCentre,
+                DiameterSize = 28,
+                Colour = Color4.Pink,
+            },
             // top
             new Diamond {
                 Anchor = Anchor.TopCentre,
                 DiameterSize = 52,
                 Colour = Color4.Black,
+            },
+            new Diamond {
+                Anchor = Anchor.TopCentre,
+                DiameterSize = 28,
+                Colour = Color4.Pink,
             },
         ];
     }
