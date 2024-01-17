@@ -6,6 +6,8 @@ using osu.Framework.Graphics.Shapes;
 
 using osuTK.Graphics;
 
+using ZeroV.Game.Graphics.Shapes;
+
 namespace ZeroV.Game.Elements.Particles;
 
 public partial class PressParticle : ParticleBase {
@@ -47,26 +49,16 @@ public partial class PressParticle : ParticleBase {
                 Colour = Color4.Black,
             },
             // buttom
-            new Diamond {
+            new BlinkDiamond {
                 Anchor = Anchor.BottomCentre,
-                DiameterSize = 52,
-                Colour = Color4.Black,
-            },
-            new Diamond {
-                Anchor = Anchor.BottomCentre,
-                DiameterSize = 28,
-                Colour = Color4.Pink,
+                InnerColor = Color4.Pink,
+                OuterColor = Color4.Black,
             },
             // top
-            new Diamond {
+            new BlinkDiamond {
                 Anchor = Anchor.TopCentre,
-                DiameterSize = 52,
-                Colour = Color4.Black,
-            },
-            new Diamond {
-                Anchor = Anchor.TopCentre,
-                DiameterSize = 28,
-                Colour = Color4.Pink,
+                InnerColor = Color4.Pink,
+                OuterColor = Color4.Black,
             },
         ];
     }

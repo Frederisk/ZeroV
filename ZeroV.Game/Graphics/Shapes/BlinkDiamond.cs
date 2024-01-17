@@ -5,30 +5,39 @@ using System.Text;
 using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
-using osuTK;
 using osuTK.Graphics;
 
 namespace ZeroV.Game.Graphics.Shapes;
-internal partial class Particle : CompositeDrawable {
 
-    public Single OuterDiameterSize { get; set; }
-    public Single InnerDiameterSize { get; set; }
+public partial class BlinkDiamond : CompositeDrawable {
+
+    public BlinkDiamond() {
+        this.Anchor = Anchor.Centre;
+        this.Origin = Anchor.Centre;
+    }
+
+    public Single OuterDiameterSize { get; init; } = 52;
+
+    public Single InnerDiameterSize { get; init; } = 28;
+
+    public Color4 OuterColor { get; init; } = Color4.Black;
+
+    public Color4 InnerColor { get; init; } = Color4.Red;
 
     [BackgroundDependencyLoader]
     private void load() {
         this.InternalChildren = [
             new Diamond {
                 DiameterSize = this.OuterDiameterSize,
-                Colour = Color4.Black,
+                Colour = this.OuterColor,
             },
             new Diamond {
                 DiameterSize = this.InnerDiameterSize,
-                Colour = Color4.Red,
+                Colour = this.InnerColor,
             },
         ];
     }
-
-
 }

@@ -3,6 +3,8 @@ using osu.Framework.Graphics;
 
 using osuTK;
 
+using ZeroV.Game.Graphics.Shapes;
+
 namespace ZeroV.Game.Elements.Particles;
 
 public partial class BlinkParticle : ParticleBase {
@@ -13,15 +15,9 @@ public partial class BlinkParticle : ParticleBase {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.InternalChildren = [
-            new Diamond {
-                DiameterSize = 52,
-                Colour = Colour4.Black,
-            },
-            new Diamond {
-                DiameterSize = 28,
-                Colour = Colour4.Red,
-            },
-        ];
+        this.InternalChild = new BlinkDiamond {
+            //InnerColor = Colour4.Red,
+            //OuterColor = Colour4.Black,
+        };
     }
 }

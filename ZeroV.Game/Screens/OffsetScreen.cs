@@ -23,7 +23,7 @@ public partial class OffsetScreen : Screen {
 
     private Track offsetBeatTrack = null!;
 
-    private BlinkParticle movingLine = null!;
+    private BlinkDiamond movingLine = null!;
 
     private Container tempDisplayContainer = null!;
 
@@ -36,7 +36,7 @@ public partial class OffsetScreen : Screen {
         //this.offsetBeatTrack = trackStore.GetVirtual();
         this.offsetBeatTrack.Looping = true;
 
-        this.movingLine = new BlinkParticle(null!) {
+        this.movingLine = new BlinkDiamond() {
             RelativePositionAxes = Axes.Both,
         };
 
@@ -89,17 +89,17 @@ public partial class OffsetScreen : Screen {
                         RelativeSizeAxes = Axes.Both,
                         Colour = Color4.LightBlue,
                     },
-                    new BlinkParticle(null!) {
+                    new BlinkDiamond() {
                         RelativePositionAxes = Axes.Both,
                         X = -0.25f,
                         Alpha = 0.5f,
                     },
-                    new BlinkParticle(null!) {
+                    new BlinkDiamond() {
                         RelativePositionAxes = Axes.Both,
                         X = +0.25f,
                         Alpha = 0.5f,
                     },
-                    new BlinkParticle(null!) {
+                    new BlinkDiamond() {
                         RelativePositionAxes = Axes.Both,
                         X = 0.00f,
                         Alpha = 0.75f,
@@ -184,7 +184,7 @@ public partial class OffsetScreen : Screen {
     }
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        BlinkParticle tempLine = new(null!) {
+        BlinkDiamond tempLine = new() {
             RelativePositionAxes = Axes.X,
             X = (Single)this.relativePosition,
         };
