@@ -1,16 +1,10 @@
-using System;
-
 using NUnit.Framework;
-
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Sprites;
 
 using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
 public partial class TestSceneScoreCounter : ZeroVTestScene {
-
     private ScoreCounter scoreCounter = new();
 
     public TestSceneScoreCounter() {

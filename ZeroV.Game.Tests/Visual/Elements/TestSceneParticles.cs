@@ -1,7 +1,6 @@
 using osu.Framework.Allocation;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Shapes;
 
 using osuTK.Graphics;
 
@@ -43,7 +42,7 @@ public partial class TestSceneParticles : ZeroVTestScene {
                 Y = 128,
                 X = 0,
             },
-            new PressParticle(null!){
+            new PressParticle(null!) {
                 Y = 0,
                 X = 320,
                 Height = 256,

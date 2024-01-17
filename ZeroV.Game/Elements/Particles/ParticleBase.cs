@@ -10,8 +10,10 @@ using osu.Framework.Graphics.Containers;
 
 namespace ZeroV.Game.Elements.Particles;
 
-
-public abstract partial class ParticleBase: CompositeDrawable {
+/// <summary>
+/// The base class for all particles.
+/// </summary>
+public abstract partial class ParticleBase : CompositeDrawable {
 
     public virtual Single StartTime {
         get => this.StartTimeBindable.Value;

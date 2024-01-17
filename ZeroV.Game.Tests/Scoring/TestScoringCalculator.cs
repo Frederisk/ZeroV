@@ -8,8 +8,8 @@ namespace ZeroV.Game.Tests.Scoring;
 
 [TestFixture]
 internal class TestScoringCalculator {
-    private ScoringCalculator calculator1024;
-    private ScoringCalculator calculator4;
+    private ScoringCalculator calculator1024 = null!;
+    private ScoringCalculator calculator4 = null!;
 
     [SetUp]
     public void SetUp() {

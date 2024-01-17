@@ -61,21 +61,22 @@ public partial class Orbit : CompositeDrawable {
     /// </summary>
     private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + visual_half_of_particle_size;
 
-    private BufferedContainer? container;
+    private BufferedContainer container;
 
     /// <summary>
     /// The space used to touch judgment.
     /// </summary>
-    public Box? TouchSpace { get; private set; }
-    private Box? innerBox;
-    private Box? innerLine;
+    public Box TouchSpace { get; private set; } = null!;
 
-    private Container<ParticleBase>? particles;
+    private Box innerBox = null!;
+    private Box innerLine = null!;
+
+    private Container<ParticleBase> particles = null!;
 
     private Int32 touchCount;
     public Boolean IsTouching => this.touchCount > 0;
 
-    private Queue<ParticleBase> particleQueue;
+    private Queue<ParticleBase> particleQueue = null!;
     private Queue<Note> notes;
 
     private Double? lastTouchDownTime;
@@ -232,7 +233,6 @@ public partial class Orbit : CompositeDrawable {
             if (this.notes.TryPeek(out Note? note)) {
                 var touchOffset = Double.Abs(time - note.Time);
                 if (touchOffset <= this.settings.GoodOffset) {
-
                     // TODO: Use Enum
                     var _ = touchOffset switch {
                         _ when touchOffset <= this.settings.MaxPerfectOffset => "MaxPerfect",
@@ -274,22 +274,21 @@ public partial class Orbit : CompositeDrawable {
 
             if (note.Time + this.settings.GoodOffset < time) {
                 // TODO: Select a collection where objects can be removed during iteration.
-
             }
         }
     }
 
     public void Add(ParticleBase a) {
-        this.particles?.Add(a);
+        this.particles.Add(a);
     }
 
     public void Remove(ParticleBase a) {
-        this.particles?.Remove(a, true);
+        this.particles.Remove(a, true);
     }
 
     private void updateColor() {
         var colorIndex = this.touchCount % 8;
-        this.innerBox!.Colour = this.colors[colorIndex];
+        this.innerBox.Colour = this.colors[colorIndex];
     }
 
     public void TouchEnter(Boolean isTouchDown) {

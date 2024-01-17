@@ -8,7 +8,7 @@ using osu.Framework.Graphics.Textures;
 namespace ZeroV.Game.Elements;
 
 public partial class SpinningBox : CompositeDrawable {
-    private Container? box;
+    private Container box = null!;
 
     public SpinningBox() {
         this.AutoSizeAxes = Axes.Both;
@@ -17,7 +17,7 @@ public partial class SpinningBox : CompositeDrawable {
 
     [BackgroundDependencyLoader]
     private void load(TextureStore textures) {
-        this.InternalChild = box = new Container {
+        this.InternalChild = this.box = new Container {
             AutoSizeAxes = Axes.Both,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
@@ -38,6 +38,6 @@ public partial class SpinningBox : CompositeDrawable {
 
     protected override void LoadComplete() {
         base.LoadComplete();
-        this.box?.Loop(b => b.RotateTo(0).RotateTo(360, 2500));
+        this.box.Loop(b => b.RotateTo(0).RotateTo(360, 2500));
     }
 }

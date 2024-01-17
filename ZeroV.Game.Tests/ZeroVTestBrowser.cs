@@ -6,6 +6,7 @@ using osu.Framework.Testing;
 namespace ZeroV.Game.Tests;
 
 public partial class ZeroVTestBrowser : ZeroVGameBase {
+
     protected override void LoadComplete() {
         base.LoadComplete();
 

@@ -85,38 +85,6 @@ public partial class SlideParticle : ParticleBase {
         ];
     }
 
-    //private partial class InnerTriangle : Container {
-    //    public InnerTriangle() {
-    //        this.Anchor = Anchor.Centre;
-    //        this.Origin = Anchor.Centre;
-    //    }
-
-    //    [BackgroundDependencyLoader]
-    //    private void load() {
-    //        this.Children = [
-    //            new Container {
-    //                RelativeSizeAxes = Axes.Both,
-    //                Height = 0.5f,
-    //                Children = [
-    //                    new Triangle {
-    //                        RelativeSizeAxes = Axes.Both,
-    //                        //Height = 0.5f,
-    //                        Colour = Color4.Red,
-    //                    },
-    //                    new Triangle {
-    //                        Anchor = Anchor.TopCentre,
-    //                        Origin = Anchor.TopCentre,
-    //                        RelativeSizeAxes = Axes.Both,
-    //                        Width = 0.8f,
-    //                        Height = 0.8f,
-    //                        Colour = Color4.Blue,
-    //                    },
-    //                ],
-    //            },
-    //        ];
-    //    }
-    //}
-
     public enum SlidingDirection : Int32 {
         Up = 0,
         Right = 1,

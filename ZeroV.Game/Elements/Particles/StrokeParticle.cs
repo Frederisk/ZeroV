@@ -16,7 +16,6 @@ using osuTK.Graphics;
 namespace ZeroV.Game.Elements.Particles;
 
 public partial class StrokeParticle : ParticleBase {
-    //private Container? container;
 
     public StrokeParticle(Orbit fatherOrbit) : base(fatherOrbit) {
     }

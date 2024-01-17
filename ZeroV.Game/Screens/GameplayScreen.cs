@@ -22,7 +22,7 @@ public partial class GameplayScreen : Screen {
     private Track? track;
 
     private List<TrackedTouch> touches = [];
-    private Container<Orbit>? orbits;
+    private Container<Orbit> orbits = null!;
 
     public GameplayScreen() {
         this.Anchor = Anchor.BottomCentre;
@@ -58,11 +58,11 @@ public partial class GameplayScreen : Screen {
     }
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        if (this.orbits is not null) {
-            TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
-            touch.UpdatePosition(e.ScreenSpaceTouchDownPosition, true);
-            this.touches.Add(touch);
-        }
+        //if (this.orbits is not null) {
+        TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
+        touch.UpdatePosition(e.ScreenSpaceTouchDownPosition, true);
+        this.touches.Add(touch);
+        //}
 
         return true;
     }
@@ -107,8 +107,8 @@ public partial class GameplayScreen : Screen {
                         this.enteredOrbits.Remove(orbit);
                         break;
 
-                    // default:
-                    //     throw new ApplicationException($"Illegal touch determination status: `{nameof(isHovered)}` is `{isHovered}` and `{nameof(isEntered)}` is `{isEntered}`.");
+                        // default:
+                        //     throw new ApplicationException($"Illegal touch determination status: `{nameof(isHovered)}` is `{isHovered}` and `{nameof(isEntered)}` is `{isEntered}`.");
                 }
             }
         }

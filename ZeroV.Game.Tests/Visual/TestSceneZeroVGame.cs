@@ -10,7 +10,7 @@ public partial class TestSceneZeroVGame : ZeroVTestScene {
     // Add visual tests to ensure correct behaviour of your game: https://github.com/ppy/osu-framework/wiki/Development-and-Testing
     // You can make changes to classes associated with the tests and they will recompile and update immediately.
 
-    private ZeroVGame game;
+    private ZeroVGame game = null!;
 
     [BackgroundDependencyLoader]
     private void load(GameHost host) {
