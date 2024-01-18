@@ -1,5 +1,11 @@
+using System;
+using System.Diagnostics;
+
+using osu.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Logging;
+using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using ZeroV.Game.Screens;
@@ -7,7 +13,16 @@ using ZeroV.Game.Screens;
 namespace ZeroV.Game;
 
 public partial class ZeroVGame : ZeroVGameBase {
-    private ScreenStack? screenStack;
+
+    /// <summary>
+    /// The screen stack that manages the game screens.
+    /// </summary>
+    /// <remarks>
+    /// This field will never be null after <see cref="LoadComplete"/> has been called.
+    /// </remarks>
+    private ScreenStack screenStack = null!;
+
+    //public ZeroVGame() { this.Storage = this.Host.Storage; }
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -18,7 +33,6 @@ public partial class ZeroVGame : ZeroVGameBase {
 
     protected override void LoadComplete() {
         base.LoadComplete();
-        //this.screenStack.Push(new MainScreen());
-        this.screenStack!.Push(new GameplayScreen());
+        this.screenStack.Push(new GameplayScreen());
     }
 }

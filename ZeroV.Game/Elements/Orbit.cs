@@ -25,9 +25,6 @@ public record Note(Double Time);
 /// </summary>
 public partial class Orbit : CompositeDrawable {
 
-    [Resolved]
-    private ZeroVGameSettings settings { get; set; } = null!;
-
     /// <summary>
     /// The size of half the particle's Y-axis radius.
     /// </summary>
@@ -85,9 +82,10 @@ public partial class Orbit : CompositeDrawable {
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
-    public new required Single X { get => base.X; set => base.X = value; }
+
+    public new Single X { get => base.X; set => base.X = value; }
     public new Single Height => base.Height;
-    public new required Single Width { get => base.Width; set => base.Width = value; }
+    public new Single Width { get => base.Width; set => base.Width = value; }
 
     public Orbit() {
         //this.AutoSizeAxes = Axes.Both;
@@ -219,63 +217,63 @@ public partial class Orbit : CompositeDrawable {
     }
 
     protected override void Update() {
-        // This method is once-per-frame update.
-        // For a music game, we may need higher-speed judgment and logic processing.
-        // TODO: So, here wo should only deal with something that don't need to be updated that frequently.
-        // Eg. It's redundant to repeat the movement of an Drawable item multiple times within a frame. But it makes sense for touch judgments.
-        base.Update();
+        //// This method is once-per-frame update.
+        //// For a music game, we may need higher-speed judgment and logic processing.
+        //// TODO: So, here wo should only deal with something that don't need to be updated that frequently.
+        //// Eg. It's redundant to repeat the movement of an Drawable item multiple times within a frame. But it makes sense for touch judgments.
+        //base.Update();
 
-        var time = this.Time.Current;
-        var startTimeOffset = this.settings.StartTimeOffset;
+        //var time = this.Time.Current;
+        //var startTimeOffset = this.settings.StartTimeOffset;
 
-        // TODO: Maybe we can make it faster?
-        if (this.lastTouchDownTime.HasValue) {
-            if (this.notes.TryPeek(out Note? note)) {
-                var touchOffset = Double.Abs(time - note.Time);
-                if (touchOffset <= this.settings.GoodOffset) {
-                    // TODO: Use Enum
-                    var _ = touchOffset switch {
-                        _ when touchOffset <= this.settings.MaxPerfectOffset => "MaxPerfect",
-                        _ when touchOffset <= this.settings.PerfectOffset => "Perfect",
-                        _ => "Good"
-                    };
+        //// TODO: Maybe we can make it faster?
+        //if (this.lastTouchDownTime.HasValue) {
+        //    if (this.notes.TryPeek(out Note? note)) {
+        //        var touchOffset = Double.Abs(time - note.Time);
+        //        if (touchOffset <= this.settings.GoodOffset) {
+        //            // TODO: Use Enum
+        //            var _ = touchOffset switch {
+        //                _ when touchOffset <= this.settings.MaxPerfectOffset => "MaxPerfect",
+        //                _ when touchOffset <= this.settings.PerfectOffset => "Perfect",
+        //                _ => "Good"
+        //            };
 
-                    // TODO: show judgment result and count.
+        //            // TODO: show judgment result and count.
 
-                    this.notes.Dequeue();
+        //            this.notes.Dequeue();
 
-                    ParticleBase particle = this.particleQueue.Dequeue();
-                    particle.Y = visual_orbit_out_of_top;
-                }
-            }
+        //            ParticleBase particle = this.particleQueue.Dequeue();
+        //            particle.Y = visual_orbit_out_of_top;
+        //        }
+        //    }
 
-            this.lastTouchDownTime = null;
-        }
+        //    this.lastTouchDownTime = null;
+        //}
 
-        // TODO: `Zip` is so slow (Because there are too many bounds checks insider this method), stop using it.
-        foreach ((ParticleBase particle, Note note) in this.particleQueue.Zip(this.notes)) {
-            if (note.Time - startTimeOffset > time) {
-                break;
-            }
-            // The Particle falls to the judgment line.
-            if (time < note.Time) {
-                particle.Y =
-                    Interpolation.ValueAt(time, visual_orbit_out_of_top, visual_orbit_offset,
-                    note.Time - startTimeOffset, note.Time);
-            }
+        //// TODO: `Zip` is so slow (Because there are too many bounds checks insider this method), stop using it.
+        //foreach ((ParticleBase particle, Note note) in this.particleQueue.Zip(this.notes)) {
+        //    if (note.Time - startTimeOffset > time) {
+        //        break;
+        //    }
+        //    // The Particle falls to the judgment line.
+        //    if (time < note.Time) {
+        //        particle.Y =
+        //            Interpolation.ValueAt(time, visual_orbit_out_of_top, visual_orbit_offset,
+        //            note.Time - startTimeOffset, note.Time);
+        //    }
 
-            if (note.Time < time) {
-                particle.Y =
-                    Interpolation.ValueAt(time, visual_orbit_offset, 0,
-                    note.Time, note.Time + this.settings.GoodOffset);
-                particle.Alpha =
-                    Interpolation.ValueAt(time, 1f, 0f, note.Time, note.Time + this.settings.GoodOffset);
-            }
+        //    if (note.Time < time) {
+        //        particle.Y =
+        //            Interpolation.ValueAt(time, visual_orbit_offset, 0,
+        //            note.Time, note.Time + this.settings.GoodOffset);
+        //        particle.Alpha =
+        //            Interpolation.ValueAt(time, 1f, 0f, note.Time, note.Time + this.settings.GoodOffset);
+        //    }
 
-            if (note.Time + this.settings.GoodOffset < time) {
-                // TODO: Select a collection where objects can be removed during iteration.
-            }
-        }
+        //    if (note.Time + this.settings.GoodOffset < time) {
+        //        // TODO: Select a collection where objects can be removed during iteration.
+        //    }
+        //}
     }
 
     public void Add(ParticleBase a) {
