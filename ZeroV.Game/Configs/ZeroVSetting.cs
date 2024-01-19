@@ -1,6 +1,6 @@
 namespace ZeroV.Game.Configs;
 
-public enum ZeroVGameSetting {
+public enum ZeroVSetting {
     StartTimeOffset,
     MaxPerfectOffset,
     PerfectOffset,

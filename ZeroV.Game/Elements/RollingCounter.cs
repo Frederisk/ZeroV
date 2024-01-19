@@ -71,7 +71,7 @@ public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T>
     }
 
     protected void UpdateDisplay() {
-        if (this.displayedCountText != null) {
+        if (this.displayedCountText is not null) {
             this.displayedCountText.Text = this.FormatCount(this.DisplayedCount);
         }
     }

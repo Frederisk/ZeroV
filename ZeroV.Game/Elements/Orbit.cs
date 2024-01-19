@@ -58,11 +58,21 @@ public partial class Orbit : CompositeDrawable {
     /// </summary>
     private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + visual_half_of_particle_size;
 
-    private BufferedContainer container;
+    /// <summary>
+    /// The container that contains all the elements of the orbit.
+    /// </summary>
+    /// <remarks>
+    /// This field will never be null after <see cref="LoadComplete"/> has been called.
+    /// It's a <see cref="BufferedContainer"/> because we need to use <see cref="BufferedContainer.Blending"/> to make the orbit partially hidden.
+    /// </remarks>
+    private BufferedContainer container = null!;
 
     /// <summary>
     /// The space used to touch judgment.
     /// </summary>
+    /// <remarks>
+    /// This field will never be null after <see cref="LoadComplete"/> has been called.
+    /// </remarks>
     public Box TouchSpace { get; private set; } = null!;
 
     private Box innerBox = null!;
@@ -117,7 +127,8 @@ public partial class Orbit : CompositeDrawable {
         this.TouchSpace = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
-            Colour = Colour4.Yellow,
+            //Colour = Colour4.Yellow,
+            Colour = Color4.Transparent,
             RelativeSizeAxes = Axes.Both,
         };
         this.innerBox = new Box {
@@ -147,7 +158,7 @@ public partial class Orbit : CompositeDrawable {
             RelativeSizeAxes = Axes.Both,
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
-            Children = new Drawable[] {
+            Children = [
                 this.TouchSpace,
                 this.innerBox,
                 this.innerLine,
@@ -168,7 +179,7 @@ public partial class Orbit : CompositeDrawable {
                         SourceAlpha = BlendingType.Zero,
                         DestinationAlpha = BlendingType.OneMinusSrcAlpha
                     },
-                    Children = new Drawable[] {
+                    Children = [
                         new Box {
                             Anchor = Anchor.TopLeft,
                             Origin = Anchor.TopLeft,
@@ -199,9 +210,9 @@ public partial class Orbit : CompositeDrawable {
                         //     Y = 0.05f + 0.25f,
                         //     Colour = Color4.White.Opacity(0.1f),
                         // }
-                    }
+                    ],
                 }
-            }
+            ]
         };
         this.InternalChild = this.container;
 

@@ -1,4 +1,5 @@
 using osu.Framework.Allocation;
+using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.IO.Stores;
@@ -33,10 +34,11 @@ public partial class ZeroVGameBase : osu.Framework.Game {
     }
 
     [BackgroundDependencyLoader]
-    private void load(Storage storage) {
+    private void load(Storage storage, FrameworkConfigManager frameworkConfigManager) {
         this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
 
-        this.dependencies!.Cache(new ZeroVConfig(storage));
+        this.dependencies!.CacheAs<ZeroVGameBase>(this);
+        this.dependencies!.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
