@@ -104,24 +104,17 @@ public partial class Orbit : CompositeDrawable {
     public new Single Height => base.Height;
     public new Single Width { get => base.Width; set => base.Width = value; }
 
+    private Boolean disposedValue = false;
+
+    private readonly GameplayScreen gameplayScreen;
+
     public Orbit(GameplayScreen gameplayScreen) {
-        //this.AutoSizeAxes = Axes.Both;
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
 
-        gameplayScreen.TouchUpdate += (source, position, isNewTouch) => {
-            if (position is null) {
-                this.TouchLeave(source);
-            } else {
-                var isHovered = this.ScreenSpaceDrawQuad.Contains(position.Value);
-                var isEntered = this.touches.Contains(source);
-                if (isHovered && !isEntered) {
-                    this.TouchEnter(source, isNewTouch);
-                } else if (!isHovered && isEntered) {
-                    this.TouchLeave(source);
-                }
-            }
-        };
+        this.gameplayScreen = gameplayScreen;
+
+        this.gameplayScreen.TouchUpdate += this.OnTouchUpdate;
 
         // FIXME: Just for test, remove it.
         base.Height = 768;
@@ -132,6 +125,30 @@ public partial class Orbit : CompositeDrawable {
         this.notes.Enqueue(new Note(TimeSpan.FromSeconds(7).TotalMilliseconds));
         this.notes.Enqueue(new Note(TimeSpan.FromSeconds(8).TotalMilliseconds));
         this.notes.Enqueue(new Note(TimeSpan.FromSeconds(9).TotalMilliseconds));
+    }
+
+    protected void OnTouchUpdate(TouchSource source, Vector2? position, Boolean isNewTouch) {
+        if (position is null) {
+            this.TouchLeave(source);
+        } else {
+            var isHovered = this.ScreenSpaceDrawQuad.Contains(position.Value);
+            var isEntered = this.touches.Contains(source);
+            if (isHovered && !isEntered) {
+                this.TouchEnter(source, isNewTouch);
+            } else if (!isHovered && isEntered) {
+                this.TouchLeave(source);
+            }
+        }
+    }
+
+    protected override void Dispose(Boolean disposing) {
+        if(!this.disposedValue){
+            if(disposing){
+                this.gameplayScreen.TouchUpdate -= this.OnTouchUpdate;
+            }
+            this.disposedValue = true;
+        }
+        base.Dispose(disposing);
     }
 
     [BackgroundDependencyLoader]
