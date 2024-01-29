@@ -14,9 +14,6 @@ public partial class ZeroVConfigManager(Storage storage, IDictionary<ZeroVSettin
     protected override void InitialiseDefaults() {
         // base.InitialiseDefaults(); // It's empty.
 
-        this.SetDefault<Int32>(ZeroVSetting.StartTimeOffset, 0);
-        this.SetDefault<Int32>(ZeroVSetting.MaxPerfectOffset, 0);
-        this.SetDefault<Int32>(ZeroVSetting.PerfectOffset, 0);
-        this.SetDefault<Int32>(ZeroVSetting.GoodOffset, 0);
+        this.SetDefault<Double>(ZeroVSetting.GlobalSoundOffset, 0);
     }
 }

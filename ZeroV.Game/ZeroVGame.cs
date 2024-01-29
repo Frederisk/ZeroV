@@ -22,8 +22,6 @@ public partial class ZeroVGame : ZeroVGameBase {
     /// </remarks>
     private ScreenStack screenStack = null!;
 
-    //public ZeroVGame() { this.Storage = this.Host.Storage; }
-
     [BackgroundDependencyLoader]
     private void load() {
         // Add your top-level game components here.

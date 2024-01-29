@@ -1,5 +1,7 @@
 using System;
 
+using OpenTabletDriver.Plugin;
+
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
@@ -11,15 +13,15 @@ using osu.Framework.Screens;
 
 using osuTK;
 using osuTK.Graphics;
-using osuTK.Input;
 
-using ZeroV.Game.Elements.Particles;
+using ZeroV.Game.Configs;
 using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game;
 
 public partial class OffsetScreen : Screen {
-    private BindableDouble offset = new(0);
+
+    private Bindable<Double> offset = null!;
 
     private Track offsetBeatTrack = null!;
 
@@ -30,8 +32,9 @@ public partial class OffsetScreen : Screen {
     private ZeroVSpriteText offsetText = null!;
 
     [BackgroundDependencyLoader]
-    private void load(ITrackStore trackStore) {
-        // TODO: Load offset
+    private void load(ITrackStore trackStore, ZeroVConfigManager configManager) {
+        this.offset = configManager.GetBindable<Double>(ZeroVSetting.GlobalSoundOffset);
+
         this.offsetBeatTrack = trackStore.Get("OffsetBeats.flac");
         //this.offsetBeatTrack = trackStore.GetVirtual();
         this.offsetBeatTrack.Looping = true;
