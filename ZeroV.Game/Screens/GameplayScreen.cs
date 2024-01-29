@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
@@ -21,7 +19,6 @@ namespace ZeroV.Game.Screens;
 public partial class GameplayScreen : Screen {
     private Track? track;
 
-    private List<TrackedTouch> touches = [];
     private Container<Orbit> orbits = null!;
 
     public GameplayScreen() {
@@ -47,76 +44,33 @@ public partial class GameplayScreen : Screen {
             },
             this.orbits,
         };
+    }
 
+    protected override void LoadComplete() {
         // TODO: For test
         this.orbits.Add(
-            new Orbit { X = 0, Width = 128 }
+            new Orbit(this) { X = 0, Width = 128 }
         );
         this.orbits.Add(
-            new Orbit { X = 100, Width = 256 }
+            new Orbit(this) { X = 100, Width = 256 }
         );
+        base.LoadComplete();
     }
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        //if (this.orbits is not null) {
-        TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
-        touch.UpdatePosition(e.ScreenSpaceTouchDownPosition, true);
-        this.touches.Add(touch);
-        //}
-
+        this.TouchUpdate?.Invoke(e.Touch.Source, e.ScreenSpaceTouchDownPosition, true);
         return true;
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
-        TrackedTouch touch = this.touches.Single(t => t.Source == e.Touch.Source);
-        touch.UpdatePosition(e.ScreenSpaceLastTouchPosition, false);
+        this.TouchUpdate?.Invoke(e.Touch.Source, e.ScreenSpaceLastTouchPosition, false);
     }
 
     protected override void OnTouchUp(TouchUpEvent e) {
-        TrackedTouch touch = this.touches.Single(t => t.Source == e.Touch.Source);
-        touch.TouchUp();
-        this.touches.Remove(touch);
+        this.TouchUpdate?.Invoke(e.Touch.Source, null, false);
     }
 
-    //protected void OnStokeStart() {}
+    public event TouchUpdateDelegate? TouchUpdate;
 
-    private class TrackedTouch {
-        private IEnumerable<Orbit> orbits;
-        private HashSet<Orbit> enteredOrbits = [];
-
-        public TouchSource Source { get; }
-
-        public TrackedTouch(TouchSource source, IEnumerable<Orbit> orbits) {
-            this.Source = source;
-            this.orbits = orbits;
-        }
-
-        public void UpdatePosition(Vector2 position, Boolean isTouchDown) {
-            foreach (Orbit orbit in this.orbits) {
-                var isHovered = orbit.ScreenSpaceDrawQuad.Contains(position);
-                var isEntered = this.enteredOrbits.Contains(orbit);
-
-                switch (isHovered, isEntered) {
-                    case (true, false):
-                        orbit.TouchEnter(isTouchDown);
-                        this.enteredOrbits.Add(orbit);
-                        break;
-
-                    case (false, true):
-                        orbit.TouchLeave();
-                        this.enteredOrbits.Remove(orbit);
-                        break;
-
-                        // default:
-                        //     throw new ApplicationException($"Illegal touch determination status: `{nameof(isHovered)}` is `{isHovered}` and `{nameof(isEntered)}` is `{isEntered}`.");
-                }
-            }
-        }
-
-        public void TouchUp() {
-            foreach (Orbit orbit in this.enteredOrbits) {
-                orbit.TouchLeave();
-            }
-        }
-    }
+    public delegate void TouchUpdateDelegate(TouchSource source, Vector2? position, Boolean isNewTouch);
 }
