@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
@@ -21,7 +19,6 @@ namespace ZeroV.Game.Screens;
 public partial class GameplayScreen : Screen {
     private Track? track;
 
-    private List<TrackedTouch> touches = [];
     private Container<Orbit> orbits = null!;
 
     public GameplayScreen() {
@@ -35,7 +32,7 @@ public partial class GameplayScreen : Screen {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
-        this.InternalChildren = new Drawable[] {
+        this.InternalChildren = [
             new PlayfieldBackground(),
             new Box() {
                 Origin = Anchor.BottomCentre,
@@ -46,77 +43,43 @@ public partial class GameplayScreen : Screen {
                 Colour = Color4.Red,
             },
             this.orbits,
-        };
+        ];
+    }
 
+    protected override void LoadComplete() {
         // TODO: For test
         this.orbits.Add(
-            new Orbit { X = 0, Width = 128 }
+            new Orbit(this) { X = 0, Width = 128 }
         );
         this.orbits.Add(
-            new Orbit { X = 100, Width = 256 }
+            new Orbit(this) { X = 100, Width = 256 }
         );
+        base.LoadComplete();
     }
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        //if (this.orbits is not null) {
-        TrackedTouch touch = new(e.Touch.Source, this.orbits.Children);
-        touch.UpdatePosition(e.ScreenSpaceTouchDownPosition, true);
-        this.touches.Add(touch);
-        //}
-
+        this.TouchUpdate?.Invoke(e.Touch.Source, e.ScreenSpaceTouchDownPosition, true);
         return true;
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
-        TrackedTouch touch = this.touches.Single(t => t.Source == e.Touch.Source);
-        touch.UpdatePosition(e.ScreenSpaceLastTouchPosition, false);
+        this.TouchUpdate?.Invoke(e.Touch.Source, e.ScreenSpaceLastTouchPosition, false);
     }
 
     protected override void OnTouchUp(TouchUpEvent e) {
-        TrackedTouch touch = this.touches.Single(t => t.Source == e.Touch.Source);
-        touch.TouchUp();
-        this.touches.Remove(touch);
+        this.TouchUpdate?.Invoke(e.Touch.Source, null, false);
     }
 
-    //protected void OnStokeStart() {}
+    /// <summary>
+    /// Occurs when a touch event is updated. Such events include press, move, and release.
+    /// </summary>
+    public event TouchUpdateDelegate? TouchUpdate;
 
-    private class TrackedTouch {
-        private IEnumerable<Orbit> orbits;
-        private HashSet<Orbit> enteredOrbits = [];
-
-        public TouchSource Source { get; }
-
-        public TrackedTouch(TouchSource source, IEnumerable<Orbit> orbits) {
-            this.Source = source;
-            this.orbits = orbits;
-        }
-
-        public void UpdatePosition(Vector2 position, Boolean isTouchDown) {
-            foreach (Orbit orbit in this.orbits) {
-                var isHovered = orbit.ScreenSpaceDrawQuad.Contains(position);
-                var isEntered = this.enteredOrbits.Contains(orbit);
-
-                switch (isHovered, isEntered) {
-                    case (true, false):
-                        orbit.TouchEnter(isTouchDown);
-                        this.enteredOrbits.Add(orbit);
-                        break;
-
-                    case (false, true):
-                        orbit.TouchLeave();
-                        this.enteredOrbits.Remove(orbit);
-                        break;
-
-                        // default:
-                        //     throw new ApplicationException($"Illegal touch determination status: `{nameof(isHovered)}` is `{isHovered}` and `{nameof(isEntered)}` is `{isEntered}`.");
-                }
-            }
-        }
-
-        public void TouchUp() {
-            foreach (Orbit orbit in this.enteredOrbits) {
-                orbit.TouchLeave();
-            }
-        }
-    }
+    /// <summary>
+    /// Encapsulates a touch update method.
+    /// </summary>
+    /// <param name="source">The source of the touch event.</param>
+    /// <param name="position">The position of the touch event. Null if the touch event is a release.</param>
+    /// <param name="isNewTouch">Whether the touch event is a new touch. This is true if the touch event is a press, and false if the touch event is a move. For release events, this value is not important.</param>
+    public delegate void TouchUpdateDelegate(TouchSource source, Vector2? position, Boolean isNewTouch);
 }

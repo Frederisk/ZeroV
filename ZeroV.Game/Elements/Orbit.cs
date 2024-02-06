@@ -8,12 +8,15 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input;
+using osu.Framework.Input.Events;
 using osu.Framework.Utils;
 
 using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements.Particles;
+using ZeroV.Game.Screens;
 
 namespace ZeroV.Game.Elements;
 
@@ -77,18 +80,22 @@ public partial class Orbit : CompositeDrawable {
 
     private Box innerBox = null!;
     private Box innerLine = null!;
-
     private Container<ParticleBase> particles = null!;
-
-    private Int32 touchCount;
-    public Boolean IsTouching => this.touchCount > 0;
-
     private Queue<ParticleBase> particleQueue = null!;
     private Queue<Note> notes;
-
     private Double? lastTouchDownTime;
 
-    private Colour4[] colors;
+    //FIXME: Just for test, remove it.
+    private Colour4[] colors = [
+        Colour4.White,
+        Colour4.Red,
+        Colour4.Orange,
+        Color4.Yellow,
+        Color4.Green,
+        Color4.Cyan,
+        Color4.Blue,
+        Color4.Purple,
+    ];
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
@@ -97,21 +104,19 @@ public partial class Orbit : CompositeDrawable {
     public new Single Height => base.Height;
     public new Single Width { get => base.Width; set => base.Width = value; }
 
-    public Orbit() {
-        //this.AutoSizeAxes = Axes.Both;
+    private Boolean disposedValue = false;
+
+    private readonly GameplayScreen gameplayScreen;
+
+    public Orbit(GameplayScreen gameplayScreen) {
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
+
+        this.gameplayScreen = gameplayScreen;
+
+        this.gameplayScreen.TouchUpdate += this.OnTouchUpdate;
+
         // FIXME: Just for test, remove it.
-        this.colors = [
-            Colour4.White,
-            Colour4.Red,
-            Colour4.Orange,
-            Color4.Yellow,
-            Color4.Green,
-            Color4.Cyan,
-            Color4.Blue,
-            Color4.Purple,
-        ];
         base.Height = 768;
         base.Y = 0;
         this.Alpha = 0.9f;
@@ -120,6 +125,30 @@ public partial class Orbit : CompositeDrawable {
         this.notes.Enqueue(new Note(TimeSpan.FromSeconds(7).TotalMilliseconds));
         this.notes.Enqueue(new Note(TimeSpan.FromSeconds(8).TotalMilliseconds));
         this.notes.Enqueue(new Note(TimeSpan.FromSeconds(9).TotalMilliseconds));
+    }
+
+    protected void OnTouchUpdate(TouchSource source, Vector2? position, Boolean isNewTouch) {
+        if (position is null) {
+            this.TouchLeave(source);
+        } else {
+            var isHovered = this.ScreenSpaceDrawQuad.Contains(position.Value);
+            var isEntered = this.touches.Contains(source);
+            if (isHovered && !isEntered) {
+                this.TouchEnter(source, isNewTouch);
+            } else if (!isHovered && isEntered) {
+                this.TouchLeave(source);
+            }
+        }
+    }
+
+    protected override void Dispose(Boolean disposing) {
+        if(!this.disposedValue){
+            if(disposing){
+                this.gameplayScreen.TouchUpdate -= this.OnTouchUpdate;
+            }
+            this.disposedValue = true;
+        }
+        base.Dispose(disposing);
     }
 
     [BackgroundDependencyLoader]
@@ -223,7 +252,7 @@ public partial class Orbit : CompositeDrawable {
         this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
 
         foreach (ParticleBase item in this.particleQueue) {
-            this.Add(item);
+            this.AddParticle(item);
         }
     }
 
@@ -287,30 +316,35 @@ public partial class Orbit : CompositeDrawable {
         //}
     }
 
-    public void Add(ParticleBase a) {
+    public void AddParticle(ParticleBase a) {
         this.particles.Add(a);
     }
 
-    public void Remove(ParticleBase a) {
+    public void RemoveParticle(ParticleBase a) {
         this.particles.Remove(a, true);
     }
 
+    #region Touch
+
+    private List<TouchSource> touches = [];
+
     private void updateColor() {
-        var colorIndex = this.touchCount % 8;
+        var colorIndex = this.touches.Count % 8;
         this.innerBox.Colour = this.colors[colorIndex];
     }
 
-    public void TouchEnter(Boolean isTouchDown) {
+    protected void TouchEnter(TouchSource source, Boolean isTouchDown) {
         if (isTouchDown) {
             this.lastTouchDownTime = this.Time.Current;
         }
-
-        this.touchCount++;
+        this.touches.Add(source);
         this.updateColor();
     }
 
-    public void TouchLeave() {
-        this.touchCount--;
+    protected void TouchLeave(TouchSource source) {
+        this.touches.Remove(source);
         this.updateColor();
     }
+
+    #endregion Touch
 }
