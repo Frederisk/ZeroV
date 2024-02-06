@@ -1,4 +1,4 @@
-﻿using osu.Game.Rulesets.Judgements;
+using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.ZeroV.Judgements;
 
 namespace osu.Game.Rulesets.ZeroV.Objects;

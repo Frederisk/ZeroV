@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,7 +44,6 @@ public partial class TestSceneOrbits : ZeroVTestScene {
 //         Colour4.Blue,
 //         Colour4.Purple,
 //     ];
-
 
 //     private void updateColor() {
 //         var colorIndex = this.TouchCount % 8;
