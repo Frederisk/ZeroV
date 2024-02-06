@@ -32,7 +32,7 @@ public partial class GameplayScreen : Screen {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
-        this.InternalChildren = new Drawable[] {
+        this.InternalChildren = [
             new PlayfieldBackground(),
             new Box() {
                 Origin = Anchor.BottomCentre,
@@ -43,7 +43,7 @@ public partial class GameplayScreen : Screen {
                 Colour = Color4.Red,
             },
             this.orbits,
-        };
+        ];
     }
 
     protected override void LoadComplete() {
@@ -70,7 +70,16 @@ public partial class GameplayScreen : Screen {
         this.TouchUpdate?.Invoke(e.Touch.Source, null, false);
     }
 
+    /// <summary>
+    /// Occurs when a touch event is updated. Such events include press, move, and release.
+    /// </summary>
     public event TouchUpdateDelegate? TouchUpdate;
 
+    /// <summary>
+    /// Encapsulates a touch update method.
+    /// </summary>
+    /// <param name="source">The source of the touch event.</param>
+    /// <param name="position">The position of the touch event. Null if the touch event is a release.</param>
+    /// <param name="isNewTouch">Whether the touch event is a new touch. This is true if the touch event is a press, and false if the touch event is a move. For release events, this value is not important.</param>
     public delegate void TouchUpdateDelegate(TouchSource source, Vector2? position, Boolean isNewTouch);
 }
