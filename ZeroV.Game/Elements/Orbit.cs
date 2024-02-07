@@ -6,8 +6,8 @@ namespace ZeroV.Game.Elements;
 
 public class Orbit : ZeroVObject
 {
-    public override double StartTime => KeyFrames.Span[0].Time;
-    public override double EndTime => KeyFrames.Span[^1].Time;
+    public override Double StartTime => this.KeyFrames.Span[0].Time;
+    public override Double EndTime => this.KeyFrames.Span[^1].Time;
 
     public struct KeyFrame {
         public Double Time { get; set; }
