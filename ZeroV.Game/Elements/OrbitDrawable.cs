@@ -251,8 +251,36 @@ public partial class OrbitDrawable : ZeroVDrawableObject<Orbit> {
         }
     }
 
+    private ReadOnlyMemory<Orbit.KeyFrame> keyFrames;
+    public override Orbit? Object {
+        get => base.Object;
+        set {
+            if (value != null) {
+                this.keyFrames = value.KeyFrames;
+            }
+            base.Object = value;
+        }
+    }
     protected override void Update() {
+        var currTime = this.Time.Current;
+        while (this.keyFrames.Length > 1) {
+            var nextTime = this.keyFrames.Span[1].Time;
+            if (currTime < nextTime) {
+                break;
+            }
+            this.keyFrames = this.keyFrames[1..];
+        }
 
+        if (this.keyFrames.Length > 1) {
+            Orbit.KeyFrame currKeyFrame = this.keyFrames.Span[0];
+            Orbit.KeyFrame nextKeyFrame = this.keyFrames.Span[1];
+            this.X = Interpolation.ValueAt(currTime,
+                currKeyFrame.Position, nextKeyFrame.Position,
+                currKeyFrame.Time, nextKeyFrame.Time);
+            this.Width = Interpolation.ValueAt(currTime,
+                currKeyFrame.Width, nextKeyFrame.Width,
+                currKeyFrame.Time, nextKeyFrame.Time);
+        }
     }
 
     public void AddParticle(ParticleBase a) {

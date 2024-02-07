@@ -47,6 +47,42 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Color = Color4.Green
                         },
                         new Orbit.KeyFrame() {
+                             Time = 4000,
+                             Position = 0,
+                             Width = 128,
+                             Color = Color4.Green
+                        },
+                        new Orbit.KeyFrame() {
+                             Time = 5000,
+                             Position = 256,
+                             Width = 256,
+                             Color = Color4.Green
+                        },
+                        new Orbit.KeyFrame() {
+                             Time = 6000,
+                             Position = 256,
+                             Width = 256,
+                             Color = Color4.Green
+                        },
+                        new Orbit.KeyFrame() {
+                             Time = 7000,
+                             Position = 0,
+                             Width = 128,
+                             Color = Color4.Green
+                        },
+                        new Orbit.KeyFrame() {
+                             Time = 8000,
+                             Position = -60,
+                             Width = 256,
+                             Color = Color4.Green
+                        },
+                        new Orbit.KeyFrame() {
+                             Time = 9000,
+                             Position = -30,
+                             Width = 162,
+                             Color = Color4.Green
+                        },
+                        new Orbit.KeyFrame() {
                              Time = 10000,
                              Position = 0,
                              Width = 128,
