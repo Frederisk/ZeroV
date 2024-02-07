@@ -4,9 +4,12 @@ using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Performance;
+using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -20,11 +23,42 @@ namespace ZeroV.Game.Screens;
 public partial class GameplayScreen : Screen {
     private Track? track;
 
+    private readonly DrawablePool<OrbitDrawable> orbitDrawablePool = new(10, 15);
+    private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<OrbitDrawable> orbits = null!;
 
     public GameplayScreen() {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
+
+        this.lifetimeEntryManager = new();
+        this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
+        this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
+    }
+
+    private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
+        var entry = (OrbitLifetimeEntry)obj;
+        entry.Drawable = this.orbitDrawablePool.Get();
+        entry.Drawable.Object = entry.Object;
+
+        this.orbits.Add(entry.Drawable);
+        Logger.Log("Orbit added.");
+    }
+    private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
+        var entry = (OrbitLifetimeEntry)obj;
+
+        this.orbits.Remove(entry.Drawable!, false);
+        this.orbitDrawablePool.Return(entry.Drawable);
+        Logger.Log("Orbit removed.");
+    }
+
+    protected override Boolean CheckChildrenLife() {
+        var result = base.CheckChildrenLife();
+        var currTime = this.Time.Current;
+        var startTime = currTime - 2000;
+        var endTime = currTime + 1000;
+        result |= this.lifetimeEntryManager.Update(startTime, endTime);
+        return result;
     }
 
     [BackgroundDependencyLoader]
@@ -45,6 +79,8 @@ public partial class GameplayScreen : Screen {
             },
             this.orbits,
         ];
+
+        this.AddInternal(this.orbitDrawablePool);
     }
 
     protected override void LoadComplete() {
