@@ -22,9 +22,9 @@ public abstract partial class ParticleBase : CompositeDrawable {
 
     public Bindable<Single> StartTimeBindable;
 
-    public Orbit FatherOrbit { get; init; }
+    public OrbitDrawable FatherOrbit { get; init; }
 
-    public ParticleBase(Orbit fatherOrbit) {
+    public ParticleBase(OrbitDrawable fatherOrbit) {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
         this.StartTimeBindable = new Bindable<Single>();
@@ -33,7 +33,7 @@ public abstract partial class ParticleBase : CompositeDrawable {
 
     public Boolean IsRecyclable { get; private set; }
 
-    public virtual void Recycle(Orbit fatherOrbit, Single startTime) {
+    public virtual void Recycle(OrbitDrawable fatherOrbit, Single startTime) {
         // TODO: Create appropriate methods to make objects reusable.
         this.StartTimeBindable = new Bindable<Single> {
             Value = startTime,

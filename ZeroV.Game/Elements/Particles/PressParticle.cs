@@ -12,7 +12,7 @@ namespace ZeroV.Game.Elements.Particles;
 
 public partial class PressParticle : ParticleBase {
 
-    public PressParticle(Orbit fatherOrbit) : base(fatherOrbit) {
+    public PressParticle(OrbitDrawable fatherOrbit) : base(fatherOrbit) {
         this.AutoSizeAxes = Axes.X;
         this.Origin = Anchor.BottomCentre;
     }

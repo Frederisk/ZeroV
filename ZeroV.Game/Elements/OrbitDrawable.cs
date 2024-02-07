@@ -26,7 +26,7 @@ public record Note(Double Time);
 /// <summary>
 /// Orbits that carry particles. It's also the main interactive object in this game.
 /// </summary>
-public partial class Orbit : CompositeDrawable {
+public partial class OrbitDrawable : CompositeDrawable {
 
     /// <summary>
     /// The size of half the particle's Y-axis radius.
@@ -108,7 +108,7 @@ public partial class Orbit : CompositeDrawable {
 
     private readonly GameplayScreen gameplayScreen;
 
-    public Orbit(GameplayScreen gameplayScreen) {
+    public OrbitDrawable(GameplayScreen gameplayScreen) {
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
 

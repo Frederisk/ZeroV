@@ -19,7 +19,7 @@ namespace ZeroV.Game.Screens;
 public partial class GameplayScreen : Screen {
     private Track? track;
 
-    private Container<Orbit> orbits = null!;
+    private Container<OrbitDrawable> orbits = null!;
 
     public GameplayScreen() {
         this.Anchor = Anchor.BottomCentre;
@@ -28,7 +28,7 @@ public partial class GameplayScreen : Screen {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.orbits = new Container<Orbit>() {
+        this.orbits = new Container<OrbitDrawable>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -49,10 +49,10 @@ public partial class GameplayScreen : Screen {
     protected override void LoadComplete() {
         // TODO: For test
         this.orbits.Add(
-            new Orbit(this) { X = 0, Width = 128 }
+            new OrbitDrawable(this) { X = 0, Width = 128 }
         );
         this.orbits.Add(
-            new Orbit(this) { X = 100, Width = 256 }
+            new OrbitDrawable(this) { X = 100, Width = 256 }
         );
         base.LoadComplete();
     }
