@@ -16,6 +16,7 @@ using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements.Particles;
+using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
 namespace ZeroV.Game.Elements;
@@ -26,7 +27,7 @@ public record Note(Double Time);
 /// <summary>
 /// Orbits that carry particles. It's also the main interactive object in this game.
 /// </summary>
-public partial class OrbitDrawable : CompositeDrawable {
+public partial class OrbitDrawable : ZeroVDrawableObject<Orbit> {
 
     /// <summary>
     /// The size of half the particle's Y-axis radius.
@@ -104,17 +105,21 @@ public partial class OrbitDrawable : CompositeDrawable {
     public new Single Height => base.Height;
     public new Single Width { get => base.Width; set => base.Width = value; }
 
-    private Boolean disposedValue = false;
+    [Resolved]
+    private GameplayScreen gameplayScreen { get; set; }
 
-    private readonly GameplayScreen gameplayScreen;
+    protected override void PrepareForUse() {
+        this.gameplayScreen.TouchUpdate += this.OnTouchUpdate;
+        base.PrepareForUse();
+    }
+    protected override void FreeAfterUse() {
+        this.gameplayScreen.TouchUpdate -= this.OnTouchUpdate;
+        base.FreeAfterUse();
+    }
 
-    public OrbitDrawable(GameplayScreen gameplayScreen) {
+    public OrbitDrawable() {
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
-
-        this.gameplayScreen = gameplayScreen;
-
-        this.gameplayScreen.TouchUpdate += this.OnTouchUpdate;
 
         // FIXME: Just for test, remove it.
         base.Height = 768;
@@ -139,16 +144,6 @@ public partial class OrbitDrawable : CompositeDrawable {
                 this.TouchLeave(source);
             }
         }
-    }
-
-    protected override void Dispose(Boolean disposing) {
-        if(!this.disposedValue){
-            if(disposing){
-                this.gameplayScreen.TouchUpdate -= this.OnTouchUpdate;
-            }
-            this.disposedValue = true;
-        }
-        base.Dispose(disposing);
     }
 
     [BackgroundDependencyLoader]
