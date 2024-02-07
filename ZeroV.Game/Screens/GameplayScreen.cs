@@ -16,6 +16,7 @@ using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Screens;
 
+[Cached]
 public partial class GameplayScreen : Screen {
     private Track? track;
 
