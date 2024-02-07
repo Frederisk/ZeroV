@@ -2,7 +2,7 @@ using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements;
 
-public class OrbitLifetimeEntry : ZeroVObjectLifetimeEntry<Orbit>
+public class OrbitLifetimeEntry : ZeroVObjectLifetimeEntry<Orbit, OrbitDrawable>
 {
     public OrbitLifetimeEntry(Orbit @object) : base(@object)
     {
