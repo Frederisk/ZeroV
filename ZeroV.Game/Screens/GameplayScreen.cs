@@ -24,9 +24,9 @@ namespace ZeroV.Game.Screens;
 public partial class GameplayScreen : Screen {
     private Track? track;
 
-    private readonly DrawablePool<OrbitDrawable> orbitDrawablePool = new(10, 15);
+    private readonly DrawablePool<Orbit> orbitDrawablePool = new(10, 15);
     private readonly LifetimeEntryManager lifetimeEntryManager;
-    private Container<OrbitDrawable> orbits = null!;
+    private Container<Orbit> orbits = null!;
 
     public GameplayScreen(ZeroVBeatmap beatmap) {
         this.Anchor = Anchor.BottomCentre;
@@ -35,7 +35,7 @@ public partial class GameplayScreen : Screen {
         this.lifetimeEntryManager = new();
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
-        foreach (Orbit item in beatmap.Orbits.Span) {
+        foreach (OrbitSource item in beatmap.Orbits.Span) {
             var entry = new OrbitLifetimeEntry(item);
             this.lifetimeEntryManager.AddEntry(entry);
         }
@@ -68,7 +68,7 @@ public partial class GameplayScreen : Screen {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.orbits = new Container<OrbitDrawable>() {
+        this.orbits = new Container<Orbit>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };

@@ -14,11 +14,11 @@ using ZeroV.Game.Elements;
 namespace ZeroV.Game.Tests.Visual.Elements;
 
 public partial class TestSceneOrbits : ZeroVTestScene {
-    private Container<OrbitDrawable> orbits = null!;
+    private Container<Orbit> orbits = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.orbits = new Container<OrbitDrawable>() {
+        this.orbits = new Container<Orbit>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Children = [

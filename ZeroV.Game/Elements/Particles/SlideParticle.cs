@@ -13,7 +13,7 @@ namespace ZeroV.Game.Elements.Particles;
 public partial class SlideParticle : ParticleBase {
     public SlidingDirection Direction { get; init; }
 
-    public SlideParticle(OrbitDrawable fatherOrbit) : base(fatherOrbit) {
+    public SlideParticle(Orbit fatherOrbit) : base(fatherOrbit) {
     }
 
     [BackgroundDependencyLoader]

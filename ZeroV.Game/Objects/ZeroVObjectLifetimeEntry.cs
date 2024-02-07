@@ -1,11 +1,10 @@
 using osu.Framework.Graphics.Performance;
-using osu.Framework.Graphics.Pooling;
 
 namespace ZeroV.Game.Objects;
 
-public abstract class ZeroVObjectLifetimeEntry<TObject, TDrawable>(TObject @object) : LifetimeEntry
+public abstract class ZeroVObjectLifetimeEntry<TObject, TDrawable>(TObject obj) : LifetimeEntry
     where TObject: ZeroVObject
     where TDrawable : ZeroVDrawableObject<TObject> {
-    public TObject Object { get; } = @object;
+    public TObject Object { get; } = obj;
     public TDrawable? Drawable { get; set; }
 }
