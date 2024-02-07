@@ -16,6 +16,7 @@ using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
 
@@ -27,13 +28,17 @@ public partial class GameplayScreen : Screen {
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<OrbitDrawable> orbits = null!;
 
-    public GameplayScreen() {
+    public GameplayScreen(ZeroVBeatmap beatmap) {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
 
         this.lifetimeEntryManager = new();
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
+        foreach (Orbit item in beatmap.Orbits.Span) {
+            var entry = new OrbitLifetimeEntry(item);
+            this.lifetimeEntryManager.AddEntry(entry);
+        }
     }
 
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
