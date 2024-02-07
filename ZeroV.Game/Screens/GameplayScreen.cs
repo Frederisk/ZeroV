@@ -83,17 +83,6 @@ public partial class GameplayScreen : Screen {
         this.AddInternal(this.orbitDrawablePool);
     }
 
-    protected override void LoadComplete() {
-        // TODO: For test
-        this.orbits.Add(
-            new OrbitDrawable() { X = 0, Width = 128 }
-        );
-        this.orbits.Add(
-            new OrbitDrawable() { X = 100, Width = 256 }
-        );
-        base.LoadComplete();
-    }
-
     protected override Boolean OnTouchDown(TouchDownEvent e) {
         this.TouchUpdate?.Invoke(e.Touch.Source, e.ScreenSpaceTouchDownPosition, true);
         return true;
