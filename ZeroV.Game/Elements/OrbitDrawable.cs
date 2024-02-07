@@ -106,14 +106,14 @@ public partial class OrbitDrawable : ZeroVDrawableObject<Orbit> {
     public new Single Width { get => base.Width; set => base.Width = value; }
 
     [Resolved]
-    private GameplayScreen gameplayScreen { get; set; }
+    private GameplayScreen? gameplayScreen { get; set; }
 
     protected override void PrepareForUse() {
-        this.gameplayScreen.TouchUpdate += this.OnTouchUpdate;
+        this.gameplayScreen!.TouchUpdate += this.OnTouchUpdate;
         base.PrepareForUse();
     }
     protected override void FreeAfterUse() {
-        this.gameplayScreen.TouchUpdate -= this.OnTouchUpdate;
+        this.gameplayScreen!.TouchUpdate -= this.OnTouchUpdate;
         base.FreeAfterUse();
     }
 
