@@ -18,4 +18,3 @@ public class Orbit : ZeroVObject
     public required ReadOnlyMemory<KeyFrame> KeyFrames { get; init; }
     public required ReadOnlyMemory<ZeroVHitObject> HitObjects { get; init; }
 }
-

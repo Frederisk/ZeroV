@@ -7,5 +7,4 @@ public abstract class ZeroVObjectLifetimeEntry<TObject>(TObject @object) : Lifet
     where TObject: ZeroVObject {
     public TObject Object { get; } = @object;
     public PoolableDrawable? Drawable { get; set; }
-
 }
