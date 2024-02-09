@@ -1,11 +1,12 @@
 using System;
+
 using osuTK.Graphics;
+
 using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements;
 
-public class OrbitSource : ZeroVObject
-{
+public class OrbitSource : ZeroVObjectSource {
     public override Double StartTime => this.KeyFrames.Span[0].Time;
     public override Double EndTime => this.KeyFrames.Span[^1].Time;
 
@@ -15,6 +16,7 @@ public class OrbitSource : ZeroVObject
         public Single Width { get; set; }
         public Color4 Color { get; set; }
     }
-    public required ReadOnlyMemory<KeyFrame> KeyFrames { get; init; }
-    public required ReadOnlyMemory<ZeroVHitObject> HitObjects { get; init; }
+
+    public ReadOnlyMemory<KeyFrame> KeyFrames { get; init; }
+    public ReadOnlyMemory<ZeroVObjectSourceWithHit> HitObjects { get; init; }
 }

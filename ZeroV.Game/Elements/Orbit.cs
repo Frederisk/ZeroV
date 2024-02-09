@@ -25,7 +25,7 @@ public record Note(Double Time);
 /// <summary>
 /// Orbits that carry particles. It's also the main interactive object in this game.
 /// </summary>
-public partial class Orbit : ZeroVDrawableObject<OrbitSource> {
+public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     /// <summary>
     /// The size of half the particle's Y-axis radius.
@@ -251,13 +251,14 @@ public partial class Orbit : ZeroVDrawableObject<OrbitSource> {
     }
 
     private ReadOnlyMemory<OrbitSource.KeyFrame> keyFrames;
-    public override OrbitSource? Object {
-        get => base.Object;
+
+    public override OrbitSource? Source {
+        get => base.Source;
         set {
             if (value != null) {
                 this.keyFrames = value.KeyFrames;
             }
-            base.Object = value;
+            base.Source = value;
         }
     }
 

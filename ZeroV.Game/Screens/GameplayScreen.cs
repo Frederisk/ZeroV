@@ -28,7 +28,7 @@ public partial class GameplayScreen : Screen {
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
 
-    public GameplayScreen(ZeroVBeatmap beatmap) {
+    public GameplayScreen(Beatmap beatmap) {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
 
@@ -44,7 +44,7 @@ public partial class GameplayScreen : Screen {
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;
         entry.Drawable = this.orbitDrawablePool.Get();
-        entry.Drawable.Object = entry.Object;
+        entry.Drawable.Source = entry.Source;
 
         this.orbits.Add(entry.Drawable);
         Logger.Log("Orbit added.");

@@ -3,6 +3,7 @@ using System;
 using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Objects;
-public class ZeroVBeatmap {
+
+public class Beatmap {
     public ReadOnlyMemory<OrbitSource> Orbits { get; set; }
 }

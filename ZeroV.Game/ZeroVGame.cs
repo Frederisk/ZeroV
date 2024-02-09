@@ -36,7 +36,7 @@ public partial class ZeroVGame : ZeroVGameBase {
     protected override void LoadComplete() {
         base.LoadComplete();
         // For test, the beatmap instance will deserialize after beatmap selected.
-        var beatmap = new ZeroVBeatmap() {
+        var beatmap = new Beatmap() {
             Orbits = new[] {
                 new OrbitSource() {
                     KeyFrames = new[] {
@@ -89,7 +89,7 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Color = Color4.Green
                         }
                     },
-                    HitObjects = Array.Empty<ZeroVHitObject>()
+                    HitObjects = Array.Empty<ZeroVObjectSourceWithHit>()
                 }
             }
         };
