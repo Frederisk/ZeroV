@@ -9,6 +9,8 @@
          It only warns about not copying the library to the app bundle to save space,
          so there's nothing to be worried about. -->
     <NoWarn>MT7091</NoWarn>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'iPhone'">
     <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
