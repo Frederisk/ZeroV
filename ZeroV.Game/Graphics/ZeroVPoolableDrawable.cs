@@ -1,6 +1,8 @@
 using osu.Framework.Graphics.Pooling;
 
-namespace ZeroV.Game.Objects;
+using ZeroV.Game.Objects;
+
+namespace ZeroV.Game.Graphics;
 
 public abstract partial class ZeroVPoolableDrawable<TObject> : PoolableDrawable
     where TObject : ZeroVObjectSource {

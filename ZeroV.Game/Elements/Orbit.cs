@@ -14,7 +14,7 @@ using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements.Particles;
-using ZeroV.Game.Objects;
+using ZeroV.Game.Graphics;
 using ZeroV.Game.Screens;
 
 namespace ZeroV.Game.Elements;
@@ -23,7 +23,7 @@ namespace ZeroV.Game.Elements;
 public record Note(Double Time);
 
 /// <summary>
-/// Orbits that carry particles. It's also the main interactive object in this game.
+/// OrbitSources that carry particles. It's also the main interactive object in this game.
 /// </summary>
 public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 

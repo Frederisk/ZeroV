@@ -35,7 +35,7 @@ public partial class GameplayScreen : Screen {
         this.lifetimeEntryManager = new();
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
-        foreach (OrbitSource item in beatmap.Orbits.Span) {
+        foreach (OrbitSource item in beatmap.OrbitSources.Span) {
             var entry = new OrbitLifetimeEntry(item);
             this.lifetimeEntryManager.AddEntry(entry);
         }

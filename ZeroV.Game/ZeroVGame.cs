@@ -37,7 +37,7 @@ public partial class ZeroVGame : ZeroVGameBase {
         base.LoadComplete();
         // For test, the beatmap instance will deserialize after beatmap selected.
         var beatmap = new Beatmap() {
-            Orbits = new[] {
+            OrbitSources = new[] {
                 new OrbitSource() {
                     KeyFrames = new[] {
                         new OrbitSource.KeyFrame() {

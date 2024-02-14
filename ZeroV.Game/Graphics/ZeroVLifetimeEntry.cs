@@ -1,6 +1,8 @@
 using osu.Framework.Graphics.Performance;
 
-namespace ZeroV.Game.Objects;
+using ZeroV.Game.Objects;
+
+namespace ZeroV.Game.Graphics;
 
 public abstract class ZeroVLifetimeEntry<TSource, TDrawable>(TSource source) : LifetimeEntry
     where TSource : ZeroVObjectSource

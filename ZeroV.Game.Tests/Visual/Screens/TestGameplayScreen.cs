@@ -19,7 +19,7 @@ public partial class TestGameplayScreen : ZeroVTestScene {
     public TestGameplayScreen() {
         // For test, the beatmap instance will deserialize after beatmap selected.
         var beatmap = new Beatmap() {
-            Orbits = new[] {
+            OrbitSources = new[] {
                 new OrbitSource() {
                     KeyFrames = new[] {
                         new OrbitSource.KeyFrame() {
