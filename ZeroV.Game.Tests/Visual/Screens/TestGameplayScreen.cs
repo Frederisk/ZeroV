@@ -35,7 +35,7 @@ public partial class TestGameplayScreen : ZeroVTestScene {
                              Color = Color4.Green
                         }
                     },
-                    HitObjects = Array.Empty<ZeroVObjectSourceWithHit>()
+                    HitObjects = Array.Empty<TimeSourceWithHit>()
                 }
             }
         };

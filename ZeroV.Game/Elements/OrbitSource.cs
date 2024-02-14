@@ -6,7 +6,7 @@ using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements;
 
-public class OrbitSource : ZeroVObjectSource {
+public class OrbitSource : TimeSource {
     public override Double StartTime => this.KeyFrames.Span[0].Time;
     public override Double EndTime => this.KeyFrames.Span[^1].Time;
 
@@ -18,5 +18,5 @@ public class OrbitSource : ZeroVObjectSource {
     }
 
     public ReadOnlyMemory<KeyFrame> KeyFrames { get; init; }
-    public ReadOnlyMemory<ZeroVObjectSourceWithHit> HitObjects { get; init; }
+    public ReadOnlyMemory<TimeSourceWithHit> HitObjects { get; init; }
 }

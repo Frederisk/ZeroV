@@ -89,7 +89,7 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Color = Color4.Green
                         }
                     },
-                    HitObjects = Array.Empty<ZeroVObjectSourceWithHit>()
+                    HitObjects = Array.Empty<TimeSourceWithHit>()
                 }
             }
         };
