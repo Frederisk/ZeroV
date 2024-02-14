@@ -24,6 +24,12 @@ namespace ZeroV.Game.Screens;
 public partial class GameplayScreen : Screen {
     private Track? track;
 
+    /// <summary>
+    /// Drawable pool for <see cref="Orbit"/> objects.
+    /// </summary>
+    /// <remarks>
+    /// FIXME: Appropriate maximum size value needs to be determined in the actual situation.
+    /// </remarks>
     private readonly DrawablePool<Orbit> orbitDrawablePool = new(10, 15);
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
