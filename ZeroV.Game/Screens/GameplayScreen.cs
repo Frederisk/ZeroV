@@ -4,26 +4,72 @@ using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Performance;
+using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osu.Framework.Screens;
 
 using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
 
+[Cached]
 public partial class GameplayScreen : Screen {
     private Track? track;
 
+    /// <summary>
+    /// Drawable pool for <see cref="Orbit"/> objects.
+    /// </summary>
+    /// <remarks>
+    /// FIXME: Appropriate maximum size value needs to be determined in the actual situation.
+    /// </remarks>
+    private readonly DrawablePool<Orbit> orbitDrawablePool = new(10, 15);
+    private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
 
-    public GameplayScreen() {
+    public GameplayScreen(Beatmap beatmap) {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
+
+        this.lifetimeEntryManager = new();
+        this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
+        this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
+        foreach (OrbitSource item in beatmap.OrbitSources.Span) {
+            var entry = new OrbitLifetimeEntry(item);
+            this.lifetimeEntryManager.AddEntry(entry);
+        }
+    }
+
+    private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
+        var entry = (OrbitLifetimeEntry)obj;
+        entry.Drawable = this.orbitDrawablePool.Get();
+        entry.Drawable.Source = entry.Source;
+
+        this.orbits.Add(entry.Drawable);
+        Logger.Log("Orbit added.");
+    }
+    private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
+        var entry = (OrbitLifetimeEntry)obj;
+
+        this.orbits.Remove(entry.Drawable!, false);
+        this.orbitDrawablePool.Return(entry.Drawable);
+        Logger.Log("Orbit removed.");
+    }
+
+    protected override Boolean CheckChildrenLife() {
+        var result = base.CheckChildrenLife();
+        var currTime = this.Time.Current;
+        var startTime = currTime - 2000;
+        var endTime = currTime + 1000;
+        result |= this.lifetimeEntryManager.Update(startTime, endTime);
+        return result;
     }
 
     [BackgroundDependencyLoader]
@@ -44,17 +90,8 @@ public partial class GameplayScreen : Screen {
             },
             this.orbits,
         ];
-    }
 
-    protected override void LoadComplete() {
-        // TODO: For test
-        this.orbits.Add(
-            new Orbit(this) { X = 0, Width = 128 }
-        );
-        this.orbits.Add(
-            new Orbit(this) { X = 100, Width = 256 }
-        );
-        base.LoadComplete();
+        this.AddInternal(this.orbitDrawablePool);
     }
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {

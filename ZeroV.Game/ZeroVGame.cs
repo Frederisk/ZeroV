@@ -8,6 +8,10 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 
+using osuTK.Graphics;
+
+using ZeroV.Game.Elements;
+using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
 namespace ZeroV.Game;
@@ -31,6 +35,64 @@ public partial class ZeroVGame : ZeroVGameBase {
 
     protected override void LoadComplete() {
         base.LoadComplete();
-        this.screenStack.Push(new GameplayScreen());
+        // For test, the beatmap instance will deserialize after beatmap selected.
+        var beatmap = new Beatmap() {
+            OrbitSources = new[] {
+                new OrbitSource() {
+                    KeyFrames = new[] {
+                        new OrbitSource.KeyFrame() {
+                             Time = 0,
+                             Position = 0,
+                             Width = 128,
+                             Color = Color4.Green
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 4000,
+                             Position = 0,
+                             Width = 128,
+                             Color = Color4.Green
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 5000,
+                             Position = 256,
+                             Width = 256,
+                             Color = Color4.Green
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 6000,
+                             Position = 256,
+                             Width = 256,
+                             Color = Color4.Green
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 7000,
+                             Position = 0,
+                             Width = 128,
+                             Color = Color4.Green
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 8000,
+                             Position = -60,
+                             Width = 256,
+                             Color = Color4.Green
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 9000,
+                             Position = -30,
+                             Width = 162,
+                             Color = Color4.Green
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 10000,
+                             Position = 0,
+                             Width = 128,
+                             Color = Color4.Green
+                        }
+                    },
+                    HitObjects = Array.Empty<TimeSourceWithHit>()
+                }
+            }
+        };
+        this.screenStack.Push(new GameplayScreen(beatmap));
     }
 }
