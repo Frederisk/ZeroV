@@ -18,8 +18,8 @@ public partial class TestGameplayScreen : ZeroVTestScene {
 
     public TestGameplayScreen() {
         // For test, the beatmap instance will deserialize after beatmap selected.
-        var beatmap = new ZeroVBeatmap() {
-            Orbits = new[] {
+        var beatmap = new Beatmap() {
+            OrbitSources = new[] {
                 new OrbitSource() {
                     KeyFrames = new[] {
                         new OrbitSource.KeyFrame() {
@@ -35,7 +35,7 @@ public partial class TestGameplayScreen : ZeroVTestScene {
                              Color = Color4.Green
                         }
                     },
-                    HitObjects = Array.Empty<ZeroVHitObject>()
+                    HitObjects = Array.Empty<TimeSourceWithHit>()
                 }
             }
         };
