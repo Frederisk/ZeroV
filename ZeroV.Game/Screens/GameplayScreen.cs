@@ -22,7 +22,9 @@ namespace ZeroV.Game.Screens;
 
 [Cached]
 public partial class GameplayScreen : Screen {
-    private Track? track;
+
+    // [Cached]
+    public Track GameplayTrack = null!;
 
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
@@ -92,6 +94,12 @@ public partial class GameplayScreen : Screen {
         ];
 
         this.AddInternal(this.orbitDrawablePool);
+
+        // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
+        this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3) {
+            Looping = false
+        };
+        this.GameplayTrack.Start();
     }
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {

@@ -50,15 +50,15 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </summary>
     private const Single visual_orbit_offset = -50;
 
-    /// <summary>
-    /// The position of the bottom of the screen.
-    /// </summary>
-    private const Single visual_orbit_bottom = 0;
+    ///// <summary>
+    ///// The position of the bottom of the screen.
+    ///// </summary>
+    //private const Single visual_orbit_bottom = 0;
 
-    /// <summary>
-    /// The position beyond the Y-axis at the bottom of visible orbit.
-    /// </summary>
-    private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + visual_half_of_particle_size;
+    ///// <summary>
+    ///// The position beyond the Y-axis at the bottom of visible orbit.
+    ///// </summary>
+    //private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + visual_half_of_particle_size;
 
     /// <summary>
     /// The container that contains all the elements of the orbit.
@@ -104,15 +104,15 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     public new Single Width { get => base.Width; set => base.Width = value; }
 
     [Resolved]
-    private GameplayScreen? gameplayScreen { get; set; }
+    private GameplayScreen gameplayScreen { get; set; } = null!;
 
     protected override void PrepareForUse() {
-        this.gameplayScreen!.TouchUpdate += this.OnTouchUpdate;
+        this.gameplayScreen.TouchUpdate += this.OnTouchUpdate;
         base.PrepareForUse();
     }
 
     protected override void FreeAfterUse() {
-        this.gameplayScreen!.TouchUpdate -= this.OnTouchUpdate;
+        this.gameplayScreen.TouchUpdate -= this.OnTouchUpdate;
         base.FreeAfterUse();
     }
 
@@ -134,14 +134,17 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     protected void OnTouchUpdate(TouchSource source, Vector2? position, Boolean isNewTouch) {
         if (position is null) {
             this.TouchLeave(source);
-        } else {
-            var isHovered = this.ScreenSpaceDrawQuad.Contains(position.Value);
-            var isEntered = this.touches.Contains(source);
-            if (isHovered && !isEntered) {
+            return;
+        }
+        var isHovered = this.ScreenSpaceDrawQuad.Contains(position.Value);
+        var isEntered = this.touches.Contains(source);
+        switch (isHovered, isEntered) {
+            case (true, false):
                 this.TouchEnter(source, isNewTouch);
-            } else if (!isHovered && isEntered) {
+                break;
+            case (false, true):
                 this.TouchLeave(source);
-            }
+                break;
         }
     }
 
@@ -255,7 +258,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     public override OrbitSource? Source {
         get => base.Source;
         set {
-            if (value != null) {
+            if (value is not null) {
                 this.keyFrames = value.KeyFrames;
             }
             base.Source = value;
@@ -263,7 +266,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     protected override void Update() {
-        var currTime = this.Time.Current;
+        base.Update();
+        // var currTime = this.Time.Current;
+        var currTime = this.gameplayScreen.GameplayTrack.CurrentTime;
         while (this.keyFrames.Length > 1) {
             var nextTime = this.keyFrames.Span[1].Time;
             if (currTime < nextTime) {
