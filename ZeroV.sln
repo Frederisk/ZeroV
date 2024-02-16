@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
@@ -54,9 +54,7 @@ Global
 		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Debug|iPhone.Build.0 = Debug|iPhone
 		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
 		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Release|Any CPU.ActiveCfg = Release|iPhone
 		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Release|iPhone.ActiveCfg = Release|iPhone
 		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Release|iPhone.Build.0 = Release|iPhone
 		{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
