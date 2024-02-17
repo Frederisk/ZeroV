@@ -6,8 +6,6 @@ using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
 
-using ZeroV.Game.Elements;
-
 namespace ZeroV.Game.Screens;
 
 public partial class MainScreen : Screen {

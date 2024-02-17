@@ -96,7 +96,7 @@ public partial class GameplayScreen : Screen {
         this.AddInternal(this.orbitDrawablePool);
 
         // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
-        this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3) {
+        this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {
             Looping = false
         };
         this.GameplayTrack.Start();
