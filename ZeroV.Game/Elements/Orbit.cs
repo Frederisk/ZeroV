@@ -260,6 +260,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             this.Width = Interpolation.ValueAt(currTime,
                 currKeyFrame.Width, nextKeyFrame.Width,
                 currKeyFrame.Time, nextKeyFrame.Time);
+            foreach (KeyValuePair<TouchSource, Vector2?> touch in this.touches) {
+                this.OnTouchChecked(touch.Key, touch.Value, false);
+            }
         }
     }
 
@@ -288,12 +291,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     //private HashSet<TouchSource> touches = [];
     private Dictionary<TouchSource, Vector2?> touches = [];
 
-    protected override void OnSizingChanged() {
-        base.OnSizingChanged();
-        foreach (KeyValuePair<TouchSource, Vector2?> touch in this.touches) {
-            this.OnTouchChecked(touch.Key, touch.Value, false);
-        }
-    }
+    // protected override void OnSizingChanged() { // And OnPositionChanged
+    //     base.OnSizingChanged();
+    //     foreach (KeyValuePair<TouchSource, Vector2?> touch in this.touches) {
+    //         this.OnTouchChecked(touch.Key, touch.Value, false);
+    //     }
+    // }
 
     protected void OnTouchChecked(TouchSource source, Vector2? position, Boolean isNewTouch) {
     if (position is null) {
