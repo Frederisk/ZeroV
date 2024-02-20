@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
@@ -33,6 +34,7 @@ public partial class GameplayScreen : Screen {
     /// FIXME: Appropriate maximum size value needs to be determined in the actual situation.
     /// </remarks>
     private readonly DrawablePool<Orbit> orbitDrawablePool = new(10, 15);
+
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
 
@@ -57,6 +59,7 @@ public partial class GameplayScreen : Screen {
         this.orbits.Add(entry.Drawable);
         Logger.Log("Orbit added.");
     }
+
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;
 
@@ -102,17 +105,22 @@ public partial class GameplayScreen : Screen {
         this.GameplayTrack.Start();
     }
 
+    public Dictionary<TouchSource, Vector2> TouchPositions = [];
+
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        this.TouchUpdate?.Invoke(e.Touch.Source, e.ScreenSpaceTouchDownPosition, true);
+        this.TouchPositions.Add(e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        this.TouchUpdate?.Invoke(e.Touch.Source, true);
         return true;
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
-        this.TouchUpdate?.Invoke(e.Touch.Source, e.ScreenSpaceLastTouchPosition, false);
+        this.TouchPositions[e.Touch.Source] = e.ScreenSpaceLastTouchPosition;
+        this.TouchUpdate?.Invoke(e.Touch.Source, false);
     }
 
     protected override void OnTouchUp(TouchUpEvent e) {
-        this.TouchUpdate?.Invoke(e.Touch.Source, null, false);
+        this.TouchPositions.Remove(e.Touch.Source);
+        this.TouchUpdate?.Invoke(e.Touch.Source, null);
     }
 
     /// <summary>
@@ -124,7 +132,6 @@ public partial class GameplayScreen : Screen {
     /// Encapsulates a touch update method.
     /// </summary>
     /// <param name="source">The source of the touch event.</param>
-    /// <param name="position">The position of the touch event. Null if the touch event is a release.</param>
-    /// <param name="isNewTouch">Whether the touch event is a new touch. This is true if the touch event is a press, and false if the touch event is a move. For release events, this value is not important.</param>
-    public delegate void TouchUpdateDelegate(TouchSource source, Vector2? position, Boolean isNewTouch);
+    /// <param name="isNewTouch">Whether the touch event is a new touch. This is true if the touch event is a press, and false if the touch event is a move. Null if the touch event is a release.</param>
+    public delegate void TouchUpdateDelegate(TouchSource source, Boolean? isNewTouch);
 }

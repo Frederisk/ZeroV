@@ -137,7 +137,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Colour = Colour4.Azure,
             RelativeSizeAxes = Axes.Both,
             // Size = new Vector2(5000,768-50),
-            // Position = new Vector2(0, -50),
+            // XPosition = new Vector2(0, -50),
             Y = visual_orbit_offset,
         };
         this.innerLine = new Box {
@@ -148,7 +148,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Width = 1,
             EdgeSmoothness = new Vector2(1, 0),
             Y = visual_orbit_offset,
-            // Position = new Vector2(0, visual_orbit_offset),
+            // XPosition = new Vector2(0, visual_orbit_offset),
         };
         this.particles = new Container<ParticleBase>() {
             Origin = Anchor.BottomCentre,
@@ -254,14 +254,27 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         if (this.keyFrames.Length > 1) {
             OrbitSource.KeyFrame currKeyFrame = this.keyFrames.Span[0];
             OrbitSource.KeyFrame nextKeyFrame = this.keyFrames.Span[1];
-            this.X = Interpolation.ValueAt(currTime,
-                currKeyFrame.Position, nextKeyFrame.Position,
+
+            var nextX = Interpolation.ValueAt(currTime,
+                currKeyFrame.XPosition, nextKeyFrame.XPosition,
                 currKeyFrame.Time, nextKeyFrame.Time);
-            this.Width = Interpolation.ValueAt(currTime,
+            var isXChanged = this.X != nextX;
+            if (isXChanged) {
+                this.X = nextX;
+            }
+
+            var nextWidth = Interpolation.ValueAt(currTime,
                 currKeyFrame.Width, nextKeyFrame.Width,
                 currKeyFrame.Time, nextKeyFrame.Time);
-            foreach (KeyValuePair<TouchSource, Vector2?> touch in this.touches) {
-                this.OnTouchChecked(touch.Key, touch.Value, false);
+            var isWidthChanged = this.Width != nextWidth;
+            if (isWidthChanged) {
+                this.Width = nextWidth;
+            }
+
+            if (isXChanged || isWidthChanged) {
+                foreach (TouchSource touchSource in this.gameplayScreen.TouchPositions.Keys) {
+                    this.OnTouchChecked(touchSource, false);
+                }
             }
         }
     }
@@ -276,8 +289,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         base.FreeAfterUse();
     }
 
-    //protected override void
-
     public void AddParticle(ParticleBase a) {
         this.particles.Add(a);
     }
@@ -288,39 +299,32 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     #region Touch
 
-    //private HashSet<TouchSource> touches = [];
-    private Dictionary<TouchSource, Vector2?> touches = [];
+    private HashSet<TouchSource> touches = [];
 
-    // protected override void OnSizingChanged() { // And OnPositionChanged
-    //     base.OnSizingChanged();
-    //     foreach (KeyValuePair<TouchSource, Vector2?> touch in this.touches) {
-    //         this.OnTouchChecked(touch.Key, touch.Value, false);
-    //     }
-    // }
-
-    protected void OnTouchChecked(TouchSource source, Vector2? position, Boolean isNewTouch) {
-    if (position is null) {
-        this.TouchLeave(source);
-        return;
-    }
-    var isHovered = this.ScreenSpaceDrawQuad.Contains(position.Value);
-    var isEntered = this.touches.ContainsKey(source);
-    switch (isHovered, isEntered) {
-        case (true, false):
-            this.TouchEnter(source, position.Value, isNewTouch);
-            break;
-
-        case (false, true):
+    protected void OnTouchChecked(TouchSource source, Boolean? isNewTouch) {
+        if (isNewTouch is null) {
             this.TouchLeave(source);
-            break;
-    }
+            return;
+        }
+        var isHovered = this.ScreenSpaceDrawQuad.Contains(this.gameplayScreen.TouchPositions[source]);
+        var isEntered = this.touches.Contains(source);
+
+        switch (isHovered, isEntered) {
+            case (true, false):
+                this.TouchEnter(source, isNewTouch.Value);
+                break;
+
+            case (false, true):
+                this.TouchLeave(source);
+                break;
+        }
     }
 
-    protected void TouchEnter(TouchSource source, Vector2 position, Boolean isTouchDown) {
-    if (isTouchDown) {
-        this.lastTouchDownTime = this.Time.Current;
-    }
-    this.touches.Add(source, position);
+    protected void TouchEnter(TouchSource source, Boolean isTouchDown) {
+        if (isTouchDown) {
+            this.lastTouchDownTime = this.gameplayScreen.GameplayTrack.CurrentTime;
+        }
+        this.touches.Add(source);
         this.updateColor();
     }
 

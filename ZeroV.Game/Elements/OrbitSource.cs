@@ -12,7 +12,7 @@ public class OrbitSource : TimeSource {
 
     public struct KeyFrame {
         public Double Time { get; set; }
-        public Single Position { get; set; }
+        public Single XPosition { get; set; }
         public Single Width { get; set; }
         public Color4 Color { get; set; }
     }

@@ -42,49 +42,49 @@ public partial class ZeroVGame : ZeroVGameBase {
                     KeyFrames = new[] {
                         new OrbitSource.KeyFrame() {
                              Time = 0,
-                             Position = 0,
+                             XPosition = 0,
                              Width = 128,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 4000,
-                             Position = 0,
+                             XPosition = 0,
                              Width = 128,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 5000,
-                             Position = 256,
+                             XPosition = 256,
                              Width = 256,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 6000,
-                             Position = 256,
+                             XPosition = 256,
                              Width = 256,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 7000,
-                             Position = 0,
+                             XPosition = 0,
                              Width = 128,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 8000,
-                             Position = -60,
+                             XPosition = -60,
                              Width = 256,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 9000,
-                             Position = -30,
+                             XPosition = -30,
                              Width = 162,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 10000,
-                             Position = 0,
+                             XPosition = 0,
                              Width = 128,
                              Color = Color4.Green
                         }

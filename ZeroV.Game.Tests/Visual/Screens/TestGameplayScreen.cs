@@ -24,13 +24,13 @@ public partial class TestGameplayScreen : ZeroVTestScene {
                     KeyFrames = new[] {
                         new OrbitSource.KeyFrame() {
                              Time = 0,
-                             Position = 0,
+                             XPosition = 0,
                              Width = 128,
                              Color = Color4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 10000,
-                             Position = 0,
+                             XPosition = 0,
                              Width = 128,
                              Color = Color4.Green
                         }
