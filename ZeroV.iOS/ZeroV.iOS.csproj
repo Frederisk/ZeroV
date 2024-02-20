@@ -23,6 +23,6 @@
     <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework.iOS" Version="2023.1012.0" />
+    <PackageReference Include="ppy.osu.Framework.iOS" Version="2024.217.0" />
   </ItemGroup>
 </Project>
