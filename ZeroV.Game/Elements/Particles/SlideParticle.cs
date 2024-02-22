@@ -79,7 +79,7 @@ public partial class SlideParticle : ParticleBase {
                 },
             },
             new Diamond {
-                DiameterSize = 34,
+                Size = new Vector2(34),
                 Colour = Color4.Black,
             },
         ];

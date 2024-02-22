@@ -33,13 +33,13 @@ public partial class SwitchButton : Checkbox {
                 new Diamond {
                     Origin = Anchor.CentreLeft,
                     Anchor = Anchor.CentreLeft,
-                    DiameterSize = this.Size.Y,
+                    Size = new Vector2(this.Size.Y),
                     Colour = Colour4.Black,
                 },
                 new Diamond {
                     Origin = Anchor.CentreRight,
                     Anchor = Anchor.CentreRight,
-                    DiameterSize = this.Size.Y,
+                    Size = new Vector2(this.Size.Y),
                     Colour = Colour4.Black,
                 }
             ],

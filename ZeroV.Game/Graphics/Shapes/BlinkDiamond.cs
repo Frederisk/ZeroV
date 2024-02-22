@@ -8,6 +8,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
+using osuTK;
 using osuTK.Graphics;
 
 namespace ZeroV.Game.Graphics.Shapes;
@@ -31,11 +32,11 @@ public partial class BlinkDiamond : CompositeDrawable {
     private void load() {
         this.InternalChildren = [
             new Diamond {
-                DiameterSize = this.OuterDiameterSize,
+                Size = new Vector2(this.OuterDiameterSize),
                 Colour = this.OuterColor,
             },
             new Diamond {
-                DiameterSize = this.InnerDiameterSize,
+                Size = new Vector2(this.InnerDiameterSize),
                 Colour = this.InnerColor,
             },
         ];
