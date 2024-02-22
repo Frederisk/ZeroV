@@ -10,6 +10,7 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Localisation;
 
 namespace ZeroV.Game.Elements;
+
 public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T> where T : struct, IEquatable<T> {
     private readonly BindableWithCurrent<T> current = new();
 
@@ -26,6 +27,7 @@ public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T>
     /// If true, the roll-up duration will be proportional to change in value.
     /// </summary>
     protected virtual Boolean IsRollingProportional => false;
+
     /// <summary>
     /// If IsRollingProportional = false, duration in milliseconds for the counter roll-up animation for each
     /// element; else duration in milliseconds for the counter roll-up animation in total.
@@ -128,6 +130,6 @@ public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T>
     /// May not be called if <see cref="CreateText"/> is overridden.
     /// </summary>
     protected virtual ZeroVSpriteText CreateSpriteText() => new() {
-        FontSize = 40f,
+        FontSize = 64,
     };
 }

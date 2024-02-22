@@ -37,6 +37,7 @@ public partial class GameplayScreen : Screen {
 
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
+    private Container overlay = null!;
 
     public GameplayScreen(Beatmap beatmap) {
         this.Anchor = Anchor.BottomCentre;
@@ -70,7 +71,7 @@ public partial class GameplayScreen : Screen {
 
     protected override Boolean CheckChildrenLife() {
         var result = base.CheckChildrenLife();
-        var currTime = this.Time.Current;
+        var currTime = this.GameplayTrack.CurrentTime;
         var startTime = currTime - 2000;
         var endTime = currTime + 1000;
         result |= this.lifetimeEntryManager.Update(startTime, endTime);
@@ -79,9 +80,18 @@ public partial class GameplayScreen : Screen {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.orbits = new Container<Orbit>() {
+        this.orbits = new Container<Orbit> {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
+        };
+        this.overlay = new Container {
+            RelativeSizeAxes = Axes.Both,
+            Children = [
+                new ScoreCounter {
+                    Origin = Anchor.TopRight,
+                    Anchor = Anchor.TopRight,
+                },
+            ],
         };
         this.InternalChildren = [
             new PlayfieldBackground(),
@@ -94,8 +104,8 @@ public partial class GameplayScreen : Screen {
                 Colour = Color4.Red,
             },
             this.orbits,
+            this.overlay,
         ];
-
         this.AddInternal(this.orbitDrawablePool);
 
         // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
