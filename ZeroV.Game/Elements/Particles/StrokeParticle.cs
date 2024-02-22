@@ -24,15 +24,15 @@ public partial class StrokeParticle : ParticleBase {
     private void load() {
         this.InternalChildren = [
             new Diamond {
-                DiameterSize = 52,
+                DiameterSize = 74,
                 Colour = Colour4.Gray,
             },
             new Diamond {
-                DiameterSize = 52 * 0.88f,
+                DiameterSize = 74 * 0.88f,
                 Colour = Colour4.Gold,
             },
             new Diamond {
-                DiameterSize = 28,
+                DiameterSize = 40,
                 Colour = Colour4.Gray,
             }
         ];

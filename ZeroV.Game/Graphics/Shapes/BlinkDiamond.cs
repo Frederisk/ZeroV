@@ -19,9 +19,9 @@ public partial class BlinkDiamond : CompositeDrawable {
         this.Origin = Anchor.Centre;
     }
 
-    public Single OuterDiameterSize { get; init; } = 52;
+    public Single OuterDiameterSize { get; init; } = 74;
 
-    public Single InnerDiameterSize { get; init; } = 28;
+    public Single InnerDiameterSize { get; init; } = 40;
 
     public Color4 OuterColor { get; init; } = Color4.Black;
 
