@@ -20,12 +20,12 @@ namespace ZeroV.Game.Elements.Particles;
 public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObject>
     where TObject: TimeSource {
 
-    public virtual Single StartTime {
+    public virtual Double StartTime {
         get => this.StartTimeBindable.Value;
         init => this.StartTimeBindable.Value = value;
     }
 
-    public Bindable<Single> StartTimeBindable;
+    public Bindable<Double> StartTimeBindable;
 
     [Resolved]
     public Orbit FatherOrbit { get; private set; } = null!;
@@ -33,14 +33,14 @@ public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObj
     public ParticleBase() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
-        this.StartTimeBindable = new Bindable<Single>();
+        this.StartTimeBindable = new BindableDouble();
     }
 
     public Boolean IsRecyclable { get; private set; }
 
-    public virtual void Recycle(Orbit fatherOrbit, Single startTime) {
+    public virtual void Recycle(Orbit fatherOrbit, Double startTime) {
         // TODO: Create appropriate methods to make objects reusable.
-        this.StartTimeBindable = new Bindable<Single> {
+        this.StartTimeBindable = new Bindable<Double> {
             Value = startTime,
         };
     }
