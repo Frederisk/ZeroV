@@ -19,9 +19,6 @@ using ZeroV.Game.Screens;
 
 namespace ZeroV.Game.Elements;
 
-// FIXME: Remove it.
-public record Note(Double Time);
-
 /// <summary>
 /// OrbitSources that carry particles. It's also the main interactive object in this game.
 /// </summary>
@@ -81,10 +78,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private Box innerLine = null!;
     private Container<ParticleBase> particles = null!;
 
-    private Queue<ParticleBase> particleQueue = null!;
-    private Queue<Note> notes;
-    private Double? lastTouchDownTime;
-
     //FIXME: Just for test, remove it.
     private Colour4[] colors = [
         Colour4.White,
@@ -115,11 +108,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         base.Height = 768;
         base.Y = 0;
         this.Alpha = 0.9f;
-
-        this.notes = new();
-        this.notes.Enqueue(new Note(TimeSpan.FromSeconds(7).TotalMilliseconds));
-        this.notes.Enqueue(new Note(TimeSpan.FromSeconds(8).TotalMilliseconds));
-        this.notes.Enqueue(new Note(TimeSpan.FromSeconds(9).TotalMilliseconds));
     }
 
     [BackgroundDependencyLoader]
@@ -215,16 +203,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             ]
         };
         this.InternalChild = this.container;
-
-        // FIXME: For Test
-        this.particleQueue = new Queue<ParticleBase>();
-        this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
-        this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
-        this.particleQueue.Enqueue(new BlinkParticle(this) { Y = visual_orbit_out_of_top });
-
-        foreach (ParticleBase item in this.particleQueue) {
-            this.AddParticle(item);
-        }
     }
 
     private ReadOnlyMemory<OrbitSource.KeyFrame> keyFrames;
