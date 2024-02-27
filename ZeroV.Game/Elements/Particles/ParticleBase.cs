@@ -28,7 +28,7 @@ public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObj
     public Bindable<Single> StartTimeBindable;
 
     [Resolved]
-    public Orbit FatherOrbit { get; private set; }
+    public Orbit FatherOrbit { get; private set; } = null!;
 
     public ParticleBase() {
         this.Origin = Anchor.Centre;
