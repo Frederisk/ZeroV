@@ -255,6 +255,10 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             OrbitSource.KeyFrame currKeyFrame = this.keyFrames.Span[0];
             OrbitSource.KeyFrame nextKeyFrame = this.keyFrames.Span[1];
 
+            this.innerBox.Colour = Interpolation.ValueAt(currTime,
+                currKeyFrame.Color, nextKeyFrame.Color,
+                currKeyFrame.Time, nextKeyFrame.Time);
+
             var nextX = Interpolation.ValueAt(currTime,
                 currKeyFrame.XPosition, nextKeyFrame.XPosition,
                 currKeyFrame.Time, nextKeyFrame.Time);
