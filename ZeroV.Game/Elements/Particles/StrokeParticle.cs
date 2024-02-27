@@ -5,7 +5,7 @@ using osuTK;
 
 namespace ZeroV.Game.Elements.Particles;
 
-public partial class StrokeParticle : ParticleBase {
+public partial class StrokeParticle : ParticleBase<StrokeParticleSource> {
 
     public StrokeParticle(Orbit fatherOrbit) : base(fatherOrbit) {
     }

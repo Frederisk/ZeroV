@@ -8,12 +8,16 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
+using ZeroV.Game.Graphics;
+using ZeroV.Game.Objects;
+
 namespace ZeroV.Game.Elements.Particles;
 
 /// <summary>
 /// The base class for all particles.
 /// </summary>
-public abstract partial class ParticleBase : CompositeDrawable {
+public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObject>
+    where TObject: TimeSource {
 
     public virtual Single StartTime {
         get => this.StartTimeBindable.Value;

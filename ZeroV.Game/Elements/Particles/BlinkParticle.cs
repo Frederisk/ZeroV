@@ -7,7 +7,7 @@ using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game.Elements.Particles;
 
-public partial class BlinkParticle : ParticleBase {
+public partial class BlinkParticle : ParticleBase<BlinkParticleSource> {
 
     public BlinkParticle(Orbit fatherOrbit) : base(fatherOrbit) {
         //this.AutoSizeAxes = Axes.Both;

@@ -76,7 +76,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     private Box innerBox = null!;
     private Box innerLine = null!;
-    private Container<ParticleBase> particles = null!;
+    private Container<PoolableDrawable> particles = null!;
 
     //FIXME: Just for test, remove it.
     private Colour4[] colors = [
@@ -138,7 +138,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Y = visual_orbit_offset,
             // XPosition = new Vector2(0, visual_orbit_offset),
         };
-        this.particles = new Container<ParticleBase>() {
+        this.particles = new Container<PoolableDrawable>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -271,11 +271,11 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         base.FreeAfterUse();
     }
 
-    public void AddParticle(ParticleBase a) {
+    public void AddParticle(PoolableDrawable a) {
         this.particles.Add(a);
     }
 
-    public void RemoveParticle(ParticleBase a) {
+    public void RemoveParticle(PoolableDrawable a) {
         this.particles.Remove(a, true);
     }
 
