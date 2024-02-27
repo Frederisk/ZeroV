@@ -11,6 +11,7 @@ using osu.Framework.Screens;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
@@ -89,7 +90,11 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Color = Color4.Purple
                         }
                     },
-                    HitObjects = Array.Empty<TimeSourceWithHit>()
+                    HitObjects = new TimeSourceWithHit[] {
+                        new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds)
+                    }
                 }
             }
         };

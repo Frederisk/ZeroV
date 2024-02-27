@@ -17,6 +17,7 @@ using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
@@ -34,6 +35,9 @@ public partial class GameplayScreen : Screen {
     /// FIXME: Appropriate maximum size value needs to be determined in the actual situation.
     /// </remarks>
     private readonly DrawablePool<Orbit> orbitDrawablePool = new(10, 15);
+
+    [Cached]
+    protected readonly DrawablePool<BlinkParticle> BlinkParticlePool = new(10, 15);
 
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
@@ -107,6 +111,7 @@ public partial class GameplayScreen : Screen {
             this.overlay,
         ];
         this.AddInternal(this.orbitDrawablePool);
+        this.AddInternal(this.BlinkParticlePool);
 
         // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
         this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {

@@ -6,8 +6,11 @@ using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Performance;
+using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
+using osu.Framework.Logging;
 using osu.Framework.Utils;
 
 using osuTK;
@@ -15,6 +18,7 @@ using osuTK.Graphics;
 
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
+using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
 namespace ZeroV.Game.Elements;
@@ -77,6 +81,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private Box innerBox = null!;
     private Box innerLine = null!;
     private Container<PoolableDrawable> particles = null!;
+    private readonly LifetimeEntryManager lifetimeEntryManager;
 
     //FIXME: Just for test, remove it.
     private Colour4[] colors = [
@@ -99,6 +104,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
+    [Resolved]
+    private DrawablePool<BlinkParticle> blinkParticlePool { get; set; } = null!;
 
     public Orbit() {
         this.Origin = Anchor.BottomCentre;
@@ -108,6 +115,10 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         base.Height = 768;
         base.Y = 0;
         this.Alpha = 0.9f;
+
+        this.lifetimeEntryManager = new();
+        this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
+        this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
     }
 
     [BackgroundDependencyLoader]
@@ -212,8 +223,43 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         set {
             if (value is not null) {
                 this.keyFrames = value.KeyFrames;
+
+                this.lifetimeEntryManager.ClearEntries();
+                foreach (TimeSourceWithHit item in value.HitObjects.Span) {
+                    switch(item) {
+                        case BlinkParticleSource src:
+                            this.lifetimeEntryManager.AddEntry(new BlinkParticleLifetimeEntry(src));
+                            break;
+                        default: throw new NotImplementedException();
+                    }
+                }
             }
             base.Source = value;
+        }
+    }
+
+    private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
+        switch(obj) {
+            case BlinkParticleLifetimeEntry blink:
+                blink.Drawable = this.blinkParticlePool.Get();
+                blink.Drawable.Recycle(this, blink.Source.StartTime);
+                this.particles.Add(blink.Drawable);
+                Logger.Log("BlinkParticle Added.");
+                return;
+            default: throw new NotImplementedException();
+        }
+    }
+
+    private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
+        switch (obj) {
+            case BlinkParticleLifetimeEntry blink:
+                if(this.particles.Remove(blink.Drawable!, false)) {
+                    this.blinkParticlePool.Return(blink.Drawable);
+                    blink.Drawable = null;
+                    Logger.Log("BlinkParticle removed.");
+                }
+                return;
+            default: throw new NotImplementedException();
         }
     }
 
@@ -259,6 +305,16 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 }
             }
         }
+    }
+    protected override Boolean CheckChildrenLife() {
+        var result = base.CheckChildrenLife();
+        if (this.gameplayScreen.GameplayTrack is not null) {
+            var currTime = this.gameplayScreen.GameplayTrack.CurrentTime;
+            var startTime = currTime - 2000;
+            var endTime = currTime + 1000;
+            result |= this.lifetimeEntryManager.Update(startTime, endTime);
+        }
+        return result;
     }
 
     protected override void PrepareForUse() {
