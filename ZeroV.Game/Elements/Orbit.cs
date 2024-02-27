@@ -22,7 +22,6 @@ namespace ZeroV.Game.Elements;
 /// <summary>
 /// OrbitSources that carry particles. It's also the main interactive object in this game.
 /// </summary>
-[Cached]
 public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     /// <summary>

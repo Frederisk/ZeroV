@@ -27,7 +27,6 @@ public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObj
 
     public Bindable<Double> StartTimeBindable;
 
-    [Resolved]
     public Orbit FatherOrbit { get; private set; } = null!;
 
     public ParticleBase() {
@@ -39,6 +38,7 @@ public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObj
     public Boolean IsRecyclable { get; private set; }
 
     public virtual void Recycle(Orbit fatherOrbit, Double startTime) {
+        this.FatherOrbit = fatherOrbit;
         // TODO: Create appropriate methods to make objects reusable.
         this.StartTimeBindable = new Bindable<Double> {
             Value = startTime,
