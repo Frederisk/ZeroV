@@ -303,9 +303,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     protected void TouchEnter(TouchSource source, Boolean isTouchDown) {
-        if (isTouchDown) {
-            this.lastTouchDownTime = this.gameplayScreen.GameplayTrack.CurrentTime;
-        }
         this.touches.Add(source);
         this.updateColor();
     }
