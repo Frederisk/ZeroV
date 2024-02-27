@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -26,13 +27,13 @@ public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObj
 
     public Bindable<Single> StartTimeBindable;
 
-    public Orbit FatherOrbit { get; init; }
+    [Resolved]
+    public Orbit FatherOrbit { get; private set; }
 
-    public ParticleBase(Orbit fatherOrbit) {
+    public ParticleBase() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
         this.StartTimeBindable = new Bindable<Single>();
-        this.FatherOrbit = fatherOrbit;
     }
 
     public Boolean IsRecyclable { get; private set; }
