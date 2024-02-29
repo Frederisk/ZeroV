@@ -241,7 +241,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         switch(obj) {
             case BlinkParticleLifetimeEntry blink:
-                blink.Drawable = this.blinkParticlePool.Get();
+                blink.Drawable = this.blinkParticlePool.Get(d => {
+                    d.Y = visual_orbit_top;
+                });
                 blink.Drawable.Recycle(this, blink.Source.StartTime);
                 this.particles.Add(blink.Drawable);
                 Logger.Log("BlinkParticle Added.");
@@ -303,6 +305,30 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 foreach (TouchSource touchSource in this.gameplayScreen.TouchPositions.Keys) {
                     this.OnTouchChecked(touchSource, false);
                 }
+            }
+        }
+
+        foreach (PoolableDrawable item in this.particles) {
+            switch (item) {
+                case BlinkParticle blink:
+                    if(currTime < blink.StartTime) {
+                        var startTime = blink.StartTime - TimeSpan.FromSeconds(1).TotalMilliseconds;
+
+                        blink.Y = Interpolation.ValueAt(currTime,
+                            visual_orbit_top, visual_orbit_offset,
+                            startTime, blink.StartTime);
+                    } else {
+                        var endTime = blink.StartTime + TimeSpan.FromSeconds(0.3).TotalMilliseconds;
+
+                        blink.Y = Interpolation.ValueAt(currTime,
+                            visual_orbit_offset, 0,
+                            blink.StartTime, endTime);
+                        blink.Alpha = Interpolation.ValueAt(currTime,
+                            1f, 0f,
+                            blink.StartTime, endTime);
+                    }
+                    break;
+                default: throw new NotImplementedException();
             }
         }
     }
