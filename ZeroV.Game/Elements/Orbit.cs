@@ -226,12 +226,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
                 this.lifetimeEntryManager.ClearEntries();
                 foreach (TimeSourceWithHit item in value.HitObjects.Span) {
-                    switch(item) {
-                        case BlinkParticleSource src:
-                            this.lifetimeEntryManager.AddEntry(new BlinkParticleLifetimeEntry(src));
-                            break;
-                        default: throw new NotImplementedException();
-                    }
+                    this.lifetimeEntryManager.AddEntry(new ParticleLifetimeEntry(item));
                 }
             }
             base.Source = value;
@@ -239,13 +234,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
-        switch(obj) {
-            case BlinkParticleLifetimeEntry blink:
-                blink.Drawable = this.blinkParticlePool.Get(d => {
+        var entry = (ParticleLifetimeEntry)obj;
+        switch(entry.Source) {
+            case BlinkParticleSource blink:
+                entry.Drawable = this.blinkParticlePool.Get(d => {
                     d.Y = visual_orbit_top;
                 });
-                blink.Drawable.Recycle(this, blink.Source.StartTime);
-                this.particles.Add(blink.Drawable);
+                entry.Drawable.Recycle(this, blink.StartTime);
+                this.particles.Add(entry.Drawable);
                 Logger.Log("BlinkParticle Added.");
                 return;
             default: throw new NotImplementedException();
@@ -253,11 +249,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
-        switch (obj) {
-            case BlinkParticleLifetimeEntry blink:
-                if(this.particles.Remove(blink.Drawable!, false)) {
-                    this.blinkParticlePool.Return(blink.Drawable);
-                    blink.Drawable = null;
+        var entry = (ParticleLifetimeEntry)obj;
+        switch (entry.Source) {
+            case BlinkParticleSource:
+                if(this.particles.Remove(entry.Drawable!, false)) {
+                    this.blinkParticlePool.Return(entry.Drawable);
+                    entry.Drawable = null;
                     Logger.Log("BlinkParticle removed.");
                 }
                 return;

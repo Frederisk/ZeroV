@@ -10,7 +10,7 @@ using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game.Elements.Particles;
 
-public partial class PressParticle : ParticleBase<PressParticleSource> {
+public partial class PressParticle : ParticleBase {
 
     public PressParticle() : base() {
         this.AutoSizeAxes = Axes.X;

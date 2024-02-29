@@ -10,7 +10,7 @@ using osuTK.Graphics;
 
 namespace ZeroV.Game.Elements.Particles;
 
-public partial class SlideParticle : ParticleBase<SlideParticleSource> {
+public partial class SlideParticle : ParticleBase {
     public SlidingDirection Direction { get; init; }
 
     public SlideParticle() : base() {

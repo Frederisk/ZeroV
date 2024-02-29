@@ -17,8 +17,7 @@ namespace ZeroV.Game.Elements.Particles;
 /// <summary>
 /// The base class for all particles.
 /// </summary>
-public abstract partial class ParticleBase<TObject> : ZeroVPoolableDrawable<TObject>
-    where TObject: TimeSource {
+public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWithHit> {
 
     public virtual Double StartTime {
         get => this.StartTimeBindable.Value;
