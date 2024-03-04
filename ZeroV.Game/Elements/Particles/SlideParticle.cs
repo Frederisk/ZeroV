@@ -84,11 +84,4 @@ public partial class SlideParticle : ParticleBase {
             },
         ];
     }
-
-    public enum SlidingDirection : Int32 {
-        Up = 0,
-        Right = 1,
-        Down = 2,
-        Left = 3,
-    }
 }
