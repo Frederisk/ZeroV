@@ -78,9 +78,10 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     public Box TouchSpace { get; private set; } = null!;
 
+    private Double speed = TimeSpan.FromSeconds(1).TotalMilliseconds;
     private Box innerBox = null!;
     private Box innerLine = null!;
-    private Container<PoolableDrawable> particles = null!;
+    private Container<ParticleBase> particles = null!;
     private readonly LifetimeEntryManager lifetimeEntryManager;
 
     //FIXME: Just for test, remove it.
@@ -106,6 +107,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private GameplayScreen gameplayScreen { get; set; } = null!;
     [Resolved]
     private DrawablePool<BlinkParticle> blinkParticlePool { get; set; } = null!;
+    [Resolved]
+    private DrawablePool<PressParticle> pressParticlePool { get; set; } = null!;
+    [Resolved]
+    private DrawablePool<SlideParticle> slideParticlePool { get; set; } = null!;
+    [Resolved]
+    private DrawablePool<StrokeParticle> strokeParticlePool { get; set; } = null!;
+
+
 
     public Orbit() {
         this.Origin = Anchor.BottomCentre;
@@ -149,7 +158,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Y = visual_orbit_offset,
             // XPosition = new Vector2(0, visual_orbit_offset),
         };
-        this.particles = new Container<PoolableDrawable>() {
+        this.particles = new Container<ParticleBase>() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -237,12 +246,42 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         var entry = (ParticleLifetimeEntry)obj;
         switch(entry.Source) {
             case BlinkParticleSource blink:
-                entry.Drawable = this.blinkParticlePool.Get(d => {
-                    d.Y = visual_orbit_top;
+                entry.Drawable = this.blinkParticlePool.Get(p => {
+                    p.Y = visual_orbit_top;
                 });
                 entry.Drawable.Recycle(this, blink.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("BlinkParticle Added.");
+                return;
+            case PressParticleSource press:
+                var duration = press.EndTime - press.StartTime;
+                var height = Math.Abs(visual_orbit_top - visual_orbit_offset) / this.speed * duration;
+
+                entry.Drawable = this.pressParticlePool.Get(p => {
+                    p.Y = visual_orbit_top;
+                    p.Height = (Single)height;
+                    p.Depth = 1;
+                });
+                entry.Drawable.Recycle(this, press.StartTime, press.EndTime);
+                this.particles.Add(entry.Drawable);
+                Logger.Log("PressParticle Added.");
+                return;
+            case SlideParticleSource slide:
+                entry.Drawable = this.slideParticlePool.Get(p => {
+                    p.Y = visual_orbit_top;
+                    p.Direction = slide.Direction;
+                });
+                entry.Drawable.Recycle(this, slide.StartTime);
+                this.particles.Add(entry.Drawable);
+                Logger.Log("SlideParticle Added.");
+                return;
+            case StrokeParticleSource stroke:
+                entry.Drawable = this.strokeParticlePool.Get(p => {
+                    p.Y = visual_orbit_top;
+                });
+                entry.Drawable.Recycle(this, stroke.StartTime);
+                this.particles.Add(entry.Drawable);
+                Logger.Log("StrokePartic Added.");
                 return;
             default: throw new NotImplementedException();
         }
@@ -250,15 +289,18 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
         var entry = (ParticleLifetimeEntry)obj;
-        switch (entry.Source) {
-            case BlinkParticleSource:
-                if(this.particles.Remove(entry.Drawable!, false)) {
-                    this.blinkParticlePool.Return(entry.Drawable);
-                    entry.Drawable = null;
-                    Logger.Log("BlinkParticle removed.");
-                }
-                return;
-            default: throw new NotImplementedException();
+        IDrawablePool drawablePool = entry.Source switch {
+            BlinkParticleSource => this.blinkParticlePool,
+            PressParticleSource => this.pressParticlePool,
+            SlideParticleSource => this.slideParticlePool,
+            StrokeParticleSource => this.strokeParticlePool,
+            _ => throw new NotImplementedException()
+        };
+
+        if (this.particles.Remove(entry.Drawable!, false)) {
+            drawablePool.Return(entry.Drawable);
+            entry.Drawable = null;
+            Logger.Log("Particle removed.");
         }
     }
 
@@ -305,27 +347,28 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             }
         }
 
-        foreach (PoolableDrawable item in this.particles) {
-            switch (item) {
-                case BlinkParticle blink:
-                    if(currTime < blink.StartTime) {
-                        var startTime = blink.StartTime - TimeSpan.FromSeconds(1).TotalMilliseconds;
+        foreach (ParticleBase item in this.particles) {
+            if (currTime < item.EndTime) {
+                var startTime = item.StartTime - this.speed;
 
-                        blink.Y = Interpolation.ValueAt(currTime,
-                            visual_orbit_top, visual_orbit_offset,
-                            startTime, blink.StartTime);
-                    } else {
-                        var endTime = blink.StartTime + TimeSpan.FromSeconds(0.3).TotalMilliseconds;
+                item.Y = Interpolation.ValueAt(currTime,
+                    visual_orbit_top, visual_orbit_offset,
+                    startTime, item.StartTime);
+            } else {
+                var endTime = item.EndTime + TimeSpan.FromSeconds(0.3).TotalMilliseconds;
+                var startOffset = visual_orbit_offset;
+                var endOffset = 0f;
+                if (item is PressParticle press) {
+                    startOffset -= press.Height;
+                    endOffset -= press.Height;
+                }
 
-                        blink.Y = Interpolation.ValueAt(currTime,
-                            visual_orbit_offset, 0,
-                            blink.StartTime, endTime);
-                        blink.Alpha = Interpolation.ValueAt(currTime,
-                            1f, 0f,
-                            blink.StartTime, endTime);
-                    }
-                    break;
-                default: throw new NotImplementedException();
+                item.Y = Interpolation.ValueAt(currTime,
+                    startOffset, endOffset,
+                    item.EndTime, endTime);
+                item.Alpha = Interpolation.ValueAt(currTime,
+                    1f, 0f,
+                    item.EndTime, endTime);
             }
         }
     }
@@ -350,11 +393,11 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         base.FreeAfterUse();
     }
 
-    public void AddParticle(PoolableDrawable a) {
+    public void AddParticle(ParticleBase a) {
         this.particles.Add(a);
     }
 
-    public void RemoveParticle(PoolableDrawable a) {
+    public void RemoveParticle(ParticleBase a) {
         this.particles.Remove(a, true);
     }
 

@@ -26,6 +26,8 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWit
 
     public Bindable<Double> StartTimeBindable;
 
+    public virtual Double EndTime { get; private set; }
+
     public Orbit FatherOrbit { get; private set; } = null!;
 
     public ParticleBase() {
@@ -36,11 +38,12 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWit
 
     public Boolean IsRecyclable { get; private set; }
 
-    public virtual void Recycle(Orbit fatherOrbit, Double startTime) {
+    public virtual void Recycle(Orbit fatherOrbit, Double startTime, Double? endTime = null) {
         this.FatherOrbit = fatherOrbit;
         // TODO: Create appropriate methods to make objects reusable.
-        this.StartTimeBindable = new Bindable<Double> {
+        this.StartTimeBindable = new BindableDouble {
             Value = startTime,
         };
+        this.EndTime = endTime ?? startTime;
     }
 }

@@ -38,6 +38,12 @@ public partial class GameplayScreen : Screen {
 
     [Cached]
     protected readonly DrawablePool<BlinkParticle> BlinkParticlePool = new(10, 15);
+    [Cached]
+    protected readonly DrawablePool<PressParticle> PressParticlePool = new(10, 15);
+    [Cached]
+    protected readonly DrawablePool<SlideParticle> SlideParticlePool = new(10, 15);
+    [Cached]
+    protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
 
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
@@ -112,6 +118,9 @@ public partial class GameplayScreen : Screen {
         ];
         this.AddInternal(this.orbitDrawablePool);
         this.AddInternal(this.BlinkParticlePool);
+        this.AddInternal(this.PressParticlePool);
+        this.AddInternal(this.SlideParticlePool);
+        this.AddInternal(this.StrokeParticlePool);
 
         // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
         this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {
