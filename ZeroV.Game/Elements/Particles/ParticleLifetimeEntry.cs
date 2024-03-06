@@ -7,7 +7,9 @@ namespace ZeroV.Game.Elements.Particles;
 
 public class ParticleLifetimeEntry : ZeroVLifetimeEntry<TimeSourceWithHit, ParticleBase> {
     public ParticleLifetimeEntry(TimeSourceWithHit source) : base(source) {
-        this.LifetimeStart = source.StartTime - TimeSpan.FromSeconds(10).TotalMilliseconds;
-        this.LifetimeEnd = source.EndTime + TimeSpan.FromSeconds(1).TotalMilliseconds;
+        //this.LifetimeStart = source.StartTime - 1000;
+        //this.LifetimeEnd = source.EndTime + 300;
+        this.LifetimeStart = source.StartTime;
+        this.LifetimeEnd = source.EndTime;
     }
 }

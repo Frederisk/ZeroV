@@ -74,17 +74,18 @@ public partial class GameplayScreen : Screen {
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;
 
-        this.orbits.Remove(entry.Drawable!, false);
-        this.orbitDrawablePool.Return(entry.Drawable);
-        Logger.Log("Orbit removed.");
+        if(this.orbits.Remove(entry.Drawable!, false)) {
+            // entry.Drawable = null;
+            Logger.Log("Orbit removed.");
+        }
     }
 
     protected override Boolean CheckChildrenLife() {
         var result = base.CheckChildrenLife();
         var currTime = this.GameplayTrack.CurrentTime;
-        var startTime = currTime - 2000;
-        var endTime = currTime + 1000;
-        result |= this.lifetimeEntryManager.Update(startTime, endTime);
+        //var startTime = currTime - 2000;
+        //var endTime = currTime + 1000;
+        result |= this.lifetimeEntryManager.Update(currTime);
         return result;
     }
 

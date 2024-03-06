@@ -46,4 +46,10 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWit
         };
         this.EndTime = endTime ?? startTime;
     }
+
+    protected override void FreeAfterUse() {
+        // Reset Particle
+        this.Alpha = 1f;
+        base.FreeAfterUse();
+    }
 }

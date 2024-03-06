@@ -34,6 +34,11 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private const Single visual_half_of_particle_size = 24;
 
     /// <summary>
+    /// The position of the top of visible orbit.
+    /// </summary>
+    private const Single visual_orbit_top = -768;
+
+    /// <summary>
     /// The position beyond the Y-axis at the top of visible orbit.
     /// </summary>
     /// <remarks>
@@ -42,19 +47,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private const Single visual_orbit_out_of_top = visual_orbit_top - visual_half_of_particle_size;
 
     /// <summary>
-    /// The position of the top of visible orbit.
-    /// </summary>
-    private const Single visual_orbit_top = -768;
-
-    /// <summary>
     /// The position of the bottom of visible orbit. It's also the offset of visible orbit relative to the screen.
     /// </summary>
     private const Single visual_orbit_offset = -50;
 
-    ///// <summary>
-    ///// The position of the bottom of the screen.
-    ///// </summary>
-    //private const Single visual_orbit_bottom = 0;
+    /// <summary>
+    /// The position of the bottom of the screen.
+    /// </summary>
+    private const Single visual_orbit_bottom = 0;
 
     ///// <summary>
     ///// The position beyond the Y-axis at the bottom of visible orbit.
@@ -78,11 +78,13 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     public Box TouchSpace { get; private set; } = null!;
 
-    private Double speed = TimeSpan.FromSeconds(1).TotalMilliseconds;
+    private Double particleFallingTime = TimeSpan.FromSeconds(1).TotalMilliseconds;
+    private Double particleFadingTime = TimeSpan.FromSeconds(0.3).TotalMilliseconds;
+
     private Box innerBox = null!;
     private Box innerLine = null!;
     private Container<ParticleBase> particles = null!;
-    private readonly LifetimeEntryManager lifetimeEntryManager;
+    private readonly LifetimeEntryManager lifetimeEntryManager = new();
 
     //FIXME: Just for test, remove it.
     private Colour4[] colors = [
@@ -105,27 +107,22 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
+
     [Resolved]
     private DrawablePool<BlinkParticle> blinkParticlePool { get; set; } = null!;
+
     [Resolved]
     private DrawablePool<PressParticle> pressParticlePool { get; set; } = null!;
+
     [Resolved]
     private DrawablePool<SlideParticle> slideParticlePool { get; set; } = null!;
+
     [Resolved]
     private DrawablePool<StrokeParticle> strokeParticlePool { get; set; } = null!;
-
-
 
     public Orbit() {
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
-
-        // FIXME: Just for test, remove it.
-        base.Height = 768;
-        base.Y = 0;
-        this.Alpha = 0.9f;
-
-        this.lifetimeEntryManager = new();
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
     }
@@ -209,20 +206,16 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                                 Color4.White.Opacity(0f)
                             )
                         },
-                        // new Box {
-                        //     Anchor = Anchor.TopLeft,
-                        //     Origin = Anchor.TopLeft,
-                        //     RelativeSizeAxes = Axes.Both,
-                        //     RelativePositionAxes = Axes.Both,
-                        //     Height = 1f - 0.05f - 0.25f,
-                        //     Y = 0.05f + 0.25f,
-                        //     Colour = Color4.White.Opacity(0.1f),
-                        // }
                     ],
                 }
             ]
         };
         this.InternalChild = this.container;
+
+        // FIXME: Just for test, remove it.
+        base.Height = 768;
+        base.Y = 0;
+        this.Alpha = 0.9f;
     }
 
     private ReadOnlyMemory<OrbitSource.KeyFrame> keyFrames;
@@ -244,21 +237,22 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         var entry = (ParticleLifetimeEntry)obj;
-        switch(entry.Source) {
+        switch (entry.Source) {
             case BlinkParticleSource blink:
                 entry.Drawable = this.blinkParticlePool.Get(p => {
-                    p.Y = visual_orbit_top;
+                    p.Y = visual_orbit_out_of_top;
                 });
                 entry.Drawable.Recycle(this, blink.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("BlinkParticle Added.");
                 return;
+
             case PressParticleSource press:
                 var duration = press.EndTime - press.StartTime;
-                var height = Math.Abs(visual_orbit_top - visual_orbit_offset) / this.speed * duration;
+                var height = Math.Abs(visual_orbit_out_of_top - visual_orbit_offset) / this.particleFallingTime * duration;
 
                 entry.Drawable = this.pressParticlePool.Get(p => {
-                    p.Y = visual_orbit_top;
+                    p.Y = visual_orbit_out_of_top;
                     p.Height = (Single)height;
                     p.Depth = 1;
                 });
@@ -266,40 +260,35 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 this.particles.Add(entry.Drawable);
                 Logger.Log("PressParticle Added.");
                 return;
+
             case SlideParticleSource slide:
                 entry.Drawable = this.slideParticlePool.Get(p => {
-                    p.Y = visual_orbit_top;
+                    p.Y = visual_orbit_out_of_top;
                     p.Direction = slide.Direction;
                 });
                 entry.Drawable.Recycle(this, slide.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("SlideParticle Added.");
                 return;
+
             case StrokeParticleSource stroke:
                 entry.Drawable = this.strokeParticlePool.Get(p => {
-                    p.Y = visual_orbit_top;
+                    p.Y = visual_orbit_out_of_top;
                 });
                 entry.Drawable.Recycle(this, stroke.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("StrokePartic Added.");
                 return;
+
             default: throw new NotImplementedException();
         }
     }
 
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
         var entry = (ParticleLifetimeEntry)obj;
-        IDrawablePool drawablePool = entry.Source switch {
-            BlinkParticleSource => this.blinkParticlePool,
-            PressParticleSource => this.pressParticlePool,
-            SlideParticleSource => this.slideParticlePool,
-            StrokeParticleSource => this.strokeParticlePool,
-            _ => throw new NotImplementedException()
-        };
 
         if (this.particles.Remove(entry.Drawable!, false)) {
-            drawablePool.Return(entry.Drawable);
-            entry.Drawable = null;
+            // entry.Drawable = null;
             Logger.Log("Particle removed.");
         }
     }
@@ -349,15 +338,15 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         foreach (ParticleBase item in this.particles) {
             if (currTime < item.EndTime) {
-                var startTime = item.StartTime - this.speed;
+                var startTime = item.StartTime - this.particleFallingTime;
 
                 item.Y = Interpolation.ValueAt(currTime,
-                    visual_orbit_top, visual_orbit_offset,
+                    visual_orbit_out_of_top, visual_orbit_offset,
                     startTime, item.StartTime);
             } else {
-                var endTime = item.EndTime + TimeSpan.FromSeconds(0.3).TotalMilliseconds;
+                var endTime = item.EndTime + this.particleFadingTime;
                 var startOffset = visual_orbit_offset;
-                var endOffset = 0f;
+                var endOffset = visual_orbit_bottom;
                 if (item is PressParticle press) {
                     startOffset -= press.Height;
                     endOffset -= press.Height;
@@ -372,12 +361,15 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             }
         }
     }
+
     protected override Boolean CheckChildrenLife() {
         var result = base.CheckChildrenLife();
         if (this.gameplayScreen.GameplayTrack is not null) {
             var currTime = this.gameplayScreen.GameplayTrack.CurrentTime;
-            var startTime = currTime - 2000;
-            var endTime = currTime + 1000;
+            // Time to fade out
+            var startTime = currTime - this.particleFadingTime;
+            // Time to fall down
+            var endTime = currTime + this.particleFallingTime;
             result |= this.lifetimeEntryManager.Update(startTime, endTime);
         }
         return result;
@@ -393,13 +385,13 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         base.FreeAfterUse();
     }
 
-    public void AddParticle(ParticleBase a) {
-        this.particles.Add(a);
-    }
+    //public void AddParticle(ParticleBase a) {
+    //    this.particles.Add(a);
+    //}
 
-    public void RemoveParticle(ParticleBase a) {
-        this.particles.Remove(a, true);
-    }
+    //public void RemoveParticle(ParticleBase a) {
+    //    this.particles.Remove(a, true);
+    //}
 
     #region Touch
 
