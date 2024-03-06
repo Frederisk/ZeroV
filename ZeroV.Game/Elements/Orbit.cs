@@ -242,7 +242,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 entry.Drawable = this.blinkParticlePool.Get(p => {
                     p.Y = visual_orbit_out_of_top;
                 });
-                entry.Drawable.Recycle(this, blink.StartTime);
+                //entry.Drawable.Recycle(this, blink.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("BlinkParticle Added.");
                 return;
@@ -256,7 +256,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                     p.Height = (Single)height;
                     p.Depth = 1;
                 });
-                entry.Drawable.Recycle(this, press.StartTime, press.EndTime);
+                //entry.Drawable.Recycle(this, press.StartTime, press.EndTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("PressParticle Added.");
                 return;
@@ -266,7 +266,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                     p.Y = visual_orbit_out_of_top;
                     p.Direction = slide.Direction;
                 });
-                entry.Drawable.Recycle(this, slide.StartTime);
+                //entry.Drawable.Recycle(this, slide.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("SlideParticle Added.");
                 return;
@@ -275,9 +275,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 entry.Drawable = this.strokeParticlePool.Get(p => {
                     p.Y = visual_orbit_out_of_top;
                 });
-                entry.Drawable.Recycle(this, stroke.StartTime);
+                //entry.Drawable.Recycle(this, stroke.StartTime);
                 this.particles.Add(entry.Drawable);
-                Logger.Log("StrokePartic Added.");
+                Logger.Log("StrokeParticle Added.");
                 return;
 
             default: throw new NotImplementedException();
