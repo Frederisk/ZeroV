@@ -1,13 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
 
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Objects;
@@ -33,6 +27,7 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWit
     public ParticleBase() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
+        this.AutoSizeAxes = Axes.Both;
         this.StartTimeBindable = new BindableDouble();
     }
 

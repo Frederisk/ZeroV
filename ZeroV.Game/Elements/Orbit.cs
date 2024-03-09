@@ -78,7 +78,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     public Box TouchSpace { get; private set; } = null!;
 
-    private Double particleFallingTime = TimeSpan.FromSeconds(1).TotalMilliseconds;
+    private Double particleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
     private Double particleFadingTime = TimeSpan.FromSeconds(0.3).TotalMilliseconds;
 
     private Box innerBox = null!;
@@ -337,28 +337,29 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         }
 
         foreach (ParticleBase item in this.particles) {
-            if (currTime < item.EndTime) {
-                var startTime = item.StartTime - this.particleFallingTime;
+            //if (currTime < item.EndTime) {
+            var startTime = item.StartTime - this.particleFallingTime;
 
-                item.Y = Interpolation.ValueAt(currTime,
-                    visual_orbit_out_of_top, visual_orbit_offset,
-                    startTime, item.StartTime);
-            } else {
-                var endTime = item.EndTime + this.particleFadingTime;
-                var startOffset = visual_orbit_offset;
-                var endOffset = visual_orbit_bottom;
-                if (item is PressParticle press) {
-                    startOffset -= press.Height;
-                    endOffset -= press.Height;
-                }
+            item.Y = Interpolation.ValueAt(currTime,
+            visual_orbit_out_of_top, visual_orbit_offset,
+            startTime, item.StartTime);
+            //item.Y += 1;
+            //} else {
+            //    var endTime = item.EndTime + this.particleFadingTime;
+            //    var startOffset = visual_orbit_offset;
+            //    var endOffset = visual_orbit_bottom;
+            //    if (item is PressParticle press) {
+            //        startOffset -= press.Height;
+            //        endOffset -= press.Height;
+            //    }
 
-                item.Y = Interpolation.ValueAt(currTime,
-                    startOffset, endOffset,
-                    item.EndTime, endTime);
-                item.Alpha = Interpolation.ValueAt(currTime,
-                    1f, 0f,
-                    item.EndTime, endTime);
-            }
+            //    item.Y = Interpolation.ValueAt(currTime,
+            //        startOffset, endOffset,
+            //        item.EndTime, endTime);
+            //    item.Alpha = Interpolation.ValueAt(currTime,
+            //        1f, 0f,
+            //        item.EndTime, endTime);
+            //}
         }
     }
 
@@ -366,10 +367,11 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         var result = base.CheckChildrenLife();
         if (this.gameplayScreen.GameplayTrack is not null) {
             var currTime = this.gameplayScreen.GameplayTrack.CurrentTime;
+            // FIXME: When the center of the particle leaves the edge of the screen for a period of time, it's recycled to avoid glitches.
             // Time to fade out
-            var startTime = currTime - this.particleFadingTime;
+            var startTime = currTime - this.particleFadingTime - 1000;
             // Time to fall down
-            var endTime = currTime + this.particleFallingTime;
+            var endTime = currTime + this.particleFallingTime + 1000;
             result |= this.lifetimeEntryManager.Update(startTime, endTime);
         }
         return result;
