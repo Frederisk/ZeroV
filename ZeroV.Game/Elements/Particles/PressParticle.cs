@@ -2,6 +2,7 @@ using System;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 
 using osuTK.Graphics;
@@ -61,5 +62,16 @@ public partial class PressParticle : ParticleBase {
                 OuterColor = Color4.Black,
             },
         ];
+    }
+
+    protected override Boolean ComputeIsMaskedAway(RectangleF maskingBounds) {
+        // TODO: It seems that `with` is faster than `+=` here.
+        //maskingBounds.Y += 37;
+        //maskingBounds.Height += 74;
+        RectangleF realMasking = maskingBounds with {
+            Y = maskingBounds.Y + 37,
+            Height = maskingBounds.Height + 74,
+        };
+        return base.ComputeIsMaskedAway(realMasking);
     }
 }
