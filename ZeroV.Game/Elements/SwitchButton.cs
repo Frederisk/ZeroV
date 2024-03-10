@@ -85,7 +85,7 @@ public partial class SwitchButton : Checkbox {
                     FillMode = FillMode.Fit,
                     Colour = Colour4.Black,
                 },
-                // Forground
+                // Foreground
                 this.innerContainer = new Container {
                     Origin = Anchor.CentreLeft,
                     Anchor = Anchor.CentreLeft,

@@ -237,11 +237,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         var entry = (ParticleLifetimeEntry)obj;
+
         switch (entry.Source) {
             case BlinkParticleSource blink:
                 entry.Drawable = this.blinkParticlePool.Get(p => {
                     p.Y = visual_orbit_out_of_top;
                 });
+                entry.Drawable.StartTime = entry.Source.StartTime;
+                entry.Drawable.EndTime = entry.Source.EndTime;
                 //entry.Drawable.Recycle(this, blink.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("BlinkParticle Added.");
@@ -250,12 +253,13 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             case PressParticleSource press:
                 var duration = press.EndTime - press.StartTime;
                 var height = Math.Abs(visual_orbit_out_of_top - visual_orbit_offset) / this.particleFallingTime * duration;
-
                 entry.Drawable = this.pressParticlePool.Get(p => {
                     p.Y = visual_orbit_out_of_top;
                     p.Height = (Single)height;
                     p.Depth = 1;
                 });
+                entry.Drawable.StartTime = entry.Source.StartTime;
+                entry.Drawable.EndTime = entry.Source.EndTime;
                 //entry.Drawable.Recycle(this, press.StartTime, press.EndTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("PressParticle Added.");
@@ -266,6 +270,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                     p.Y = visual_orbit_out_of_top;
                     p.Direction = slide.Direction;
                 });
+                entry.Drawable.StartTime = entry.Source.StartTime;
+                entry.Drawable.EndTime = entry.Source.EndTime;
                 //entry.Drawable.Recycle(this, slide.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("SlideParticle Added.");
@@ -275,6 +281,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 entry.Drawable = this.strokeParticlePool.Get(p => {
                     p.Y = visual_orbit_out_of_top;
                 });
+                entry.Drawable.StartTime = entry.Source.StartTime;
+                entry.Drawable.EndTime = entry.Source.EndTime;
                 //entry.Drawable.Recycle(this, stroke.StartTime);
                 this.particles.Add(entry.Drawable);
                 Logger.Log("StrokeParticle Added.");
