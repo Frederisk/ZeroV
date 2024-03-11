@@ -70,13 +70,13 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     private BufferedContainer container = null!;
 
-    /// <summary>
-    /// The space used to touch judgment.
-    /// </summary>
-    /// <remarks>
-    /// This field will never be null after <see cref="LoadComplete"/> has been called.
-    /// </remarks>
-    public Box TouchSpace { get; private set; } = null!;
+    ///// <summary>
+    ///// The space used to touch judgment.
+    ///// </summary>
+    ///// <remarks>
+    ///// This field will never be null after <see cref="LoadComplete"/> has been called.
+    ///// </remarks>
+    //public Box TouchSpace { get; private set; } = null!;
 
     private Double particleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
     private Double particleFadingTime = TimeSpan.FromSeconds(0.3).TotalMilliseconds;
@@ -129,13 +129,13 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.TouchSpace = new Box {
-            Origin = Anchor.BottomCentre,
-            Anchor = Anchor.BottomCentre,
-            //Colour = Colour4.Yellow,
-            Colour = Color4.Transparent,
-            RelativeSizeAxes = Axes.Both,
-        };
+        //this.TouchSpace = new Box {
+        //    Origin = Anchor.BottomCentre,
+        //    Anchor = Anchor.BottomCentre,
+        //    //Colour = Colour4.Yellow,
+        //    Colour = Color4.Transparent,
+        //    RelativeSizeAxes = Axes.Both,
+        //};
         this.innerBox = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
@@ -164,7 +164,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Children = [
-                this.TouchSpace,
+                //this.TouchSpace,
                 this.innerBox,
                 this.innerLine,
                 this.particles,
@@ -238,58 +238,27 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         var entry = (ParticleLifetimeEntry)obj;
 
-        switch (entry.Source) {
-            case BlinkParticleSource blink:
-                entry.Drawable = this.blinkParticlePool.Get(p => {
-                    p.Y = visual_orbit_out_of_top;
-                });
-                entry.Drawable.StartTime = entry.Source.StartTime;
-                entry.Drawable.EndTime = entry.Source.EndTime;
-                //entry.Drawable.Recycle(this, blink.StartTime);
-                this.particles.Add(entry.Drawable);
-                Logger.Log("BlinkParticle Added.");
-                return;
+        entry.Drawable = entry.Source switch {
+            BlinkParticleSource blink => this.blinkParticlePool.Get(p => {
+                p.Y = visual_orbit_out_of_top;
+            }),
+            PressParticleSource press => this.pressParticlePool.Get(p => {
+                p.Y = visual_orbit_out_of_top;
+                p.Height = (Single)((visual_orbit_offset - visual_orbit_out_of_top) * (press.EndTime - press.StartTime) / this.particleFallingTime);
+            }),
+            SlideParticleSource slide => this.slideParticlePool.Get(p => {
+                p.Y = visual_orbit_out_of_top;
+                p.Direction = slide.Direction;
+            }),
+            StrokeParticleSource stroke => this.strokeParticlePool.Get(p => {
+                p.Y = visual_orbit_out_of_top;
+            }),
+            _ => throw new NotImplementedException(),
+        };
 
-            case PressParticleSource press:
-                var duration = press.EndTime - press.StartTime;
-                var height = Math.Abs(visual_orbit_out_of_top - visual_orbit_offset) / this.particleFallingTime * duration;
-                entry.Drawable = this.pressParticlePool.Get(p => {
-                    p.Y = visual_orbit_out_of_top;
-                    p.Height = (Single)height;
-                    p.Depth = 1;
-                });
-                entry.Drawable.StartTime = entry.Source.StartTime;
-                entry.Drawable.EndTime = entry.Source.EndTime;
-                //entry.Drawable.Recycle(this, press.StartTime, press.EndTime);
-                this.particles.Add(entry.Drawable);
-                Logger.Log("PressParticle Added.");
-                return;
-
-            case SlideParticleSource slide:
-                entry.Drawable = this.slideParticlePool.Get(p => {
-                    p.Y = visual_orbit_out_of_top;
-                    p.Direction = slide.Direction;
-                });
-                entry.Drawable.StartTime = entry.Source.StartTime;
-                entry.Drawable.EndTime = entry.Source.EndTime;
-                //entry.Drawable.Recycle(this, slide.StartTime);
-                this.particles.Add(entry.Drawable);
-                Logger.Log("SlideParticle Added.");
-                return;
-
-            case StrokeParticleSource stroke:
-                entry.Drawable = this.strokeParticlePool.Get(p => {
-                    p.Y = visual_orbit_out_of_top;
-                });
-                entry.Drawable.StartTime = entry.Source.StartTime;
-                entry.Drawable.EndTime = entry.Source.EndTime;
-                //entry.Drawable.Recycle(this, stroke.StartTime);
-                this.particles.Add(entry.Drawable);
-                Logger.Log("StrokeParticle Added.");
-                return;
-
-            default: throw new NotImplementedException();
-        }
+        entry.Drawable.Source = entry.Source;
+        this.particles.Add(entry.Drawable);
+        Logger.Log($"{entry.Drawable.GetType()} added.");
     }
 
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
@@ -346,11 +315,11 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         foreach (ParticleBase item in this.particles) {
             //if (currTime < item.EndTime) {
-            var startTime = item.StartTime - this.particleFallingTime;
+            var startTime = item.Source!.StartTime - this.particleFallingTime;
 
             item.Y = Interpolation.ValueAt(currTime,
             visual_orbit_out_of_top, visual_orbit_offset,
-            startTime, item.StartTime);
+            startTime, item.Source.StartTime);
             //item.Y += 1;
             //} else {
             //    var endTime = item.EndTime + this.particleFadingTime;

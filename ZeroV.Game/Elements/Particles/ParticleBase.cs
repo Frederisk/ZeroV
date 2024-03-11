@@ -13,9 +13,9 @@ namespace ZeroV.Game.Elements.Particles;
 /// </summary>
 public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWithHit> {
 
-    public virtual Double StartTime { get; set; }
+    //public virtual Double StartTime { get; set; }
 
-    public virtual Double EndTime { get; set; }
+    //public virtual Double EndTime { get; set; }
 
     // public virtual Double StartTime {
     //     get => this.StartTimeBindable.Value;
