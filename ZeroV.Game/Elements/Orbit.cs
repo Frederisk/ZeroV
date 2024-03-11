@@ -86,17 +86,17 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private Container<ParticleBase> particles = null!;
     private readonly LifetimeEntryManager lifetimeEntryManager = new();
 
-    //FIXME: Just for test, remove it.
-    private Colour4[] colors = [
-        Colour4.White,
-        Colour4.Red,
-        Colour4.Orange,
-        Color4.Yellow,
-        Color4.Green,
-        Color4.Cyan,
-        Color4.Blue,
-        Color4.Purple,
-    ];
+    ////FIXME: Just for test, remove it.
+    //private Colour4[] colors = [
+    //    Colour4.White,
+    //    Colour4.Red,
+    //    Colour4.Orange,
+    //    Color4.Yellow,
+    //    Color4.Green,
+    //    Color4.Cyan,
+    //    Color4.Blue,
+    //    Color4.Purple,
+    //];
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
@@ -397,18 +397,18 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     protected void TouchEnter(TouchSource source, Boolean isTouchDown) {
         this.touches.Add(source);
-        this.updateColor();
+        //this.updateColor();
     }
 
     protected void TouchLeave(TouchSource source) {
         this.touches.Remove(source);
-        this.updateColor();
+        //this.updateColor();
     }
 
-    private void updateColor() {
-        var colorIndex = this.touches.Count % 8;
-        this.innerBox.Colour = this.colors[colorIndex];
-    }
+    //private void updateColor() {
+    //    var colorIndex = this.touches.Count % 8;
+    //    this.innerBox.Colour = this.colors[colorIndex];
+    //}
 
     #endregion Touch
 }
