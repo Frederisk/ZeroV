@@ -13,34 +13,38 @@ namespace ZeroV.Game.Elements.Particles;
 /// </summary>
 public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWithHit> {
 
-    public virtual Double StartTime {
-        get => this.StartTimeBindable.Value;
-        init => this.StartTimeBindable.Value = value;
-    }
+    //public virtual Double StartTime { get; set; }
 
-    public Bindable<Double> StartTimeBindable;
+    //public virtual Double EndTime { get; set; }
 
-    public virtual Double EndTime { get; private set; }
+    // public virtual Double StartTime {
+    //     get => this.StartTimeBindable.Value;
+    //     init => this.StartTimeBindable.Value = value;
+    // }
 
-    public Orbit FatherOrbit { get; private set; } = null!;
+    // public Bindable<Double> StartTimeBindable;
+
+    // public virtual Double EndTime { get; private set; }
+
+    // public Orbit FatherOrbit { get; private set; } = null!;
 
     public ParticleBase() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
         this.AutoSizeAxes = Axes.Both;
-        this.StartTimeBindable = new BindableDouble();
+        // this.StartTimeBindable = new BindableDouble();
     }
 
-    //public Boolean IsRecyclable { get; private set; }
+    // public Boolean IsRecyclable { get; private set; }
 
-    //public virtual void Recycle(Orbit fatherOrbit, Double startTime, Double? endTime = null) {
-    //    this.FatherOrbit = fatherOrbit;
-    //    // TODO: Create appropriate methods to make objects reusable.
-    //    this.StartTimeBindable = new BindableDouble {
-    //        Value = startTime,
-    //    };
-    //    this.EndTime = endTime ?? startTime;
-    //}
+    // public virtual void Recycle(Orbit fatherOrbit, Double startTime, Double? endTime = null) {
+    //     this.FatherOrbit = fatherOrbit;
+    //     // TODO: Create appropriate methods to make objects reusable.
+    //     this.StartTimeBindable = new BindableDouble {
+    //         Value = startTime,
+    //     };
+    //     this.EndTime = endTime ?? startTime;
+    // }
 
     protected override void FreeAfterUse() {
         // Reset Particle
