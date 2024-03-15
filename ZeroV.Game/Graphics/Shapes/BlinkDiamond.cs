@@ -14,6 +14,7 @@ public partial class BlinkDiamond : CompositeDrawable {
     public BlinkDiamond() {
         this.Anchor = Anchor.Centre;
         this.Origin = Anchor.Centre;
+        this.AutoSizeAxes = Axes.Both;
     }
 
     public Single OuterDiameterSize { get; init; } = 74;

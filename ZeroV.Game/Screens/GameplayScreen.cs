@@ -17,6 +17,7 @@ using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
@@ -34,6 +35,15 @@ public partial class GameplayScreen : Screen {
     /// FIXME: Appropriate maximum size value needs to be determined in the actual situation.
     /// </remarks>
     private readonly DrawablePool<Orbit> orbitDrawablePool = new(10, 15);
+
+    [Cached]
+    protected readonly DrawablePool<BlinkParticle> BlinkParticlePool = new(10, 15);
+    [Cached]
+    protected readonly DrawablePool<PressParticle> PressParticlePool = new(10, 15);
+    [Cached]
+    protected readonly DrawablePool<SlideParticle> SlideParticlePool = new(10, 15);
+    [Cached]
+    protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
 
     private readonly LifetimeEntryManager lifetimeEntryManager;
     private Container<Orbit> orbits = null!;
@@ -64,17 +74,18 @@ public partial class GameplayScreen : Screen {
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;
 
-        this.orbits.Remove(entry.Drawable!, false);
-        this.orbitDrawablePool.Return(entry.Drawable);
-        Logger.Log("Orbit removed.");
+        if(this.orbits.Remove(entry.Drawable!, false)) {
+            // entry.Drawable = null;
+            Logger.Log("Orbit removed.");
+        }
     }
 
     protected override Boolean CheckChildrenLife() {
         var result = base.CheckChildrenLife();
         var currTime = this.GameplayTrack.CurrentTime;
-        var startTime = currTime - 2000;
-        var endTime = currTime + 1000;
-        result |= this.lifetimeEntryManager.Update(startTime, endTime);
+        //var startTime = currTime - 2000;
+        //var endTime = currTime + 1000;
+        result |= this.lifetimeEntryManager.Update(currTime);
         return result;
     }
 
@@ -107,6 +118,10 @@ public partial class GameplayScreen : Screen {
             this.overlay,
         ];
         this.AddInternal(this.orbitDrawablePool);
+        this.AddInternal(this.BlinkParticlePool);
+        this.AddInternal(this.PressParticlePool);
+        this.AddInternal(this.SlideParticlePool);
+        this.AddInternal(this.StrokeParticlePool);
 
         // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
         this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {

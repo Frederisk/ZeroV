@@ -11,6 +11,7 @@ using osu.Framework.Screens;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
@@ -44,25 +45,25 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Time = 0,
                              XPosition = 0,
                              Width = 128,
-                             Color = Color4.Green
+                             Color = Color4.Azure
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 4000,
                              XPosition = 0,
                              Width = 128,
-                             Color = Color4.Green
+                             Color = Color4.Red
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 5000,
                              XPosition = 256,
                              Width = 256,
-                             Color = Color4.Green
+                             Color = Color4.Orange
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 6000,
                              XPosition = 256,
                              Width = 256,
-                             Color = Color4.Green
+                             Color = Color4.Yellow
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 7000,
@@ -74,22 +75,39 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Time = 8000,
                              XPosition = -60,
                              Width = 256,
-                             Color = Color4.Green
+                             Color = Color4.Cyan
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 9000,
                              XPosition = -30,
                              Width = 162,
-                             Color = Color4.Green
+                             Color = Color4.Blue
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 10000,
                              XPosition = 0,
                              Width = 128,
-                             Color = Color4.Green
+                             Color = Color4.Purple
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 16000,
+                             XPosition = 0,
+                             Width = 128,
+                             Color = Color4.Purple
                         }
                     },
-                    HitObjects = Array.Empty<TimeSourceWithHit>()
+                    HitObjects = new TimeSourceWithHit[] {
+                        new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds),
+                        new PressParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds, TimeSpan.FromSeconds(11).TotalMilliseconds),
+                        new SlideParticleSource(TimeSpan.FromSeconds(11).TotalMilliseconds, SlidingDirection.Left),
+                        new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Up),
+                        new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Right),
+                        new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Down),
+                        new StrokeParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds)
+                    }
                 }
             }
         };

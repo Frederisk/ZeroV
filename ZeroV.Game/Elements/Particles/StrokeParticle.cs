@@ -7,7 +7,7 @@ namespace ZeroV.Game.Elements.Particles;
 
 public partial class StrokeParticle : ParticleBase {
 
-    public StrokeParticle(Orbit fatherOrbit) : base(fatherOrbit) {
+    public StrokeParticle() : base() {
     }
 
     [BackgroundDependencyLoader]

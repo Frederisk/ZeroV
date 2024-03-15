@@ -1,42 +1,54 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
+
+using ZeroV.Game.Graphics;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements.Particles;
 
 /// <summary>
 /// The base class for all particles.
 /// </summary>
-public abstract partial class ParticleBase : CompositeDrawable {
+public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWithHit> {
 
-    public virtual Single StartTime {
-        get => this.StartTimeBindable.Value;
-        init => this.StartTimeBindable.Value = value;
-    }
+    //public virtual Double StartTime { get; set; }
 
-    public Bindable<Single> StartTimeBindable;
+    //public virtual Double EndTime { get; set; }
 
-    public Orbit FatherOrbit { get; init; }
+    // public virtual Double StartTime {
+    //     get => this.StartTimeBindable.Value;
+    //     init => this.StartTimeBindable.Value = value;
+    // }
 
-    public ParticleBase(Orbit fatherOrbit) {
+    // public Bindable<Double> StartTimeBindable;
+
+    // public virtual Double EndTime { get; private set; }
+
+    // public Orbit FatherOrbit { get; private set; } = null!;
+
+    public ParticleBase() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
-        this.StartTimeBindable = new Bindable<Single>();
-        this.FatherOrbit = fatherOrbit;
+        this.AutoSizeAxes = Axes.Both;
+        // this.StartTimeBindable = new BindableDouble();
     }
 
-    public Boolean IsRecyclable { get; private set; }
+    // public Boolean IsRecyclable { get; private set; }
 
-    public virtual void Recycle(Orbit fatherOrbit, Single startTime) {
-        // TODO: Create appropriate methods to make objects reusable.
-        this.StartTimeBindable = new Bindable<Single> {
-            Value = startTime,
-        };
+    // public virtual void Recycle(Orbit fatherOrbit, Double startTime, Double? endTime = null) {
+    //     this.FatherOrbit = fatherOrbit;
+    //     // TODO: Create appropriate methods to make objects reusable.
+    //     this.StartTimeBindable = new BindableDouble {
+    //         Value = startTime,
+    //     };
+    //     this.EndTime = endTime ?? startTime;
+    // }
+
+    protected override void FreeAfterUse() {
+        // Reset Particle
+        this.Alpha = 1f;
+        base.FreeAfterUse();
     }
 }
