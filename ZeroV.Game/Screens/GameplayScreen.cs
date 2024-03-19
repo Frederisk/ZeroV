@@ -19,6 +19,7 @@ using osuTK.Graphics;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Screens;
 
@@ -45,15 +46,17 @@ public partial class GameplayScreen : Screen {
     [Cached]
     protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
 
-    private readonly LifetimeEntryManager lifetimeEntryManager;
+    private readonly LifetimeEntryManager lifetimeEntryManager = new();
     private Container<Orbit> orbits = null!;
     private Container overlay = null!;
+    private ScoreCounter scoreCounter = null!;
+    // FIXME:
+    public ScoringCalculator ScoringCalculator = new(10);
 
     public GameplayScreen(Beatmap beatmap) {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
 
-        this.lifetimeEntryManager = new();
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
         foreach (OrbitSource item in beatmap.OrbitSources.Span) {
@@ -98,12 +101,14 @@ public partial class GameplayScreen : Screen {
         this.overlay = new Container {
             RelativeSizeAxes = Axes.Both,
             Children = [
-                new ScoreCounter {
+               this.scoreCounter = new ScoreCounter {
                     Origin = Anchor.TopRight,
                     Anchor = Anchor.TopRight,
                 },
             ],
         };
+        // FIXME:
+        this.ScoringCalculator.ScoringChanged += () => this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
         this.InternalChildren = [
             new PlayfieldBackground(),
             new Box() {

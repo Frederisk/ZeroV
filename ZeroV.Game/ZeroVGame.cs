@@ -98,6 +98,12 @@ public partial class ZeroVGame : ZeroVGameBase {
                     },
                     HitObjects = new TimeSourceWithHit[] {
                         new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(4).TotalMilliseconds),
+
+                        new BlinkParticleSource(TimeSpan.FromSeconds(5).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(6).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(7).TotalMilliseconds),
+
                         new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds),

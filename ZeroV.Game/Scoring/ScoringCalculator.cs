@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace ZeroV.Game.Scoring;
 
@@ -36,6 +35,8 @@ public class ScoringCalculator {
 
     public Boolean IsAllDone => this.JudgedCount == this.ParticleCount;
 
+    public Action? ScoringChanged;
+
     private Double comboMultiplier => this.CurrentCombo switch {
         0 => throw new InvalidOperationException("CurrentCombo is 0"),
         1 or 2 or 3 => 1.0,
@@ -58,6 +59,10 @@ public class ScoringCalculator {
     // }
 
     public void AddTarget(TargetResult targeResult) {
+        // FIXME:
+        if (targeResult is TargetResult.None) {
+            return;
+        }
         if (targeResult is TargetResult.Miss) {
             this.MissCount++;
             this.CurrentCombo = 0;
@@ -95,8 +100,9 @@ public class ScoringCalculator {
             default:
                 throw new ArgumentOutOfRangeException(nameof(targeResult), targeResult, null);
         }
-        this.Scoring += this.BaseScoring * this.comboMultiplier * targetMultiplier;
         // this.Scoring += this.BaseScoring * this.comboMultiplier * getTargetMultiplier(targeResult);
+        this.Scoring += this.BaseScoring * this.comboMultiplier * targetMultiplier;
+        this.ScoringChanged?.Invoke();
     }
 
     public ScoringCalculator(UInt32 particleNumber) {
