@@ -81,7 +81,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     private Box innerBox = null!;
     private Box innerLine = null!;
-    private Container<ParticleBase> particles = null!;
+    private ParticleQueue particles = null!;
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
@@ -121,7 +121,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Y = visual_orbit_offset,
             // XPosition = new Vector2(0, visual_orbit_offset),
         };
-        this.particles = new Container<ParticleBase>() {
+        this.particles = new ParticleQueue() {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
@@ -259,16 +259,54 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     #region Judge
 
     private void judgeBlinkMain() {
-        if (this.particles.Count is 0 || this.particles[0] is not BlinkParticle lastParticle) {
+        if (this.particles.QueueFirstOrDefalut is not BlinkParticle lastParticle) {
             return;
         }
         TargetResult result = Judgment.JudgeBlink(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
         if (result is not TargetResult.None) {
-            this.particles.Remove(lastParticle, false);
+            this.particles.HideFirst();
         }
         this.gameplayScreen.ScoringCalculator.AddTarget(result);
     }
-    
+
+    private sealed partial class ParticleQueue : Container<ParticleBase> {
+        private readonly List<ParticleBase> queue = [];
+
+        public ParticleBase? QueueFirstOrDefalut {
+            get {
+                if (this.queue.Count > 0) {
+                    return this.queue[0];
+                } else {
+                    //throw new InvalidOperationException("The queue is empty.");
+                    return null;
+                }
+            }
+        }
+
+        public override void Add(ParticleBase drawable) {
+            base.Add(drawable);
+            if (this.queue.IndexOf(drawable) < 0) {
+                this.queue.Add(drawable);
+            } else {
+                throw new InvalidOperationException("You can't add the same particle twice.");
+            }
+        }
+
+        public override Boolean Remove(ParticleBase drawable, Boolean disposeImmediately) {
+            var result = base.Remove(drawable, disposeImmediately);
+            this.queue.Remove(drawable);
+            return result;
+        }
+
+        public void HideFirst(Single alpha = 0) {
+            if (this.queue.Count > 0) {
+                ParticleBase first = this.queue[0];
+                first.Alpha = alpha;
+                this.queue.RemoveAt(0);
+            }
+        }
+    }
+
     // call this
     // if (the last particle is Blink)
     // when (TouchEnter && isNewTouch)
