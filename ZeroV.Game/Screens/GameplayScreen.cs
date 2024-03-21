@@ -19,6 +19,7 @@ using osuTK.Graphics;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Screens;
 
@@ -38,24 +39,39 @@ public partial class GameplayScreen : Screen {
 
     [Cached]
     protected readonly DrawablePool<BlinkParticle> BlinkParticlePool = new(10, 15);
+
     [Cached]
     protected readonly DrawablePool<PressParticle> PressParticlePool = new(10, 15);
+
     [Cached]
     protected readonly DrawablePool<SlideParticle> SlideParticlePool = new(10, 15);
+
     [Cached]
     protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
 
-    private readonly LifetimeEntryManager lifetimeEntryManager;
+    private readonly LifetimeEntryManager lifetimeEntryManager = new();
     private Container<Orbit> orbits = null!;
     private Container overlay = null!;
+    private ScoreCounter scoreCounter = null!;
+
+    public ScoringCalculator ScoringCalculator;
 
     public GameplayScreen(Beatmap beatmap) {
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
 
-        this.lifetimeEntryManager = new();
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
+
+        // FIXME: Need a better way to calculate the count of hit objects.
+        UInt32 count = 0;
+        foreach (OrbitSource i in beatmap.OrbitSources.Span) {
+            foreach (TimeSourceWithHit ii in i.HitObjects.Span) {
+                count++;
+            }
+        }
+        this.ScoringCalculator = new ScoringCalculator(count);
+
         foreach (OrbitSource item in beatmap.OrbitSources.Span) {
             var entry = new OrbitLifetimeEntry(item);
             this.lifetimeEntryManager.AddEntry(entry);
@@ -74,7 +90,7 @@ public partial class GameplayScreen : Screen {
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;
 
-        if(this.orbits.Remove(entry.Drawable!, false)) {
+        if (this.orbits.Remove(entry.Drawable!, false)) {
             // entry.Drawable = null;
             Logger.Log("Orbit removed.");
         }
@@ -98,12 +114,14 @@ public partial class GameplayScreen : Screen {
         this.overlay = new Container {
             RelativeSizeAxes = Axes.Both,
             Children = [
-                new ScoreCounter {
+               this.scoreCounter = new ScoreCounter {
                     Origin = Anchor.TopRight,
                     Anchor = Anchor.TopRight,
                 },
             ],
         };
+        // FIXME:
+        this.ScoringCalculator.ScoringChanged += () => this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
         this.InternalChildren = [
             new PlayfieldBackground(),
             new Box() {

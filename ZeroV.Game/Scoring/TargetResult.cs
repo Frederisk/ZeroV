@@ -4,17 +4,16 @@ namespace ZeroV.Game.Scoring;
 
 [Flags]
 public enum TargetResult {
-    Miss = 0b0000,
-    Normal = 0b0001,
-    Perfect = 0b0010,
-    MaxPerfect = 0b0100,
+    None       = 0b0_0000, // Too Early, Nothing happened
+    Normal     = 0b0_0001,
+    Perfect    = 0b0_0010,
+    MaxPerfect = 0b0_0100,
+    Miss       = 0b0_1000, // Too Late, Failed
+    Early      = 0b1_0000,
 
-    Early = 0b1000,
-
-    NormalEarly = Normal | Early,
-    NormalLate = Normal,
+    NormalEarly  = Normal | Early,
+    NormalLate   = Normal,
     PerfectEarly = Perfect | Early,
-    PerfectLate = Perfect,
-
-    ResultMask = Normal | Perfect | MaxPerfect,
+    PerfectLate  = Perfect,
+    //ResultMask = Normal | Perfect | MaxPerfect,
 }

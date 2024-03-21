@@ -11,8 +11,10 @@ public static class Judgment {
         // late------------------------early
         // xxxxx-1000======0======+1000xxxxx
         return offset switch {
+            // -1000~: None
+            var x when x is > +1000 => TargetResult.None,
             // ~1000: Miss
-            var x when x is < -1000 or > +1000 => TargetResult.Miss,
+            var x when x is < -1000 => TargetResult.Miss,
             // 1000~500: Bad
             var x when x is < -500 => TargetResult.NormalLate,
             var x when x is > +500 => TargetResult.NormalEarly,
