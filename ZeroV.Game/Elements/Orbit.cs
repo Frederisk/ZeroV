@@ -17,6 +17,8 @@ using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 
+using SharpGen.Runtime;
+
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Objects;
@@ -267,6 +269,49 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             this.particles.HideFirst();
         }
         this.gameplayScreen.ScoringCalculator.AddTarget(result);
+    }
+
+    private Boolean waitSlideMove = false;
+    private SlideParticle? currJudgeSlide;
+    private TouchSource currJudgeSlideTouchSource;
+    private Vector2 currJudgeSlidePosition;
+    private TargetResult currJudgeSlideResult;
+    private void judgeSlideMain(TouchSource touchSource, Vector2? touchPosition) {
+        if (!this.waitSlideMove) {
+            if (this.particles.QueueFirstOrDefalut is not SlideParticle lastParticle) {
+                return;
+            }
+            TargetResult result = Judgment.JudgeSlide(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
+            if (result is not TargetResult.None) {
+                this.particles.HideFirst(0.5f);
+
+                this.waitSlideMove = true;
+                this.currJudgeSlide = lastParticle;
+                this.currJudgeSlidePosition = touchPosition!.Value;
+                this.currJudgeSlideTouchSource = touchSource;
+                this.currJudgeSlideResult = result;
+            }
+        } else if(touchSource == this.currJudgeSlideTouchSource) {
+            Boolean moveSucceed;
+            if(touchPosition.HasValue) {
+                Vector2 offset = this.currJudgeSlidePosition - touchPosition.Value;
+                switch (this.currJudgeSlide!.Direction) {
+                    case SlidingDirection.Left: moveSucceed = offset.X > 0; break;
+                    case SlidingDirection.Right: moveSucceed = offset.X < 0; break;
+                    case SlidingDirection.Up: moveSucceed = offset.Y > 0; break;
+                    case SlidingDirection.Down: moveSucceed = offset.Y < 0; break;
+                    default: throw new NotImplementedException($"Unknown SlidingDirection {this.currJudgeSlide!.Direction}");
+                }
+            } else {
+                moveSucceed = false;
+            }
+
+            this.gameplayScreen.ScoringCalculator.AddTarget(moveSucceed ? this.currJudgeSlideResult : TargetResult.Miss);
+
+            this.waitSlideMove = false;
+            this.currJudgeSlide!.Alpha = 0f;
+            this.currJudgeSlide = null;
+        }
     }
 
     private sealed partial class ParticleQueue : Container<ParticleBase> {
