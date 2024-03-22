@@ -274,8 +274,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private TouchSource currJudgeSlideTouchSource;
     private Vector2 currJudgeSlidePosition;
     private TargetResult currJudgeSlideResult;
-    private void judgeSlideMain(TouchSource touchSource, Vector2? touchPosition) {
-        if (!this.waitSlideMove) {
+    private void judgeSlideMain(Boolean isNewTouch, TouchSource touchSource, Vector2? touchPosition) {
+        if (!this.waitSlideMove && isNewTouch) {
             if (this.particles.QueueFirstOrDefalut is not SlideParticle lastParticle) {
                 return;
             }
@@ -289,7 +289,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 this.currJudgeSlideTouchSource = touchSource;
                 this.currJudgeSlideResult = result;
             }
-        } else if(touchSource == this.currJudgeSlideTouchSource) {
+        } else if(this.waitSlideMove && touchSource == this.currJudgeSlideTouchSource) {
             Boolean moveSucceed;
             if(touchPosition.HasValue) {
                 Vector2 offset = this.currJudgeSlidePosition - touchPosition.Value;
