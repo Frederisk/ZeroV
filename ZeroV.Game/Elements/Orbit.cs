@@ -17,8 +17,6 @@ using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 
-using SharpGen.Runtime;
-
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Objects;
