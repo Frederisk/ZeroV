@@ -508,9 +508,26 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     protected void TouchEnter(TouchSource source, Boolean isTouchDown) {
         this.touches.Add(source);
 
-        if (isTouchDown) {
-            this.judgeBlinkMain();
-        }
+        //if (isTouchDown) {
+        //    this.judgeBlinkMain();
+        //}
+    }
+
+    protected override Boolean OnTouchDown(TouchDownEvent e) {
+        // base.OnTouchDown(e); // only return false
+        this.judgeBlinkMain();
+        this.judgeSlideMain(true, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        return false;
+    }
+
+    protected override void OnTouchMove(TouchMoveEvent e) {
+        // base.OnTouchMove(e); // do nothing
+        this.judgeSlideMain(false, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+    }
+
+    protected override void OnTouchUp(TouchUpEvent e) {
+        // base.OnTouchUp(e); // do nothing
+        this.judgeSlideMain(false, e.Touch.Source, null);
     }
 
     // FIXME: This method is for test only.
