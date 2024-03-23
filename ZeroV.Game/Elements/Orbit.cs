@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using osu.Framework.Allocation;
-using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
@@ -15,7 +14,6 @@ using osu.Framework.Logging;
 using osu.Framework.Utils;
 
 using osuTK;
-using osuTK.Graphics;
 
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
@@ -168,8 +166,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                             Y = 0.05f,
                             Height = 0.25f,
                             Colour = ColourInfo.GradientVertical(
-                                Color4.White.Opacity(1f),
-                                Color4.White.Opacity(0f)
+                                Colour4.White.Opacity(1f),
+                                Colour4.White.Opacity(0f)
                             )
                         },
                     ],
@@ -259,12 +257,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     #region Judge
 
     private void judgeBlinkMain() {
-        if (this.particles.QueueFirstOrDefalut is not BlinkParticle lastParticle) {
+        if (this.particles.GetFirstOrDefaultFromQueue() is not BlinkParticle lastParticle) {
             return;
         }
         TargetResult result = Judgment.JudgeBlink(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
         if (result is not TargetResult.None) {
-            this.particles.HideFirst();
+            this.particles.HideFromQueueAt(0);
         }
         this.gameplayScreen.ScoringCalculator.AddTarget(result);
     }
@@ -284,7 +282,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     //}
 
     //// call this
-    //// if (the last particle is Storke && touches.Count > 0)
+    //// if (the last particle is Stroke && touches.Count > 0)
     //// when (TouchEnter and touches.Count from 0 become more || Judge range changed)
     //private TargetResult JudgeStroke() {
     //    TargetResult result = Judgment.JudgeStroke(this.particles[^1].Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
@@ -307,6 +305,49 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     // private TargetResult JudgePress() {
     //     return TargetResult.Miss;
     // }
+
+    private sealed partial class ParticleQueue : Container<ParticleBase> {
+        private readonly List<ParticleBase> queue = [];
+
+        public IReadOnlyList<ParticleBase> Queue => this.queue;
+
+        /// <summary>
+        /// The first particle in the queue. If the queue is empty, return null.
+        /// </summary>
+        public ParticleBase? GetFirstOrDefaultFromQueue() {
+            if (this.queue.Count > 0) {
+                return this.queue[0];
+            } else {
+                return null;
+            }
+        }
+
+        public ParticleBase GetFirstFromQueue() => this.queue[0];
+
+        public override void Add(ParticleBase drawable) {
+            base.Add(drawable);
+            if (this.queue.IndexOf(drawable) < 0) {
+                this.queue.Add(drawable);
+            } else {
+                throw new InvalidOperationException("You can't add the same particle twice.");
+            }
+        }
+
+        public override Boolean Remove(ParticleBase drawable, Boolean disposeImmediately) {
+            var result = base.Remove(drawable, disposeImmediately);
+            this.queue.Remove(drawable);
+            return result;
+        }
+
+        public void HideFromQueueAt(Int32 index, Single alpha = 0) {
+            if (index < 0 || index >= this.queue.Count) {
+                throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
+            }
+            ParticleBase particle = this.queue[index];
+            particle.Alpha = alpha;
+            this.queue.RemoveAt(index);
+        }
+    }
 
     #endregion Judge
 
@@ -389,8 +430,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         return result;
     }
 
-    #endregion Poolable
-
     protected override void PrepareForUse() {
         base.PrepareForUse();
         this.gameplayScreen.TouchUpdate += this.OnTouchChecked;
@@ -400,6 +439,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         this.gameplayScreen.TouchUpdate -= this.OnTouchChecked;
         base.FreeAfterUse();
     }
+
+    #endregion Poolable
 
     #region Touch
 
@@ -443,42 +484,4 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     #endregion Touch
-
-    private sealed partial class ParticleQueue : Container<ParticleBase> {
-        private readonly List<ParticleBase> queue = [];
-
-        public ParticleBase? QueueFirstOrDefalut {
-            get {
-                if (this.queue.Count > 0) {
-                    return this.queue[0];
-                } else {
-                    //throw new InvalidOperationException("The queue is empty.");
-                    return null;
-                }
-            }
-        }
-
-        public override void Add(ParticleBase drawable) {
-            base.Add(drawable);
-            if (this.queue.IndexOf(drawable) < 0) {
-                this.queue.Add(drawable);
-            } else {
-                throw new InvalidOperationException("You can't add the same particle twice.");
-            }
-        }
-
-        public override Boolean Remove(ParticleBase drawable, Boolean disposeImmediately) {
-            var result = base.Remove(drawable, disposeImmediately);
-            this.queue.Remove(drawable);
-            return result;
-        }
-
-        public void HideFirst(Single alpha = 0) {
-            if (this.queue.Count > 0) {
-                ParticleBase first = this.queue[0];
-                first.Alpha = alpha;
-                this.queue.RemoveAt(0);
-            }
-        }
-    }
 }
