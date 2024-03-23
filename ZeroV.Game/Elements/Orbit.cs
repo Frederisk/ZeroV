@@ -281,16 +281,19 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     //    //return result;
     //}
 
-    //// call this
-    //// if (the last particle is Stroke && touches.Count > 0)
-    //// when (TouchEnter and touches.Count from 0 become more || Judge range changed)
-    //private TargetResult JudgeStroke() {
-    //    TargetResult result = Judgment.JudgeStroke(this.particles[^1].Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
-    //    if (result is TargetResult.MaxPerfect) {
-    //        this.particles.Remove(this.particles[1], false);
-    //    }
-    //    return result;
-    //}
+    private void judgeStrokeMain() {
+        for (var i = 0; i < this.particles.Queue.Count; i++) {
+            if (this.particles.Queue[i] is not StrokeParticle particle) {
+                continue;
+            }
+            TargetResult result = Judgment.JudgeStroke(particle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
+            if (result is not TargetResult.None) {
+                this.particles.HideFromQueueAt(i); // Note the count of particles will decrease here.
+                i--; // The index should be decreased. because the next particle will move incrementally to the current index due to the removal of the current particle.
+            }
+            this.gameplayScreen.ScoringCalculator.AddTarget(result);
+        }
+    }
 
     // call this
     // if (the last particle is Slide)
@@ -346,6 +349,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             ParticleBase particle = this.queue[index];
             particle.Alpha = alpha;
             this.queue.RemoveAt(index);
+        }
+
+        public void HideFromQueue(ParticleBase particle, Single alpha = 0) {
+            var index = this.queue.IndexOf(particle);
+            if (index < 0) {
+                throw new InvalidOperationException("The particle is not in the queue.");
+            }
+            this.HideFromQueueAt(index, alpha);
         }
     }
 
@@ -448,7 +459,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     protected void OnTouchChecked(TouchSource source, Boolean? isNewTouch) {
         if (isNewTouch is null) {
-            this.TouchLeave(source);
+            this.OnTouchLeave(source);
             return;
         }
         var isHovered = this.ScreenSpaceDrawQuad.Contains(this.gameplayScreen.TouchPositions[source]);
@@ -456,30 +467,39 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         switch (isHovered, isEntered) {
             case (true, false):
-                this.TouchEnter(source, isNewTouch.Value);
+                this.OnTouchEnter(source, isNewTouch.Value);
                 break;
 
             case (false, true):
-                this.TouchLeave(source);
+                this.OnTouchLeave(source);
                 break;
         }
     }
 
-    protected void TouchEnter(TouchSource source, Boolean isTouchDown) {
+    protected void OnTouchEnter(TouchSource source, Boolean isTouchDown) {
         this.touches.Add(source);
 
-        if (isTouchDown) {
-            this.judgeBlinkMain();
-        }
+        this.judgeStrokeMain();
     }
 
-    // FIXME: This method is for test only.
-    protected override Boolean OnClick(ClickEvent e) {
-        this.TouchEnter(0, true);
+    protected override Boolean OnTouchDown(TouchDownEvent e) {
+        // base.OnTouchDown(e); // only return false
+        this.judgeBlinkMain();
+        //this.judgeSlideMain(true, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
         return false;
     }
 
-    protected void TouchLeave(TouchSource source) {
+    protected override void OnTouchMove(TouchMoveEvent e) {
+        // base.OnTouchMove(e); // do nothing
+        //this.judgeSlideMain(false, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+    }
+
+    protected override void OnTouchUp(TouchUpEvent e) {
+        // base.OnTouchUp(e); // do nothing
+        //this.judgeSlideMain(false, e.Touch.Source, null);
+    }
+
+    protected void OnTouchLeave(TouchSource source) {
         this.touches.Remove(source);
     }
 
