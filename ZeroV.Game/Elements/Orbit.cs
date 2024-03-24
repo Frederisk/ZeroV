@@ -186,7 +186,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     protected override void Update() {
         base.Update();
-        // var currTime = this.Time.Current;
         var currTime = this.gameplayScreen.GameplayTrack.CurrentTime;
         while (this.keyFrames.Length > 1) {
             var nextTime = this.keyFrames.Span[1].Time;
@@ -267,29 +266,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         this.gameplayScreen.ScoringCalculator.AddTarget(result);
     }
 
-    // call this
-    // if (the last particle is Blink)
-    // when (TouchEnter && isNewTouch)
-    //private TargetResult JudgePress() {
-    //    if (this.particles.Count is 0) {
-    //        return TargetResult.None;
-    //    }
-    //    //TargetResult result = Judgment.JudgeBlink(this.particles[0].Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
-    //    //if (result is not TargetResult.None) {
-    //    //    this.particles.Remove(this.particles[0], false);
-    //    //}
-    //    //return result;
-    //}
-
     private void judgeStrokeMain() {
-        for (var i = 0; i < this.particles.Queue.Count; i++) {
+        for (var i = this.particles.Queue.Count - 1; i >= 0; i--) {
             if (this.particles.Queue[i] is not StrokeParticle particle) {
                 continue;
             }
             TargetResult result = Judgment.JudgeStroke(particle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
             if (result is not TargetResult.None) {
                 this.particles.HideFromQueueAt(i); // Note the count of particles will decrease here.
-                i--; // The index should be decreased. because the next particle will move incrementally to the current index due to the removal of the current particle.
             }
             this.gameplayScreen.ScoringCalculator.AddTarget(result);
         }
@@ -315,33 +299,33 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         public IReadOnlyList<ParticleBase> Queue => this.queue;
 
         /// <summary>
-        /// The first particle in the queue. If the queue is empty, return null.
+        /// Get the first particle in the queue.
         /// </summary>
-        public ParticleBase? GetFirstOrDefaultFromQueue() {
-            if (this.queue.Count > 0) {
-                return this.queue[0];
-            } else {
-                return null;
-            }
-        }
-
-        public ParticleBase GetFirstFromQueue() => this.queue[0];
+        /// <returns>The first particle in the queue. If the queue is empty, return <see langword="null"/>.</returns>
+        public ParticleBase? GetFirstOrDefaultFromQueue() => this.queue.Count > 0 ? this.queue[0] : null;
 
         public override void Add(ParticleBase drawable) {
             base.Add(drawable);
             if (this.queue.IndexOf(drawable) < 0) {
                 this.queue.Add(drawable);
             } else {
-                throw new InvalidOperationException("You can't add the same particle twice.");
+                throw new InvalidOperationException("You can't add the same particle in the orbit twice.");
             }
         }
 
         public override Boolean Remove(ParticleBase drawable, Boolean disposeImmediately) {
             var result = base.Remove(drawable, disposeImmediately);
-            this.queue.Remove(drawable);
+            _ = this.queue.Remove(drawable);
             return result;
         }
 
+        /// <summary>
+        /// Hide and Remove the particle at the specified index in the queue.
+        /// Note the particle in the <see cref="Container{T}.Children"/> will not be removed.
+        /// </summary>
+        /// <param name="index">The zero-based index of the particle to hide.</param>
+        /// <param name="alpha">The alpha value of the particle to hide.</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void HideFromQueueAt(Int32 index, Single alpha = 0) {
             if (index < 0 || index >= this.queue.Count) {
                 throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
@@ -349,14 +333,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             ParticleBase particle = this.queue[index];
             particle.Alpha = alpha;
             this.queue.RemoveAt(index);
-        }
-
-        public void HideFromQueue(ParticleBase particle, Single alpha = 0) {
-            var index = this.queue.IndexOf(particle);
-            if (index < 0) {
-                throw new InvalidOperationException("The particle is not in the queue.");
-            }
-            this.HideFromQueueAt(index, alpha);
         }
     }
 
