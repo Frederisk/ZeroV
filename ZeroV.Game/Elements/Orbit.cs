@@ -260,16 +260,63 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     #region Judge
 
-    private void judgeBlinkMain() {
+    private Boolean judgeBlinkMain() {
         if (this.particles.GetFirstOrDefaultFromQueue() is not BlinkParticle lastParticle) {
-            return;
+            return false;
         }
         TargetResult result = Judgment.JudgeBlink(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
         if (result is not TargetResult.None) {
             this.particles.HideFromQueueAt(0);
         }
         this.gameplayScreen.ScoringCalculator.AddTarget(result);
+        return true;
     }
+
+    private Boolean waitSlideMove = false;
+    private SlideParticle? currJudgeSlide;
+    private TouchSource currJudgeSlideTouchSource;
+    private TargetResult currJudgeSlideResult;
+    private Boolean judgeSlideMain(Boolean isNewTouch, TouchSource touchSource, Vector2? delta) {
+        if (!this.waitSlideMove && isNewTouch) {
+            if (this.particles.GetFirstOrDefaultFromQueue() is not SlideParticle lastParticle) {
+                return false;
+            }
+            TargetResult result = Judgment.JudgeSlide(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
+            if (result is not TargetResult.None) {
+                this.particles.HideFromQueueAt(0, 0.5f);
+
+                Logger.Log("waite slide move");
+                this.waitSlideMove = true;
+                this.currJudgeSlide = lastParticle;
+                this.currJudgeSlideTouchSource = touchSource;
+                this.currJudgeSlideResult = result;
+            }
+            return true;
+        } else if (this.waitSlideMove && touchSource == this.currJudgeSlideTouchSource) {
+            Boolean moveSucceed;
+            if (delta.HasValue) {
+                Vector2 offset = delta.Value;
+                switch (this.currJudgeSlide!.Direction) {
+                    case SlidingDirection.Left: moveSucceed = offset.X < 0; break;
+                    case SlidingDirection.Right: moveSucceed = offset.X > 0; break;
+                    case SlidingDirection.Up: moveSucceed = offset.Y < 0; break;
+                    case SlidingDirection.Down: moveSucceed = offset.Y > 0; break;
+                    default: throw new NotImplementedException($"Unknown SlidingDirection {this.currJudgeSlide!.Direction}");
+                }
+            } else {
+                moveSucceed = false;
+            }
+            Logger.Log($"{moveSucceed}");
+            this.gameplayScreen.ScoringCalculator.AddTarget(moveSucceed ? this.currJudgeSlideResult : TargetResult.Miss);
+
+            this.waitSlideMove = false;
+            this.currJudgeSlide!.Alpha = 0f;
+            this.currJudgeSlide = null;
+            return true;
+        }
+        return false;
+    }
+
 
     private void judgeStrokeMain() {
         // Outdated code, judgement in reverse order.
@@ -486,19 +533,19 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
         // base.OnTouchDown(e); // only return false
-        this.judgeBlinkMain();
-        //this.judgeSlideMain(true, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        if (this.judgeBlinkMain()) { }
+        else if (this.judgeSlideMain(true, e.Touch.Source, null)) { }
         return false;
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
         // base.OnTouchMove(e); // do nothing
-        // this.judgeSlideMain(false, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        this.judgeSlideMain(false, e.Touch.Source, e.Delta);
     }
 
     protected override void OnTouchUp(TouchUpEvent e) {
         // base.OnTouchUp(e); // do nothing
-        // this.judgeSlideMain(false, e.Touch.Source, null);
+        this.judgeSlideMain(false, e.Touch.Source, null);
     }
 
     protected void OnTouchLeave(TouchSource source) {
