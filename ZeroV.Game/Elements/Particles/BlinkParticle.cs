@@ -10,6 +10,7 @@ namespace ZeroV.Game.Elements.Particles;
 public partial class BlinkParticle : ParticleBase {
 
     public BlinkParticle() : base() {
+        this.Type = ParticleType.Blink;
         //this.AutoSizeAxes = Axes.Both;
     }
 

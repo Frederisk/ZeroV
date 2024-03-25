@@ -261,10 +261,11 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     #region Judge
 
     private void judgeBlinkMain() {
-        if (this.particles.GetFirstOrDefaultFromQueue() is not BlinkParticle lastParticle) {
+        ParticleBase? first = this.particles.GetFirstOrDefaultFromQueue();
+        if (first is null || first.Type is not ParticleType.Blink) {
             return;
         }
-        TargetResult result = Judgment.JudgeBlink(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
+        TargetResult result = Judgment.JudgeBlink(first.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
         if (result is not TargetResult.None) {
             this.particles.HideFromQueueAt(0);
         }
@@ -285,7 +286,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         // }
 
         for (var i = 0; i < this.particles.Queue.Count; i++) {
-            if (this.particles.Queue[i] is not StrokeParticle particle) {
+            ParticleBase particle = this.particles.Queue[i];
+            if (particle.Type is not ParticleType.Stroke) {
                 break; // The judgement is terminated when there are any other particles in the front of the stroke particle that cannot be judged. This is to avoid the strange flickering of target results and reduce the judgment performance load.
             }
             TargetResult result = Judgment.JudgeStroke(particle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
@@ -353,9 +355,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         /// <param name="alpha">The alpha value of the particle to hide.</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void HideFromQueueAt(Int32 index, Single alpha = 0) {
-            if (index < 0 || index >= this.queue.Count) {
-                throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
-            }
+            //if (index < 0 || index >= this.queue.Count) {
+            //    throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
+            //}
             ParticleBase particle = this.queue[index];
             particle.Alpha = alpha;
             this.queue.RemoveAt(index);
