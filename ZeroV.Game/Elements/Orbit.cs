@@ -277,46 +277,57 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private TouchSource currJudgeSlideTouchSource;
     private TargetResult currJudgeSlideResult;
     private Boolean judgeSlideMain(Boolean isNewTouch, TouchSource touchSource, Vector2? delta) {
-        if (!this.waitSlideMove && isNewTouch) {
-            if (this.particles.GetFirstOrDefaultFromQueue() is not SlideParticle lastParticle) {
-                return false;
+        if (!this.waitSlideMove) {
+            if (isNewTouch) {
+                return this.judgeSlideTouch(touchSource);
             }
-            TargetResult result = Judgment.JudgeSlide(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
-            if (result is not TargetResult.None) {
-                this.particles.HideFromQueueAt(0, 0.5f);
-
-                Logger.Log("waite slide move");
-                this.waitSlideMove = true;
-                this.currJudgeSlide = lastParticle;
-                this.currJudgeSlideTouchSource = touchSource;
-                this.currJudgeSlideResult = result;
-            }
-            return true;
-        } else if (this.waitSlideMove && touchSource == this.currJudgeSlideTouchSource) {
-            Boolean moveSucceed;
-            if (delta.HasValue) {
-                Vector2 offset = delta.Value;
-                switch (this.currJudgeSlide!.Direction) {
-                    case SlidingDirection.Left: moveSucceed = offset.X < 0; break;
-                    case SlidingDirection.Right: moveSucceed = offset.X > 0; break;
-                    case SlidingDirection.Up: moveSucceed = offset.Y < 0; break;
-                    case SlidingDirection.Down: moveSucceed = offset.Y > 0; break;
-                    default: throw new NotImplementedException($"Unknown SlidingDirection {this.currJudgeSlide!.Direction}");
-                }
-            } else {
-                moveSucceed = false;
-            }
-            Logger.Log($"{moveSucceed}");
-            this.gameplayScreen.ScoringCalculator.AddTarget(moveSucceed ? this.currJudgeSlideResult : TargetResult.Miss);
-
-            this.waitSlideMove = false;
-            this.currJudgeSlide!.Alpha = 0f;
-            this.currJudgeSlide = null;
-            return true;
+            return false;
+        } else {
+            return this.judgeSlideMove(touchSource, delta);
         }
-        return false;
     }
+    private Boolean judgeSlideTouch(TouchSource touchSource) {
+        if (this.particles.GetFirstOrDefaultFromQueue() is not SlideParticle lastParticle) {
+            return false;
+        }
+        TargetResult result = Judgment.JudgeSlide(lastParticle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
+        if (result is not TargetResult.None) {
+            this.particles.HideFromQueueAt(0, 0.5f);
 
+            Logger.Log("waite slide move");
+            this.waitSlideMove = true;
+            this.currJudgeSlide = lastParticle;
+            this.currJudgeSlideTouchSource = touchSource;
+            this.currJudgeSlideResult = result;
+        }
+        return true;
+    }
+    private Boolean judgeSlideMove(TouchSource touchSource, Vector2? delta) {
+        if (touchSource != this.currJudgeSlideTouchSource) {
+            return false;
+        }
+
+        Boolean moveSucceed;
+        if (delta.HasValue) {
+            Vector2 offset = delta.Value;
+            switch (this.currJudgeSlide!.Direction) {
+                case SlidingDirection.Left: moveSucceed = offset.X < 0; break;
+                case SlidingDirection.Right: moveSucceed = offset.X > 0; break;
+                case SlidingDirection.Up: moveSucceed = offset.Y < 0; break;
+                case SlidingDirection.Down: moveSucceed = offset.Y > 0; break;
+                default: throw new NotImplementedException($"Unknown SlidingDirection {this.currJudgeSlide!.Direction}");
+            }
+        } else {
+            moveSucceed = false;
+        }
+        Logger.Log($"{moveSucceed}");
+        this.gameplayScreen.ScoringCalculator.AddTarget(moveSucceed ? this.currJudgeSlideResult : TargetResult.Miss);
+
+        this.waitSlideMove = false;
+        this.currJudgeSlide!.Alpha = 0f;
+        this.currJudgeSlide = null;
+        return true;
+    }
 
     private void judgeStrokeMain() {
         // Outdated code, judgement in reverse order.
