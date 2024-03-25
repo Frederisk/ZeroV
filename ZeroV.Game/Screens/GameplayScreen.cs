@@ -14,7 +14,6 @@ using osu.Framework.Logging;
 using osu.Framework.Screens;
 
 using osuTK;
-using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
@@ -53,6 +52,7 @@ public partial class GameplayScreen : Screen {
     private Container<Orbit> orbits = null!;
     private Container overlay = null!;
     private ScoreCounter scoreCounter = null!;
+    private ZeroVSpriteText topText = null!;
 
     public ScoringCalculator ScoringCalculator;
 
@@ -117,11 +117,20 @@ public partial class GameplayScreen : Screen {
                this.scoreCounter = new ScoreCounter {
                     Origin = Anchor.TopRight,
                     Anchor = Anchor.TopRight,
-                },
+               },
+               this.topText = new ZeroVSpriteText {
+                    Origin = Anchor.TopCentre,
+                    Anchor = Anchor.TopCentre,
+                    Text = "ZeroV",
+                    FontSize = 52,
+               },
             ],
         };
         // FIXME:
-        this.ScoringCalculator.ScoringChanged += () => this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
+        this.ScoringCalculator.ScoringChanged += delegate () {
+            this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
+            this.topText.Text = this.ScoringCalculator.CurrentTarget.ToString();
+        };
         this.InternalChildren = [
             new PlayfieldBackground(),
             new Box() {
@@ -130,7 +139,7 @@ public partial class GameplayScreen : Screen {
                 Position = new Vector2(0, -50),
                 RelativeSizeAxes = Axes.X,
                 Height = 10,
-                Colour = Color4.Red,
+                Colour = Colour4.Red,
             },
             this.orbits,
             this.overlay,

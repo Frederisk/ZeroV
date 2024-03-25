@@ -4,16 +4,16 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
 
 using osuTK;
-using osuTK.Graphics;
 
 namespace ZeroV.Game.Screens;
 
 public partial class MainScreen : Screen {
+
     [BackgroundDependencyLoader]
     private void load() {
-        this.InternalChildren = new Drawable[] {
+        this.InternalChildren = [
             new Box {
-                Colour = Color4.Violet,
+                Colour = Colour4.Violet,
                 // 1366 * 768
                 RelativeSizeAxes = Axes.Both,
             },
@@ -40,6 +40,6 @@ public partial class MainScreen : Screen {
             //{
             //    Anchor = Anchor.Centre
             //}
-        };
+        ];
     }
 }

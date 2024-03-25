@@ -30,6 +30,8 @@ public class ScoringCalculator {
     public UInt32 MaxCombo { get; private set; } = 0;
     public UInt32 CurrentCombo { get; private set; } = 0;
 
+    public TargetResult CurrentTarget { get; private set; }
+
     public Boolean IsFullCombo => this.CurrentCombo == this.JudgedCount;
     public Boolean IsAllPerfect => (this.PerfectCount + this.MaxPerfectCount) == this.JudgedCount;
 
@@ -38,7 +40,7 @@ public class ScoringCalculator {
     public Action? ScoringChanged;
 
     private Double comboMultiplier => this.CurrentCombo switch {
-        0 => throw new InvalidOperationException("CurrentCombo is 0"),
+        0 => 0, // throw new InvalidOperationException("CurrentCombo is 0"),
         1 or 2 or 3 => 1.0,
         4 or 5 => 1.1,
         6 => 1.2,
@@ -58,19 +60,20 @@ public class ScoringCalculator {
     //     };
     // }
 
-    public void AddTarget(TargetResult targeResult) {
-        if (targeResult is TargetResult.None) {
+    public void AddTarget(TargetResult targetResult) {
+        if (targetResult is TargetResult.None) {
             return;
         }
-        if (targeResult is TargetResult.Miss) {
-            this.MissCount++;
-            this.CurrentCombo = 0;
-            return;
-        }
+
         this.CurrentCombo++;
-        this.MaxCombo = Math.Max(this.MaxCombo, this.CurrentCombo);
         Double targetMultiplier;
-        switch (targeResult) {
+        switch (targetResult) {
+            case TargetResult.Miss:
+                this.MissCount++;
+                targetMultiplier = 0.0;
+                this.CurrentCombo = 0;
+                break;
+
             case TargetResult.NormalEarly:
                 this.NormalEarlyCount++;
                 targetMultiplier = 0.1;
@@ -97,10 +100,12 @@ public class ScoringCalculator {
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException(nameof(targeResult), targeResult, null);
+                throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
         }
+        this.MaxCombo = Math.Max(this.MaxCombo, this.CurrentCombo);
         // this.Scoring += this.BaseScoring * this.comboMultiplier * getTargetMultiplier(targeResult);
         this.Scoring += this.BaseScoring * this.comboMultiplier * targetMultiplier;
+        this.CurrentTarget = targetResult;
         this.ScoringChanged?.Invoke();
     }
 

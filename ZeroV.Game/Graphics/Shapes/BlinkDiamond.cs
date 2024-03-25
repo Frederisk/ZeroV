@@ -5,7 +5,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
 using osuTK;
-using osuTK.Graphics;
 
 namespace ZeroV.Game.Graphics.Shapes;
 
@@ -21,9 +20,9 @@ public partial class BlinkDiamond : CompositeDrawable {
 
     public Single InnerDiameterSize { get; init; } = 40;
 
-    public Color4 OuterColor { get; init; } = Color4.Black;
+    public Colour4 OuterColor { get; init; } = Colour4.Black;
 
-    public Color4 InnerColor { get; init; } = Color4.Red;
+    public Colour4 InnerColor { get; init; } = Colour4.Red;
 
     [BackgroundDependencyLoader]
     private void load() {

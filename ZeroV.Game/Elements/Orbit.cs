@@ -75,7 +75,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private BufferedContainer container = null!;
 
     private Double particleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
-    private Double particleFadingTime = TimeSpan.FromSeconds(1).TotalMilliseconds;
+    private Double particleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
 
     private Box innerBox = null!;
     private Box innerLine = null!;
@@ -251,6 +251,11 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             //        item.EndTime, endTime);
             //}
         }
+
+        if (this.touches.Count > 0) {
+            this.judgeStrokeMain();
+        }
+        this.judgeMissMain();
     }
 
     #region Judge
@@ -267,13 +272,26 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     private void judgeStrokeMain() {
-        for (var i = this.particles.Queue.Count - 1; i >= 0; i--) {
+        // Outdated code, judgement in reverse order.
+        // for (var i = this.particles.Queue.Count - 1; i >= 0; i--) {
+        //     if (this.particles.Queue[i] is not StrokeParticle particle) {
+        //         break;
+        //     }
+        //     TargetResult result = Judgment.JudgeStroke(particle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
+        //     if (result is not TargetResult.None) {
+        //         this.particles.HideFromQueueAt(i); // Note the count of particles will decrease here.
+        //     }
+        //     this.gameplayScreen.ScoringCalculator.AddTarget(result);
+        // }
+
+        for (var i = 0; i < this.particles.Queue.Count; i++) {
             if (this.particles.Queue[i] is not StrokeParticle particle) {
-                continue;
+                break; // The judgement is terminated when there are any other particles in the front of the stroke particle that cannot be judged. This is to avoid the strange flickering of target results and reduce the judgment performance load.
             }
             TargetResult result = Judgment.JudgeStroke(particle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
             if (result is not TargetResult.None) {
                 this.particles.HideFromQueueAt(i); // Note the count of particles will decrease here.
+                i--; // The index should be decreased. because the next particle will move incrementally to the current index due to the removal of the current particle.
             }
             this.gameplayScreen.ScoringCalculator.AddTarget(result);
         }
@@ -292,6 +310,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     // private TargetResult JudgePress() {
     //     return TargetResult.Miss;
     // }
+
+    private void judgeMissMain() {
+        ParticleBase? first = this.particles.GetFirstOrDefaultFromQueue();
+        if (first is not null && this.gameplayScreen.GameplayTrack.CurrentTime - first.Source!.EndTime > 1000) {
+            this.particles.HideFromQueueAt(0);
+            this.gameplayScreen.ScoringCalculator.AddTarget(TargetResult.Miss);
+        }
+    }
 
     private sealed partial class ParticleQueue : Container<ParticleBase> {
         private readonly List<ParticleBase> queue = [];
@@ -467,12 +493,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     protected override void OnTouchMove(TouchMoveEvent e) {
         // base.OnTouchMove(e); // do nothing
-        //this.judgeSlideMain(false, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        // this.judgeSlideMain(false, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
     }
 
     protected override void OnTouchUp(TouchUpEvent e) {
         // base.OnTouchUp(e); // do nothing
-        //this.judgeSlideMain(false, e.Touch.Source, null);
+        // this.judgeSlideMain(false, e.Touch.Source, null);
     }
 
     protected void OnTouchLeave(TouchSource source) {
