@@ -14,6 +14,7 @@ namespace ZeroV.Game.Elements.Particles;
 public partial class PressParticle : ParticleBase {
 
     public PressParticle() : base() {
+        this.Type = ParticleType.Press;
         this.AutoSizeAxes = Axes.X;
         this.Origin = Anchor.BottomCentre;
     }

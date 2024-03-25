@@ -13,18 +13,7 @@ namespace ZeroV.Game.Elements.Particles;
 /// </summary>
 public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWithHit> {
 
-    //public virtual Double StartTime { get; set; }
-
-    //public virtual Double EndTime { get; set; }
-
-    // public virtual Double StartTime {
-    //     get => this.StartTimeBindable.Value;
-    //     init => this.StartTimeBindable.Value = value;
-    // }
-
-    // public Bindable<Double> StartTimeBindable;
-
-    // public virtual Double EndTime { get; private set; }
+    public ParticleType Type { get; protected init; }
 
     // public Orbit FatherOrbit { get; private set; } = null!;
 
@@ -51,4 +40,12 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWit
         this.Alpha = 1f;
         base.FreeAfterUse();
     }
+}
+
+public enum ParticleType {
+    Unknown,
+    Blink,
+    Press,
+    Slide,
+    Stroke,
 }
