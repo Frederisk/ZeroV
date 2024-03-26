@@ -15,6 +15,8 @@ using osu.Framework.Utils;
 
 using osuTK;
 
+using Vortice;
+
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Objects;
@@ -251,119 +253,25 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             //}
         }
 
-        if (this.touches.Count > 0) {
-            this.judgeStrokeMain();
-        }
-        this.judgeMissMain();
+        this.judgeFirstParticle(new JudgeInput() {
+            CurrentTime = currTime,
+            TouchSource = null,
+            IsTouchDown = false,
+            IsTouchPress = this.HasTouches,
+            TouchMoveDelta = null
+        });
     }
 
-    #region Judge
+    private void judgeFirstParticle(JudgeInput input) {
+        if (this.particles.TryPeek(out ParticleBase? particle)) {
+            TargetResult result = particle.Source!.Judge(input);
 
-    private void judgeBlinkMain() {
-        ParticleBase? first = this.particles.GetFirstOrDefaultFromQueue();
-        if (first is null || first.Type is not ParticleType.Blink) {
-            return;
-        }
-        TargetResult result = Judgment.JudgeBlink(first.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
-        if (result is not TargetResult.None) {
-            this.particles.HideFromQueueAt(0);
-        }
-        this.gameplayScreen.ScoringCalculator.AddTarget(result);
-    }
-
-    private void judgeStrokeMain() {
-        // Outdated code, judgement in reverse order.
-        // for (var i = this.particles.Queue.Count - 1; i >= 0; i--) {
-        //     if (this.particles.Queue[i] is not StrokeParticle particle) {
-        //         break;
-        //     }
-        //     TargetResult result = Judgment.JudgeStroke(particle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
-        //     if (result is not TargetResult.None) {
-        //         this.particles.HideFromQueueAt(i); // Note the count of particles will decrease here.
-        //     }
-        //     this.gameplayScreen.ScoringCalculator.AddTarget(result);
-        // }
-
-        for (var i = 0; i < this.particles.Queue.Count; i++) {
-            ParticleBase particle = this.particles.Queue[i];
-            if (particle.Type is not ParticleType.Stroke) {
-                break; // The judgement is terminated when there are any other particles in the front of the stroke particle that cannot be judged. This is to avoid the strange flickering of target results and reduce the judgment performance load.
-            }
-            TargetResult result = Judgment.JudgeStroke(particle.Source!.StartTime, this.gameplayScreen.GameplayTrack.CurrentTime);
-            if (result is not TargetResult.None) {
-                this.particles.HideFromQueueAt(i); // Note the count of particles will decrease here.
-                i--; // The index should be decreased. because the next particle will move incrementally to the current index due to the removal of the current particle.
-            }
-            this.gameplayScreen.ScoringCalculator.AddTarget(result);
-        }
-    }
-
-    // call this
-    // if (the last particle is Slide)
-    // when (TouchEnter && isNewTouch && SlideDirection = Self.Direction)
-    // private TargetResult JudgeSlide() {
-    //     return TargetResult.Miss;
-    // }
-
-    // call this
-    // if (the last particle is Press)
-    // when (Begin: TouchEnter && isNewTouch) && (End: Judge range become MaxPerfect || TouchLeave and touches.Count become 0)
-    // private TargetResult JudgePress() {
-    //     return TargetResult.Miss;
-    // }
-
-    private void judgeMissMain() {
-        ParticleBase? first = this.particles.GetFirstOrDefaultFromQueue();
-        if (first is not null && this.gameplayScreen.GameplayTrack.CurrentTime - first.Source!.EndTime > 1000) {
-            this.particles.HideFromQueueAt(0);
-            this.gameplayScreen.ScoringCalculator.AddTarget(TargetResult.Miss);
-        }
-    }
-
-    private sealed partial class ParticleQueue : Container<ParticleBase> {
-        private readonly List<ParticleBase> queue = [];
-
-        public IReadOnlyList<ParticleBase> Queue => this.queue;
-
-        /// <summary>
-        /// Get the first particle in the queue.
-        /// </summary>
-        /// <returns>The first particle in the queue. If the queue is empty, return <see langword="null"/>.</returns>
-        public ParticleBase? GetFirstOrDefaultFromQueue() => this.queue.Count > 0 ? this.queue[0] : null;
-
-        public override void Add(ParticleBase drawable) {
-            base.Add(drawable);
-            if (this.queue.IndexOf(drawable) < 0) {
-                this.queue.Add(drawable);
-            } else {
-                throw new InvalidOperationException("You can't add the same particle in the orbit twice.");
+            if (result != TargetResult.None) {
+                this.gameplayScreen.ScoringCalculator.AddTarget(result);
+                this.particles.Dequeue();
             }
         }
-
-        public override Boolean Remove(ParticleBase drawable, Boolean disposeImmediately) {
-            var result = base.Remove(drawable, disposeImmediately);
-            _ = this.queue.Remove(drawable);
-            return result;
-        }
-
-        /// <summary>
-        /// Hide and Remove the particle at the specified index in the queue.
-        /// Note the particle in the <see cref="Container{T}.Children"/> will not be removed.
-        /// </summary>
-        /// <param name="index">The zero-based index of the particle to hide.</param>
-        /// <param name="alpha">The alpha value of the particle to hide.</param>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public void HideFromQueueAt(Int32 index, Single alpha = 0) {
-            //if (index < 0 || index >= this.queue.Count) {
-            //    throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
-            //}
-            ParticleBase particle = this.queue[index];
-            particle.Alpha = alpha;
-            this.queue.RemoveAt(index);
-        }
     }
-
-    #endregion Judge
 
     #region Poolable
 
@@ -418,7 +326,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         };
 
         entry.Drawable.Source = entry.Source;
-        this.particles.Add(entry.Drawable);
+        this.particles.Enqueue(entry.Drawable);
         Logger.Log($"{entry.Drawable.GetType()} added.");
     }
 
@@ -449,52 +357,59 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     #region Touch
 
-    private HashSet<TouchSource> touches = [];
+    private Dictionary<TouchSource, Vector2> touches = [];
+    public Boolean HasTouches => this.touches.Count > 0;
 
     protected void OnTouchChecked(TouchSource source, Boolean? isNewTouch) {
         if (isNewTouch is null) {
             this.OnTouchLeave(source);
             return;
         }
-        var isHovered = this.ScreenSpaceDrawQuad.Contains(this.gameplayScreen.TouchPositions[source]);
-        var isEntered = this.touches.Contains(source);
+
+        Vector2 touchPosition = this.gameplayScreen.TouchPositions[source];
+        var isHovered = this.ScreenSpaceDrawQuad.Contains(touchPosition);
+        var isEntered = this.touches.TryGetValue(source, out Vector2 lastTouchPosition);
 
         switch (isHovered, isEntered) {
-            case (true, false):
-                this.OnTouchEnter(source, isNewTouch.Value);
-                break;
-
-            case (false, true):
-                this.OnTouchLeave(source);
-                break;
+            case (true, true): this.OnTouchMoveInternal(source, touchPosition, lastTouchPosition); break;
+            case (true, false): this.OnTouchEnter(source, isNewTouch.Value, touchPosition); break;
+            case (false, true): this.OnTouchLeave(source); break;
         }
     }
 
-    protected void OnTouchEnter(TouchSource source, Boolean isTouchDown) {
-        this.touches.Add(source);
-
-        this.judgeStrokeMain();
+    private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
+    protected void OnTouchEnter(TouchSource source, Boolean isTouchDown, Vector2 touchPosition) {
+        this.touches.Add(source, touchPosition);
+        this.judgeFirstParticle(new JudgeInput() {
+            CurrentTime = this.currentTime,
+            TouchSource = source,
+            IsTouchDown = isTouchDown,
+            IsTouchPress = true,
+            TouchMoveDelta = null
+        });
     }
-
-    protected override Boolean OnTouchDown(TouchDownEvent e) {
-        // base.OnTouchDown(e); // only return false
-        this.judgeBlinkMain();
-        //this.judgeSlideMain(true, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
-        return false;
+    protected void OnTouchMoveInternal(TouchSource source, Vector2 touchPosition, Vector2 lastTouchPosition) {
+        this.touches[source] = touchPosition;
+        Vector2 delta = touchPosition - lastTouchPosition;
+        if (delta != default) {
+            this.judgeFirstParticle(new JudgeInput() {
+                CurrentTime = this.currentTime,
+                TouchSource = source,
+                IsTouchDown = false,
+                IsTouchPress = true,
+                TouchMoveDelta = delta
+            });
+        }
     }
-
-    protected override void OnTouchMove(TouchMoveEvent e) {
-        // base.OnTouchMove(e); // do nothing
-        // this.judgeSlideMain(false, e.Touch.Source, e.ScreenSpaceTouchDownPosition);
-    }
-
-    protected override void OnTouchUp(TouchUpEvent e) {
-        // base.OnTouchUp(e); // do nothing
-        // this.judgeSlideMain(false, e.Touch.Source, null);
-    }
-
     protected void OnTouchLeave(TouchSource source) {
         this.touches.Remove(source);
+        this.judgeFirstParticle(new JudgeInput() {
+            CurrentTime = this.currentTime,
+            TouchSource = source,
+            IsTouchDown = false,
+            IsTouchPress = false,
+            TouchMoveDelta = null
+        });
     }
 
     #endregion Touch

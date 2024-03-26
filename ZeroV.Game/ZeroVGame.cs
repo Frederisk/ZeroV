@@ -90,7 +90,7 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Color = Color4.Purple
                         },
                         new OrbitSource.KeyFrame() {
-                             Time = 16000,
+                             Time = 17000,
                              XPosition = 0,
                              Width = 128,
                              Color = Color4.Purple
@@ -100,13 +100,12 @@ public partial class ZeroVGame : ZeroVGameBase {
                         new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
-                        new BlinkParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds),
                         new PressParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds, TimeSpan.FromSeconds(11).TotalMilliseconds),
-                        new SlideParticleSource(TimeSpan.FromSeconds(11).TotalMilliseconds, SlidingDirection.Left),
-                        new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Up),
-                        new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Right),
-                        new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Down),
-                        new StrokeParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds)
+                        new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Left),
+                        new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Up),
+                        new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Right),
+                        new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
+                        new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds)
                     }
                 }
             }

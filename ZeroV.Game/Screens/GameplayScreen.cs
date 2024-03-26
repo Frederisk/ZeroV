@@ -166,7 +166,7 @@ public partial class GameplayScreen : Screen {
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
-        this.TouchPositions[e.Touch.Source] = e.ScreenSpaceLastTouchPosition;
+        this.TouchPositions[e.Touch.Source] = e.ScreenSpaceLastTouchPosition + e.Delta;
         this.TouchUpdate?.Invoke(e.Touch.Source, false);
     }
 
