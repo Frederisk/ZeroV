@@ -95,7 +95,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         this.Origin = Anchor.BottomCentre;
         this.Anchor = Anchor.BottomCentre;
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
-        this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
     }
 
     [BackgroundDependencyLoader]
@@ -421,15 +420,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         entry.Drawable.Source = entry.Source;
         this.particles.Add(entry.Drawable);
         Logger.Log($"{entry.Drawable.GetType()} added.");
-    }
-
-    private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
-        var entry = (ParticleLifetimeEntry)obj;
-
-        if (this.particles.Remove(entry.Drawable!, false)) {
-            // entry.Drawable = null;
-            Logger.Log("Particle removed.");
-        }
     }
 
     protected override Boolean CheckChildrenLife() {
