@@ -294,7 +294,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         if (result is not TargetResult.None) {
             this.particles.HideFromQueueAt(0, 0.5f);
 
-            Logger.Log("waite slide move");
             this.waitSlideMove = true;
             this.currJudgeSlide = lastParticle;
             this.currJudgeSlideTouchSource = touchSource;
@@ -320,7 +319,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         } else {
             moveSucceed = false;
         }
-        Logger.Log($"{moveSucceed}");
+
         this.gameplayScreen.ScoringCalculator.AddTarget(moveSucceed ? this.currJudgeSlideResult : TargetResult.Miss);
 
         this.waitSlideMove = false;
