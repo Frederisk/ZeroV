@@ -13,7 +13,7 @@ namespace ZeroV.Game.Elements.Particles;
 /// </summary>
 public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWithHit> {
 
-    public ParticleType Type { get; protected init; }
+    //public ParticleType Type { get; protected init; }
 
     // public Orbit FatherOrbit { get; private set; } = null!;
 

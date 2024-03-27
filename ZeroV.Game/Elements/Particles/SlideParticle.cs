@@ -20,7 +20,7 @@ public partial class SlideParticle : ParticleBase {
     }
 
     public SlideParticle() : base() {
-        this.Type = ParticleType.Slide;
+        //this.Type = ParticleType.Slide;
     }
 
     [BackgroundDependencyLoader]

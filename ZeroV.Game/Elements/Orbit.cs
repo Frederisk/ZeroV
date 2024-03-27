@@ -357,7 +357,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     #region Touch
 
-    private Dictionary<TouchSource, Vector2> touches = [];
+    //private Dictionary<TouchSource, Vector2> touches = [];
+    private HashSet<TouchSource> touches = [];
     public Boolean HasTouches => this.touches.Count > 0;
 
     protected void OnTouchChecked(TouchSource source, Boolean? isNewTouch) {
@@ -368,18 +369,20 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         Vector2 touchPosition = this.gameplayScreen.TouchPositions[source];
         var isHovered = this.ScreenSpaceDrawQuad.Contains(touchPosition);
-        var isEntered = this.touches.TryGetValue(source, out Vector2 lastTouchPosition);
+        var isEntered = this.touches.Contains(source);
 
         switch (isHovered, isEntered) {
-            case (true, true): this.OnTouchMoveInternal(source, touchPosition, lastTouchPosition); break;
-            case (true, false): this.OnTouchEnter(source, isNewTouch.Value, touchPosition); break;
+            //case (true, true): this.OnTouchMoveInternal(source, touchPosition, lastTouchPosition); break;
+            //case (true, false): this.OnTouchEnter(source, isNewTouch.Value, touchPosition); break;
+            case (true, false): this.OnTouchEnter(source, isNewTouch.Value); break;
             case (false, true): this.OnTouchLeave(source); break;
         }
     }
 
     private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
-    protected void OnTouchEnter(TouchSource source, Boolean isTouchDown, Vector2 touchPosition) {
-        this.touches.Add(source, touchPosition);
+
+    protected void OnTouchEnter(TouchSource source, Boolean isTouchDown) {
+        this.touches.Add(source);
         this.judgeFirstParticle(new JudgeInput() {
             CurrentTime = this.currentTime,
             TouchSource = source,
@@ -388,19 +391,23 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             TouchMoveDelta = null
         });
     }
-    protected void OnTouchMoveInternal(TouchSource source, Vector2 touchPosition, Vector2 lastTouchPosition) {
-        this.touches[source] = touchPosition;
-        Vector2 delta = touchPosition - lastTouchPosition;
-        if (delta != default) {
-            this.judgeFirstParticle(new JudgeInput() {
-                CurrentTime = this.currentTime,
-                TouchSource = source,
-                IsTouchDown = false,
-                IsTouchPress = true,
-                TouchMoveDelta = delta
-            });
-        }
+
+    protected override void OnTouchMove(TouchMoveEvent e) {
+        // base.OnTouchMove(e); // do nothing.
+        TouchSource source = e.Touch.Source;
+        //this.touches[source] = e.ScreenSpaceTouchDownPosition;
+        Vector2 delta = e.Delta;
+        //if (delta != default) {
+        this.judgeFirstParticle(new JudgeInput() {
+            CurrentTime = this.currentTime,
+            TouchSource = source,
+            IsTouchDown = false,
+            IsTouchPress = true,
+            TouchMoveDelta = delta
+        });
+        //}
     }
+
     protected void OnTouchLeave(TouchSource source) {
         this.touches.Remove(source);
         this.judgeFirstParticle(new JudgeInput() {

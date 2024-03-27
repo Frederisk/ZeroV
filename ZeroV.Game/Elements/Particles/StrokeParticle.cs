@@ -8,7 +8,7 @@ namespace ZeroV.Game.Elements.Particles;
 public partial class StrokeParticle : ParticleBase {
 
     public StrokeParticle() : base() {
-        this.Type = ParticleType.Stroke;
+        //this.Type = ParticleType.Stroke;
     }
 
     [BackgroundDependencyLoader]
