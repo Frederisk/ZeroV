@@ -10,7 +10,7 @@ public class PressParticleSource(Double startTime, Double endTime) : TimeSourceW
     public override Double EndTime => endTime;
 
     private TargetResult result;
-    public override TargetResult Judge(JudgeInput input) {
+    public override TargetResult Judge(in JudgeInput input) {
         if (this.result == TargetResult.None) {
             this.result = Judgment.JudgeBlink(startTime, input.CurrentTime);
             switch (input.IsTouchDown) {

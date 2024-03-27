@@ -9,7 +9,7 @@ public class BlinkParticleSource(Double startTime) : TimeSourceWithHit {
     public override Double StartTime => startTime;
     public override Double EndTime => this.StartTime;
 
-    public override TargetResult Judge(JudgeInput input) {
+    public override TargetResult Judge(in JudgeInput input) {
         TargetResult result = Judgment.JudgeBlink(startTime, input.CurrentTime);
         switch (input.IsTouchDown) {
             case null or false when result != TargetResult.Miss:

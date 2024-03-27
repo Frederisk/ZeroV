@@ -13,7 +13,7 @@ public class SlideParticleSource(Double startTime, SlidingDirection direction) :
     public SlidingDirection Direction => direction;
 
     private TargetResult result;
-    public override TargetResult Judge(JudgeInput input) {
+    public override TargetResult Judge(in JudgeInput input) {
         if (this.result == TargetResult.None) {
             return this.judgeTouch(input);
         } else {
@@ -21,7 +21,7 @@ public class SlideParticleSource(Double startTime, SlidingDirection direction) :
         }
     }
 
-    private TargetResult judgeTouch(JudgeInput input) {
+    private TargetResult judgeTouch(in JudgeInput input) {
         this.result = Judgment.JudgeSlide(startTime, input.CurrentTime);
         switch (input.IsTouchDown) {
             case null or false when this.result != TargetResult.Miss:
@@ -34,7 +34,7 @@ public class SlideParticleSource(Double startTime, SlidingDirection direction) :
             _ => TargetResult.None
         };
     }
-    private TargetResult judgeMove(JudgeInput input) {
+    private TargetResult judgeMove(in JudgeInput input) {
         if (input.TouchMoveDelta.HasValue) {
             Vector2 delta = input.TouchMoveDelta.Value;
             var succeed = this.Direction switch {

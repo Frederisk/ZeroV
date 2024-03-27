@@ -5,5 +5,5 @@ namespace ZeroV.Game.Objects;
 
 public abstract class TimeSourceWithHit : TimeSource {
 
-    public abstract TargetResult Judge(JudgeInput input);
+    public abstract TargetResult Judge(in JudgeInput input);
 }
