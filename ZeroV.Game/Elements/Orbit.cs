@@ -390,6 +390,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
+        // base.OnTouchMove(e); // do nothing.
         TouchSource source = e.Touch.Source;
         Vector2 delta = e.Delta;
         this.judgeFirstParticle(new JudgeInput() {
