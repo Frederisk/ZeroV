@@ -357,7 +357,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     #region Touch
 
-    //private Dictionary<TouchSource, Vector2> touches = [];
     private HashSet<TouchSource> touches = [];
     public Boolean HasTouches => this.touches.Count > 0;
 
@@ -372,8 +371,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         var isEntered = this.touches.Contains(source);
 
         switch (isHovered, isEntered) {
-            //case (true, true): this.OnTouchMoveInternal(source, touchPosition, lastTouchPosition); break;
-            //case (true, false): this.OnTouchEnter(source, isNewTouch.Value, touchPosition); break;
             case (true, false): this.OnTouchEnter(source, isNewTouch.Value); break;
             case (false, true): this.OnTouchLeave(source); break;
         }
@@ -393,11 +390,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
-        // base.OnTouchMove(e); // do nothing.
         TouchSource source = e.Touch.Source;
-        //this.touches[source] = e.ScreenSpaceTouchDownPosition;
         Vector2 delta = e.Delta;
-        //if (delta != default) {
         this.judgeFirstParticle(new JudgeInput() {
             CurrentTime = this.currentTime,
             TouchSource = source,
@@ -405,7 +399,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             IsTouchPress = true,
             TouchMoveDelta = delta
         });
-        //}
     }
 
     protected void OnTouchLeave(TouchSource source) {
