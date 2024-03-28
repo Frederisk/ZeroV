@@ -26,7 +26,7 @@ public class SlideParticleSource(Double startTime, SlidingDirection direction) :
     //    //    _ => TargetResult.None
     //    //};
     //}
-    public override TargetResult? JudgeMove(Double currentTime, Vector2 delta) {
+    public override TargetResult JudgeMove(Double currentTime, Vector2 delta) {
         //if (input.TouchMoveDelta.HasValue) {
             //Vector2 delta = input.TouchMoveDelta.Value;
         var succeed = this.Direction switch {
