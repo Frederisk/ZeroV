@@ -10,6 +10,7 @@ public readonly ref struct JudgeInput {
     public required Double CurrentTime { get; init; }
     public TouchSource? TouchSource { get; init; } 
     public Boolean? IsTouchDown { get; init; }
-    public Boolean IsTouchPress { get; init; }
+    public Boolean HasTouches { get; init; }
+    public Boolean? IsTouchLeave { get; init; }
     public Vector2? TouchMoveDelta { get; init; }
 }

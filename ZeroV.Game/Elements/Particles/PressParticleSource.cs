@@ -27,10 +27,10 @@ public class PressParticleSource(Double startTime, Double endTime) : TimeSourceW
             TargetResult result = Judgment.JudgeBlink(endTime, input.CurrentTime);
 
             switch (result) {
-                case TargetResult.None when !input.IsTouchPress: return TargetResult.Miss;
+                case TargetResult.None when !input.HasTouches: return TargetResult.Miss;
                 case TargetResult.None: return TargetResult.None;
                 case TargetResult.Miss:
-                case var _ when !input.IsTouchPress:
+                case var _ when !input.HasTouches:
                     return this.result;
                 default: return TargetResult.None;
             }

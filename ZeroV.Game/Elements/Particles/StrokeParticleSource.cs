@@ -12,7 +12,7 @@ public class StrokeParticleSource(Double startTime) : TimeSourceWithHit {
 
     public override TargetResult Judge(in JudgeInput input) {
         TargetResult result = Judgment.JudgeStroke(startTime, input.CurrentTime);
-        if(!input.IsTouchPress && result != TargetResult.Miss) {
+        if(!input.HasTouches && result != TargetResult.Miss) {
             result = TargetResult.None;
         }
 

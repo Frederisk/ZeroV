@@ -46,7 +46,7 @@ public class SlideParticleSource(Double startTime, SlidingDirection direction) :
             };
 
             return succeed ? this.result : TargetResult.Miss;
-        } else if (!input.IsTouchPress) {
+        } else if (input.IsTouchLeave == true) {
             return TargetResult.Miss;
         } else if (Judgment.JudgeSlide(startTime, input.CurrentTime) == TargetResult.Miss) {
             return TargetResult.Miss;

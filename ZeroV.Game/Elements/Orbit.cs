@@ -257,7 +257,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             CurrentTime = currTime,
             TouchSource = null,
             IsTouchDown = false,
-            IsTouchPress = this.HasTouches,
+            HasTouches = this.HasTouches,
             TouchMoveDelta = null
         });
     }
@@ -384,7 +384,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             CurrentTime = this.currentTime,
             TouchSource = source,
             IsTouchDown = isTouchDown,
-            IsTouchPress = true,
+            HasTouches = true,
+            IsTouchLeave = false,
             TouchMoveDelta = null
         });
     }
@@ -397,7 +398,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             CurrentTime = this.currentTime,
             TouchSource = source,
             IsTouchDown = false,
-            IsTouchPress = true,
+            HasTouches = this.HasTouches,
+            IsTouchLeave = false,
             TouchMoveDelta = delta
         });
     }
@@ -408,7 +410,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             CurrentTime = this.currentTime,
             TouchSource = source,
             IsTouchDown = false,
-            IsTouchPress = false,
+            HasTouches = this.HasTouches,
+            IsTouchLeave = true,
             TouchMoveDelta = null
         });
     }
