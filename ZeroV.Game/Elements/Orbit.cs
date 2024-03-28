@@ -361,9 +361,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
 
-    protected void OnTouchEnter(TouchSource source, Boolean isTouchDown) {
+    protected void OnTouchEnter(TouchSource source, Boolean isNewTouch) {
         this.touches.Add(source);
-        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeEnter(this.currentTime, isTouchDown);
+        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeEnter(this.currentTime, isNewTouch);
         this.processTarget(result);
     }
 

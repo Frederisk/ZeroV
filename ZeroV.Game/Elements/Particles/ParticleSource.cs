@@ -8,7 +8,7 @@ using ZeroV.Game.Scoring;
 namespace ZeroV.Game.Elements.Particles;
 
 public abstract class ParticleSource : TimeSource {
-    public virtual TargetResult? JudgeEnter(Double currentTime, Boolean isTouchDown) {
+    public virtual TargetResult? JudgeEnter(Double currentTime, Boolean isNewTouch) {
         return null;
     }
 
