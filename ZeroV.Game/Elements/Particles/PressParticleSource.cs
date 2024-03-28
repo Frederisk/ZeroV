@@ -5,35 +5,35 @@ using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements.Particles;
 
-public class PressParticleSource(Double startTime, Double endTime) : TimeSourceWithHit {
+public class PressParticleSource(Double startTime, Double endTime) : ParticleSource {
     public override Double StartTime => startTime;
     public override Double EndTime => endTime;
 
     private TargetResult result;
-    public override TargetResult Judge(in JudgeInput input) {
-        if (this.result == TargetResult.None) {
-            this.result = Judgment.JudgeBlink(startTime, input.CurrentTime);
-            switch (input.IsTouchDown) {
-                case null or false when this.result != TargetResult.Miss:
-                    this.result = TargetResult.None;
-                    break;
-            }
+    //public override TargetResult Judge(in JudgeInput input) {
+    //    if (this.result == TargetResult.None) {
+    //        this.result = Judgment.JudgeBlink(startTime, input.CurrentTime);
+    //        switch (input.IsTouchDown) {
+    //            case null or false when this.result != TargetResult.Miss:
+    //                this.result = TargetResult.None;
+    //                break;
+    //        }
 
-            return this.result switch {
-                TargetResult.Miss => TargetResult.Miss,
-                _ => TargetResult.None
-            };         
-        } else {
-            TargetResult result = Judgment.JudgeBlink(endTime, input.CurrentTime);
+    //        return this.result switch {
+    //            TargetResult.Miss => TargetResult.Miss,
+    //            _ => TargetResult.None
+    //        };         
+    //    } else {
+    //        TargetResult result = Judgment.JudgeBlink(endTime, input.CurrentTime);
 
-            switch (result) {
-                case TargetResult.None when !input.HasTouches: return TargetResult.Miss;
-                case TargetResult.None: return TargetResult.None;
-                case TargetResult.Miss:
-                case var _ when !input.HasTouches:
-                    return this.result;
-                default: return TargetResult.None;
-            }
-        }
-    }
+    //        switch (result) {
+    //            case TargetResult.None when !input.HasTouches: return TargetResult.Miss;
+    //            case TargetResult.None: return TargetResult.None;
+    //            case TargetResult.Miss:
+    //            case var _ when !input.HasTouches:
+    //                return this.result;
+    //            default: return TargetResult.None;
+    //        }
+    //    }
+    //}
 }

@@ -5,8 +5,8 @@ using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements.Particles;
 
-public class ParticleLifetimeEntry : ZeroVLifetimeEntry<TimeSourceWithHit, ParticleBase> {
-    public ParticleLifetimeEntry(TimeSourceWithHit source) : base(source) {
+public class ParticleLifetimeEntry : ZeroVLifetimeEntry<ParticleSource, ParticleBase> {
+    public ParticleLifetimeEntry(ParticleSource source) : base(source) {
         this.LifetimeStart = source.StartTime;
         this.LifetimeEnd = source.EndTime;
     }

@@ -4,9 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using osu.Framework.Graphics.Containers;
 
-using ZeroV.Game.Elements.Particles;
-
-namespace ZeroV.Game.Objects;
+namespace ZeroV.Game.Elements.Particles;
 public partial class ParticleQueue : Container<ParticleBase> {
 
     private readonly Queue<ParticleBase> innerQueue = [];

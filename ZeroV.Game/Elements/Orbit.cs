@@ -253,24 +253,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             //}
         }
 
-        this.judgeFirstParticle(new JudgeInput() {
-            CurrentTime = currTime,
-            TouchSource = null,
-            IsTouchDown = false,
-            HasTouches = this.HasTouches,
-            TouchMoveDelta = null
-        });
-    }
-
-    private void judgeFirstParticle(JudgeInput input) {
-        if (this.particles.TryPeek(out ParticleBase? particle)) {
-            TargetResult result = particle.Source!.Judge(input);
-
-            if (result != TargetResult.None) {
-                this.gameplayScreen.ScoringCalculator.AddTarget(result);
-                this.particles.Dequeue();
-            }
-        }
+        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeUpdate(this.currentTime);
+        this.processTarget(result);
     }
 
     #region Poolable
@@ -296,7 +280,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 this.keyFrames = value.KeyFrames;
 
                 this.lifetimeEntryManager.ClearEntries();
-                foreach (TimeSourceWithHit item in value.HitObjects.Span) {
+                foreach (ParticleSource item in value.HitObjects.Span) {
                     this.lifetimeEntryManager.AddEntry(new ParticleLifetimeEntry(item));
                 }
             }
@@ -380,40 +364,27 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     protected void OnTouchEnter(TouchSource source, Boolean isTouchDown) {
         this.touches.Add(source);
-        this.judgeFirstParticle(new JudgeInput() {
-            CurrentTime = this.currentTime,
-            TouchSource = source,
-            IsTouchDown = isTouchDown,
-            HasTouches = true,
-            IsTouchLeave = false,
-            TouchMoveDelta = null
-        });
+        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeEnter(this.currentTime, isTouchDown);
+        this.processTarget(result);
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
         // base.OnTouchMove(e); // do nothing.
-        TouchSource source = e.Touch.Source;
-        Vector2 delta = e.Delta;
-        this.judgeFirstParticle(new JudgeInput() {
-            CurrentTime = this.currentTime,
-            TouchSource = source,
-            IsTouchDown = false,
-            HasTouches = this.HasTouches,
-            IsTouchLeave = false,
-            TouchMoveDelta = delta
-        });
+        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeMove(this.currentTime, e.Delta);
+        this.processTarget(result);
     }
 
     protected void OnTouchLeave(TouchSource source) {
         this.touches.Remove(source);
-        this.judgeFirstParticle(new JudgeInput() {
-            CurrentTime = this.currentTime,
-            TouchSource = source,
-            IsTouchDown = false,
-            HasTouches = this.HasTouches,
-            IsTouchLeave = true,
-            TouchMoveDelta = null
-        });
+        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeLeave(this.currentTime, false);
+        this.processTarget(result);
+    }
+
+    private void processTarget(TargetResult? result) {
+        if (result is not null and not TargetResult.None) {
+            this.gameplayScreen.ScoringCalculator.AddTarget(result.Value);
+            this.particles.Dequeue();
+        }
     }
 
     #endregion Touch

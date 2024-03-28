@@ -11,7 +11,7 @@ namespace ZeroV.Game.Elements.Particles;
 /// <summary>
 /// The base class for all particles.
 /// </summary>
-public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWithHit> {
+public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSource> {
 
     //public ParticleType Type { get; protected init; }
 
@@ -42,10 +42,10 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<TimeSourceWit
     }
 }
 
-public enum ParticleType {
-    Unknown,
-    Blink,
-    Press,
-    Slide,
-    Stroke,
-}
+//public enum ParticleType {
+//    Unknown,
+//    Blink,
+//    Press,
+//    Slide,
+//    Stroke,
+//}

@@ -96,7 +96,7 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Color = Color4.Purple
                         }
                     },
-                    HitObjects = new TimeSourceWithHit[] {
+                    HitObjects = new ParticleSource[] {
                         new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
