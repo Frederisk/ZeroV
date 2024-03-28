@@ -1,6 +1,5 @@
 using System;
 
-using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements.Particles;

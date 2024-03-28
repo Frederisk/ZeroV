@@ -2,6 +2,7 @@ using System;
 
 using osuTK.Graphics;
 
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements;

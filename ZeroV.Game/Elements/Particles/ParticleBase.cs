@@ -4,7 +4,6 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 
 using ZeroV.Game.Graphics;
-using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements.Particles;
 

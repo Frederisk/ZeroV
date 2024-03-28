@@ -2,7 +2,6 @@ using System;
 
 using osu.Framework.Input.Events;
 
-using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements.Particles;

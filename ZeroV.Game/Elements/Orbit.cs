@@ -19,7 +19,6 @@ using Vortice;
 
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
-using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 using ZeroV.Game.Screens;
 

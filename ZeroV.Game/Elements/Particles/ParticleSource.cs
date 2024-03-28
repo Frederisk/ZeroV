@@ -2,9 +2,10 @@ using System;
 
 using osuTK;
 
+using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 
-namespace ZeroV.Game.Objects;
+namespace ZeroV.Game.Elements.Particles;
 
 public abstract class ParticleSource : TimeSource {
     public virtual TargetResult? JudgeEnter(Double currentTime, Boolean isTouchDown) {
