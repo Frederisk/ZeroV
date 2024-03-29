@@ -15,8 +15,6 @@ using osu.Framework.Utils;
 
 using osuTK;
 
-using Vortice;
-
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Scoring;
@@ -81,6 +79,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private Box innerBox = null!;
     private Box innerLine = null!;
     private ParticleQueue particles = null!;
+
+    private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
@@ -186,7 +186,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     protected override void Update() {
         base.Update();
-        var currTime = this.gameplayScreen.GameplayTrack.CurrentTime;
+        var currTime = this.currentTime;
         while (this.keyFrames.Length > 1) {
             var nextTime = this.keyFrames.Span[1].Time;
             if (currTime < nextTime) {
@@ -252,7 +252,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             //}
         }
 
-        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeUpdate(this.currentTime);
+        TargetResult? result = this.particles.PeekOrDefault()?.JudgeUpdate(this.currentTime, this.HasTouches);
         this.processTarget(result);
     }
 
@@ -316,7 +316,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     protected override Boolean CheckChildrenLife() {
         var result = base.CheckChildrenLife();
         if (this.gameplayScreen.GameplayTrack is not null) {
-            var currTime = this.gameplayScreen.GameplayTrack.CurrentTime;
+            var currTime = this.currentTime;
             // Time to fade out
             var startTime = currTime - this.particleFadingTime;
             // Time to fall down
@@ -359,23 +359,21 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         }
     }
 
-    private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
-
     protected void OnTouchEnter(TouchSource source, Boolean isNewTouch) {
         this.touches.Add(source);
-        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeEnter(this.currentTime, isNewTouch);
+        TargetResult? result = this.particles.PeekOrDefault()?.JudgeEnter(this.currentTime, isNewTouch);
         this.processTarget(result);
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
         // base.OnTouchMove(e); // do nothing.
-        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeMove(this.currentTime, e.Delta);
+        TargetResult? result = this.particles.PeekOrDefault()?.JudgeMove(this.currentTime, e.Delta);
         this.processTarget(result);
     }
 
     protected void OnTouchLeave(TouchSource source) {
         this.touches.Remove(source);
-        TargetResult? result = this.particles.PeekOrDefault()?.Source!.JudgeLeave(this.currentTime, false);
+        TargetResult? result = this.particles.PeekOrDefault()?.JudgeLeave(this.currentTime, false);
         this.processTarget(result);
     }
 

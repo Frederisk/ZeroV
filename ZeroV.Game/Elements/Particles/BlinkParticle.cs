@@ -1,9 +1,12 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 
 using osuTK;
 
 using ZeroV.Game.Graphics.Shapes;
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements.Particles;
 
@@ -20,5 +23,25 @@ public partial class BlinkParticle : ParticleBase {
             //InnerColor = Colour4.Red,
             //OuterColor = Colour4.Black,
         };
+    }
+
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+        // base.JudgeEnter(currentTime, isNewTouch); // just return null
+        if (isNewTouch) {
+            TargetResult result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
+            return result;
+        }
+        // only judge when touch is down
+        return null;
+    }
+
+    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        // base.JudgeUpdate(currentTime); // just return null
+        TargetResult result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
+        if (result is TargetResult.Miss) {
+            return result;
+        }
+        // only judge miss
+        return null;
     }
 }

@@ -9,11 +9,13 @@ using osu.Framework.Graphics.Shapes;
 using osuTK;
 using osuTK.Graphics;
 
+using ZeroV.Game.Scoring;
+
 namespace ZeroV.Game.Elements.Particles;
 
 public partial class SlideParticle : ParticleBase {
-
     private Bindable<SlidingDirection> directionBindable = new();
+
     public SlidingDirection Direction {
         get => this.directionBindable.Value;
         set => this.directionBindable.Value = value;
@@ -87,8 +89,7 @@ public partial class SlideParticle : ParticleBase {
             },
         };
 
-        this.directionBindable.ValueChanged += e =>
-        {
+        this.directionBindable.ValueChanged += e => {
             innerContainer.Rotation = 90 * (Int32)e.NewValue;
             innerTriangle.Colour = this.Direction switch {
                 SlidingDirection.Left => Color4.SkyBlue,
@@ -104,5 +105,42 @@ public partial class SlideParticle : ParticleBase {
             Size = new Vector2(34),
             Colour = Color4.Black,
         });
+    }
+
+    private TargetResult result;
+
+    //private TargetResult judgeTouch(in JudgeInput input) {
+    //    //this.result = Judgment.JudgeSlide(startTime, input.CurrentTime);
+    //    //switch (input.IsTouchDown) {
+    //    //    case null or false when this.result != TargetResult.Miss:
+    //    //        this.result = TargetResult.None;
+    //    //        break;
+    //    //}
+
+    //    //return this.result switch {
+    //    //    TargetResult.Miss => TargetResult.Miss,
+    //    //    _ => TargetResult.None
+    //    //};
+    //}
+
+    public override TargetResult? JudgeMove(in Double currentTime, in Vector2 delta) {
+        //if (input.TouchMoveDelta.HasValue) {
+        //Vector2 delta = input.TouchMoveDelta.Value;
+        var succeed = this.Direction switch {
+            SlidingDirection.Left => delta.X < 0,
+            SlidingDirection.Right => delta.X > 0,
+            SlidingDirection.Up => delta.Y < 0,
+            SlidingDirection.Down => delta.Y > 0,
+            _ => throw new NotImplementedException($"Unknown SlidingDirection {this.Direction}")
+        };
+
+        return succeed ? this.result : TargetResult.Miss;
+        //} else if (input.IsTouchLeave == true) {
+        //    return TargetResult.Miss;
+        //} else if (Judgment.JudgeSlide(startTime, input.CurrentTime) == TargetResult.Miss) {
+        //    return TargetResult.Miss;
+        //} else {
+        //    return TargetResult.None;
+        //}
     }
 }

@@ -1,7 +1,11 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 
 using osuTK;
+
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements.Particles;
 
@@ -27,5 +31,20 @@ public partial class StrokeParticle : ParticleBase {
                 Colour = Colour4.Gray,
             }
         ];
+    }
+
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+        // base.JudgeEnter(currentTime, isNewTouch); // just return null
+        TargetResult result = Judgment.JudgeStroke(this.Source!.StartTime, currentTime);
+        return result;
+    }
+
+    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        // base.JudgeUpdate(currentTime); // just return null
+        if (hasTouches) {
+            TargetResult result = Judgment.JudgeStroke(this.Source!.StartTime, currentTime);
+            return result;
+        }
+        return null;
     }
 }
