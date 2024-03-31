@@ -109,19 +109,17 @@ public partial class SlideParticle : ParticleBase {
 
     private TargetResult result;
 
-    //private TargetResult judgeTouch(in JudgeInput input) {
-    //    //this.result = Judgment.JudgeSlide(startTime, input.CurrentTime);
-    //    //switch (input.IsTouchDown) {
-    //    //    case null or false when this.result != TargetResult.Miss:
-    //    //        this.result = TargetResult.None;
-    //    //        break;
-    //    //}
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+        this.result = Judgment.JudgeSlide(this.Source!.StartTime, currentTime);
+        if (isNewTouch is false && this.result is not TargetResult.Miss) {
+            this.result = TargetResult.None;
+        }
 
-    //    //return this.result switch {
-    //    //    TargetResult.Miss => TargetResult.Miss,
-    //    //    _ => TargetResult.None
-    //    //};
-    //}
+        return this.result switch {
+            TargetResult.Miss => TargetResult.Miss,
+            _ => null,
+        };
+    }
 
     public override TargetResult? JudgeMove(in Double currentTime, in Vector2 delta) {
         //if (input.TouchMoveDelta.HasValue) {
@@ -131,16 +129,18 @@ public partial class SlideParticle : ParticleBase {
             SlidingDirection.Right => delta.X > 0,
             SlidingDirection.Up => delta.Y < 0,
             SlidingDirection.Down => delta.Y > 0,
-            _ => throw new NotImplementedException($"Unknown SlidingDirection {this.Direction}")
+            _ => throw new NotImplementedException($"Unknown SlidingDirection: {this.Direction}")
         };
 
         return succeed ? this.result : TargetResult.Miss;
-        //} else if (input.IsTouchLeave == true) {
-        //    return TargetResult.Miss;
-        //} else if (Judgment.JudgeSlide(startTime, input.CurrentTime) == TargetResult.Miss) {
-        //    return TargetResult.Miss;
-        //} else {
-        //    return TargetResult.None;
-        //}
+    }
+
+    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        // base.JudgeUpdate(currentTime); // just return null
+        if (hasTouches) {
+            TargetResult result = Judgment.JudgeSlide(this.Source!.EndTime, currentTime);
+            return result;
+        }
+        return null;
     }
 }

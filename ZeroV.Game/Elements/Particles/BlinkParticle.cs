@@ -37,7 +37,7 @@ public partial class BlinkParticle : ParticleBase {
 
     public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
         // base.JudgeUpdate(currentTime); // just return null
-        TargetResult result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
+        TargetResult result = Judgment.JudgeBlink(this.Source!.EndTime, currentTime);
         if (result is TargetResult.Miss) {
             return result;
         }
