@@ -104,4 +104,10 @@ public partial class PressParticle : ParticleBase {
     //        }
     //    }
     //}
+
+    protected override void FreeAfterUse() {
+        // Reset Particle
+        this.result = TargetResult.None;
+        base.FreeAfterUse();
+    }
 }

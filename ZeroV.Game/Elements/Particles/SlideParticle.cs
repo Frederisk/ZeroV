@@ -124,6 +124,9 @@ public partial class SlideParticle : ParticleBase {
     public override TargetResult? JudgeMove(in Double currentTime, in Vector2 delta) {
         //if (input.TouchMoveDelta.HasValue) {
         //Vector2 delta = input.TouchMoveDelta.Value;
+        if (this.result is TargetResult.None) {
+            return null;
+        }
         var succeed = this.Direction switch {
             SlidingDirection.Left => delta.X < 0,
             SlidingDirection.Right => delta.X > 0,
@@ -135,6 +138,13 @@ public partial class SlideParticle : ParticleBase {
         return succeed ? this.result : TargetResult.Miss;
     }
 
+    public override TargetResult? JudgeLeave(in Double currentTime, in Boolean isTouchUp) {
+        if (this.result is TargetResult.None) {
+            return null;
+        }
+        return TargetResult.Miss;
+    }
+
     public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
         // base.JudgeUpdate(currentTime); // just return null
         if (hasTouches) {
@@ -142,5 +152,10 @@ public partial class SlideParticle : ParticleBase {
             return result;
         }
         return null;
+    }
+
+    protected override void FreeAfterUse() {
+        this.result = TargetResult.None;
+        base.FreeAfterUse();
     }
 }
