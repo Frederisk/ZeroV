@@ -73,8 +73,8 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     private BufferedContainer container = null!;
 
-    private Double particleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
-    private Double particleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
+    private readonly Double particleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
+    private readonly Double particleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
 
     private Box innerBox = null!;
     private Box innerLine = null!;

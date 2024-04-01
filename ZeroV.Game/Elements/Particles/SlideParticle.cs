@@ -1,5 +1,7 @@
 using System;
 
+using OpenTabletDriver.Native.Windows.Input;
+
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -110,20 +112,16 @@ public partial class SlideParticle : ParticleBase {
     private TargetResult result;
 
     public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
-        this.result = Judgment.JudgeSlide(this.Source!.StartTime, currentTime);
-        if (isNewTouch is false && this.result is not TargetResult.Miss) {
-            this.result = TargetResult.None;
+        if (isNewTouch) {
+            this.result = Judgment.JudgeSlide(this.Source!.StartTime, currentTime);
+            if (this.result is TargetResult.Miss) {
+                return TargetResult.Miss;
+            }
         }
-
-        return this.result switch {
-            TargetResult.Miss => TargetResult.Miss,
-            _ => null,
-        };
+        return null;
     }
 
     public override TargetResult? JudgeMove(in Double currentTime, in Vector2 delta) {
-        //if (input.TouchMoveDelta.HasValue) {
-        //Vector2 delta = input.TouchMoveDelta.Value;
         if (this.result is TargetResult.None) {
             return null;
         }
@@ -147,11 +145,9 @@ public partial class SlideParticle : ParticleBase {
 
     public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
         // base.JudgeUpdate(currentTime); // just return null
-        if (hasTouches) {
-            TargetResult result = Judgment.JudgeSlide(this.Source!.EndTime, currentTime);
-            if(result == TargetResult.Miss) {
-                return result;
-            }
+        TargetResult result = Judgment.JudgeSlide(this.Source!.EndTime, currentTime);
+        if (result is TargetResult.Miss) {
+            return result;
         }
         return null;
     }

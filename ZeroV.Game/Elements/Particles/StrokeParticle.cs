@@ -41,10 +41,11 @@ public partial class StrokeParticle : ParticleBase {
 
     public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
         // base.JudgeUpdate(currentTime); // just return null
-        if (hasTouches) {
-            TargetResult result = Judgment.JudgeStroke(this.Source!.EndTime, currentTime);
+        TargetResult result = Judgment.JudgeBlink(this.Source!.EndTime, currentTime);
+        if (hasTouches || result is TargetResult.Miss) {
             return result;
         }
+
         return null;
     }
 }
