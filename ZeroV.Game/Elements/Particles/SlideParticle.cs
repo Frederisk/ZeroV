@@ -149,7 +149,9 @@ public partial class SlideParticle : ParticleBase {
         // base.JudgeUpdate(currentTime); // just return null
         if (hasTouches) {
             TargetResult result = Judgment.JudgeSlide(this.Source!.EndTime, currentTime);
-            return result;
+            if(result == TargetResult.Miss) {
+                return result;
+            }
         }
         return null;
     }
