@@ -41,7 +41,7 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
         base.FreeAfterUse();
     }
 
-    protected abstract TargetResult JudgeMain(in Double targetTime, in Double currentTime);
+    //protected abstract TargetResult JudgeMain(in Double targetTime, in Double currentTime);
 
     public virtual TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
         return null;

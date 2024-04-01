@@ -5,9 +5,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 
-using osuTK;
-using osuTK.Graphics;
-
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Scoring;
 
@@ -29,40 +26,40 @@ public partial class PressParticle : ParticleBase {
                 Anchor = Anchor.BottomCentre,
                 Width = Single.Sqrt(2 * 52 * 52),
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Pink,
+                Colour = Colour4.Pink,
             },
             new Box {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
                 Width = 6.1f,
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
             },
             new Box {
                 Origin = Anchor.BottomLeft,
                 Anchor = Anchor.BottomLeft,
                 Width = 6.1f,
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
             },
             new Box {
                 Origin = Anchor.BottomRight,
                 Anchor = Anchor.BottomRight,
                 Width = 6.1f,
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
             },
             // buttom
             new BlinkDiamond {
                 Anchor = Anchor.BottomCentre,
-                InnerColor = Color4.Pink,
-                OuterColor = Color4.Black,
+                InnerColor = Colour4.Pink,
+                OuterColor = Colour4.Black,
             },
             // top
             new BlinkDiamond {
                 Anchor = Anchor.TopCentre,
-                InnerColor = Color4.Pink,
-                OuterColor = Color4.Black,
+                InnerColor = Colour4.Pink,
+                OuterColor = Colour4.Black,
             },
         ];
     }
