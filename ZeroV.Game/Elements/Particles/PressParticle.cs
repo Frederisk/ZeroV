@@ -5,6 +5,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 
+using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Graphics.Shapes;
@@ -78,36 +79,49 @@ public partial class PressParticle : ParticleBase {
     }
 
     private TargetResult result;
-    //public override TargetResult Judge(in JudgeInput input) {
-    //    if (this.result == TargetResult.None) {
-    //        this.result = Judgment.JudgeBlink(startTime, input.CurrentTime);
-    //        switch (input.IsTouchDown) {
-    //            case null or false when this.result != TargetResult.Miss:
-    //                this.result = TargetResult.None;
-    //                break;
-    //        }
+    private Double noTouchTime = Double.MaxValue;
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+        if(isNewTouch && this.result == TargetResult.None) {
+            this.result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
+            return TargetResult.None;
+        }
+        return null;
+    }
+    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        if(this.result != TargetResult.None) {
+            if (currentTime - this.noTouchTime > 100) {
+                if (hasTouches) {
+                    this.noTouchTime = Double.MaxValue;
+                } else {
+                    this.result = TargetResult.Miss;
+                    return TargetResult.Miss;
+                }
+            }
 
-    //        return this.result switch {
-    //            TargetResult.Miss => TargetResult.Miss,
-    //            _ => TargetResult.None
-    //        };
-    //    } else {
-    //        TargetResult result = Judgment.JudgeBlink(endTime, input.CurrentTime);
+            TargetResult endResult = Judgment.JudgeBlink(this.Source!.EndTime, currentTime);
+            if (!hasTouches) {
+                if(endResult == TargetResult.None) {
+                    this.noTouchTime = currentTime;
+                } else {
+                    return this.result;
+                }
+            } else if(endResult == TargetResult.MaxPerfect) {
+                return this.result;
+            }
+        } else {
+            TargetResult result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
+            if ((result == TargetResult.Miss)) {
+                return TargetResult.Miss;
+            }
+        }
 
-    //        switch (result) {
-    //            case TargetResult.None when !input.HasTouches: return TargetResult.Miss;
-    //            case TargetResult.None: return TargetResult.None;
-    //            case TargetResult.Miss:
-    //            case var _ when !input.HasTouches:
-    //                return this.result;
-    //            default: return TargetResult.None;
-    //        }
-    //    }
-    //}
+        return null;
+    }
 
     protected override void FreeAfterUse() {
         // Reset Particle
         this.result = TargetResult.None;
+        this.noTouchTime = Double.MaxValue;
         base.FreeAfterUse();
     }
 }
