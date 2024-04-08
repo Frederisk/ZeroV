@@ -97,13 +97,20 @@ public partial class PressParticle : ParticleBase {
 
             TargetResult endResult = Judgment.JudgeBlink(this.Source!.EndTime, currentTime);
             if (!hasTouches) {
-                if(endResult == TargetResult.None) {
-                    this.noTouchTime = currentTime;
+                if (endResult == TargetResult.None) {
+                    if (this.noTouchTime == Double.MaxValue) {
+                        this.noTouchTime = currentTime;
+                    } else {
+                        return TargetResult.None;
+                    }
                 } else {
                     return this.result;
                 }
-            } else if(endResult == TargetResult.MaxPerfect) {
-                return this.result;
+            } else {
+                this.noTouchTime = Double.MaxValue;
+                if (endResult == TargetResult.MaxPerfect) {
+                    return this.result;
+                }
             }
         } else {
             TargetResult result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
