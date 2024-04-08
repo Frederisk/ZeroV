@@ -76,7 +76,7 @@ public partial class PressParticle : ParticleBase {
     }
 
     private TargetResult result;
-    private Double noTouchTime = Double.MaxValue;
+    private Double? noTouchTime;
     public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
         if(isNewTouch && this.result == TargetResult.None) {
             this.result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
@@ -88,7 +88,7 @@ public partial class PressParticle : ParticleBase {
         if(this.result != TargetResult.None) {
             if (currentTime - this.noTouchTime > 100) {
                 if (hasTouches) {
-                    this.noTouchTime = Double.MaxValue;
+                    this.noTouchTime = null;
                 } else {
                     this.result = TargetResult.Miss;
                     return TargetResult.Miss;
@@ -98,7 +98,7 @@ public partial class PressParticle : ParticleBase {
             TargetResult endResult = Judgment.JudgeBlink(this.Source!.EndTime, currentTime);
             if (!hasTouches) {
                 if (endResult == TargetResult.None) {
-                    if (this.noTouchTime == Double.MaxValue) {
+                    if (this.noTouchTime == null) {
                         this.noTouchTime = currentTime;
                     } else {
                         return TargetResult.None;
@@ -107,7 +107,7 @@ public partial class PressParticle : ParticleBase {
                     return this.result;
                 }
             } else {
-                this.noTouchTime = Double.MaxValue;
+                this.noTouchTime = null;
                 if (endResult == TargetResult.MaxPerfect) {
                     return this.result;
                 }
