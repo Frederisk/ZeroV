@@ -111,9 +111,32 @@ public partial class SlideParticle : ParticleBase {
 
     private TargetResult result;
 
+
+    protected override TargetResult JudgeMain(in Double targetTime, in Double touchTime) {
+        // -: late, +: early,
+        var offset = targetTime - touchTime;
+
+        // late------------------------early
+        // xxxxx-1000======0======+1000xxxxx
+        return offset switch {
+            // -1000~: None
+            var x when x is > +1000 => TargetResult.None,
+            // ~1000: Miss
+            var x when x is < -1000 => TargetResult.Miss,
+            // 1000~500: Bad
+            var x when x is < -800 => TargetResult.NormalLate,
+            var x when x is > +800 => TargetResult.NormalEarly,
+            // 500~300: Normal
+            var x when x is < -400 => TargetResult.PerfectLate,
+            var x when x is > +400 => TargetResult.PerfectEarly,
+            // 400~0: Perfect
+            _ => TargetResult.MaxPerfect,
+        };
+    }
+
     public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
         if (isNewTouch) {
-            this.result = Judgment.JudgeSlide(this.Source!.StartTime, currentTime);
+            this.result = this.JudgeMain(this.Source!.StartTime, currentTime);
             if (this.result is TargetResult.Miss) {
                 return TargetResult.Miss;
             }
@@ -143,14 +166,8 @@ public partial class SlideParticle : ParticleBase {
         return TargetResult.Miss;
     }
 
-    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
-        // base.JudgeUpdate(currentTime); // just return null
-        TargetResult result = Judgment.JudgeSlide(this.Source!.EndTime, currentTime);
-        if (result is TargetResult.Miss) {
-            return result;
-        }
-        return null;
-    }
+    // public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) =>
+    //     base.JudgeUpdate(currentTime, hasTouches);
 
     protected override void FreeAfterUse() {
         this.result = TargetResult.None;

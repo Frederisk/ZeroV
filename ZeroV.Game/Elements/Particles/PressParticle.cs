@@ -77,16 +77,23 @@ public partial class PressParticle : ParticleBase {
 
     private TargetResult result;
     private Double? noTouchTime;
+
+    private readonly Double deltaTime = TimeSpan.FromMilliseconds(100).TotalMilliseconds;
+
+    // protected override TargetResult JudgeMain(in Double targetTime, in Double currentTime) =>
+    //     base.JudgeMain(targetTime, currentTime);
+
     public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
-        if(isNewTouch && this.result == TargetResult.None) {
-            this.result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
+        if (isNewTouch && this.result is TargetResult.None) {
+            this.result = this.JudgeMain(this.Source!.StartTime, currentTime);
             return TargetResult.None;
         }
         return null;
     }
+
     public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
-        if(this.result != TargetResult.None) {
-            if (currentTime - this.noTouchTime > 100) {
+        if (this.result is not TargetResult.None) {
+            if ((currentTime - this.noTouchTime) > this.deltaTime) {
                 if (hasTouches) {
                     this.noTouchTime = null;
                 } else {
@@ -95,10 +102,10 @@ public partial class PressParticle : ParticleBase {
                 }
             }
 
-            TargetResult endResult = Judgment.JudgeBlink(this.Source!.EndTime, currentTime);
+            TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
             if (!hasTouches) {
-                if (endResult == TargetResult.None) {
-                    if (this.noTouchTime == null) {
+                if (endResult is TargetResult.None) {
+                    if (this.noTouchTime is null) {
                         this.noTouchTime = currentTime;
                     } else {
                         return TargetResult.None;
@@ -108,15 +115,12 @@ public partial class PressParticle : ParticleBase {
                 }
             } else {
                 this.noTouchTime = null;
-                if (endResult == TargetResult.MaxPerfect) {
+                if (endResult is TargetResult.MaxPerfect) {
                     return this.result;
                 }
             }
         } else {
-            TargetResult result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
-            if ((result == TargetResult.Miss)) {
-                return TargetResult.Miss;
-            }
+            return base.JudgeUpdate(currentTime, hasTouches); // judge miss here
         }
 
         return null;

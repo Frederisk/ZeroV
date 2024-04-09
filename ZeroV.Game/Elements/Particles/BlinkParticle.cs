@@ -25,23 +25,19 @@ public partial class BlinkParticle : ParticleBase {
         };
     }
 
+    // protected override TargetResult JudgeMain(in Double targetTime, in Double currentTime) =>
+    //     base.JudgeMain(targetTime, currentTime);
+
     public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
         // base.JudgeEnter(currentTime, isNewTouch); // just return null
         if (isNewTouch) {
-            TargetResult result = Judgment.JudgeBlink(this.Source!.StartTime, currentTime);
+            TargetResult result = this.JudgeMain(this.Source!.StartTime, currentTime);
             return result;
         }
         // only judge when touch is down
         return null;
     }
 
-    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
-        // base.JudgeUpdate(currentTime); // just return null
-        TargetResult result = Judgment.JudgeBlink(this.Source!.EndTime, currentTime);
-        if (result is TargetResult.Miss) {
-            return result;
-        }
-        // only judge miss
-        return null;
-    }
+    // public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) =>
+    //     base.JudgeUpdate(currentTime, hasTouches);
 }
