@@ -105,7 +105,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Anchor = Anchor.BottomCentre,
             Colour = Colour4.Azure,
             RelativeSizeAxes = Axes.Both,
-            // Size = new Vector2(5000,768-50),
+            // Size = new Vector2(5000, 768-50),
             // XPosition = new Vector2(0, -50),
             Y = visual_orbit_offset,
         };

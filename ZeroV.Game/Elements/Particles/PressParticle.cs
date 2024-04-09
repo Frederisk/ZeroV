@@ -49,7 +49,7 @@ public partial class PressParticle : ParticleBase {
                 RelativeSizeAxes = Axes.Y,
                 Colour = Colour4.Black,
             },
-            // buttom
+            // bottom
             new BlinkDiamond {
                 Anchor = Anchor.BottomCentre,
                 InnerColor = Colour4.Pink,
@@ -97,7 +97,6 @@ public partial class PressParticle : ParticleBase {
                 if (hasTouches) {
                     this.noTouchTime = null;
                 } else {
-                    this.result = TargetResult.Miss;
                     return TargetResult.Miss;
                 }
             }
@@ -115,12 +114,16 @@ public partial class PressParticle : ParticleBase {
                 }
             } else {
                 this.noTouchTime = null;
+                // TODO: Calculate the length here.
                 if (endResult is TargetResult.MaxPerfect) {
                     return this.result;
                 }
             }
         } else {
-            return base.JudgeUpdate(currentTime, hasTouches); // judge miss here
+            TargetResult result = this.JudgeMain(this.Source!.StartTime, currentTime);
+            if (result is TargetResult.Miss) {
+                return TargetResult.Miss;
+            }
         }
 
         return null;
@@ -129,7 +132,7 @@ public partial class PressParticle : ParticleBase {
     protected override void FreeAfterUse() {
         // Reset Particle
         this.result = TargetResult.None;
-        this.noTouchTime = Double.MaxValue;
+        this.noTouchTime = null;
         base.FreeAfterUse();
     }
 }

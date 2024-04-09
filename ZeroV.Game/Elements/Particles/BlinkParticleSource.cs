@@ -1,7 +1,5 @@
 using System;
 
-using ZeroV.Game.Scoring;
-
 namespace ZeroV.Game.Elements.Particles;
 
 public class BlinkParticleSource(Double startTime) : ParticleSource {

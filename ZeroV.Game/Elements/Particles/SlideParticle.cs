@@ -1,7 +1,5 @@
 using System;
 
-using OpenTabletDriver.Native.Windows.Input;
-
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -110,7 +108,6 @@ public partial class SlideParticle : ParticleBase {
     }
 
     private TargetResult result;
-
 
     protected override TargetResult JudgeMain(in Double targetTime, in Double touchTime) {
         // -: late, +: early,

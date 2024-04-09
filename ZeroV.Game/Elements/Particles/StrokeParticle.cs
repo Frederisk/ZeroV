@@ -39,7 +39,6 @@ public partial class StrokeParticle : ParticleBase {
             TargetResult.Miss => TargetResult.Miss,
             _ => TargetResult.MaxPerfect,
         };
-    
 
     public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
         // base.JudgeEnter(currentTime, isNewTouch); // just return null
@@ -47,6 +46,12 @@ public partial class StrokeParticle : ParticleBase {
         return result;
     }
 
-    // public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) =>
-    //     base.JudgeUpdate(currentTime, hasTouches);
+    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        TargetResult result = this.JudgeMain(this.Source!.EndTime, currentTime);
+        if (hasTouches || result is TargetResult.Miss) {
+            return result;
+        }
+
+        return null;
+    }
 }

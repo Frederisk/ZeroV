@@ -1,5 +1,3 @@
-using System;
-
 using ZeroV.Game.Graphics;
 
 namespace ZeroV.Game.Elements.Particles;
