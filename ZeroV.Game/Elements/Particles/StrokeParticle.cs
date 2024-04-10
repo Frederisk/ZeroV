@@ -1,14 +1,18 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 
 using osuTK;
+
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements.Particles;
 
 public partial class StrokeParticle : ParticleBase {
 
     public StrokeParticle() : base() {
-        this.Type = ParticleType.Stroke;
+        //this.Type = ParticleType.Stroke;
     }
 
     [BackgroundDependencyLoader]
@@ -27,5 +31,27 @@ public partial class StrokeParticle : ParticleBase {
                 Colour = Colour4.Gray,
             }
         ];
+    }
+
+    protected override TargetResult JudgeMain(in Double targetTime, in Double touchTime) =>
+        base.JudgeMain(targetTime, touchTime) switch {
+            TargetResult.None => TargetResult.None,
+            TargetResult.Miss => TargetResult.Miss,
+            _ => TargetResult.MaxPerfect,
+        };
+
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+        // base.JudgeEnter(currentTime, isNewTouch); // just return null
+        TargetResult result = this.JudgeMain(this.Source!.StartTime, currentTime);
+        return result;
+    }
+
+    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        TargetResult result = this.JudgeMain(this.Source!.EndTime, currentTime);
+        if (hasTouches || result is TargetResult.Miss) {
+            return result;
+        }
+
+        return null;
     }
 }

@@ -8,6 +8,7 @@ using osu.Framework.Screens;
 using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
@@ -35,7 +36,7 @@ public partial class TestGameplayScreen : ZeroVTestScene {
                              Color = Color4.Green
                         }
                     },
-                    HitObjects = Array.Empty<TimeSourceWithHit>()
+                    HitObjects = Array.Empty<ParticleSource>()
                 }
             }
         };

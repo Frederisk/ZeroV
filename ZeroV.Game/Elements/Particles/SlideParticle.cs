@@ -9,18 +9,20 @@ using osu.Framework.Graphics.Shapes;
 using osuTK;
 using osuTK.Graphics;
 
+using ZeroV.Game.Scoring;
+
 namespace ZeroV.Game.Elements.Particles;
 
 public partial class SlideParticle : ParticleBase {
-
     private Bindable<SlidingDirection> directionBindable = new();
+
     public SlidingDirection Direction {
         get => this.directionBindable.Value;
         set => this.directionBindable.Value = value;
     }
 
     public SlideParticle() : base() {
-        this.Type = ParticleType.Slide;
+        //this.Type = ParticleType.Slide;
     }
 
     [BackgroundDependencyLoader]
@@ -87,8 +89,7 @@ public partial class SlideParticle : ParticleBase {
             },
         };
 
-        this.directionBindable.ValueChanged += e =>
-        {
+        this.directionBindable.ValueChanged += e => {
             innerContainer.Rotation = 90 * (Int32)e.NewValue;
             innerTriangle.Colour = this.Direction switch {
                 SlidingDirection.Left => Color4.SkyBlue,
@@ -104,5 +105,69 @@ public partial class SlideParticle : ParticleBase {
             Size = new Vector2(34),
             Colour = Color4.Black,
         });
+    }
+
+    private TargetResult result;
+
+    protected override TargetResult JudgeMain(in Double targetTime, in Double touchTime) {
+        // -: late, +: early,
+        var offset = targetTime - touchTime;
+
+        // late------------------------early
+        // xxxxx-1000======0======+1000xxxxx
+        return offset switch {
+            // -1000~: None
+            var x when x is > +1000 => TargetResult.None,
+            // ~1000: Miss
+            var x when x is < -1000 => TargetResult.Miss,
+            // 1000~500: Bad
+            var x when x is < -800 => TargetResult.NormalLate,
+            var x when x is > +800 => TargetResult.NormalEarly,
+            // 500~300: Normal
+            var x when x is < -400 => TargetResult.PerfectLate,
+            var x when x is > +400 => TargetResult.PerfectEarly,
+            // 400~0: Perfect
+            _ => TargetResult.MaxPerfect,
+        };
+    }
+
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+        if (isNewTouch) {
+            this.result = this.JudgeMain(this.Source!.StartTime, currentTime);
+            if (this.result is TargetResult.Miss) {
+                return TargetResult.Miss;
+            }
+        }
+        return null;
+    }
+
+    public override TargetResult? JudgeMove(in Double currentTime, in Vector2 delta) {
+        if (this.result is TargetResult.None) {
+            return null;
+        }
+        var succeed = this.Direction switch {
+            SlidingDirection.Left => delta.X < 0,
+            SlidingDirection.Right => delta.X > 0,
+            SlidingDirection.Up => delta.Y < 0,
+            SlidingDirection.Down => delta.Y > 0,
+            _ => throw new NotImplementedException($"Unknown SlidingDirection: {this.Direction}")
+        };
+
+        return succeed ? this.result : TargetResult.Miss;
+    }
+
+    public override TargetResult? JudgeLeave(in Double currentTime, in Boolean isTouchUp) {
+        if (this.result is TargetResult.None) {
+            return null;
+        }
+        return TargetResult.Miss;
+    }
+
+    // public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) =>
+    //     base.JudgeUpdate(currentTime, hasTouches);
+
+    protected override void FreeAfterUse() {
+        this.result = TargetResult.None;
+        base.FreeAfterUse();
     }
 }

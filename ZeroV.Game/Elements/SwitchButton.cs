@@ -12,7 +12,6 @@ using osuTK;
 namespace ZeroV.Game.Elements;
 
 public partial class SwitchButton : Checkbox {
-
     private Drawable innerContainer = null!;
     private Drawable innerDiamond = null!;
 
@@ -105,7 +104,6 @@ public partial class SwitchButton : Checkbox {
         };
     }
 
-
     protected override void LoadComplete() {
         base.LoadComplete();
         this.Current.BindValueChanged(this.updateState, true);
@@ -116,5 +114,4 @@ public partial class SwitchButton : Checkbox {
         this.innerContainer.MoveToX(state.NewValue ? this.DrawWidth - this.innerContainer.DrawWidth : 0, 250, Easing.OutQuint);
         this.innerDiamond.RotateTo(state.NewValue ? 720 : 0, 400, Easing.OutQuint);
     }
-
 }

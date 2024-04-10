@@ -5,16 +5,15 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 
-using osuTK.Graphics;
-
 using ZeroV.Game.Graphics.Shapes;
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements.Particles;
 
 public partial class PressParticle : ParticleBase {
 
     public PressParticle() : base() {
-        this.Type = ParticleType.Press;
+        //this.Type = ParticleType.Press;
         this.AutoSizeAxes = Axes.X;
         this.Origin = Anchor.BottomCentre;
     }
@@ -27,40 +26,40 @@ public partial class PressParticle : ParticleBase {
                 Anchor = Anchor.BottomCentre,
                 Width = Single.Sqrt(2 * 52 * 52),
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Pink,
+                Colour = Colour4.Pink,
             },
             new Box {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
                 Width = 6.1f,
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
             },
             new Box {
                 Origin = Anchor.BottomLeft,
                 Anchor = Anchor.BottomLeft,
                 Width = 6.1f,
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
             },
             new Box {
                 Origin = Anchor.BottomRight,
                 Anchor = Anchor.BottomRight,
                 Width = 6.1f,
                 RelativeSizeAxes = Axes.Y,
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
             },
-            // buttom
+            // bottom
             new BlinkDiamond {
                 Anchor = Anchor.BottomCentre,
-                InnerColor = Color4.Pink,
-                OuterColor = Color4.Black,
+                InnerColor = Colour4.Pink,
+                OuterColor = Colour4.Black,
             },
             // top
             new BlinkDiamond {
                 Anchor = Anchor.TopCentre,
-                InnerColor = Color4.Pink,
-                OuterColor = Color4.Black,
+                InnerColor = Colour4.Pink,
+                OuterColor = Colour4.Black,
             },
         ];
     }
@@ -74,5 +73,51 @@ public partial class PressParticle : ParticleBase {
             Height = maskingBounds.Height + 74,
         };
         return base.ComputeIsMaskedAway(realMasking);
+    }
+
+    private TargetResult result;
+    private Double? noTouchTime;
+
+    private readonly Double deltaTime = TimeSpan.FromMilliseconds(100).TotalMilliseconds;
+
+    // protected override TargetResult JudgeMain(in Double targetTime, in Double currentTime) =>
+    //     base.JudgeMain(targetTime, currentTime);
+
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+        if (isNewTouch && this.result is TargetResult.None) {
+            this.result = this.JudgeMain(this.Source!.StartTime, currentTime);
+            return TargetResult.None;
+        }
+        return null;
+    }
+
+    public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        if (this.result is TargetResult.None) {
+            return base.JudgeUpdate(currentTime, hasTouches); // judge miss here
+        }
+        if (hasTouches) {
+            if (currentTime >= this.Source!.EndTime) {
+                return this.result;
+            }
+            this.noTouchTime = null;
+            // TODO: Calculate the length here.
+        } else {
+            TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
+            if (endResult is not TargetResult.None) {
+                return this.result;
+            }
+            if ((currentTime - this.noTouchTime) > this.deltaTime) {
+                return TargetResult.Miss;
+            }
+            this.noTouchTime ??= currentTime;
+        }
+        return null;
+    }
+
+    protected override void FreeAfterUse() {
+        // Reset Particle
+        this.result = TargetResult.None;
+        this.noTouchTime = null;
+        base.FreeAfterUse();
     }
 }

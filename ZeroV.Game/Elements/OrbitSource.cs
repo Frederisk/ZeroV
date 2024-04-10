@@ -2,6 +2,7 @@ using System;
 
 using osuTK.Graphics;
 
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Elements;
@@ -18,5 +19,5 @@ public class OrbitSource : TimeSource {
     }
 
     public ReadOnlyMemory<KeyFrame> KeyFrames { get; init; }
-    public ReadOnlyMemory<TimeSourceWithHit> HitObjects { get; init; }
+    public ReadOnlyMemory<ParticleSource> HitObjects { get; init; }
 }
