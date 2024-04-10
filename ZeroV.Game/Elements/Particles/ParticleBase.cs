@@ -77,7 +77,7 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
 
     public virtual TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
         // judge miss
-        TargetResult result = this.JudgeMain(this.Source!.EndTime, currentTime);
+        TargetResult result = this.JudgeMain(this.Source!.StartTime, currentTime);
         if (result is TargetResult.Miss) {
             return result;
         }

@@ -115,15 +115,12 @@ public partial class PressParticle : ParticleBase {
             } else {
                 this.noTouchTime = null;
                 // TODO: Calculate the length here.
-                if (endResult is TargetResult.MaxPerfect) {
+                if (currentTime >= this.Source!.EndTime) {
                     return this.result;
                 }
             }
         } else {
-            TargetResult result = this.JudgeMain(this.Source!.StartTime, currentTime);
-            if (result is TargetResult.Miss) {
-                return TargetResult.Miss;
-            }
+            return base.JudgeUpdate(currentTime, hasTouches); // judge miss here
         }
 
         return null;
