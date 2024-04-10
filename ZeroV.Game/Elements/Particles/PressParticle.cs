@@ -92,37 +92,25 @@ public partial class PressParticle : ParticleBase {
     }
 
     public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
-        if (this.result is not TargetResult.None) {
-            if ((currentTime - this.noTouchTime) > this.deltaTime) {
-                if (hasTouches) {
-                    this.noTouchTime = null;
-                } else {
-                    return TargetResult.Miss;
-                }
-            }
-
-            TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
-            if (!hasTouches) {
-                if (endResult is TargetResult.None) {
-                    if (this.noTouchTime is null) {
-                        this.noTouchTime = currentTime;
-                    } else {
-                        return TargetResult.None;
-                    }
-                } else {
-                    return this.result;
-                }
-            } else {
-                this.noTouchTime = null;
-                // TODO: Calculate the length here.
-                if (currentTime >= this.Source!.EndTime) {
-                    return this.result;
-                }
-            }
-        } else {
+        if (this.result is TargetResult.None) {
             return base.JudgeUpdate(currentTime, hasTouches); // judge miss here
         }
-
+        if (hasTouches) {
+            if (currentTime >= this.Source!.EndTime) {
+                return this.result;
+            }
+            this.noTouchTime = null;
+            // TODO: Calculate the length here.
+        } else {
+            TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
+            if (endResult is not TargetResult.None) {
+                return this.result;
+            }
+            if ((currentTime - this.noTouchTime) > this.deltaTime) {
+                return TargetResult.Miss;
+            }
+            this.noTouchTime ??= currentTime;
+        }
         return null;
     }
 
