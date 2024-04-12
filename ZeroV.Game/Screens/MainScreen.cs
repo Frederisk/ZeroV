@@ -5,6 +5,8 @@ using osu.Framework.Screens;
 
 using osuTK;
 
+using ZeroV.Game.Utils;
+
 namespace ZeroV.Game.Screens;
 
 public partial class MainScreen : Screen {
@@ -20,7 +22,7 @@ public partial class MainScreen : Screen {
             new Box {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
-                Size = new Vector2(1366, 768)
+                Size = new Vector2(ZeroVMath.SCREEN_DRAWABLE_X, ZeroVMath.SCREEN_DRAWABLE_Y),
             },
             //new SpriteText {
             //    Y = 20,

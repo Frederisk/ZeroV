@@ -19,6 +19,7 @@ using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Scoring;
 using ZeroV.Game.Screens;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Elements;
 
@@ -31,12 +32,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// The size of half the particle's Y-axis radius.
     /// </summary>
     /// TODO: This value should be obtained from the particle's size.
-    private const Single visual_half_of_particle_size = 24;
+    private const Single visual_half_of_particle_size = ZeroVMath.DIAMOND_OUTER_SIZE / 2;
 
     /// <summary>
     /// The position of the top of visible orbit.
     /// </summary>
-    private const Single visual_orbit_top = -768;
+    private const Single visual_orbit_top = -ZeroVMath.SCREEN_DRAWABLE_Y;
 
     /// <summary>
     /// The position beyond the Y-axis at the top of visible orbit.
@@ -49,7 +50,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// <summary>
     /// The position of the bottom of visible orbit. It's also the offset of visible orbit relative to the screen.
     /// </summary>
-    private const Single visual_orbit_offset = -50;
+    private const Single visual_orbit_offset = -ZeroVMath.GAMESCREEN_BASELINE_Y;
 
     /// <summary>
     /// The position of the bottom of the screen.

@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Shapes;
 
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Scoring;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Elements.Particles;
 
@@ -24,7 +25,7 @@ public partial class PressParticle : ParticleBase {
             new Box {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
-                Width = Single.Sqrt(2 * 52 * 52),
+                Width = ZeroVMath.SQRT_2 * 52,
                 RelativeSizeAxes = Axes.Y,
                 Colour = Colour4.Pink,
             },

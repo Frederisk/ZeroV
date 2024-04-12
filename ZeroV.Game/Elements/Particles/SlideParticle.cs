@@ -10,6 +10,7 @@ using osuTK;
 using osuTK.Graphics;
 
 using ZeroV.Game.Scoring;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Elements.Particles;
 
@@ -59,7 +60,7 @@ public partial class SlideParticle : ParticleBase {
             // Y = (innerDiff * Single.Sqrt(2))/ (1 + Single.Sqrt(2)),
             Anchor = Anchor.BottomCentre,
             Origin = Anchor.BottomCentre,
-            Y = (inner_size - 1) / (1 + Single.Sqrt(2)),
+            Y = (inner_size - 1) / (1 + ZeroVMath.SQRT_2),
             RelativeSizeAxes = Axes.Both,
             RelativePositionAxes = Axes.Both,
             Size = new Vector2(inner_size),
@@ -72,7 +73,7 @@ public partial class SlideParticle : ParticleBase {
             },
         };
         var innerContainer = new Container {
-            Size = new Vector2(52 * Single.Sqrt(2)),
+            Size = new Vector2(52 * ZeroVMath.SQRT_2),
             Rotation = 90 * (Int32)this.Direction,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,

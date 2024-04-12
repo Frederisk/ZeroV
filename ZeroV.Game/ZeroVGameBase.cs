@@ -8,6 +8,7 @@ using osu.Framework.Platform;
 using osuTK;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.Utils;
 using ZeroV.Resources;
 
 namespace ZeroV.Game;
@@ -29,7 +30,7 @@ public partial class ZeroVGameBase : osu.Framework.Game {
         // Ensure game and tests scale with window size and screen DPI.
         base.Content.Add(this.Content = new DrawSizePreservingFillContainer {
             // You may want to change TargetDrawSize to your "default" resolution, which will decide how things scale and position when using absolute coordinates.
-            TargetDrawSize = new Vector2(1366, 768)
+            TargetDrawSize = new Vector2(ZeroVMath.SCREEN_DRAWABLE_X, ZeroVMath.SCREEN_DRAWABLE_Y),
         });
     }
 
