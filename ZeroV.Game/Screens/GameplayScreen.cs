@@ -28,6 +28,9 @@ public partial class GameplayScreen : Screen {
     // [Cached]
     public Track GameplayTrack = null!;
 
+    public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
+    public readonly Double ParticleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
+
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
     /// </summary>

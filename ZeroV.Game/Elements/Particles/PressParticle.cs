@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -7,6 +8,7 @@ using osu.Framework.Graphics.Shapes;
 
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Scoring;
+using ZeroV.Game.Screens;
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Elements.Particles;
@@ -102,6 +104,7 @@ public partial class PressParticle : ParticleBase {
             }
             this.noTouchTime = null;
             // TODO: Calculate the length here.
+            this.updateLength(currentTime, this.Source!.EndTime, this.gameplayScreen.ParticleFallingTime);
         } else {
             TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
             if (endResult is not TargetResult.None) {
@@ -120,5 +123,12 @@ public partial class PressParticle : ParticleBase {
         this.result = TargetResult.None;
         this.noTouchTime = null;
         base.FreeAfterUse();
+    }
+
+    [Resolved]
+    private GameplayScreen gameplayScreen { get; set; } = null!;
+
+    private void updateLength(Double startTime, Double endTime, Double fallingTime) {
+        this.Height = (ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_OUTER_SIZE / 2 - ZeroVMath.GAMESCREEN_BASELINE_Y) * (Single)(startTime - endTime) / (Single)fallingTime;
     }
 }

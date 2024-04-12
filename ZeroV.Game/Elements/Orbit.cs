@@ -42,9 +42,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// <summary>
     /// The position beyond the Y-axis at the top of visible orbit.
     /// </summary>
-    /// <remarks>
-    /// -768 - 24 = -792
-    /// </remarks>
     private const Single visual_orbit_out_of_top = visual_orbit_top - visual_half_of_particle_size;
 
     /// <summary>
@@ -60,9 +57,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// <summary>
     /// The position beyond the Y-axis at the bottom of visible orbit.
     /// </summary>
-    /// <remarks>
-    /// 0 + 24 = 24
-    /// </remarks>
     private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + visual_half_of_particle_size;
 
     /// <summary>
@@ -74,14 +68,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     private BufferedContainer container = null!;
 
-    private readonly Double particleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
-    private readonly Double particleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
-
     private Box innerBox = null!;
     private Box innerLine = null!;
     private ParticleQueue particles = null!;
-
-    private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
@@ -92,6 +81,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
+    private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
+    private Double particleFallingTime => this.gameplayScreen.ParticleFallingTime;
+    private Double particleFadingTime => this.gameplayScreen.ParticleFadingTime;
 
     public Orbit() {
         this.Origin = Anchor.BottomCentre;
