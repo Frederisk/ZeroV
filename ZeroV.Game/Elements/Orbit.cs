@@ -289,7 +289,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             }),
             PressParticleSource press => this.pressParticlePool.Get(p => {
                 p.Y = visual_orbit_out_of_top;
-                p.Height = (Single)((visual_orbit_offset - visual_orbit_out_of_top) * (press.EndTime - press.StartTime) / this.particleFallingTime);
+                p.UpdateLength(press.StartTime, press.EndTime);
             }),
             SlideParticleSource slide => this.slideParticlePool.Get(p => {
                 p.Y = visual_orbit_out_of_top;

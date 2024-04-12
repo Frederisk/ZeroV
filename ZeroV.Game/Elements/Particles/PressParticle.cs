@@ -104,7 +104,7 @@ public partial class PressParticle : ParticleBase {
             }
             this.noTouchTime = null;
             // TODO: Calculate the length here.
-            this.updateLength(currentTime, this.Source!.EndTime, this.gameplayScreen.ParticleFallingTime);
+            this.UpdateLength(currentTime, this.Source!.EndTime);
         } else {
             TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
             if (endResult is not TargetResult.None) {
@@ -128,7 +128,7 @@ public partial class PressParticle : ParticleBase {
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
 
-    private void updateLength(Double startTime, Double endTime, Double fallingTime) {
-        this.Height = (ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_OUTER_SIZE / 2 - ZeroVMath.GAMESCREEN_BASELINE_Y) * (Single)(startTime - endTime) / (Single)fallingTime;
+    public void UpdateLength(Double startTime, Double endTime) {
+        this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_OUTER_SIZE / 2 - ZeroVMath.GAMESCREEN_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
     }
 }
