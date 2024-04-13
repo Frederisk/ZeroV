@@ -25,9 +25,9 @@ public partial class BlinkParticle : ParticleBase {
     // protected override TargetResult JudgeMain(in Double targetTime, in Double currentTime) =>
     //     base.JudgeMain(targetTime, currentTime);
 
-    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isTouchDown) {
         // base.JudgeEnter(currentTime, isNewTouch); // just return null
-        if (isNewTouch) {
+        if (isTouchDown) {
             TargetResult result = this.JudgeMain(this.Source!.StartTime, currentTime);
             return result;
         }

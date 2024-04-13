@@ -132,8 +132,8 @@ public partial class SlideParticle : ParticleBase {
         };
     }
 
-    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
-        if (isNewTouch) {
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isTouchDown) {
+        if (isTouchDown) {
             this.result = this.JudgeMain(this.Source!.StartTime, currentTime);
             if (this.result is TargetResult.Miss) {
                 return TargetResult.Miss;

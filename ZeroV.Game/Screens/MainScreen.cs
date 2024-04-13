@@ -16,7 +16,6 @@ public partial class MainScreen : Screen {
         this.InternalChildren = [
             new Box {
                 Colour = Colour4.Violet,
-                // 1366 * 768
                 RelativeSizeAxes = Axes.Both,
             },
             new Box {

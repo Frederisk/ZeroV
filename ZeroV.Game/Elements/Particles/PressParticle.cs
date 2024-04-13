@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -31,6 +30,7 @@ public partial class PressParticle : ParticleBase {
                 RelativeSizeAxes = Axes.Y,
                 Colour = Colour4.Pink,
             },
+            // Three black lines.
             new Box {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
@@ -72,8 +72,8 @@ public partial class PressParticle : ParticleBase {
         //maskingBounds.Y += 37;
         //maskingBounds.Height += 74;
         RectangleF realMasking = maskingBounds with {
-            Y = maskingBounds.Y + 37,
-            Height = maskingBounds.Height + 74,
+            Y = maskingBounds.Y + (ZeroVMath.DIAMOND_SIZE / 2),
+            Height = maskingBounds.Height + ZeroVMath.DIAMOND_SIZE,
         };
         return base.ComputeIsMaskedAway(realMasking);
     }
@@ -86,34 +86,44 @@ public partial class PressParticle : ParticleBase {
     // protected override TargetResult JudgeMain(in Double targetTime, in Double currentTime) =>
     //     base.JudgeMain(targetTime, currentTime);
 
-    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
-        if (isNewTouch && this.result is TargetResult.None) {
+    public override TargetResult? JudgeEnter(in Double currentTime, in Boolean isTouchDown) {
+        // When this particle is touched down first time, judge it and remember the result.
+        if (isTouchDown && this.result is TargetResult.None) {
             this.result = this.JudgeMain(this.Source!.StartTime, currentTime);
-            return TargetResult.None;
         }
         return null;
     }
 
     public override TargetResult? JudgeUpdate(in Double currentTime, in Boolean hasTouches) {
+        // If this particle is never touched down, judge miss.
         if (this.result is TargetResult.None) {
             return base.JudgeUpdate(currentTime, hasTouches); // judge miss here
         }
+        // If this particle is holding...
         if (hasTouches) {
+            // If it's holding and the time is enough, return the touch down result.
             if (currentTime >= this.Source!.EndTime) {
                 return this.result;
             }
+            // Clear the no touch time.
             this.noTouchTime = null;
-            // TODO: Calculate the length here.
+            // And update the length of the particle.
             this.UpdateLength(currentTime, this.Source!.EndTime);
-        } else {
+        }
+        // If this particle is not holding...
+        else {
+            // Judge it immediately.
             TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
+            // If it's not too early, return the touch down result.
             if (endResult is not TargetResult.None) {
                 return this.result;
             }
+            // Wait for the deltaTime to judge, until time is up. When time is up, judge miss.
             if ((currentTime - this.noTouchTime) > this.deltaTime) {
                 this.result = TargetResult.Miss;
                 return TargetResult.Miss;
             }
+            // Set the first no touch time.
             this.noTouchTime ??= currentTime;
         }
         return null;
@@ -123,17 +133,12 @@ public partial class PressParticle : ParticleBase {
     private GameplayScreen gameplayScreen { get; set; } = null!;
 
     public void UpdateLength(Double startTime, Double endTime) {
-        this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_OUTER_SIZE / 2 - ZeroVMath.GAMESCREEN_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
+        this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_SIZE / 2 - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
     }
 
     public override void OnDequeueInJudge() {
         // base.OnDequeueInJudge(); // this.Alpha = 0f;
         this.Alpha = this.result is TargetResult.Miss or TargetResult.None ? 0.5f : 0;
-        //if (this.result is TargetResult.Miss or TargetResult.None) {
-        //    this.Alpha = 0.5f;
-        //} else {
-        //    this.Alpha = 0;
-        //}
     }
 
     protected override void FreeAfterUse() {

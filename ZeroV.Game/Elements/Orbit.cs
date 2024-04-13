@@ -29,12 +29,6 @@ namespace ZeroV.Game.Elements;
 public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     /// <summary>
-    /// The size of half the particle's Y-axis radius.
-    /// </summary>
-    /// TODO: This value should be obtained from the particle's size.
-    private const Single visual_half_of_particle_size = ZeroVMath.DIAMOND_OUTER_SIZE / 2;
-
-    /// <summary>
     /// The position of the top of visible orbit.
     /// </summary>
     private const Single visual_orbit_top = -ZeroVMath.SCREEN_DRAWABLE_Y;
@@ -42,12 +36,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// <summary>
     /// The position beyond the Y-axis at the top of visible orbit.
     /// </summary>
-    private const Single visual_orbit_out_of_top = visual_orbit_top - visual_half_of_particle_size;
+    private const Single visual_orbit_out_of_top = visual_orbit_top - (ZeroVMath.DIAMOND_SIZE / 2);
 
     /// <summary>
     /// The position of the bottom of visible orbit. It's also the offset of visible orbit relative to the screen.
     /// </summary>
-    private const Single visual_orbit_offset = -ZeroVMath.GAMESCREEN_BASELINE_Y;
+    private const Single visual_orbit_offset = -ZeroVMath.SCREEN_GAME_BASELINE_Y;
 
     /// <summary>
     /// The position of the bottom of the screen.
@@ -57,7 +51,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// <summary>
     /// The position beyond the Y-axis at the bottom of visible orbit.
     /// </summary>
-    private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + visual_half_of_particle_size;
+    private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + (ZeroVMath.DIAMOND_SIZE / 2);
 
     /// <summary>
     /// The container that contains all the elements of the orbit.
@@ -171,7 +165,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         this.InternalChild = this.container;
 
         // FIXME: Just for test, remove it.
-        base.Height = 768;
+        base.Height = ZeroVMath.SCREEN_DRAWABLE_Y;
         base.Y = 0;
         this.Alpha = 0.9f;
     }
@@ -285,20 +279,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         var entry = (ParticleLifetimeEntry)obj;
 
         entry.Drawable = entry.Source switch {
-            BlinkParticleSource blink => this.blinkParticlePool.Get(p => {
-                p.Y = visual_orbit_out_of_top;
+            BlinkParticleSource blinkSource => this.blinkParticlePool.Get(),
+            PressParticleSource pressSource => this.pressParticlePool.Get(p => {
+                p.UpdateLength(pressSource.StartTime, pressSource.EndTime);
             }),
-            PressParticleSource press => this.pressParticlePool.Get(p => {
-                p.Y = visual_orbit_out_of_top;
-                p.UpdateLength(press.StartTime, press.EndTime);
+            SlideParticleSource slideSource => this.slideParticlePool.Get(p => {
+                p.Direction = slideSource.Direction;
             }),
-            SlideParticleSource slide => this.slideParticlePool.Get(p => {
-                p.Y = visual_orbit_out_of_top;
-                p.Direction = slide.Direction;
-            }),
-            StrokeParticleSource stroke => this.strokeParticlePool.Get(p => {
-                p.Y = visual_orbit_out_of_top;
-            }),
+            StrokeParticleSource strokeSource => this.strokeParticlePool.Get(),
             _ => throw new NotImplementedException(),
         };
 
@@ -362,9 +350,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         }
     }
 
-    protected void OnTouchEnter(TouchSource source, Boolean isNewTouch) {
+    protected void OnTouchEnter(TouchSource source, Boolean isTouchDown) {
         this.touches.Add(source);
-        TargetResult? result = this.particles.PeekOrDefault()?.JudgeEnter(this.currentTime, isNewTouch);
+        TargetResult? result = this.particles.PeekOrDefault()?.JudgeEnter(this.currentTime, isTouchDown);
         this.processTarget(result);
     }
 

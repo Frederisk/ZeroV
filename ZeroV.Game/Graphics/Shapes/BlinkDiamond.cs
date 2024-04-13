@@ -18,9 +18,9 @@ public partial class BlinkDiamond : CompositeDrawable {
         this.AutoSizeAxes = Axes.Both;
     }
 
-    public Single OuterDiameterSize { get; init; } = ZeroVMath.DIAMOND_OUTER_SIZE;
+    public Single OuterDiameterSize { get; init; } = ZeroVMath.DIAMOND_SIZE;
 
-    public Single InnerDiameterSize { get; init; } = ZeroVMath.DIAMOND_INNER_SIZE;
+    public Single InnerDiameterSize { get; init; } = ZeroVMath.DIAMOND_SIZE * 0.54f;
 
     public Colour4 OuterColor { get; init; } = Colour4.Black;
 

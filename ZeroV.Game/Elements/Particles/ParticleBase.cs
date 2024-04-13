@@ -6,6 +6,7 @@ using osuTK;
 
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Scoring;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Elements.Particles;
 
@@ -37,6 +38,7 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
 
     protected override void FreeAfterUse() {
         // Reset Particle
+        this.Y = -(ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2));
         this.Alpha = 1f;
         base.FreeAfterUse();
     }
@@ -63,7 +65,7 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
         };
     }
 
-    public virtual TargetResult? JudgeEnter(in Double currentTime, in Boolean isNewTouch) {
+    public virtual TargetResult? JudgeEnter(in Double currentTime, in Boolean isTouchDown) {
         return null;
     }
 

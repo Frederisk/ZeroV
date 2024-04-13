@@ -20,8 +20,19 @@ public enum TargetResult {
     /// </remarks>
     None       = 0b0_0000,
 
-    Normal     = 0b0_0001,
+    /// <summary>
+    /// Minimum requirements for passed judgement.
+    /// </summary>
+    Normal = 0b0_0001,
+
+    /// <summary>
+    /// Next level of passed judgement.
+    /// </summary>
     Perfect    = 0b0_0010,
+
+    /// <summary>
+    /// Maximum requirements for passed judgement.
+    /// </summary>
     MaxPerfect = 0b0_0100,
 
     /// <summary>
@@ -29,6 +40,9 @@ public enum TargetResult {
     /// </summary>
     Miss  = 0b0_1000,
 
+    /// <summary>
+    /// Flag for early judgements. There will never flag in <see cref="MaxPerfect"/>.
+    /// </summary>
     Early = 0b1_0000,
 
     NormalEarly = Normal | Early,
