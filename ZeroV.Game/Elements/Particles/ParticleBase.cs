@@ -84,4 +84,8 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
         // ignore other results
         return null;
     }
+
+    public virtual void OnDequeueInJudge() {
+        this.Alpha = 0f;
+    }
 }

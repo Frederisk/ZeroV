@@ -118,17 +118,24 @@ public partial class PressParticle : ParticleBase {
         return null;
     }
 
-    protected override void FreeAfterUse() {
-        // Reset Particle
-        this.result = TargetResult.None;
-        this.noTouchTime = null;
-        base.FreeAfterUse();
-    }
+
 
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
 
     public void UpdateLength(Double startTime, Double endTime) {
         this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_OUTER_SIZE / 2 - ZeroVMath.GAMESCREEN_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
+    }
+
+    public override void OnDequeueInJudge() {
+        // base.OnDequeueInJudge(); // this.Alpha = 0f;
+        this.Alpha = 0.5f;
+    }
+
+    protected override void FreeAfterUse() {
+        // Reset Particle
+        this.result = TargetResult.None;
+        this.noTouchTime = null;
+        base.FreeAfterUse();
     }
 }
