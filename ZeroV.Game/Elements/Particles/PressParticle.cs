@@ -100,6 +100,7 @@ public partial class PressParticle : ParticleBase {
         }
         if (hasTouches) {
             if (currentTime >= this.Source!.EndTime) {
+                this.Alpha = 0;
                 return this.result;
             }
             this.noTouchTime = null;
@@ -108,6 +109,7 @@ public partial class PressParticle : ParticleBase {
         } else {
             TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
             if (endResult is not TargetResult.None) {
+                this.Alpha = 0;
                 return this.result;
             }
             if ((currentTime - this.noTouchTime) > this.deltaTime) {
