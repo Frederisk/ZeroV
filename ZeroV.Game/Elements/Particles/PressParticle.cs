@@ -100,7 +100,6 @@ public partial class PressParticle : ParticleBase {
         }
         if (hasTouches) {
             if (currentTime >= this.Source!.EndTime) {
-                this.Alpha = 0;
                 return this.result;
             }
             this.noTouchTime = null;
@@ -109,18 +108,16 @@ public partial class PressParticle : ParticleBase {
         } else {
             TargetResult endResult = this.JudgeMain(this.Source!.EndTime, currentTime);
             if (endResult is not TargetResult.None) {
-                this.Alpha = 0;
                 return this.result;
             }
             if ((currentTime - this.noTouchTime) > this.deltaTime) {
+                this.result = TargetResult.Miss;
                 return TargetResult.Miss;
             }
             this.noTouchTime ??= currentTime;
         }
         return null;
     }
-
-
 
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
@@ -131,7 +128,12 @@ public partial class PressParticle : ParticleBase {
 
     public override void OnDequeueInJudge() {
         // base.OnDequeueInJudge(); // this.Alpha = 0f;
-        this.Alpha = 0.5f;
+        this.Alpha = this.result is TargetResult.Miss or TargetResult.None ? 0.5f : 0;
+        //if (this.result is TargetResult.Miss or TargetResult.None) {
+        //    this.Alpha = 0.5f;
+        //} else {
+        //    this.Alpha = 0;
+        //}
     }
 
     protected override void FreeAfterUse() {
