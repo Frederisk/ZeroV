@@ -2,6 +2,7 @@ using System;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 
@@ -20,40 +21,52 @@ public partial class PressParticle : ParticleBase {
         this.Origin = Anchor.BottomCentre;
     }
 
+    private BlinkDiamond bottomDiamond = null!;
+    private CompositeDrawable pillarBox = null!;
+
     [BackgroundDependencyLoader]
     private void load() {
+        this.pillarBox = new Container<Box> {
+            Origin = Anchor.TopCentre,
+            Anchor = Anchor.TopCentre,
+            Width = ZeroVMath.DIAMOND_SIZE,
+            Children = [
+                new Box {
+                    Origin = Anchor.TopCentre,
+                    Anchor = Anchor.TopCentre,
+                    //Width = ZeroVMath.DIAMOND_SIZE,
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.Pink,
+                },
+                // Three black lines.
+                new Box {
+                    Origin = Anchor.TopCentre,
+                    Anchor = Anchor.TopCentre,
+                    Width = 6.1f,
+                    RelativeSizeAxes = Axes.Y,
+                    Colour = Colour4.Black,
+                },
+                new Box {
+                    Origin = Anchor.TopLeft,
+                    Anchor = Anchor.TopLeft,
+                    Width = 6.1f,
+                    RelativeSizeAxes = Axes.Y,
+                    Colour = Colour4.Black,
+                },
+                new Box {
+                    Origin = Anchor.TopRight,
+                    Anchor = Anchor.TopRight,
+                    Width = 6.1f,
+                    RelativeSizeAxes = Axes.Y,
+                    Colour = Colour4.Black,
+                },
+            ],
+        };
+
         this.InternalChildren = [
-            new Box {
-                Origin = Anchor.BottomCentre,
-                Anchor = Anchor.BottomCentre,
-                Width = ZeroVMath.SQRT_2 * 52,
-                RelativeSizeAxes = Axes.Y,
-                Colour = Colour4.Pink,
-            },
-            // Three black lines.
-            new Box {
-                Origin = Anchor.BottomCentre,
-                Anchor = Anchor.BottomCentre,
-                Width = 6.1f,
-                RelativeSizeAxes = Axes.Y,
-                Colour = Colour4.Black,
-            },
-            new Box {
-                Origin = Anchor.BottomLeft,
-                Anchor = Anchor.BottomLeft,
-                Width = 6.1f,
-                RelativeSizeAxes = Axes.Y,
-                Colour = Colour4.Black,
-            },
-            new Box {
-                Origin = Anchor.BottomRight,
-                Anchor = Anchor.BottomRight,
-                Width = 6.1f,
-                RelativeSizeAxes = Axes.Y,
-                Colour = Colour4.Black,
-            },
+            this.pillarBox,
             // bottom
-            new BlinkDiamond {
+            this.bottomDiamond = new BlinkDiamond {
                 Anchor = Anchor.BottomCentre,
                 InnerColor = Colour4.Pink,
                 OuterColor = Colour4.Black,
@@ -108,7 +121,9 @@ public partial class PressParticle : ParticleBase {
             // Clear the no touch time.
             this.noTouchTime = null;
             // And update the length of the particle.
-            this.UpdateLength(currentTime, this.Source!.EndTime);
+            if (currentTime > this.Source!.StartTime) {
+                this.updateInnerLength(currentTime);
+            }
         }
         // If this particle is not holding...
         else {
@@ -129,11 +144,17 @@ public partial class PressParticle : ParticleBase {
         return null;
     }
 
+    private void updateInnerLength(Double currentTime) {
+        this.bottomDiamond.Y = -(Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_SIZE / 2 - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (currentTime - this.Source!.StartTime) / this.gameplayScreen.ParticleFallingTime);
+        this.pillarBox.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_SIZE / 2 - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (this.Source!.EndTime - currentTime) / this.gameplayScreen.ParticleFallingTime);
+    }
+
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
 
     public void UpdateLength(Double startTime, Double endTime) {
         this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_SIZE / 2 - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
+        this.pillarBox.Height = this.Height;
     }
 
     public override void OnDequeueInJudge() {
