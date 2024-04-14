@@ -16,25 +16,12 @@ namespace ZeroV.Game.Elements.Particles;
 public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSource> {
     //public ParticleType Type { get; protected init; }
 
-    // public Orbit FatherOrbit { get; private set; } = null!;
-
     public ParticleBase() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
         this.AutoSizeAxes = Axes.Both;
-        // this.StartTimeBindable = new BindableDouble();
+        this.Y = -(ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2));
     }
-
-    // public Boolean IsRecyclable { get; private set; }
-
-    // public virtual void Recycle(Orbit fatherOrbit, Double startTime, Double? endTime = null) {
-    //     this.FatherOrbit = fatherOrbit;
-    //     // TODO: Create appropriate methods to make objects reusable.
-    //     this.StartTimeBindable = new BindableDouble {
-    //         Value = startTime,
-    //     };
-    //     this.EndTime = endTime ?? startTime;
-    // }
 
     protected override void FreeAfterUse() {
         // Reset Particle
