@@ -13,6 +13,7 @@ using osuTK.Graphics;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Overlays;
 using ZeroV.Game.Screens;
 
 namespace ZeroV.Game;
@@ -27,11 +28,18 @@ public partial class ZeroVGame : ZeroVGameBase {
     /// </remarks>
     private ScreenStack screenStack = null!;
 
+    private NowPlayingOverlay nowPlayingOverlay = null!;
+
     [BackgroundDependencyLoader]
     private void load() {
         // Add your top-level game components here.
         // A screen stack and sample screen has been provided for convenience, but you can replace it if you don't want to use screens.
         this.Child = this.screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
+
+        this.nowPlayingOverlay = new() {
+            RelativeSizeAxes = Axes.Both
+        };
+        this.Add(this.nowPlayingOverlay);
     }
 
     protected override void LoadComplete() {
@@ -110,6 +118,8 @@ public partial class ZeroVGame : ZeroVGameBase {
                 }
             }
         };
-        this.screenStack.Push(new GameplayScreen(beatmap));
+
+        // this.screenStack.Push(new GameplayScreen(beatmap));
+        this.nowPlayingOverlay.Show();
     }
 }
