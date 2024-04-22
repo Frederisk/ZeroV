@@ -14,7 +14,7 @@ namespace ZeroV.Game.Tests.Data;
 
 [TestFixture]
 internal class TestSceneXml {
-    private String XmlSource;
+    private String? XmlSource;
 
     private static MemoryStream GetMemoryStream(String source) {
         return new MemoryStream(Encoding.UTF8.GetBytes(source));
@@ -23,58 +23,46 @@ internal class TestSceneXml {
     [SetUp]
     public void SetUp() {
         this.XmlSource = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <ZeroVMap MapVersion="1.0.0.0">
+            <?xml version="1.0" encoding="utf-8"?>
+            <ZeroVMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" MapVersion="1.0.0.0">
               <TrackInfo>
                 <Title>Brilliant World(Vocal Main Mix)</Title>
-                <Artists>
-                    FELT
-                </Artists>
                 <Length>00:04:24.7370000</Length>
-                <!-- <RealBegin>00:00:00.8990000</RealBegin> -->
                 <BPM>127</BPM>
-                <FileOffset>00:00:00.0000000</FileOffset><!-- Offset is editable. -->
+                <FileOffset>00:00:00</FileOffset><!-- Offset is editable. -->
               </TrackInfo>
               <GameInfo>
                 <Author>Rowe Wilson Frederisk Holme</Author>
               </GameInfo>
               <BeatmapList>
-                <Map MapOffset="-00:00:00.4900000" Comment="The 1st. Beatmap">
+                <Map MapOffset="-00:00:00.4900000">
                   <Oribit>
                     <Frames>
-                      <Key Time="00:00:00.9450000" Position="0" Color="Azure" /> <!-- Real time is: 0.945 - 0.49 = 0.896-->
-                      <Key Time="00:00:20.123" Position="3000" /><!-- Color="Azure", it's the same as above one. -->
+                      <Key Time="00:00:00.9450000" Position="0" Color="Azure" /><!-- Real time is: 0.945 - 0.49 = 0.896-->
+                      <Key Time="00:00:20.1230000" Position="3000" /><!-- Color="Azure", it's the same as above one. -->
                     </Frames>
                     <Particles>
-                      <Blink Time="00:00:00.0000000" Position="0" />
-                      <Press StartTime="00:00:00.0000000" EndTime="00:00:00.0000000" />
-                      <Press StartTime="00:00:00.0000000" EndTime="00:00:00.0000000" />
-                      <Slide Time="00:00:00.0000000" Direction="Left" />
-                      <Blink Time="00:00:00.0000000" />
-                      <Slide Time="00:00:00.0000000" Direction="Right" />
+                      <Blink Time="00:00:00" />
+                      <Blink Time="00:00:00" />
+                      <Press StartTime="00:00:00" EndTime="00:00:00" />
+                      <Press StartTime="00:00:00" EndTime="00:00:00" />
+                      <Slide Time="00:00:00" Direction="Left" />
+                      <Slide Time="00:00:00" Direction="Right" />
                     </Particles>
                   </Oribit>
-
                   <Oribit>
                     <Frames>
-                      <Key Time="00:00:01.8900000" Position="-700" Color="#FFFFFFFF" /><!-- Color="#RRGGBBAA"-->
+                      <Key Time="00:00:01.8900000" Position="-700" Color="#FFFFFFFF" />
                     </Frames>
-                    <Particles>
-
-                    </Particles>
+                    <Particles />
                   </Oribit>
-
                   <Oribit>
                     <Frames>
-                      <Key Time="00:00:02.835" Position="+700" Color="Azure" />
+                      <Key Time="00:00:02.8350000" Position="700" Color="Azure" />
                     </Frames>
-
-                    <Particles>
-
-                    </Particles>
+                    <Particles />
                   </Oribit>
                 </Map>
-                <!--<Map Comment="Another One"></Map>-->
               </BeatmapList>
             </ZeroVMap>
             """;
@@ -82,16 +70,20 @@ internal class TestSceneXml {
 
     [Test]
     public void TestXml() {
-        using MemoryStream stream = GetMemoryStream(this.XmlSource);
+        using MemoryStream stream = GetMemoryStream(this.XmlSource!);
         var serializer = new XmlSerializer(typeof(ZeroVMapXml));
-        ZeroVMapXml? map = (ZeroVMapXml?)serializer.Deserialize(stream)!;
 
+        ZeroVMapXml? map = (ZeroVMapXml?)serializer.Deserialize(stream)!;
         // Assert: The map can safely be converted to string.
         map.ToString();
         Assert.AreEqual("Left",
             map.BeatmapList!.MapList![0].OribitList![0].Particles!.Slide![0].Direction.ToString());
-        
+
+        // deserialize to string
+        using MemoryStream stream2 = new MemoryStream();
+        serializer.Serialize(stream2, map);
+        stream2.Position = 0;
+        using StreamReader reader = new StreamReader(stream2);
+        String text = reader.ReadToEnd();
     }
-
-
 }
