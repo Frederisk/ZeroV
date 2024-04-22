@@ -1,0 +1,196 @@
+using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+
+using ZeroV.Game.Elements.Particles;
+
+namespace ZeroV.Game.Objects;
+
+[XmlRoot(ElementName = "ZeroVMap")]
+public record class ZeroVMapXml {
+    [XmlAttribute(AttributeName = "MapVersion")]
+    public String? MapVersionString {
+        get => this.MapVersion?.ToString();
+        set => this.MapVersion = value is null ? null : Version.Parse(value);
+    }
+
+    [XmlIgnore]
+    public Version? MapVersion { get; set; }
+
+    [XmlElement(ElementName = "TrackInfo")]
+    public TrackInfoXml? TrackInfo { get; set; }
+
+    [XmlElement(ElementName = "GameInfo")]
+    public GameInfoXml? GameInfo { get; set; }
+
+    [XmlElement(ElementName = "BeatmapList")]
+    public BeatmapListXml? BeatmapList { get; set; }
+}
+
+public record class TrackInfoXml {
+    [XmlElement(ElementName = "Title")]
+    public String? Title { get; set; }
+
+    [XmlElement(ElementName = "Artist")]
+    public ArtistsXml? Artists { get; set; }
+
+    [XmlElement(ElementName = "Length")]
+    public String? LengthString {
+        get => this.Length?.ToString();
+        set => this.Length = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? Length { get; set; }
+
+    [XmlElement(ElementName = "BPM")]
+    public Double BPM { get; set; }
+
+    [XmlElement(ElementName = "FileOffset")]
+    public String? FileOffsetString {
+        get => this.FileOffset?.ToString();
+        set => this.FileOffset = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? FileOffset { get; set; }
+}
+
+public record class ArtistsXml {
+}
+
+public record class GameInfoXml {
+    [XmlElement(ElementName = "Author")]
+    public String? Author { get; set; }
+
+    [XmlElement(ElementName = "Description")]
+    public String? Description { get; set; }
+
+    [XmlElement(ElementName = "GameVersion")]
+    public String? GameVersionString {
+        get => this.GameVersion?.ToString();
+        set => this.GameVersion = value is null ? null : Version.Parse(value);
+    }
+
+    [XmlIgnore]
+    public Version? GameVersion { get; set; }
+}
+
+public record class BeatmapListXml {
+    [XmlElement(ElementName = "Map")]
+    public List<MapXml>? MapList { get; set; }
+}
+
+public record class MapXml {
+    [XmlAttribute(AttributeName = "MapOffset")]
+    public String? MapOffsetString {
+        get => this.MapOffset?.ToString();
+        set => this.MapOffset = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? MapOffset { get; set; }
+
+    [XmlElement(ElementName = "Oribit")]
+    public List<OribitXml>? OribitList { get; set; }
+}
+
+public record class OribitXml {
+    [XmlElement(ElementName = "Frames")]
+    public FramesXml? Frames { get; set; }
+
+    [XmlElement(ElementName = "Particles")]
+    public ParticlesXml? Particles { get; set; }
+}
+
+public record class FramesXml {
+    [XmlElement(ElementName = "Key")]
+    public List<KeyXml>? Key { get; set; }
+}
+
+public record class KeyXml {
+    [XmlAttribute(AttributeName = "Time")]
+    public String? TimeString {
+        get => this.Time?.ToString();
+        set => this.Time = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? Time { get; set; }
+
+    [XmlAttribute(AttributeName = "Position")]
+    public Double Position { get; set; }
+
+    [XmlAttribute(AttributeName = "Color")]
+    public String? Colour { get; set; }
+}
+
+public record class ParticlesXml {
+    [XmlElement(ElementName = "Blink")]
+    public List<BlinkXml>? Blink { get; set; }
+
+    [XmlElement(ElementName = "Press")]
+    public List<PressXml>? Press { get; set; }
+
+    [XmlElement(ElementName = "Slide")]
+    public List<SlideXml>? Slide { get; set; }
+
+    [XmlElement(ElementName = "Stroke")]
+    public List<StrokeXml>? Stroke { get; set; }
+}
+
+public record class BlinkXml {
+    [XmlAttribute(AttributeName = "Time")]
+    public String? TimeString {
+        get => this.Time?.ToString();
+        set => this.Time = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? Time { get; set; }
+}
+
+public record class PressXml {
+    [XmlAttribute(AttributeName = "StartTime")]
+    public String? StartTimeString {
+        get => this.StartTime?.ToString();
+        set => this.StartTime = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? StartTime { get; set; }
+
+    [XmlAttribute(AttributeName = "EndTime")]
+    public String? EndTimeString {
+        get => this.EndTime?.ToString();
+        set => this.EndTime = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? EndTime { get; set; }
+}
+
+public record class SlideXml {
+    [XmlAttribute(AttributeName = "Time")]
+    public String? TimeString {
+        get => this.Time?.ToString();
+        set => this.Time = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? Time { get; set; }
+
+    [XmlAttribute(AttributeName = "Direction")]
+    public SlidingDirection Direction { get; set; }
+}
+
+public record class StrokeXml {
+    [XmlAttribute(AttributeName = "Time")]
+    public String? TimeString {
+        get => this.Time?.ToString();
+        set => this.Time = value is null ? null : TimeSpan.Parse(value);
+    }
+
+    [XmlIgnore]
+    public TimeSpan? Time { get; set; }
+}
