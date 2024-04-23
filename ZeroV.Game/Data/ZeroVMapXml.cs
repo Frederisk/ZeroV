@@ -91,11 +91,11 @@ public record class MapXml {
     [XmlIgnore]
     public TimeSpan? MapOffset { get; set; }
 
-    [XmlElement(ElementName = "Oribit")]
-    public List<OribitXml>? OribitList { get; set; }
+    [XmlElement(ElementName = "Orbit")]
+    public List<OrbitXml>? OrbitList { get; set; }
 }
 
-public record class OribitXml {
+public record class OrbitXml {
     [XmlElement(ElementName = "Frames")]
     public FramesXml? Frames { get; set; }
 
@@ -121,7 +121,7 @@ public record class KeyXml {
     [XmlAttribute(AttributeName = "Position")]
     public Double Position { get; set; }
 
-    [XmlAttribute(AttributeName = "Color")]
+    [XmlAttribute(AttributeName = "Colour")]
     public String? Colour { get; set; }
 }
 

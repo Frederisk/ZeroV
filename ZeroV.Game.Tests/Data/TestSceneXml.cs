@@ -6,8 +6,6 @@ using System.Xml.Serialization;
 
 using NUnit.Framework;
 
-using Vortice;
-
 using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Tests.Data;
@@ -36,10 +34,10 @@ internal class TestSceneXml {
               </GameInfo>
               <BeatmapList>
                 <Map MapOffset="-00:00:00.4900000">
-                  <Oribit>
+                  <Orbit>
                     <Frames>
-                      <Key Time="00:00:00.9450000" Position="0" Color="Azure" /><!-- Real time is: 0.945 - 0.49 = 0.896-->
-                      <Key Time="00:00:20.1230000" Position="3000" /><!-- Color="Azure", it's the same as above one. -->
+                      <Key Time="00:00:00.9450000" Position="0" Colour="Azure" /><!-- Real time is: 0.945 - 0.49 = 0.896-->
+                      <Key Time="00:00:20.1230000" Position="3000" /><!-- Colour="Azure", it's the same as above one. -->
                     </Frames>
                     <Particles>
                       <Blink Time="00:00:00" />
@@ -49,19 +47,19 @@ internal class TestSceneXml {
                       <Slide Time="00:00:00" Direction="Left" />
                       <Slide Time="00:00:00" Direction="Right" />
                     </Particles>
-                  </Oribit>
-                  <Oribit>
+                  </Orbit>
+                  <Orbit>
                     <Frames>
                       <Key Time="00:00:01.8900000" Position="-700" Color="#FFFFFFFF" />
                     </Frames>
                     <Particles />
-                  </Oribit>
-                  <Oribit>
+                  </Orbit>
+                  <Orbit>
                     <Frames>
                       <Key Time="00:00:02.8350000" Position="700" Color="Azure" />
                     </Frames>
                     <Particles />
-                  </Oribit>
+                  </Orbit>
                 </Map>
               </BeatmapList>
             </ZeroVMap>
@@ -77,7 +75,7 @@ internal class TestSceneXml {
         // Assert: The map can safely be converted to string.
         map.ToString();
         Assert.AreEqual("Left",
-            map.BeatmapList!.MapList![0].OribitList![0].Particles!.Slide![0].Direction.ToString());
+            map.BeatmapList!.MapList![0].OrbitList![0].Particles!.Slide![0].Direction.ToString());
 
         // deserialize to string
         using MemoryStream stream2 = new MemoryStream();
