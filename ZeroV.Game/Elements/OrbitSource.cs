@@ -1,6 +1,6 @@
 using System;
 
-using osuTK.Graphics;
+using osu.Framework.Graphics;
 
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
@@ -15,7 +15,7 @@ public class OrbitSource : TimeSource {
         public Double Time { get; set; }
         public Single XPosition { get; set; }
         public Single Width { get; set; }
-        public Color4 Color { get; set; }
+        public Colour4 Colour { get; set; }
     }
 
     public ReadOnlyMemory<KeyFrame> KeyFrames { get; init; }

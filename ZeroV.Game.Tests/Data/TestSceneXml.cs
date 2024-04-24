@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 using NUnit.Framework;
 
@@ -24,7 +26,7 @@ internal class TestSceneXml {
             <?xml version="1.0" encoding="utf-8"?>
             <ZeroVMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" MapVersion="1.0.0.0">
               <TrackInfo>
-                <Title>Brilliant World(Vocal Main Mix)</Title>
+                <!--<Title>Brilliant World(Vocal Main Mix)</Title>-->
                 <Length>00:04:24.7370000</Length>
                 <BPM>127</BPM>
                 <FileOffset>00:00:00</FileOffset><!-- Offset is editable. -->
@@ -36,7 +38,7 @@ internal class TestSceneXml {
                 <Map MapOffset="-00:00:00.4900000">
                   <Orbit>
                     <Frames>
-                      <Key Time="00:00:00.9450000" Position="0" Colour="Azure" /><!-- Real time is: 0.945 - 0.49 = 0.896-->
+                      <Key Time="00:00:00.9450000" Position="0" Width="1000" Colour="Azure" /><!-- Real time is: 0.945 - 0.49 = 0.896-->
                       <Key Time="00:00:20.1230000" Position="3000" /><!-- Colour="Azure", it's the same as above one. -->
                     </Frames>
                     <Particles>
@@ -70,8 +72,11 @@ internal class TestSceneXml {
     public void TestXml() {
         using MemoryStream stream = GetMemoryStream(this.XmlSource!);
         var serializer = new XmlSerializer(typeof(ZeroVMapXml));
-
         ZeroVMapXml? map = (ZeroVMapXml?)serializer.Deserialize(stream)!;
+        var result = Validator.TryValidateObject(map, new ValidationContext(map), null, true);
+
+        Assert.IsFalse(result);
+
         // Assert: The map can safely be converted to string.
         map.ToString();
         Assert.AreEqual("Left",
