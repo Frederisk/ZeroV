@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using NUnit.Framework;
 
 using ZeroV.Game.Objects;
+using ZeroV.Game.Data;
 
 namespace ZeroV.Game.Tests.Data;
 
@@ -73,7 +74,7 @@ internal class TestSceneXml {
         using MemoryStream stream = GetMemoryStream(this.XmlSource!);
         var serializer = new XmlSerializer(typeof(ZeroVMapXml));
         ZeroVMapXml? map = (ZeroVMapXml?)serializer.Deserialize(stream)!;
-        var result = Validator.TryValidateObject(map, new ValidationContext(map), null, true);
+        var result = AnnotationsValidator.TryValidateObjectRecursive(map, null, null);
 
         Assert.IsFalse(result);
 
