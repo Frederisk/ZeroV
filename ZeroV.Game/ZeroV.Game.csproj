@@ -12,5 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ppy.osu.Framework" Version="2024.217.0" />
+    <PackageReference Include="XmlSchemaClassGenerator.SourceGenerator" Version="1.0.12" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Schemas\**" />
+    <AdditionalFiles Include="Schemas\*.xsd" XscGenSchema="true" />
+    <AdditionalFiles Include="Schemas\Config.json" XscGenConfig="true" />
   </ItemGroup>
 </Project>
