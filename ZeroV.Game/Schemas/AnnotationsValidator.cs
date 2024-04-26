@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace ZeroV.Game.Data;
+namespace ZeroV.Game.Schemas;
 
 public class AnnotationsValidator {
 
@@ -26,7 +26,7 @@ public class AnnotationsValidator {
         }
         validatedObjects.Add(instance);
 
-        Boolean isValidate = Validator.TryValidateObject(instance, new ValidationContext(instance, null, validationContexts), results, true);
+        var isValidate = Validator.TryValidateObject(instance, new ValidationContext(instance, null, validationContexts), results, true);
 
         foreach (PropertyInfo property in instance.GetType().GetProperties()) {
             // Ignore:
@@ -38,13 +38,13 @@ public class AnnotationsValidator {
                 continue;
             }
 
-            Object? value = property.GetValue(instance, null);
+            var value = property.GetValue(instance, null);
             if (value is null) {
                 continue;
             }
 
             if (value is IEnumerable enumValue) {
-                foreach (Object? item in enumValue) {
+                foreach (var item in enumValue) {
                     if (item is not null) {
                         List<ValidationResult> nestedResults = [];
                         if (!tryValidateObjectRecursive(item, validationContexts, nestedResults, validatedObjects)) {

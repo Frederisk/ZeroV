@@ -3,7 +3,7 @@
     {
       "path": null,
       "namespaces": {
-        "http://zerov.games/ZeroVMap": "ZeroV.Game.Schemas.ZeroVMap"
+        "http://zerov.games/ZeroVMap": "ZeroV.Game.Schemas"
       }
     }
   ],

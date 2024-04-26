@@ -1,34 +1,29 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using System.ComponentModel.DataAnnotations;
 
 using NUnit.Framework;
 
-using ZeroV.Game.Objects;
-using ZeroV.Game.Data;
 using osu.Framework.IO.Stores;
 using ZeroV.Resources;
-using osu.Framework.Audio.Track;
 using System.Xml;
 using System.Xml.Schema;
+using ZeroV.Game.Schemas;
 
 namespace ZeroV.Game.Tests.Data;
 
 [TestFixture]
 internal class TestSceneXml {
-    private String? XmlSource;
+    private String? xmlSource;
 
-    private static MemoryStream GetMemoryStream(String source) {
+    private static MemoryStream getMemoryStream(String source) {
         return new MemoryStream(Encoding.UTF8.GetBytes(source));
     }
 
     [SetUp]
     public void SetUp() {
-        this.XmlSource = """
+        this.xmlSource = """
             <?xml version="1.0" encoding="utf-8"?>
             <ZeroVMap
               xmlns="http://zerov.games/ZeroVMap"
@@ -95,7 +90,7 @@ internal class TestSceneXml {
         using Stream xsdStream = dllStore.GetStream(@"Data/ZeroVMap.xsd");
         using XmlReader xsdReader = XmlReader.Create(xsdStream);
         // xml
-        using MemoryStream xmlStream = GetMemoryStream(this.XmlSource!);
+        using MemoryStream xmlStream = getMemoryStream(this.xmlSource!);
         //using XmlReader xmlReader = XmlReader.Create(xmlStream);
 
         // setting
@@ -136,7 +131,7 @@ internal class TestSceneXml {
         // xsd
         using XmlReader xsdReader = XmlReader.Create("./Schemas/ZeroVMap.xsd");
         // xml
-        using MemoryStream stream = GetMemoryStream(this.XmlSource!);
+        using MemoryStream stream = getMemoryStream(this.xmlSource!);
 
         // setting
         var settings = new XmlReaderSettings();
@@ -146,7 +141,7 @@ internal class TestSceneXml {
         settings.ValidationType = ValidationType.Schema;
 
         // deserialize
-        var serializer = new XmlSerializer(typeof(Schemas.ZeroVMap.ZeroVMap));
-        Schemas.ZeroVMap.ZeroVMap? map = (Schemas.ZeroVMap.ZeroVMap?)serializer.Deserialize(stream)!;
+        var serializer = new XmlSerializer(typeof(ZeroVMap));
+        ZeroVMap? map = (ZeroVMap?)serializer.Deserialize(stream)!;
     }
 }
