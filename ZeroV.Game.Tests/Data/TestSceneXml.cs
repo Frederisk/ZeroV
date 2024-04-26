@@ -130,4 +130,23 @@ internal class TestSceneXml {
         //using StreamReader reader = new StreamReader(stream2);
         //String text = reader.ReadToEnd();
     }
+
+    [Test]
+    public void TestXml2() {
+        // xsd
+        using XmlReader xsdReader = XmlReader.Create("./Schemas/ZeroVMap.xsd");
+        // xml
+        using MemoryStream stream = GetMemoryStream(this.XmlSource!);
+
+        // setting
+        var settings = new XmlReaderSettings();
+        settings.Schemas.Add("http://zerov.games/ZeroVMap", xsdReader);
+        settings.ValidationEventHandler += new ValidationEventHandler((sender, args) => { if (args.Severity is XmlSeverityType.Error) { throw new Exception(); } });
+        settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+        settings.ValidationType = ValidationType.Schema;
+
+        // deserialize
+        var serializer = new XmlSerializer(typeof(Schemas.ZeroVMap.ZeroVMap));
+        Schemas.ZeroVMap.ZeroVMap? map = (Schemas.ZeroVMap.ZeroVMap?)serializer.Deserialize(stream)!;
+    }
 }

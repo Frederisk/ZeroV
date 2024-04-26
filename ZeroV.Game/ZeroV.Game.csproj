@@ -16,7 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Schemas\**" />
-    <AdditionalFiles Include="Schemas\*.xsd" XscGenSchema="true" />
+    <AdditionalFiles Include="Schemas\*.xsd" XscGenSchema="true" CopyToOutputDirectory="PreserveNewest" />
     <AdditionalFiles Include="Schemas\Config.json" XscGenConfig="true" />
   </ItemGroup>
 </Project>
