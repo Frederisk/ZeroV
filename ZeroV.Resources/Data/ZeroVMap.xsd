@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema
   xmlns="http://www.w3.org/2001/XMLSchema"
-  xmlns:zvm="http://zerov.game/ZeroVMap"
-  targetNamespace="http://zerov.game/ZeroVMap"
+  xmlns:zvm="http://zerov.games/ZeroVMap"
+  targetNamespace="http://zerov.games/ZeroVMap"
   elementFormDefault="qualified"
   attributeFormDefault="unqualified">
   <!-- ZeroVMap -->
