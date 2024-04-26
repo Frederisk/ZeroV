@@ -7,6 +7,5 @@
     <EmbeddedResource Include="Samples\**\*" />
     <EmbeddedResource Include="Textures\**\*" />
     <EmbeddedResource Include="Tracks\**\*" />
-    <EmbeddedResource Include="Data\**\*" />
   </ItemGroup>
 </Project>
