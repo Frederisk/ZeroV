@@ -8,6 +8,7 @@ using osu.Framework.Platform;
 using osuTK;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.KeyValueStorage;
 using ZeroV.Game.Utils;
 using ZeroV.Resources;
 
@@ -40,6 +41,10 @@ public partial class ZeroVGameBase : osu.Framework.Game {
 
         this.dependencies!.CacheAs<ZeroVGameBase>(this);
         this.dependencies!.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
+
+        var keyValueStorage = new JsonKeyValueStorage();
+        this.dependencies!.CacheAs<IKeyValueStorage>(keyValueStorage);
+        this.Add(keyValueStorage);
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
