@@ -1,0 +1,303 @@
+#nullable disable
+
+using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+
+namespace ZeroV.Game.Data.Schema.ZeroVMap;
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("direction", Namespace = "http://zerov.games/ZeroVMap")]
+public enum DirectionXml {
+    Up,
+    Right,
+    Down,
+    Left,
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMap", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+[XmlRoot("ZeroVMap", Namespace = "http://zerov.games/ZeroVMap")]
+public partial class ZeroVMapXml {
+
+    [Required]
+    [XmlElement("TrackInfo")]
+    public TrackInfoXml TrackInfo { get; set; }
+
+    [Required]
+    [XmlElement("GameInfo")]
+    public GameInfoXml GameInfo { get; set; }
+
+    [Required]
+    [XmlArray("BeatmapList")]
+    [XmlArrayItem("Map", Namespace = "http://zerov.games/ZeroVMap")]
+    public List<MapXml> BeatmapList { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: \d+\.\d+\.\d+\.\d+.</para>
+    /// </summary>
+    [RegularExpression("\\d+\\.\\d+\\.\\d+\\.\\d+")]
+    [Required]
+    [XmlAttribute("MapVersion")]
+    public String MapVersion { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapTrackInfo", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class TrackInfoXml {
+
+    [Required]
+    [XmlElement("Title")]
+    public String Title { get; set; }
+
+    [AllowNull]
+    [MaybeNull]
+    [XmlElement("Album")]
+    public String Album { get; set; }
+
+    [AllowNull]
+    [MaybeNull]
+    [XmlElement("TrackOrder")]
+    public String TrackOrder { get; set; }
+
+    [AllowNull]
+    [MaybeNull]
+    [XmlElement("Artists")]
+    public Object Artists { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlElement("Length")]
+    public String Length { get; set; }
+
+    [Required]
+    [XmlElement("BPM")]
+    public Single Bpm { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlElement("FileOffset")]
+    public String FileOffset { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapGameInfo", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class GameInfoXml {
+
+    [Required]
+    [XmlElement("Author")]
+    public String Author { get; set; }
+
+    [AllowNull]
+    [MaybeNull]
+    [XmlElement("Description")]
+    public String Description { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: \d+\.\d+\.\d+\.\d+.</para>
+    /// </summary>
+    [RegularExpression("\\d+\\.\\d+\\.\\d+\\.\\d+")]
+    [Required]
+    [XmlElement("GameVersion")]
+    public String GameVersion { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapList", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class BeatmapListXml {
+
+    [XmlElement("Map")]
+    public List<MapXml> Map { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMap", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class MapXml {
+
+    [XmlElement("Orbit")]
+    public List<OrbitXml> Orbit { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [AllowNull]
+    [MaybeNull]
+    [XmlAttribute("MapOffset")]
+    public String MapOffset { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbit", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class OrbitXml {
+
+    [Required]
+    [XmlElement("Frames")]
+    public XmlFrames Frames { get; set; }
+
+    [Required]
+    [XmlElement("Particles")]
+    public ParticlesXml Particles { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbitFrames", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class XmlFrames {
+
+    [Required]
+    [XmlElement("Key")]
+    public List<KeyXml> Key { get; set; }
+
+    //[XmlElement("Fuck")]
+    //public List<Object> Fuck { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbitFramesKey", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class KeyXml {
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlAttribute("Time")]
+    public String Time { get; set; }
+
+    [Required]
+    [XmlAttribute("Position")]
+    public Single Position { get; set; }
+
+    [Required]
+    [XmlAttribute("Width")]
+    public Single Width { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: #([0-Fa-f]{6}|[0-Fa-f]{8}).</para>
+    /// </summary>
+    [RegularExpression("#([0-Fa-f]{6}|[0-Fa-f]{8})")]
+    [Required]
+    [XmlAttribute("Colour")]
+    public String Colour { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbitParticles", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class ParticlesXml {
+
+    [XmlElement("Blink")]
+    public List<BlinkXml> Blink {get; set;}
+
+    [XmlElement("Press")]
+    public List<PressXml> Press { get; set; }
+
+    [XmlElement("Slide")]
+    public List<SlideXml> Slide { get; set; }
+
+    [XmlElement("Stroke")]
+    public List<StrokeXml> Stroke { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbitParticlesBlink", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class BlinkXml {
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlAttribute("Time")]
+    public String Time { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbitParticlesPress", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class PressXml {
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlAttribute("StartTime")]
+    public String StartTime { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlAttribute("EndTime")]
+    public String EndTime { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbitParticlesSlide", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class SlideXml {
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlAttribute("Time")]
+    public String Time { get; set; }
+
+    [Required]
+    [XmlAttribute("Direction")]
+    public DirectionXml Direction { get; set; }
+}
+
+[GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
+[Serializable]
+[XmlType("ZeroVMapBeatmapListMapOrbitParticlesStroke", Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[DesignerCategory("code")]
+public partial class StrokeXml {
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    /// </summary>
+    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [Required]
+    [XmlAttribute("Time")]
+    public String Time { get; set; }
+}
