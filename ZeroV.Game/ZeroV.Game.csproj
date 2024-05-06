@@ -5,9 +5,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Elements\Particles\PressParticle.cs~RF1eae0e9c.TMP" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
