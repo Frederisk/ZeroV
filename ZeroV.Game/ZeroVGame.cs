@@ -38,9 +38,9 @@ public partial class ZeroVGame : ZeroVGameBase {
         base.LoadComplete();
         // For test, the beatmap instance will deserialize after beatmap selected.
         var beatmap = new Beatmap() {
-            OrbitSources = new[] {
+            OrbitSources = [
                 new OrbitSource() {
-                    KeyFrames = new[] {
+                    KeyFrames = [
                         new OrbitSource.KeyFrame() {
                              Time = 0,
                              XPosition = 0,
@@ -94,9 +94,9 @@ public partial class ZeroVGame : ZeroVGameBase {
                              XPosition = 0,
                              Width = 128,
                              Colour = Color4.Purple
-                        }
-                    },
-                    HitObjects = new ParticleSource[] {
+                        },
+                    ],
+                    HitObjects = [
                         new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
                         new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
@@ -105,10 +105,10 @@ public partial class ZeroVGame : ZeroVGameBase {
                         new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Up),
                         new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Right),
                         new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
-                        new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds)
-                    }
+                        new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
+                    ]
                 }
-            }
+            ]
         };
         this.screenStack.Push(new GameplayScreen(beatmap));
     }

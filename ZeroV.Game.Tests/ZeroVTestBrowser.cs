@@ -10,10 +10,10 @@ public partial class ZeroVTestBrowser : ZeroVGameBase {
     protected override void LoadComplete() {
         base.LoadComplete();
 
-        this.AddRange(new Drawable[] {
+        this.AddRange([
             new TestBrowser("ZeroV"),
             new CursorContainer()
-        });
+        ]);
     }
 
     public override void SetHost(GameHost host) {

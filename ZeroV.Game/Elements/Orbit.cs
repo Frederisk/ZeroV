@@ -170,22 +170,28 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         this.Alpha = 0.9f;
     }
 
-    private ReadOnlyMemory<OrbitSource.KeyFrame> keyFrames;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// This field will never be null after <see cref="Source"/> has been set.
+    /// </remarks>
+    private List<OrbitSource.KeyFrame> keyFrames = null!;
 
     protected override void Update() {
         base.Update();
         var currTime = this.currentTime;
-        while (this.keyFrames.Length > 1) {
-            var nextTime = this.keyFrames.Span[1].Time;
+        while (this.keyFrames.Count > 1) {
+            var nextTime = this.keyFrames[1].Time;
             if (currTime < nextTime) {
                 break;
             }
             this.keyFrames = this.keyFrames[1..];
         }
 
-        if (this.keyFrames.Length > 1) {
-            OrbitSource.KeyFrame currKeyFrame = this.keyFrames.Span[0];
-            OrbitSource.KeyFrame nextKeyFrame = this.keyFrames.Span[1];
+        if (this.keyFrames.Count > 1) {
+            OrbitSource.KeyFrame currKeyFrame = this.keyFrames[0];
+            OrbitSource.KeyFrame nextKeyFrame = this.keyFrames[1];
 
             this.innerBox.Colour = Interpolation.ValueAt(currTime,
                 currKeyFrame.Colour, nextKeyFrame.Colour,
@@ -267,7 +273,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 this.keyFrames = value.KeyFrames;
 
                 this.lifetimeEntryManager.ClearEntries();
-                foreach (ParticleSource item in value.HitObjects.Span) {
+                foreach (ParticleSource item in value.HitObjects) {
                     this.lifetimeEntryManager.AddEntry(new ParticleLifetimeEntry(item));
                 }
             }

@@ -18,9 +18,9 @@ public partial class TestGameplayScreen : ZeroVTestScene {
     public TestGameplayScreen() {
         // For test, the beatmap instance will deserialize after beatmap selected.
         var beatmap = new Beatmap() {
-            OrbitSources = new[] {
+            OrbitSources = [
                 new OrbitSource() {
-                    KeyFrames = new[] {
+                    KeyFrames = [
                         new OrbitSource.KeyFrame() {
                              Time = 0,
                              XPosition = 0,
@@ -32,11 +32,11 @@ public partial class TestGameplayScreen : ZeroVTestScene {
                              XPosition = 0,
                              Width = 128,
                              Colour = Colour4.Green,
-                        }
-                    },
-                    HitObjects = Array.Empty<ParticleSource>()
+                        },
+                    ],
+                    HitObjects = [],
                 }
-            }
+            ]
         };
         this.Add(new ScreenStack(new GameplayScreen(beatmap) { RelativeSizeAxes = Axes.Both }) { RelativeSizeAxes = Axes.Both });
     }

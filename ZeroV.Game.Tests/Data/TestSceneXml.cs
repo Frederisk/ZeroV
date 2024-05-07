@@ -20,15 +20,15 @@ namespace ZeroV.Game.Tests.Data;
 
 [TestFixture]
 internal class TestSceneXml {
-    private String? XmlSource;
+    private String? xmlSource;
 
-    private static MemoryStream GetMemoryStream(String source) {
+    private static MemoryStream getMemoryStream(String source) {
         return new MemoryStream(Encoding.UTF8.GetBytes(source));
     }
 
     [SetUp]
     public void SetUp() {
-        this.XmlSource = """
+        this.xmlSource = """
             <?xml version="1.0" encoding="utf-8"?>
             <ZeroVMap
               xmlns="http://zerov.games/ZeroVMap"
@@ -95,7 +95,7 @@ internal class TestSceneXml {
         using Stream xsdStream = dllStore.GetStream(@"Data/ZeroVMap.xsd");
         using XmlReader xsdReader = XmlReader.Create(xsdStream);
         // xml
-        using MemoryStream xmlStream = GetMemoryStream(this.XmlSource!);
+        using MemoryStream xmlStream = getMemoryStream(this.xmlSource!);
         //using XmlReader xmlReader = XmlReader.Create(xmlStream);
 
         // setting

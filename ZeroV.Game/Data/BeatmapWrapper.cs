@@ -8,7 +8,6 @@ using System.Xml.Serialization;
 
 using osu.Framework.Graphics;
 
-using ZeroV.Game.Data.Schema;
 using ZeroV.Game.Data.Schema.ZeroVMap;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
@@ -97,8 +96,8 @@ public class BeatmapWrapper {
 
     private static OrbitSource getOrbitSourceFromXml(OrbitXml orbitXml) =>
         new() {
-            KeyFrames = getKeyFrameListFromXml(orbitXml.Frames).ToArray(),
-            HitObjects = getParticleSourceListFromXml(orbitXml.Particles).ToArray(),
+            KeyFrames = getKeyFrameListFromXml(orbitXml.Frames),
+            HitObjects = getParticleSourceListFromXml(orbitXml.Particles),
         };
 
     #endregion Wrapping static methods
