@@ -46,7 +46,7 @@ public partial class ZeroVMapXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: \d+\.\d+\.\d+\.\d+.</para>
     /// </summary>
-    [RegularExpression("\\d+\\.\\d+\\.\\d+\\.\\d+")]
+    [RegularExpression(@"\d+\.\d+\.\d+\.\d+")]
     [Required]
     [XmlAttribute("MapVersion")]
     public String MapVersion { get; set; }
@@ -80,7 +80,7 @@ public partial class TrackInfoXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlElement("Length")]
     public String Length { get; set; }
@@ -92,7 +92,7 @@ public partial class TrackInfoXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlElement("FileOffset")]
     public String FileOffset { get; set; }
@@ -116,7 +116,7 @@ public partial class GameInfoXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: \d+\.\d+\.\d+\.\d+.</para>
     /// </summary>
-    [RegularExpression("\\d+\\.\\d+\\.\\d+\\.\\d+")]
+    [RegularExpression(@"\d+\.\d+\.\d+\.\d+")]
     [Required]
     [XmlElement("GameVersion")]
     public String GameVersion { get; set; }
@@ -144,7 +144,7 @@ public partial class MapXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [AllowNull]
     [MaybeNull]
     [XmlAttribute("MapOffset")]
@@ -189,7 +189,7 @@ public partial class KeyXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlAttribute("Time")]
     public String Time { get; set; }
@@ -239,7 +239,7 @@ public partial class BlinkXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlAttribute("Time")]
     public String Time { get; set; }
@@ -254,7 +254,7 @@ public partial class PressXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlAttribute("StartTime")]
     public String StartTime { get; set; }
@@ -262,7 +262,7 @@ public partial class PressXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlAttribute("EndTime")]
     public String EndTime { get; set; }
@@ -277,7 +277,7 @@ public partial class SlideXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlAttribute("Time")]
     public String Time { get; set; }
@@ -296,7 +296,7 @@ public partial class StrokeXml {
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
     /// </summary>
-    [RegularExpression("-?([01]\\d|2[0-3]):\\d{2}:\\d{2}(\\.\\d{1,7})?")]
+    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
     [Required]
     [XmlAttribute("Time")]
     public String Time { get; set; }

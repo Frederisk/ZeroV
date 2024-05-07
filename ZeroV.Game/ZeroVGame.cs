@@ -1,11 +1,7 @@
 using System;
-using System.Diagnostics;
 
-using osu.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Logging;
-using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using osuTK.Graphics;
@@ -108,7 +104,8 @@ public partial class ZeroVGame : ZeroVGameBase {
                         new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
                     ]
                 }
-            ]
+            ],
+            Offset = 0,
         };
         this.screenStack.Push(new GameplayScreen(beatmap));
     }

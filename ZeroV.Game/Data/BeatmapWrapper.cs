@@ -11,6 +11,7 @@ using osu.Framework.Graphics;
 using ZeroV.Game.Data.Schema.ZeroVMap;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Data;
 
@@ -18,16 +19,7 @@ public class BeatmapWrapper {
     private static readonly XmlSerializer zero_v_map_serializer = new(typeof(ZeroVMapXml));
     private static readonly XmlReaderSettings xml_reader_settings = createXmlReaderSettings();
 
-    public ZeroVMapXml ZeroVMap { get; }
-
-    public BeatmapWrapper(Stream xmlStream) {
-        ArgumentNullException.ThrowIfNull(xmlStream);
-
-        using var reader = XmlReader.Create(xmlStream, xml_reader_settings);
-
-        // Deserialize the XML
-        this.ZeroVMap = (ZeroVMapXml)zero_v_map_serializer.Deserialize(reader)!;
-    }
+    #region createXmlReaderSettings
 
     [SuppressMessage("Style", "IDE0017")]
     private static XmlReaderSettings createXmlReaderSettings() {
@@ -46,6 +38,36 @@ public class BeatmapWrapper {
         if (args.Severity is XmlSeverityType.Error) {
             throw new InvalidOperationException(args.Message);
         }
+    }
+
+    #endregion createXmlReaderSettings
+
+    public ZeroVMapXml ZeroVMap { get; }
+
+    public BeatmapWrapper(Stream xmlStream) {
+        ArgumentNullException.ThrowIfNull(xmlStream);
+
+        using var reader = XmlReader.Create(xmlStream, xml_reader_settings);
+
+        // Deserialize the XML
+        this.ZeroVMap = (ZeroVMapXml)zero_v_map_serializer.Deserialize(reader)!;
+    }
+
+    public List<Beatmap> GetAllBeatmaps() {
+        List<Beatmap> beatmaps = [];
+        beatmaps.AddRange(this.ZeroVMap.BeatmapList.ConvertAll(getBeatmapFromXml));
+        if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
+            beatmaps.ForEach(beatmap => beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds);
+        }
+        return beatmaps;
+    }
+
+    public Beatmap GetBeatmapAt(Int32 index) {
+        Beatmap beatmap = getBeatmapFromXml(this.ZeroVMap.BeatmapList[index]);
+        if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
+            beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds;
+        }
+        return beatmap;
     }
 
     #region Wrapping static methods
@@ -98,6 +120,12 @@ public class BeatmapWrapper {
         new() {
             KeyFrames = getKeyFrameListFromXml(orbitXml.Frames),
             HitObjects = getParticleSourceListFromXml(orbitXml.Particles),
+        };
+
+    private static Beatmap getBeatmapFromXml(MapXml mapXml) =>
+        new() {
+            OrbitSources = mapXml.Orbit.ConvertAll(getOrbitSourceFromXml),
+            Offset = TimeSpan.Parse(mapXml.MapOffset ?? "00:00:00.0000000").TotalMilliseconds,
         };
 
     #endregion Wrapping static methods

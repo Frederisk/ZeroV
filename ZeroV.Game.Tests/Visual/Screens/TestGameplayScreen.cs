@@ -36,7 +36,8 @@ public partial class TestGameplayScreen : ZeroVTestScene {
                     ],
                     HitObjects = [],
                 }
-            ]
+            ],
+            Offset = 0,
         };
         this.Add(new ScreenStack(new GameplayScreen(beatmap) { RelativeSizeAxes = Axes.Both }) { RelativeSizeAxes = Axes.Both });
     }
