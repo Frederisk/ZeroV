@@ -10,7 +10,6 @@ using osu.Framework.Platform;
 namespace ZeroV.Game.KeyValueStorage;
 
 public partial class JsonKeyValueStorage : CompositeDrawable, IKeyValueStorage {
-
     private const String floder_path = "JsonKeyValueStorage";
     private readonly SearchValues<Char> invalidFileNameChars = SearchValues.Create(Path.GetInvalidFileNameChars());
 
