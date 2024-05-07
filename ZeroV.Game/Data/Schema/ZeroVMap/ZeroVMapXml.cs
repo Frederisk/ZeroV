@@ -159,7 +159,7 @@ public partial class OrbitXml {
 
     [Required]
     [XmlElement("Frames")]
-    public XmlFrames Frames { get; set; }
+    public FramesXml Frames { get; set; }
 
     [Required]
     [XmlElement("Particles")]
@@ -168,9 +168,9 @@ public partial class OrbitXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(XmlFrames), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(FramesXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
-public partial class XmlFrames {
+public partial class FramesXml {
 
     [Required]
     [XmlElement("Key")]
