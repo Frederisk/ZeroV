@@ -85,9 +85,26 @@ public partial class TrackInfoXml {
     [XmlElement("Length")]
     public String Length { get; set; }
 
-    [Required]
-    [XmlElement("BPM")]
-    public Single Bpm { get; set; }
+    [EditorBrowsableAttribute(EditorBrowsableState.Never)]
+    [XmlElementAttribute("BPM")]
+    public float BpmValue { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="de">Ruft einen Wert ab, der angibt, ob die Bpm-Eigenschaft spezifiziert ist, oder legt diesen fest.</para>
+    /// <para xml:lang="en">Gets or sets a value indicating whether the Bpm property is specified.</para>
+    /// </summary>
+    [XmlIgnoreAttribute()]
+    [EditorBrowsableAttribute(EditorBrowsableState.Never)]
+    public bool BpmValueSpecified { get; set; }
+
+    [XmlIgnoreAttribute()]
+    public Nullable<float> Bpm {
+        get => this.BpmValueSpecified ? this.BpmValue : null;
+        set {
+            this.BpmValue = value.GetValueOrDefault();
+            this.BpmValueSpecified = value.HasValue;
+        }
+    }
 
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>

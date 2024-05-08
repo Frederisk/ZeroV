@@ -24,7 +24,7 @@
                 <!-- TODO: Clarify the type of this element. -->
               </element>
               <element name="Length" type="zvm:timespan" />
-              <element name="BPM" type="float" />
+              <element name="BPM" type="float" minOccurs="0" />
               <element name="FileOffset" type="zvm:timespan" />
             </sequence>
             <!-- <assert test="not(TrackOrder) or Album" /> -->
