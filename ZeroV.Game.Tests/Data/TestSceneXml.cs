@@ -8,6 +8,7 @@ using osu.Framework.IO.Stores;
 using ZeroV.Resources;
 using System.Xml;
 using System.Xml.Schema;
+using ZeroV.Game.Data;
 
 namespace ZeroV.Game.Tests.Data;
 
@@ -121,24 +122,7 @@ internal class TestSceneXml {
 
     [Test]
     public void TestXml() {
-        // xsd
-        using DllResourceStore dllStore = new(ZeroVResources.ResourceAssembly);
-        using Stream xsdStream = dllStore.GetStream(@"Data/ZeroVMap.xsd");
-        using XmlReader xsdReader = XmlReader.Create(xsdStream);
-        // xml
-        using MemoryStream xmlStream = getMemoryStream(this.xmlSource!);
-        //using XmlReader xmlReader = XmlReader.Create(xmlStream);
-
-        // setting
-        XmlReaderSettings settings = new XmlReaderSettings();
-        settings.Schemas.Add("http://zerov.games/ZeroVMap", xsdReader);
-        settings.ValidationEventHandler += new ValidationEventHandler((sender, args) => { if (args.Severity is XmlSeverityType.Error) { throw new Exception(); } });
-        settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-        settings.ValidationType = ValidationType.Schema;
-
-        // validate
-        using XmlReader reader = XmlReader.Create(xmlStream, settings);
-        XmlDocument document = new XmlDocument();
-        document.Load(reader);
+        BeatmapWrapper wrapper = new(getMemoryStream(this.xmlSource!));
+        Assert.IsNotNull(wrapper.ZeroVMap);
     }
 }

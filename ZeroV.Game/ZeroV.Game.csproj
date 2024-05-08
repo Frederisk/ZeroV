@@ -5,6 +5,15 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Data\Schema\ZeroVMap\ZeroVMapXml.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Schema\**\*.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
