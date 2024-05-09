@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ZeroV.Game.KeyValueStorage;
+namespace ZeroV.Game.Data.KeyValueStorage;
 
 public interface IKeyValueStorage {
     ValueTask<T?> GetAsync<T>(String key);

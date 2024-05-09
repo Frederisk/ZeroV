@@ -8,7 +8,8 @@ using osu.Framework.Platform;
 using osuTK;
 
 using ZeroV.Game.Configs;
-using ZeroV.Game.KeyValueStorage;
+using ZeroV.Game.Data;
+using ZeroV.Game.Data.KeyValueStorage;
 using ZeroV.Game.Utils;
 using ZeroV.Resources;
 
@@ -25,7 +26,7 @@ public partial class ZeroVGameBase : osu.Framework.Game {
 
     protected override Container<Drawable> Content { get; }
 
-    private DependencyContainer? dependencies;
+    private DependencyContainer dependencies = null!;
 
     protected ZeroVGameBase() {
         // Ensure game and tests scale with window size and screen DPI.
@@ -39,12 +40,13 @@ public partial class ZeroVGameBase : osu.Framework.Game {
     private void load(Storage storage, FrameworkConfigManager frameworkConfigManager) {
         this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
 
-        this.dependencies!.CacheAs<ZeroVGameBase>(this);
-        this.dependencies!.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
+        this.dependencies.CacheAs<ZeroVGameBase>(this);
+        this.dependencies.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
 
-        var keyValueStorage = new JsonKeyValueStorage();
-        this.dependencies!.CacheAs<IKeyValueStorage>(keyValueStorage);
-        this.Add(keyValueStorage);
+        //var keyValueStorage = new JsonKeyValueStorage();
+        //this.dependencies!.CacheAs<IKeyValueStorage>(keyValueStorage);
+        //this.Add(keyValueStorage);
+        this.dependencies.CacheAs<IKeyValueStorage>(new JsonKeyValueStorage(storage));
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
