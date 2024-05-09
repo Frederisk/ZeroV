@@ -2,9 +2,8 @@ using System;
 using System.Buffers;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.Json;
 
-using osu.Framework.Allocation;
-using osu.Framework.Graphics.Containers;
 using osu.Framework.Platform;
 
 namespace ZeroV.Game.Data.KeyValueStorage;
@@ -28,8 +27,8 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
         }
     }
 
-    public async ValueTask<T?> GetAsync<T>(String key) {
-        if (key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
+    public async ValueTask<T?> GetAsync<T>(String? key) {
+        if (String.IsNullOrWhiteSpace(key) || key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
             throw new ArgumentException("Invalid key.", nameof(key));
         }
 
@@ -39,17 +38,17 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
         }
 
         using Stream stream = this.Storage.GetStream(fileName, FileAccess.Read, FileMode.Open);
-        return await System.Text.Json.JsonSerializer.DeserializeAsync<T>(stream);
+        return await JsonSerializer.DeserializeAsync<T>(stream);
     }
 
-    public async ValueTask SetAsync<T>(String key, T value) {
-        if (key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
+    public async ValueTask SetAsync<T>(String key, T? value) {
+        if (String.IsNullOrWhiteSpace(key) || key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
             throw new ArgumentException("Invalid key.", nameof(key));
         }
 
         var fileName = $"{key}.json";
         using Stream stream = this.Storage.GetStream(fileName, FileAccess.Write, FileMode.Truncate);
-        await System.Text.Json.JsonSerializer.SerializeAsync(stream, value);
+        await JsonSerializer.SerializeAsync(stream, value);
 
         await stream.FlushAsync();
     }
