@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 
 namespace ZeroV.Game.Utils;
 
@@ -13,13 +11,4 @@ public static class ZeroVMath {
     public const Single SCREEN_DRAWABLE_X = 1366;
     public const Single SCREEN_DRAWABLE_Y = 768;
     public const Single SCREEN_GAME_BASELINE_Y = 50;
-
-
-    //public static T Sum<T>(this IEnumerable<T>  numberList) where T : struct, IAdditionOperators<T, T, T> {
-    //    T t = default;
-    //    foreach (T number in numberList) {
-    //        t += number;
-    //    }
-    //    return t;
-    //}
 }
