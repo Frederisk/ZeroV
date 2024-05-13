@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq; // Just to use the Sum() method.
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -73,7 +74,30 @@ public class BeatmapWrapper {
         return beatmap;
     }
 
+    public TrackInfo GetTrackInfo() {
+        return new() {
+            Title = this.ZeroVMap.TrackInfo.Title,
+            Album = this.ZeroVMap.TrackInfo.Album,
+            TrackOrder = this.ZeroVMap.TrackInfo.TrackOrder is not null ? Int32.Parse(this.ZeroVMap.TrackInfo.TrackOrder) : null,
+            Artists = this.ZeroVMap.TrackInfo.Artists,
+            FileOffset = this.ZeroVMap.TrackInfo.FileOffset is not null ? TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset) : default,
+            GameAuthor = this.ZeroVMap.GameInfo.Author,
+            Description = this.ZeroVMap.GameInfo.Description,
+            GameVersion = new Version(this.ZeroVMap.GameInfo.GameVersion),
+            Maps = this.ZeroVMap.BeatmapList.ConvertAll(getMapInfoFromXml),
+        };
+    }
+
     #region Wrapping static methods
+
+    private static MapInfo getMapInfoFromXml(MapXml mapXml) => new MapInfo() {
+        MapOffset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset) : default,
+        Difficulty = default, // FIXME: calculate it
+        BlinkCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Blink.Count).Sum(),
+        PressCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Press.Count).Sum(),
+        SlideCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Slide.Count).Sum(),
+        StrokeCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Stroke.Count).Sum(),
+    };
 
     private static OrbitSource.KeyFrame getKeyFrameFromXml(KeyXml keyXml) =>
         new() {
@@ -128,7 +152,7 @@ public class BeatmapWrapper {
     private static Beatmap getBeatmapFromXml(MapXml mapXml) =>
         new() {
             OrbitSources = mapXml.Orbit.ConvertAll(getOrbitSourceFromXml),
-            Offset = TimeSpan.Parse(mapXml.MapOffset ?? "00:00:00.0000000").TotalMilliseconds,
+            Offset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset).TotalMilliseconds : default,
         };
 
     #endregion Wrapping static methods
