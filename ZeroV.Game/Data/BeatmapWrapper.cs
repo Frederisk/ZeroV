@@ -48,13 +48,21 @@ public class BeatmapWrapper {
 
     public ZeroVMapXml ZeroVMap { get; }
 
-    public BeatmapWrapper(Stream xmlStream) {
-        ArgumentNullException.ThrowIfNull(xmlStream);
+    public FileInfo File { get; }
 
-        using var reader = XmlReader.Create(xmlStream, xml_reader_settings);
+    private BeatmapWrapper(ZeroVMapXml zeroVMap, FileInfo file) {
+        this.ZeroVMap = zeroVMap;
+        this.File = file;
+    }
 
+    public static BeatmapWrapper Create(FileInfo file) {
+        ArgumentNullException.ThrowIfNull(file);
+
+        using FileStream xmlStream = file.OpenRead();
+        using XmlReader reader = XmlReader.Create(xmlStream, xml_reader_settings);
         // Deserialize the XML
-        this.ZeroVMap = (ZeroVMapXml)zero_v_map_serializer.Deserialize(reader)!;
+        var map = (ZeroVMapXml)zero_v_map_serializer.Deserialize(reader)!;
+        return new BeatmapWrapper(map, file);
     }
 
     public List<Beatmap> GetAllBeatmaps() {
@@ -75,6 +83,15 @@ public class BeatmapWrapper {
     }
 
     public TrackInfo GetTrackInfo() {
+        DirectoryInfo[]? directories = this.File.Directory?.GetDirectories();
+        if (directories is null || directories.Length < 1 || !directories[0].Exists) {
+            throw new InvalidOperationException("The beatmap file is not in a valid directory.");
+        }
+        // TODO: match music file
+        FileInfo[] files = directories[0].GetFiles("Track.*");
+        if (files.Length < 1 || !files[0].Exists) {
+            throw new InvalidOperationException("Track file not found.");
+        }
         return new() {
             Title = this.ZeroVMap.TrackInfo.Title,
             Album = this.ZeroVMap.TrackInfo.Album,
@@ -85,6 +102,7 @@ public class BeatmapWrapper {
             Description = this.ZeroVMap.GameInfo.Description,
             GameVersion = new Version(this.ZeroVMap.GameInfo.GameVersion),
             Maps = this.ZeroVMap.BeatmapList.ConvertAll(getMapInfoFromXml),
+            File = files[0],
         };
     }
 

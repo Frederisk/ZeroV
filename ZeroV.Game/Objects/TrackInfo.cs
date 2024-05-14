@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ZeroV.Game.Objects;
 public record TrackInfo {
@@ -20,4 +21,22 @@ public record TrackInfo {
     public required Version GameVersion { get; init; }
 
     public required List<MapInfo> Maps { get; init; }
+
+    //public required FileInfo InfoFile { get; init; }
+
+    public required FileInfo File { get; init; }
+}
+
+public record MapInfo {
+    public required TimeSpan MapOffset { get; init; }
+
+    public required Double Difficulty { get; init; }
+
+    public required Int32 BlinkCount { get; init; }
+
+    public required Int32 PressCount { get; init; }
+
+    public required Int32 SlideCount { get; init; }
+
+    public required Int32 StrokeCount { get; init; }
 }

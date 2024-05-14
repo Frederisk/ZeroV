@@ -7,7 +7,6 @@ using osu.Framework.Platform;
 namespace ZeroV.Game.Configs;
 
 public partial class ZeroVConfigManager(Storage storage, IDictionary<ZeroVSetting, Object>? defaultOverrides = null) : IniConfigManager<ZeroVSetting>(storage, defaultOverrides) {
-
     protected Storage Storage = storage;
 
     protected override void InitialiseDefaults() {
