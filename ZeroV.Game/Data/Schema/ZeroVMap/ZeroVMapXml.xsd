@@ -72,7 +72,7 @@
                                     </simpleContent> -->
                                   </complexType>
                                 </element>
-                                <element name="Fuck" minOccurs="0" maxOccurs="unbounded"/>
+                                <!--<element name="Fuck" minOccurs="0" maxOccurs="unbounded"/>-->
                               </sequence>
                             </complexType>
                           </element>

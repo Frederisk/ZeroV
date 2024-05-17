@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Data\Schema\ZeroVMap\ZeroVMapXml.xsd" />
+    <None Remove="Data\Schema\**\*.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Schema\**\*.xsd">

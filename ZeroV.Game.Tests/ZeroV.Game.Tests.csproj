@@ -7,6 +7,15 @@
   <PropertyGroup>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\ZeroV.Game\ZeroV.Game.csproj" />
   </ItemGroup>

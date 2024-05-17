@@ -83,12 +83,9 @@ public class BeatmapWrapper {
     }
 
     public TrackInfo GetTrackInfo() {
-        DirectoryInfo[]? directories = this.File.Directory?.GetDirectories();
-        if (directories is null || directories.Length < 1 || !directories[0].Exists) {
-            throw new InvalidOperationException("The beatmap file is not in a valid directory.");
-        }
+        DirectoryInfo? directory = this.File.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
         // TODO: match music file
-        FileInfo[] files = directories[0].GetFiles("Track.*");
+        FileInfo[] files = directory.GetFiles("Track.*");
         if (files.Length < 1 || !files[0].Exists) {
             throw new InvalidOperationException("Track file not found.");
         }
