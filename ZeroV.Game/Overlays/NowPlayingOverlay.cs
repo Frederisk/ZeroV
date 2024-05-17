@@ -56,7 +56,6 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
     }
 
     public partial class ListItem(BeatmapWrapper beatmap) : CompositeDrawable {
-
         private Boolean selected;
 
         [Resolved]
