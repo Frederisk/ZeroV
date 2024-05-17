@@ -4,9 +4,12 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 
 using osuTK.Graphics;
+
+using ZeroV.Game.Data;
 
 namespace ZeroV.Game.Overlays;
 
@@ -15,6 +18,9 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
     private const Double transition_length = 800;
 
     private FillFlowContainer container = null!;
+
+    [Resolved]
+    private BeatmapWrapperProvider beatmapWrapperProvider { get; set; } = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -29,14 +35,6 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
             RelativeSizeAxes = Axes.Both,
             Child = this.container
         };
-
-        this.container.Add(new ListItem() { Colour = Color4.Red });
-        this.container.Add(new ListItem() { Colour = Color4.Orange });
-        this.container.Add(new ListItem() { Colour = Color4.Yellow });
-        this.container.Add(new ListItem() { Colour = Color4.Green });
-        this.container.Add(new ListItem() { Colour = Color4.Cyan });
-        this.container.Add(new ListItem() { Colour = Color4.Blue });
-        this.container.Add(new ListItem() { Colour = Color4.Purple });
     }
 
     private ListItem? selectedItem;
@@ -46,13 +44,18 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
     }
 
     protected override void PopIn() {
+        this.container.Clear();
+        foreach (BeatmapWrapper item in beatmapWrapperProvider.BeatmapWrappers) {
+            this.container.Add(new ListItem(item) { Colour = Color4.Blue });
+        }
+
         this.FadeIn(transition_length, Easing.OutQuint);
     }
     protected override void PopOut() {
         this.FadeOut(transition_length, Easing.OutQuint);
     }
 
-    public partial class ListItem : CompositeDrawable {
+    public partial class ListItem(BeatmapWrapper beatmap) : CompositeDrawable {
 
         private Boolean selected;
 
@@ -61,6 +64,8 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
 
         [BackgroundDependencyLoader]
         private void load() {
+            var trackinfo = beatmap.GetTrackInfo();
+
             this.RelativeSizeAxes = Axes.X;
             this.Height = 300;
 
@@ -68,6 +73,9 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
             this.BorderColour = Color4.Black;
 
             this.AddInternal(new Box() { RelativeSizeAxes = Axes.Both });
+            this.AddInternal(new SpriteText() {
+                Text = trackinfo.Title
+            });
         }
 
         public void OnSelect() {
