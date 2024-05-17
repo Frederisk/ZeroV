@@ -5,7 +5,13 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Elements\Particles\PressParticle.cs~RF1eae0e9c.TMP" />
+    <None Remove="Data\Schema\ZeroVMap\ZeroVMapXml.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Schema\**\*.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
