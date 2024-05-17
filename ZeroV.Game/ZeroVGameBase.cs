@@ -44,7 +44,7 @@ public partial class ZeroVGameBase : osu.Framework.Game {
 
         this.dependencies!.CacheAs<ZeroVGameBase>(this);
         this.dependencies!.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
-        this.dependencies!.CacheAs<BeatmapWrapperProvider>(new BeatmapWrapperProvider(storage));
+        this.dependencies!.CacheAs<TrackInfoProvider>(new TrackInfoProvider(storage));
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>

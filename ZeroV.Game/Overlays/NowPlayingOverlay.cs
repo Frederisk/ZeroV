@@ -10,6 +10,7 @@ using osu.Framework.Input.Events;
 using osuTK.Graphics;
 
 using ZeroV.Game.Data;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Overlays;
 
@@ -20,7 +21,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
     private FillFlowContainer container = null!;
 
     [Resolved]
-    private BeatmapWrapperProvider beatmapWrapperProvider { get; set; } = null!;
+    private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -45,7 +46,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
 
     protected override void PopIn() {
         this.container.Clear();
-        foreach (BeatmapWrapper item in beatmapWrapperProvider.BeatmapWrappers) {
+        foreach (TrackInfo item in this.beatmapWrapperProvider.TrackInfoList) {
             this.container.Add(new ListItem(item) { Colour = Color4.Blue });
         }
 
@@ -55,7 +56,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
         this.FadeOut(transition_length, Easing.OutQuint);
     }
 
-    public partial class ListItem(BeatmapWrapper beatmap) : CompositeDrawable {
+    public partial class ListItem(TrackInfo info) : CompositeDrawable {
         private Boolean selected;
 
         [Resolved]
@@ -63,8 +64,6 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
 
         [BackgroundDependencyLoader]
         private void load() {
-            var trackinfo = beatmap.GetTrackInfo();
-
             this.RelativeSizeAxes = Axes.X;
             this.Height = 300;
 
@@ -73,7 +72,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
 
             this.AddInternal(new Box() { RelativeSizeAxes = Axes.Both });
             this.AddInternal(new SpriteText() {
-                Text = trackinfo.Title
+                Text = info.Title
             });
         }
 
@@ -84,7 +83,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
                 this.selected = true;
                 this.BorderThickness = 3;
             } else {
-                //TODO: Confirm seelect
+                //TODO: Confirm select
                 this.baseOverlay.Hide();
             }
         }
