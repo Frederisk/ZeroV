@@ -87,7 +87,7 @@ public partial class TrackInfoXml {
 
     [EditorBrowsableAttribute(EditorBrowsableState.Never)]
     [XmlElementAttribute("BPM")]
-    public float BpmValue { get; set; }
+    public Single BpmValue { get; set; }
 
     /// <summary>
     /// <para xml:lang="de">Ruft einen Wert ab, der angibt, ob die Bpm-Eigenschaft spezifiziert ist, oder legt diesen fest.</para>
@@ -98,7 +98,7 @@ public partial class TrackInfoXml {
     public bool BpmValueSpecified { get; set; }
 
     [XmlIgnoreAttribute()]
-    public Nullable<float> Bpm {
+    public Nullable<Single> Bpm {
         get => this.BpmValueSpecified ? this.BpmValue : null;
         set {
             this.BpmValue = value.GetValueOrDefault();

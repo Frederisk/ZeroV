@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZeroV.Game.Utils;
+
+/// <summary>
+/// Stores the paths used in ZeroV.
+/// </summary>
 public static class ZeroVPath {
     public const String BEATMAPS_STORAGE_PATH = "Beatmaps";
 

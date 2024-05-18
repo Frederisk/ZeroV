@@ -4,8 +4,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
 
-using osuTK.Graphics;
-
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
@@ -41,55 +39,55 @@ public partial class ZeroVGame : ZeroVGameBase {
                              Time = 0,
                              XPosition = 0,
                              Width = 128,
-                             Colour = Color4.Azure
+                             Colour = Colour4.Azure
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 4000,
                              XPosition = 0,
                              Width = 128,
-                             Colour = Color4.Red
+                             Colour = Colour4.Red
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 5000,
                              XPosition = 256,
                              Width = 256,
-                             Colour = Color4.Orange
+                             Colour = Colour4.Orange
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 6000,
                              XPosition = 256,
                              Width = 256,
-                             Colour = Color4.Yellow
+                             Colour = Colour4.Yellow
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 7000,
                              XPosition = 0,
                              Width = 128,
-                             Colour = Color4.Green
+                             Colour = Colour4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 8000,
                              XPosition = -60,
                              Width = 256,
-                             Colour = Color4.Cyan
+                             Colour = Colour4.Cyan
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 9000,
                              XPosition = -30,
                              Width = 162,
-                             Colour = Color4.Blue
+                             Colour = Colour4.Blue
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 10000,
                              XPosition = 0,
                              Width = 128,
-                             Colour = Color4.Purple
+                             Colour = Colour4.Purple
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 17000,
                              XPosition = 0,
                              Width = 128,
-                             Colour = Color4.Purple
+                             Colour = Colour4.Purple
                         },
                     ],
                     HitObjects = [
