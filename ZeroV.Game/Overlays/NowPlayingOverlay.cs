@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -71,9 +72,14 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
             this.BorderColour = Color4.Black;
 
             this.AddInternal(new Box() { RelativeSizeAxes = Axes.Both });
-            this.AddInternal(new SpriteText() {
-                Text = info.Title
-            });
+            var title = new SpriteText() {
+                Origin = Anchor.TopCentre,
+                Anchor = Anchor.TopCentre,
+                Text = info.Title,
+                Colour = Color4.Black,
+            };
+            title.Font = title.Font.With(size: 52);
+            this.AddInternal(title);
         }
 
         public void OnSelect() {

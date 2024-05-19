@@ -9,5 +9,5 @@ namespace ZeroV.Game.Data;
 
 public class TrackInfoProvider(Storage storage) {
     // TODO: Implement IBeatmapWrapperProvider
-    public IReadOnlyList<TrackInfo> TrackInfoList => throw new NotImplementedException();
+    public virtual IReadOnlyList<TrackInfo> TrackInfoList => throw new NotImplementedException();
 }
