@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -12,6 +10,8 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace ZeroV.Game.Data.Schema.ZeroVMap;
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
@@ -65,17 +65,17 @@ public partial class TrackInfoXml {
     [AllowNull]
     [MaybeNull]
     [XmlElement("Album")]
-    public String Album { get; set; }
+    public String? Album { get; set; }
 
     [AllowNull]
     [MaybeNull]
     [XmlElement("TrackOrder")]
-    public String TrackOrder { get; set; }
+    public String? TrackOrder { get; set; }
 
     [AllowNull]
     [MaybeNull]
     [XmlElement("Artists")]
-    public Object Artists { get; set; }
+    public Object? Artists { get; set; }
 
     /// <summary>
     /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
@@ -87,7 +87,7 @@ public partial class TrackInfoXml {
 
     [EditorBrowsableAttribute(EditorBrowsableState.Never)]
     [XmlElementAttribute("BPM")]
-    public float BpmValue { get; set; }
+    public Single BpmValue { get; set; }
 
     /// <summary>
     /// <para xml:lang="de">Ruft einen Wert ab, der angibt, ob die Bpm-Eigenschaft spezifiziert ist, oder legt diesen fest.</para>
@@ -98,7 +98,7 @@ public partial class TrackInfoXml {
     public bool BpmValueSpecified { get; set; }
 
     [XmlIgnoreAttribute()]
-    public Nullable<float> Bpm {
+    public Nullable<Single> Bpm {
         get => this.BpmValueSpecified ? this.BpmValue : null;
         set {
             this.BpmValue = value.GetValueOrDefault();
@@ -128,7 +128,7 @@ public partial class GameInfoXml {
     [AllowNull]
     [MaybeNull]
     [XmlElement("Description")]
-    public String Description { get; set; }
+    public String? Description { get; set; }
 
     /// <summary>
     /// <para xml:lang="en">Pattern: \d+\.\d+\.\d+\.\d+.</para>
@@ -165,7 +165,7 @@ public partial class MapXml {
     [AllowNull]
     [MaybeNull]
     [XmlAttribute("MapOffset")]
-    public String MapOffset { get; set; }
+    public String? MapOffset { get; set; }
 }
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
@@ -235,7 +235,7 @@ public partial class KeyXml {
 public partial class ParticlesXml {
 
     [XmlElement("Blink")]
-    public List<BlinkXml> Blink {get; set;}
+    public List<BlinkXml> Blink { get; set; }
 
     [XmlElement("Press")]
     public List<PressXml> Press { get; set; }
@@ -318,3 +318,5 @@ public partial class StrokeXml {
     [XmlAttribute("Time")]
     public String Time { get; set; }
 }
+
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

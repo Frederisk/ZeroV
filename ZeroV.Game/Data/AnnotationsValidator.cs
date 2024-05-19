@@ -9,7 +9,18 @@ namespace ZeroV.Game.Data;
 
 public class AnnotationsValidator {
 
-    public static Boolean TryValidateObjectRecursive(Object? instance, IDictionary<Object, Object?>? validationContexts, ICollection<ValidationResult>? results) {
+    /// <summary>
+    /// Determines whether the specified object is valid using the validation context recursively, validation results collection, and a value that specifies whether to validate all properties.
+    /// </summary>
+    /// <param name="instance">The object to validate.</param>
+    /// <param name="validationContexts">The context that describes the object to validate.</param>
+    /// <param name="results">A collection to hold each failed validation.</param>
+    /// <returns>
+    /// <see langword="true"/> if the object validates; otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="instance"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="instance"/> is <see cref="IEnumerable"/> or doesn't match the <see cref="ValidationContext.ObjectInstance"/> on <paramref name="validationContexts"/>.</exception>
+    public static Boolean TryValidateObjectRecursive(Object instance, IDictionary<Object, Object?>? validationContexts, ICollection<ValidationResult>? results) {
         ArgumentNullException.ThrowIfNull(instance);
 
         if (instance is IEnumerable) {
@@ -20,7 +31,7 @@ public class AnnotationsValidator {
     }
 
     private static Boolean tryValidateObjectRecursive(Object instance, IDictionary<Object, Object?>? validationContexts, ICollection<ValidationResult>? results, ISet<Object> validatedObjects) {
-        // short-circuit to avoid infinite loops on cyclical object graphs
+        // A short-circuit to avoid infinite loops on cyclical object graphs
         if (validatedObjects.Contains(instance)) {
             return true;
         }
@@ -28,6 +39,7 @@ public class AnnotationsValidator {
 
         Boolean isValidate = Validator.TryValidateObject(instance, new ValidationContext(instance, null, validationContexts), results, true);
 
+        // Validate each property recursively
         foreach (PropertyInfo property in instance.GetType().GetProperties()) {
             // Ignore:
             if (!property.CanRead // Can not be read
@@ -69,5 +81,8 @@ public class AnnotationsValidator {
     }
 }
 
+/// <summary>
+/// Specifies that the property should not be validated recursively by <see cref="AnnotationsValidator"/>.
+/// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 public class SkipRecursiveValidationAttribute : Attribute { }
