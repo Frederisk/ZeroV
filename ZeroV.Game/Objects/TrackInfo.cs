@@ -20,7 +20,7 @@ public record TrackInfo {
 
     public required Version GameVersion { get; init; }
 
-    public required List<MapInfo> Maps { get; init; }
+    public required IReadOnlyList<MapInfo> Maps { get; init; }
 
     //public required FileInfo InfoFile { get; init; }
 
