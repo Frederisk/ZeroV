@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 
 using osu.Framework.Allocation;
@@ -26,11 +27,13 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
 
     [BackgroundDependencyLoader]
     private void load() {
+        this.RelativeSizeAxes = Axes.Both;
+
         this.container = new FillFlowContainer() {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
-            Spacing = new osuTK.Vector2(0, 2)
+            Spacing = new osuTK.Vector2(0, 0)
         };
 
         this.Child = new BasicScrollContainer() {
@@ -39,8 +42,8 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
         };
     }
 
-    private ListItem? selectedItem;
-    public void OnSelect(ListItem item) {
+    private MapInfoListItem? selectedItem;
+    public void OnSelect(MapInfoListItem item) {
         this.selectedItem?.OnSelectCancel();
         this.selectedItem = item;
     }
@@ -48,7 +51,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
     protected override void PopIn() {
         this.container.Clear();
         foreach (TrackInfo item in this.beatmapWrapperProvider.TrackInfoList) {
-            this.container.Add(new ListItem(item) { Colour = Color4.Blue });
+            this.container.Add(new TrackInfoListItem(item));
         }
 
         this.FadeIn(transition_length, Easing.OutQuint);
@@ -57,7 +60,74 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
         this.FadeOut(transition_length, Easing.OutQuint);
     }
 
-    public partial class ListItem(TrackInfo info) : CompositeDrawable {
+    public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {
+        private Boolean isExpanded;
+        private FillFlowContainer container = null!;
+
+        [BackgroundDependencyLoader]
+        private void load() {
+            this.Masking = true;
+            this.BorderColour = Color4.White;
+            this.RelativeSizeAxes = Axes.X;
+            this.AutoSizeAxes = Axes.Y;
+
+            this.container = new FillFlowContainer() {
+                RelativeSizeAxes = Axes.X,
+                Height = 0,
+                Direction = FillDirection.Vertical,
+                Spacing = new osuTK.Vector2(0, 0),
+                Margin = new MarginPadding(0) {
+                    Left = 100
+                }
+            };
+
+            this.AddInternal(new FillFlowContainer() {
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y,
+                Children = [
+                    new Container() {
+                        RelativeSizeAxes = Axes.X,
+                        Height = 200,
+                        Children = [
+                            new Box() {
+                                RelativeSizeAxes = Axes.Both,
+                                Colour = Color4.Blue
+                            },
+                            new SpriteText() {
+                                Origin = Anchor.TopCentre,
+                                Anchor = Anchor.TopCentre,
+                                Text = info.Title,
+                                Colour = Color4.Black,
+                                Font = FontUsage.Default.With(size: 52)
+                            }
+                        ]
+                    },
+                    this.container
+                ]
+            });
+
+            foreach (MapInfo item in info.Maps) {
+                this.container.Add(new MapInfoListItem(item));
+            }
+        }
+
+        protected void OnIsExpandedChanged() {
+            if(this.isExpanded) {
+                this.container.AutoSizeAxes = Axes.Y;
+            } else {
+                this.container.AutoSizeAxes = Axes.None;
+                this.container.Height = 0;
+            }
+        }
+
+        protected override Boolean OnClick(ClickEvent e) {
+            this.isExpanded = !this.isExpanded;
+            OnIsExpandedChanged();
+            return base.OnClick(e);
+        }
+    }
+
+    public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
         private Boolean selected;
 
         [Resolved]
@@ -65,21 +135,22 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
 
         [BackgroundDependencyLoader]
         private void load() {
-            this.RelativeSizeAxes = Axes.X;
-            this.Height = 300;
-
             this.Masking = true;
-            this.BorderColour = Color4.Black;
+            this.BorderColour = Color4.White;
+            this.RelativeSizeAxes = Axes.X;
+            this.Height = 50;
 
-            this.AddInternal(new Box() { RelativeSizeAxes = Axes.Both });
-            var title = new SpriteText() {
+            this.AddInternal(new Box() {
+                RelativeSizeAxes = Axes.Both,
+                Colour = Colour4.Green
+            });
+            this.AddInternal(new SpriteText() {
                 Origin = Anchor.TopCentre,
                 Anchor = Anchor.TopCentre,
-                Text = info.Title,
+                Text = mapInfo.Difficulty.ToString(),
                 Colour = Color4.Black,
-            };
-            title.Font = title.Font.With(size: 52);
-            this.AddInternal(title);
+                Font = FontUsage.Default.With(size: 52)
+            });
         }
 
         public void OnSelect() {
@@ -93,6 +164,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
                 this.baseOverlay.Hide();
             }
         }
+
         public void OnSelectCancel() {
             this.selected = false;
             this.BorderThickness = 0;

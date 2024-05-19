@@ -51,7 +51,44 @@ public partial class TestNowPlayingOverlay : ZeroVTestScene {
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-                Maps = [],
+                Maps = [
+                    new MapInfo() {
+                        Difficulty = 1,
+                        MapOffset = TimeSpan.FromSeconds(2),
+                        BlinkCount = 1,
+                        PressCount = 1,
+                        SlideCount = 1,
+                        StrokeCount = 1
+                    },
+                    new MapInfo() {
+                        Difficulty = 2,
+                        MapOffset = TimeSpan.FromSeconds(2),
+                        BlinkCount = 1,
+                        PressCount = 1,
+                        SlideCount = 1,
+                        StrokeCount = 1
+                    }
+                ],
+                File = new System.IO.FileInfo("testFileName.xml")
+            },
+            new() {
+                Title = "Test Title2",
+                Album = "Test Album",
+                TrackOrder = 0,
+                Artists = "Test Artists",
+                FileOffset = TimeSpan.FromSeconds(1),
+                GameAuthor = "Test GameAuthor",
+                Description = "Test Description",
+                GameVersion = new Version(1,0,0),
+                Maps = [
+                    new MapInfo() {
+                        Difficulty = 1,
+                        MapOffset = TimeSpan.FromSeconds(2),
+                        BlinkCount = 1,
+                        PressCount = 1,
+                        SlideCount = 1,
+                        StrokeCount = 1
+                    }],
                 File = new System.IO.FileInfo("testFileName.xml")
             }
         ];
