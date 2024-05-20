@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 
+using FFmpeg.AutoGen;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -60,9 +62,12 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
         this.FadeOut(transition_length, Easing.OutQuint);
     }
 
+    [Cached]
     public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {
         private Boolean isExpanded;
         private FillFlowContainer container = null!;
+
+        public TrackInfo TrackInfo => info;
 
         [BackgroundDependencyLoader]
         private void load() {
@@ -85,23 +90,7 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
                 RelativeSizeAxes = Axes.X,
                 AutoSizeAxes = Axes.Y,
                 Children = [
-                    new Container() {
-                        RelativeSizeAxes = Axes.X,
-                        Height = 200,
-                        Children = [
-                            new Box() {
-                                RelativeSizeAxes = Axes.Both,
-                                Colour = Color4.Blue
-                            },
-                            new SpriteText() {
-                                Origin = Anchor.TopCentre,
-                                Anchor = Anchor.TopCentre,
-                                Text = info.Title,
-                                Colour = Color4.Black,
-                                Font = FontUsage.Default.With(size: 52)
-                            }
-                        ]
-                    },
+                    new TrackInfoListItemHeader(),
                     this.container
                 ]
             });
@@ -111,19 +100,47 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
             }
         }
 
-        protected void OnIsExpandedChanged() {
-            if(this.isExpanded) {
-                this.container.AutoSizeAxes = Axes.Y;
-            } else {
-                this.container.AutoSizeAxes = Axes.None;
-                this.container.Height = 0;
+        public Boolean IsExpanded {
+            get => this.isExpanded;
+            set {
+                if(value) {
+                    this.container.AutoSizeAxes = Axes.Y;
+                } else {
+                    this.container.AutoSizeAxes = Axes.None;
+                    this.container.Height = 0;
+                }
+                this.isExpanded = value;
             }
         }
 
-        protected override Boolean OnClick(ClickEvent e) {
-            this.isExpanded = !this.isExpanded;
-            OnIsExpandedChanged();
-            return base.OnClick(e);
+        public partial class TrackInfoListItemHeader : CompositeDrawable {
+
+            [Resolved]
+            private TrackInfoListItem listItem { get; set; } = null!;
+
+            [BackgroundDependencyLoader]
+            private void load() {
+                this.RelativeSizeAxes = Axes.X;
+                this.Height = 200;
+
+                this.AddInternal(new Box() {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Color4.Blue
+                });
+                this.AddInternal(new SpriteText() {
+                    Origin = Anchor.TopCentre,
+                    Anchor = Anchor.TopCentre,
+                    Text = this.listItem.TrackInfo.Title,
+                    Colour = Color4.Black,
+                    Font = FontUsage.Default.With(size: 52)
+                });
+            }
+
+            protected override Boolean OnClick(ClickEvent e) {
+                this.listItem.IsExpanded = !this.listItem.IsExpanded;
+                return base.OnClick(e);
+
+            }
         }
     }
 
