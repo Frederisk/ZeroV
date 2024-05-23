@@ -1,3 +1,5 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -38,13 +40,8 @@ public partial class MainScreen : Screen {
                         Y = 100,
                     },
                     new DiamondButton {
-                        X = 986,
-                        Y = 564,
-                        Size = new Vector2(250),
-                    },
-                    new DiamondButton {
                         X = 1106,
-                        Y = 444,
+                        Y = 204,
                         Size = new Vector2(250),
                     },
                     new DiamondButton {
@@ -54,8 +51,14 @@ public partial class MainScreen : Screen {
                     },
                     new DiamondButton {
                         X = 1106,
-                        Y = 204,
+                        Y = 444,
                         Size = new Vector2(250),
+                    },
+                    new DiamondButton {
+                        X = 986,
+                        Y = 564,
+                        Size = new Vector2(250),
+                        Action = this.Game.Exit,
                     },
                 ],
             },
