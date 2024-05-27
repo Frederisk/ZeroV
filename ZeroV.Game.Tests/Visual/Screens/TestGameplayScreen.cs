@@ -5,9 +5,8 @@ using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
 
-using osuTK.Graphics;
-
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
@@ -26,16 +25,16 @@ public partial class TestGameplayScreen : ZeroVTestScene {
                              Time = 0,
                              XPosition = 0,
                              Width = 128,
-                             Color = Color4.Green
+                             Colour = Colour4.Green,
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 10000,
                              XPosition = 0,
                              Width = 128,
-                             Color = Color4.Green
+                             Colour = Colour4.Green,
                         }
                     },
-                    HitObjects = Array.Empty<TimeSourceWithHit>()
+                    HitObjects = Array.Empty<ParticleSource>()
                 }
             }
         };

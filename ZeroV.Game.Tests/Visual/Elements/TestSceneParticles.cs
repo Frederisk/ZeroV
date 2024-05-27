@@ -14,35 +14,35 @@ public partial class TestSceneParticles : ZeroVTestScene {
     private void load() {
         this.ChangeBackgroundColour(Color4.White);
         Drawable[] particles = [
-            new BlinkParticle(null!) {
+            new BlinkParticle() {
                 Y = -128,
                 X = 0,
             },
-            new SlideParticle(null!) {
+            new SlideParticle() {
                 Y = 0,
                 X = -192,
-                Direction = SlideParticle.SlidingDirection.Up,
+                Direction = SlidingDirection.Up,
             },
-            new SlideParticle(null!) {
+            new SlideParticle() {
                 Y = 0,
                 X = -64,
-                Direction = SlideParticle.SlidingDirection.Right,
+                Direction = SlidingDirection.Right,
             },
-            new SlideParticle(null!) {
+            new SlideParticle() {
                 Y = 0,
                 X = 64,
-                Direction = SlideParticle.SlidingDirection.Down,
+                Direction = SlidingDirection.Down,
             },
-            new SlideParticle(null!) {
+            new SlideParticle() {
                 Y = 0,
                 X = 192,
-                Direction = SlideParticle.SlidingDirection.Left,
+                Direction = SlidingDirection.Left,
             },
-            new StrokeParticle(null!) {
+            new StrokeParticle() {
                 Y = 128,
                 X = 0,
             },
-            new PressParticle(null!) {
+            new PressParticle() {
                 Y = 0,
                 X = 320,
                 Height = 256,

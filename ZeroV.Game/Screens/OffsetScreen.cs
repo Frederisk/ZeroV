@@ -10,7 +10,6 @@ using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 
 using osuTK;
-using osuTK.Graphics;
 
 using ZeroV.Game.Configs;
 using ZeroV.Game.Graphics.Shapes;
@@ -88,7 +87,7 @@ public partial class OffsetScreen : Screen {
                 Children = [
                     new Box {
                         RelativeSizeAxes = Axes.Both,
-                        Colour = Color4.LightBlue,
+                        Colour = Colour4.LightBlue,
                     },
                     new BlinkDiamond() {
                         RelativePositionAxes = Axes.Both,

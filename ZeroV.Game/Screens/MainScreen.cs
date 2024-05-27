@@ -1,45 +1,71 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
 
 using osuTK;
-using osuTK.Graphics;
+
+using ZeroV.Game.Elements;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens;
 
 public partial class MainScreen : Screen {
+
     [BackgroundDependencyLoader]
     private void load() {
-        this.InternalChildren = new Drawable[] {
+        this.InternalChildren = [
             new Box {
-                Colour = Color4.Violet,
-                // 1366 * 768
+                Colour = Colour4.Violet,
                 RelativeSizeAxes = Axes.Both,
             },
-            new Box {
+            new Container {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
-                Size = new Vector2(1366, 768)
+                Size = new Vector2(ZeroVMath.SCREEN_DRAWABLE_X, ZeroVMath.SCREEN_DRAWABLE_Y),
+                Children = [
+                    new Box {
+                        Colour = Colour4.White,
+                        RelativeSizeAxes = Axes.Both,
+                    },
+                    // TODO: Logo here
+                    new ZeroVSpriteText {
+                        Text = "ZeroV",
+                        FontSize = 128,
+                        Colour = Colour4.Black,
+                        X = 136,
+                        Y = 100,
+                    },
+                    new DiamondButton {
+                        X = 1106,
+                        Y = 204,
+                        Size = new Vector2(250),
+                        Text = "Play",
+                    },
+                    new DiamondButton {
+                        X = 986,
+                        Y = 324,
+                        Size = new Vector2(250),
+                        Text = "Options",
+                    },
+                    new DiamondButton {
+                        X = 1106,
+                        Y = 444,
+                        Size = new Vector2(250),
+                        Text = "Credits",
+                    },
+                    new DiamondButton {
+                        X = 986,
+                        Y = 564,
+                        Size = new Vector2(250),
+                        Text = "Exit",
+                        Action = this.Game.Exit,
+                    },
+                ],
             },
-            //new SpriteText {
-            //    Y = 20,
-            //    Text = "Main Screen",
-            //    Anchor = Anchor.TopCentre,
-            //    Origin = Anchor.TopCentre,
-            //    Font = FontUsage.Default.With(size: 40)
-            //},
-            //new SpinningBox {
-            //    Anchor = Anchor.Centre,
-            //}
-            //new Orbit {
-            //    Anchor = Anchor.Centre,
-            //    //Height = 1024
-            //},
-            //new BlinkParticles
-            //{
-            //    Anchor = Anchor.Centre
-            //}
-        };
+        ];
     }
 }

@@ -50,8 +50,8 @@ public partial class TestSceneOrbits : ZeroVTestScene {
 //         this.InnerBox.Colour = this.colors[colorIndex];
 //     }
 
-//     public override void TouchEnter(Boolean isTouchDown) {
-//         base.TouchEnter(isTouchDown);
+//     public override void TouchEnter(Boolean isNewTouch) {
+//         base.TouchEnter(isNewTouch);
 //         this.updateColor();
 //         throw new Exception();
 //     }

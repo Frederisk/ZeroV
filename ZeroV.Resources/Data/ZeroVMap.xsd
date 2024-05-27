@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:zvm="http://zerov.games/ZeroVMap"
+  targetNamespace="http://zerov.games/ZeroVMap"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+  <!-- ZeroVMap -->
+  <element name="ZeroVMap">
+    <complexType>
+      <sequence>
+        <!-- TrackInfo -->
+        <element name="TrackInfo">
+          <complexType>
+            <sequence>
+              <element name="Title" type="string" />
+              <!-- if TarckOrder is exist, Album must be exist. -->
+              <!-- Album is optional. -->
+              <sequence minOccurs="0">
+                <element name="Album" type="string" />
+                <element name="TrackOrder" type="integer" minOccurs="0" />
+              </sequence>
+              <element name="Artists" minOccurs="0">
+                <!-- TODO: Clarify the type of this element. -->
+              </element>
+              <element name="Length" type="zvm:timespan" />
+              <element name="BPM" type="float" />
+              <element name="FileOffset" type="zvm:timespan" />
+            </sequence>
+            <!-- <assert test="not(TrackOrder) or Album" /> -->
+          </complexType>
+        </element>
+
+        <!-- GameInfo -->
+        <element name="GameInfo">
+          <complexType>
+            <sequence>
+              <element name="Author" type="string" />
+              <element name="Description" type="string" minOccurs="0" />
+              <element name="GameVersion" type="zvm:version" />
+            </sequence>
+          </complexType>
+        </element>
+
+        <!-- BeatmapList -->
+        <element name="BeatmapList">
+          <complexType>
+            <sequence>
+              <!-- Map -->
+              <element name="Map">
+                <complexType>
+                  <sequence>
+                    <!-- Orbit[] -->
+                    <element name="Orbit" minOccurs="0" maxOccurs="unbounded">
+                      <complexType>
+                        <sequence>
+                          <!-- Frames -->
+                          <element name="Frames">
+                            <complexType>
+                              <sequence>
+                                <!-- Key -->
+                                <element name="Key" minOccurs="1" maxOccurs="unbounded">
+                                  <complexType>
+                                    <!-- <simpleContent>
+                                      <extension base="string"> -->
+                                    <attribute name="Time" type="zvm:timespan" use="required" />
+                                    <attribute name="Position" type="float" use="required" />
+                                    <attribute name="Width" type="float" use="required" />
+                                    <attribute name="Colour" type='zvm:colorhex' use="required" />
+                                    <!-- <attribute name="Position" /> -->
+                                    <!-- </extension>
+                                    </simpleContent> -->
+                                  </complexType>
+                                </element>
+                              </sequence>
+                            </complexType>
+                          </element>
+                          <!-- Particles -->
+                          <element name="Particles">
+                            <complexType mixed="true">
+                              <choice minOccurs="0" maxOccurs="unbounded">
+                                <!-- Blink -->
+                                <element name="Blink">
+                                  <complexType>
+                                    <attribute name="Time" type="zvm:timespan" use="required" />
+                                  </complexType>
+                                </element>
+                                <!-- Press -->
+                                <element name="Press">
+                                  <complexType>
+                                    <attribute name="StartTime" type="zvm:timespan" use="required" />
+                                    <attribute name="EndTime" type="zvm:timespan" use="required" />
+                                  </complexType>
+                                </element>
+                                <!-- Slide -->
+                                <element name="Slide">
+                                  <complexType>
+                                    <attribute name="Time" type="zvm:timespan" use="required" />
+                                    <attribute name="Direction" type="zvm:direction" use="required" />
+                                  </complexType>
+                                </element>
+                                <!-- Stroke -->
+                                <element name="Stroke">
+                                  <complexType>
+                                    <attribute name="Time" type="zvm:timespan" use="required" />
+                                  </complexType>
+                                </element>
+                              </choice>
+                            </complexType>
+                          </element>
+                        </sequence>
+                      </complexType>
+                    </element>
+                  </sequence>
+                  <attribute name="MapOffset" type="zvm:timespan" />
+                </complexType>
+              </element>
+            </sequence>
+          </complexType>
+        </element>
+
+      </sequence>
+      <attribute name="MapVersion" type="zvm:version" use="required" />
+    </complexType>
+  </element>
+  <simpleType name="version">
+    <restriction base="string">
+      <pattern value="\d+\.\d+\.\d+\.\d+" />
+    </restriction>
+  </simpleType>
+  <simpleType name="timespan">
+    <restriction base="string">
+      <pattern value="-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?"></pattern>
+    </restriction>
+  </simpleType>
+  <simpleType name="colorhex">
+    <restriction base="string">
+      <pattern value="#([0-Fa-f]{6}|[0-Fa-f]{8})" />
+    </restriction>
+  </simpleType>
+  <simpleType name="direction">
+    <restriction base="string">
+      <enumeration value="Up" />
+      <enumeration value="Right" />
+      <enumeration value="Down" />
+      <enumeration value="Left" />
+    </restriction>
+  </simpleType>
+</schema>
