@@ -3,8 +3,6 @@ using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input.Events;
 
 using osuTK;
 
@@ -19,9 +17,9 @@ public partial class DiamondButton : ClickableContainer {
         //this.Anchor = Anchor.Centre;
     }
 
-    // public String Text { get; set; }
+    public required String Text { get; init; }
 
-    private Diamond outerDiamond;
+    private Diamond outerDiamond = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -47,8 +45,7 @@ public partial class DiamondButton : ClickableContainer {
                 },
             },
             new ZeroVSpriteText{
-                // FIXME: Text = this.Text,
-                Text = "Default",
+                Text = this.Text,
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 FontSize = 72,
