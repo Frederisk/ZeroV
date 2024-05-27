@@ -36,7 +36,7 @@ public partial class DiamondButton : ClickableContainer {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 FillMode = FillMode.Fit,
-                Padding = new MarginPadding(10 * ZeroVMath.SQRT_2),
+                Padding = new MarginPadding(10),
                 Child = new Diamond {
                     RelativeSizeAxes = Axes.Both,
                     Anchor = Anchor.Centre,
@@ -48,7 +48,7 @@ public partial class DiamondButton : ClickableContainer {
                 Text = this.Text,
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
-                FontSize = 72,
+                FontSize = 64,
                 Colour= Colour4.Black
             }
         ];
