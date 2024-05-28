@@ -38,6 +38,6 @@ public partial class ZeroVGame : ZeroVGameBase {
         base.LoadComplete();
         // For test, the beatmap instance will deserialize after beatmap selected.
       
-        this.screenStack.Push(new MainScreen());
+        this.screenStack.Push(new IntroScreen());
     }
 }

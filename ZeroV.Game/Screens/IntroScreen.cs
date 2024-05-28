@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -20,7 +23,6 @@ public partial class IntroScreen : Screen {
             AutoSizeAxes = Axes.Both,
             Text = "Loading ZeroV...",
         };
-
         this.InternalChildren = [
             new Box {
                 Colour = Color4.Black,
@@ -35,19 +37,25 @@ public partial class IntroScreen : Screen {
     protected override void LoadComplete() {
         base.LoadComplete();
 
-        this.Delay(500).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-            .Delay(200).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-            .Delay(100).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-            .Delay(200).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-            .Delay(100).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-            .Delay(50).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-            .Delay(100).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-            .Delay(50).Schedule(() => { this.textFlow.AddParagraph("Hello"); })
-
-            .Delay(1000).Schedule(this.continueToMain);
+        this.Schedule(async () => {
+            var task = Task.Run(this.FakeLoad);
+            while (!task.IsCompletedSuccessfully) {
+                await Task.Delay(Random.Shared.Next(50, 500));
+                this.textFlow.AddParagraph("Hello");
+            }
+            //this.textFlow.FadeOut(1000).Schedule(continueToMain);
+            //this.();
+        });
     }
 
     private void continueToMain() {
         this.Push(new MainScreen());
+    }
+
+    /// <summary>
+    /// A slow method.
+    /// </summary>
+    private void FakeLoad() {
+        Task.Delay(10000).Wait();
     }
 }
