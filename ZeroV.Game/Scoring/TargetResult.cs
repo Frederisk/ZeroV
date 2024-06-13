@@ -18,7 +18,7 @@ public enum TargetResult {
     /// Including lack of objects in the queue, failure to meet judgement conditions, etc.
     /// Just use <see cref="None"/> to indicate that it is too early.
     /// </remarks>
-    None       = 0b0_0000,
+    None = 0b0_0000,
 
     /// <summary>
     /// Minimum requirements for passed judgement.
@@ -28,7 +28,7 @@ public enum TargetResult {
     /// <summary>
     /// Next level of passed judgement.
     /// </summary>
-    Perfect    = 0b0_0010,
+    Perfect = 0b0_0010,
 
     /// <summary>
     /// Maximum requirements for passed judgement.
@@ -38,7 +38,7 @@ public enum TargetResult {
     /// <summary>
     /// Too late, failed.
     /// </summary>
-    Miss  = 0b0_1000,
+    Miss = 0b0_1000,
 
     /// <summary>
     /// Flag for early judgements. There will never flag in <see cref="MaxPerfect"/>.
