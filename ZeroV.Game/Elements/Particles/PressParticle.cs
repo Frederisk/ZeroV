@@ -145,15 +145,15 @@ public partial class PressParticle : ParticleBase {
     }
 
     private void updateInnerLength(Double currentTime) {
-        this.bottomDiamond.Y = -(Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_SIZE / 2 - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (currentTime - this.Source!.StartTime) / this.gameplayScreen.ParticleFallingTime);
-        this.pillarBox.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_SIZE / 2 - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (this.Source!.EndTime - currentTime) / this.gameplayScreen.ParticleFallingTime);
+        this.bottomDiamond.Y = -(Single)((ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2) - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (currentTime - this.Source!.StartTime) / this.gameplayScreen.ParticleFallingTime);
+        this.pillarBox.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2) - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (this.Source!.EndTime - currentTime) / this.gameplayScreen.ParticleFallingTime);
     }
 
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
 
     public void UpdateLength(Double startTime, Double endTime) {
-        this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + ZeroVMath.DIAMOND_SIZE / 2 - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
+        this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2) - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
         this.pillarBox.Height = this.Height;
     }
 

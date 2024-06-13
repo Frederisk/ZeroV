@@ -13,7 +13,7 @@ public class ZeroVFramedReplayInputHandler : FramedReplayInputHandler<ZeroVRepla
         : base(replay) {
     }
 
-    protected override Boolean IsImportant(ZeroVReplayFrame frame) => frame.Actions.Any();
+    protected override Boolean IsImportant(ZeroVReplayFrame frame) => frame.Actions.Count > 0;
 
     protected override void CollectReplayInputs(List<IInput> inputs) {
         inputs.Add(new ReplayState<ZeroVAction> {
