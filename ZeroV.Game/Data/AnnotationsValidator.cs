@@ -41,11 +41,7 @@ public class AnnotationsValidator {
         // Validate each property recursively
         foreach (PropertyInfo property in instance.GetType().GetProperties()) {
             // Ignore:
-            if (!property.CanRead // Can not be read
-                || property.PropertyType == typeof(String) // String
-                || property.PropertyType.IsValueType // Value type
-                || property.GetIndexParameters().Length is not 0 // Has index parameters
-                || property.GetCustomAttribute(typeof(SkipRecursiveValidationAttribute), false) is not null) {
+            if (isIllegalProperty(property)) {
                 continue;
             }
 
@@ -77,6 +73,13 @@ public class AnnotationsValidator {
         }
         return isValidate;
     }
+
+    private static Boolean isIllegalProperty(PropertyInfo property) =>
+        !property.CanRead // Can not be read
+        || property.PropertyType == typeof(String) // String
+        || property.PropertyType.IsValueType // Value type
+        || property.GetIndexParameters().Length > 0 // Has index parameters
+        || property.GetCustomAttributes(typeof(SkipRecursiveValidationAttribute), false).Length > 0;
 }
 
 /// <summary>

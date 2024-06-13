@@ -38,13 +38,12 @@ public partial class IntroScreen : Screen {
         base.LoadComplete();
 
         this.Schedule(async () => {
-            var task = Task.Run(this.FakeLoad);
+            var task = Task.Run(this.fakeLoad);
             while (!task.IsCompletedSuccessfully) {
                 await Task.Delay(Random.Shared.Next(50, 500));
                 this.textFlow.AddParagraph("Hello");
             }
-            //this.textFlow.FadeOut(1000).Schedule(continueToMain);
-            //this.();
+            this.textFlow.FadeOut(1000).Schedule(continueToMain);
         });
     }
 
@@ -55,7 +54,7 @@ public partial class IntroScreen : Screen {
     /// <summary>
     /// A slow method.
     /// </summary>
-    private void FakeLoad() {
+    private void fakeLoad() {
         Task.Delay(10000).Wait();
     }
 }
