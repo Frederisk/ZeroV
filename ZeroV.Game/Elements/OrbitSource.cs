@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using osu.Framework.Graphics;
 
@@ -8,8 +9,8 @@ using ZeroV.Game.Objects;
 namespace ZeroV.Game.Elements;
 
 public class OrbitSource : TimeSource {
-    public override Double StartTime => this.KeyFrames.Span[0].Time;
-    public override Double EndTime => this.KeyFrames.Span[^1].Time;
+    public override Double StartTime => this.KeyFrames[0].Time;
+    public override Double EndTime => this.KeyFrames[^1].Time;
 
     public struct KeyFrame {
         public Double Time { get; set; }
@@ -18,6 +19,6 @@ public class OrbitSource : TimeSource {
         public Colour4 Colour { get; set; }
     }
 
-    public ReadOnlyMemory<KeyFrame> KeyFrames { get; init; }
-    public ReadOnlyMemory<ParticleSource> HitObjects { get; init; }
+    public required List<KeyFrame> KeyFrames { get; init; }
+    public required List<ParticleSource> HitObjects { get; init; }
 }

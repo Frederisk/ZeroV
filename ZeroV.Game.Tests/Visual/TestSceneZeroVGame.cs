@@ -14,7 +14,7 @@ public partial class TestSceneZeroVGame : ZeroVTestScene {
 
     [BackgroundDependencyLoader]
     private void load(GameHost host) {
-        this.game = new ZeroVGame();
+        this.game = new();
         this.game.SetHost(host);
 
         this.AddGame(this.game);

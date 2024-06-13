@@ -24,7 +24,7 @@
                 <!-- TODO: Clarify the type of this element. -->
               </element>
               <element name="Length" type="zvm:timespan" />
-              <element name="BPM" type="float" />
+              <element name="BPM" type="float" minOccurs="0" />
               <element name="FileOffset" type="zvm:timespan" />
             </sequence>
             <!-- <assert test="not(TrackOrder) or Album" /> -->
@@ -46,8 +46,8 @@
         <element name="BeatmapList">
           <complexType>
             <sequence>
-              <!-- Map -->
-              <element name="Map">
+              <!-- Map[] -->
+              <element name="Map" minOccurs="0" maxOccurs="unbounded">
                 <complexType>
                   <sequence>
                     <!-- Orbit[] -->
@@ -58,7 +58,7 @@
                           <element name="Frames">
                             <complexType>
                               <sequence>
-                                <!-- Key -->
+                                <!-- Key[] -->
                                 <element name="Key" minOccurs="1" maxOccurs="unbounded">
                                   <complexType>
                                     <!-- <simpleContent>
@@ -72,34 +72,35 @@
                                     </simpleContent> -->
                                   </complexType>
                                 </element>
+                                <!--<element name="Fuck" minOccurs="0" maxOccurs="unbounded"/>-->
                               </sequence>
                             </complexType>
                           </element>
                           <!-- Particles -->
                           <element name="Particles">
-                            <complexType mixed="true">
+                            <complexType mixed="false">
                               <choice minOccurs="0" maxOccurs="unbounded">
-                                <!-- Blink -->
+                                <!-- Blink[] -->
                                 <element name="Blink">
                                   <complexType>
                                     <attribute name="Time" type="zvm:timespan" use="required" />
                                   </complexType>
                                 </element>
-                                <!-- Press -->
+                                <!-- Press[] -->
                                 <element name="Press">
                                   <complexType>
                                     <attribute name="StartTime" type="zvm:timespan" use="required" />
                                     <attribute name="EndTime" type="zvm:timespan" use="required" />
                                   </complexType>
                                 </element>
-                                <!-- Slide -->
+                                <!-- Slide[] -->
                                 <element name="Slide">
                                   <complexType>
                                     <attribute name="Time" type="zvm:timespan" use="required" />
                                     <attribute name="Direction" type="zvm:direction" use="required" />
                                   </complexType>
                                 </element>
-                                <!-- Stroke -->
+                                <!-- Stroke[] -->
                                 <element name="Stroke">
                                   <complexType>
                                     <attribute name="Time" type="zvm:timespan" use="required" />

@@ -2,8 +2,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
 
-using osuTK.Graphics;
-
 using ZeroV.Game.Elements.Particles;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
@@ -12,7 +10,7 @@ public partial class TestSceneParticles : ZeroVTestScene {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.ChangeBackgroundColour(Color4.White);
+        this.ChangeBackgroundColour(Colour4.White);
         Drawable[] particles = [
             new BlinkParticle() {
                 Y = -128,
@@ -42,11 +40,12 @@ public partial class TestSceneParticles : ZeroVTestScene {
                 Y = 128,
                 X = 0,
             },
-            new PressParticle() {
-                Y = 0,
-                X = 320,
-                Height = 256,
-            },
+            // FIXME: PressParticle need a GameScreen dependency.
+            //new PressParticle() {
+            //    Y = 0,
+            //    X = 320,
+            //    Height = 256,
+            //},
         ];
         particles.ForEach(this.Add);
     }

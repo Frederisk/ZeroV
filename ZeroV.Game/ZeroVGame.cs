@@ -1,14 +1,8 @@
 using System;
-using System.Diagnostics;
 
-using osu.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Logging;
-using osu.Framework.Platform;
 using osu.Framework.Screens;
-
-using osuTK.Graphics;
 
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Particles;
@@ -37,7 +31,6 @@ public partial class ZeroVGame : ZeroVGameBase {
     protected override void LoadComplete() {
         base.LoadComplete();
         // For test, the beatmap instance will deserialize after beatmap selected.
-      
         this.screenStack.Push(new IntroScreen());
     }
 }

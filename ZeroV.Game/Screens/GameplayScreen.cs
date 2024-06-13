@@ -68,14 +68,14 @@ public partial class GameplayScreen : Screen {
 
         // FIXME: Need a better way to calculate the count of hit objects.
         UInt32 count = 0;
-        foreach (OrbitSource i in beatmap.OrbitSources.Span) {
-            foreach (ParticleSource ii in i.HitObjects.Span) {
+        foreach (OrbitSource i in beatmap.OrbitSources) {
+            foreach (ParticleSource ii in i.HitObjects) {
                 count++;
             }
         }
         this.ScoringCalculator = new ScoringCalculator(count);
 
-        foreach (OrbitSource item in beatmap.OrbitSources.Span) {
+        foreach (OrbitSource item in beatmap.OrbitSources) {
             var entry = new OrbitLifetimeEntry(item);
             this.lifetimeEntryManager.AddEntry(entry);
         }
