@@ -6,14 +6,15 @@ using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Data.IO;
 
-public class BeatmapReader {
+public static class BeatmapReader {
 
     public static List<FileInfo> GetAllMapFile(String beatmapsFolder) {
         var info = new DirectoryInfo(beatmapsFolder);
-        if (!info.Exists) {
-            return [];
-        }
         List<FileInfo> children = [];
+        if (!info.Exists) {
+            Directory.CreateDirectory(info.FullName); /// FIXME: IO Exception
+            return children;
+        }
         foreach (DirectoryInfo child in info.GetDirectories()) {
             FileInfo[] xmlFiles = child.GetFiles(ZeroVPath.BEATMAPS_INFO_FILE);
             if (xmlFiles.Length > 0 && xmlFiles[0].Exists) {

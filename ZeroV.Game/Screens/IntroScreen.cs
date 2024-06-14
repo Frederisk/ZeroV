@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
@@ -8,6 +10,10 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
 
 using osuTK.Graphics;
+
+using ZeroV.Game.Configs;
+using ZeroV.Game.Data;
+using ZeroV.Game.Data.IO;
 
 namespace ZeroV.Game.Screens;
 
@@ -36,14 +42,14 @@ public partial class IntroScreen : Screen {
 
     protected override void LoadComplete() {
         base.LoadComplete();
-
+        // TODO: Add cutscenes.
         this.Schedule(async () => {
-            var task = Task.Run(this.fakeLoad);
+            var task = Task.Run(this.loadBeatmaps);
             while (!task.IsCompletedSuccessfully) {
                 await Task.Delay(Random.Shared.Next(50, 500));
                 this.textFlow.AddParagraph("Hello");
             }
-            this.textFlow.FadeOut(1000).Schedule(continueToMain);
+            this.textFlow.FadeOut(1000).Schedule(this.continueToMain);
         });
     }
 
@@ -51,10 +57,12 @@ public partial class IntroScreen : Screen {
         this.Push(new MainScreen());
     }
 
-    /// <summary>
-    /// A slow method.
-    /// </summary>
-    private void fakeLoad() {
-        Task.Delay(10000).Wait();
+    private void loadBeatmaps() {
+        String beatmapStoragePath = this.Dependencies.Get<ZeroVConfigManager>().Get<String>(ZeroVSetting.BeatmapStoragePath);
+        Console.WriteLine("!!!" + beatmapStoragePath);
+        List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
+        foreach (FileInfo infoFile in beatmapInfoFileList) {
+            _ = BeatmapWrapper.Create(infoFile);
+        }
     }
 }
