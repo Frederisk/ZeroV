@@ -22,9 +22,9 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
     //}
 
     public JsonKeyValueStorage(Storage storage) {
-        if (!storage.ExistsDirectory(folder_path)) {
-            this.Storage = storage.GetStorageForDirectory(folder_path);
-        }
+        //if (!storage.ExistsDirectory(folder_path)) {
+        this.Storage = storage.GetStorageForDirectory(folder_path);
+        //}
     }
 
     public async ValueTask<T?> GetAsync<T>(String? key) {
@@ -47,7 +47,7 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
         }
 
         var fileName = $"{key}.json";
-        using Stream stream = this.Storage.GetStream(fileName, FileAccess.Write, FileMode.Truncate);
+        using Stream stream = this.Storage.GetStream(fileName, FileAccess.Write, FileMode.Create);
         await JsonSerializer.SerializeAsync(stream, value);
 
         await stream.FlushAsync();

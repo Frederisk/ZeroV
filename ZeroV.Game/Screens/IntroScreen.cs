@@ -9,11 +9,11 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
 
-using osuTK.Graphics;
-
 using ZeroV.Game.Configs;
 using ZeroV.Game.Data;
 using ZeroV.Game.Data.IO;
+using ZeroV.Game.Data.KeyValueStorage;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
 
@@ -31,11 +31,10 @@ public partial class IntroScreen : Screen {
         };
         this.InternalChildren = [
             new Box {
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
                 // 1366 * 768
                 RelativeSizeAxes = Axes.Both,
             },
-
             this.textFlow,
         ];
     }
@@ -44,25 +43,32 @@ public partial class IntroScreen : Screen {
         base.LoadComplete();
         // TODO: Add cutscenes.
         this.Schedule(async () => {
-            var task = Task.Run(this.loadBeatmaps);
+            Task<List<TrackInfo>> task = this.loadBeatmapsAsync();
+            //Task load = this.LoadComponentAsync(new MainScreen(), this.Push); && !load.IsCompletedSuccessfully
             while (!task.IsCompletedSuccessfully) {
                 await Task.Delay(Random.Shared.Next(50, 500));
-                this.textFlow.AddParagraph("Hello");
+                this.textFlow.AddParagraph("Reading...");
             }
-            this.textFlow.FadeOut(1000).Schedule(this.continueToMain);
+            //this.textFlow.FadeOut(1000).Schedule(this.continueToMain);
+            this.Push(new MainScreen());
+            // task.Result;
         });
     }
 
-    private void continueToMain() {
-        this.Push(new MainScreen());
-    }
+    //[Resolved]
+    //IKeyValueStorage keyValueStorage { get; set; } = null!;
 
-    private void loadBeatmaps() {
-        String beatmapStoragePath = this.Dependencies.Get<ZeroVConfigManager>().Get<String>(ZeroVSetting.BeatmapStoragePath);
-        Console.WriteLine("!!!" + beatmapStoragePath);
-        List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
-        foreach (FileInfo infoFile in beatmapInfoFileList) {
-            _ = BeatmapWrapper.Create(infoFile);
+    private async Task<List<TrackInfo>> loadBeatmapsAsync() {
+        // TODO: TrackInfoList
+        IKeyValueStorage keyValueStorage = this.Dependencies.Get<IKeyValueStorage>();
+        List<TrackInfo>? trackInfoList = await keyValueStorage.GetAsync<List<TrackInfo>>("TrackInfoList");
+        if (trackInfoList is null) {
+            String beatmapStoragePath = this.Dependencies.Get<ZeroVConfigManager>().Get<String>(ZeroVSetting.BeatmapStoragePath);
+            List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
+            List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
+            trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
+            await keyValueStorage.SetAsync("TrackInfoList", trackInfoList);
         }
+        return trackInfoList;
     }
 }

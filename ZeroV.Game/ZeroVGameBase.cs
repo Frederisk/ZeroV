@@ -43,9 +43,6 @@ public partial class ZeroVGameBase : osu.Framework.Game {
         this.dependencies.CacheAs<ZeroVGameBase>(this);
         this.dependencies.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
 
-        //var keyValueStorage = new JsonKeyValueStorage();
-        //this.dependencies!.CacheAs<IKeyValueStorage>(keyValueStorage);
-        //this.Add(keyValueStorage);
         this.dependencies.CacheAs<IKeyValueStorage>(new JsonKeyValueStorage(storage));
     }
 
