@@ -1,3 +1,5 @@
+using NUnit.Framework;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 
@@ -5,6 +7,7 @@ using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
+[TestFixture]
 public partial class TestSceneSwitchButton : ZeroVTestScene {
 
     [BackgroundDependencyLoader]

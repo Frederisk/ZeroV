@@ -4,6 +4,7 @@ using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
+[TestFixture]
 public partial class TestSceneScoreCounter : ZeroVTestScene {
     private ScoreCounter scoreCounter = new();
 

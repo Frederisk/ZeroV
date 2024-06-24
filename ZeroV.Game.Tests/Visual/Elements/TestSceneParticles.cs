@@ -1,3 +1,5 @@
+using NUnit.Framework;
+
 using osu.Framework.Allocation;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
@@ -6,6 +8,7 @@ using ZeroV.Game.Elements.Particles;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
+[TestFixture]
 public partial class TestSceneParticles : ZeroVTestScene {
 
     [BackgroundDependencyLoader]

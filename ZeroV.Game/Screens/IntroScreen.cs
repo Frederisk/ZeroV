@@ -46,6 +46,9 @@ public partial class IntroScreen : Screen {
             Task<List<TrackInfo>> task = this.loadBeatmapsAsync();
             //Task load = this.LoadComponentAsync(new MainScreen(), this.Push); && !load.IsCompletedSuccessfully
             while (!task.IsCompletedSuccessfully) {
+                if (task.IsFaulted) {
+                    throw task.Exception;
+                }
                 await Task.Delay(Random.Shared.Next(50, 500));
                 this.textFlow.AddParagraph("Reading...");
             }
