@@ -139,7 +139,6 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
             protected override Boolean OnClick(ClickEvent e) {
                 this.listItem.IsExpanded = !this.listItem.IsExpanded;
                 return base.OnClick(e);
-
             }
         }
     }
