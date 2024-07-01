@@ -1,5 +1,6 @@
+using NUnit.Framework;
+
 using osu.Framework.Allocation;
-using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
 using osuTK;
@@ -8,6 +9,7 @@ using ZeroV.Game.Graphics;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
+[TestFixture]
 public partial class TestSceneIcons : ZeroVTestScene {
 
     [BackgroundDependencyLoader]

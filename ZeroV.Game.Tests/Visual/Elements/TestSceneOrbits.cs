@@ -1,3 +1,5 @@
+using NUnit.Framework;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -6,6 +8,7 @@ using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
+[TestFixture]
 public partial class TestSceneOrbits : ZeroVTestScene {
     private Container<Orbit> orbits = null!;
 

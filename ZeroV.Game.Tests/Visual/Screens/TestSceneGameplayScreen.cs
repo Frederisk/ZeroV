@@ -13,9 +13,9 @@ using ZeroV.Game.Screens;
 namespace ZeroV.Game.Tests.Visual.Screens;
 
 [TestFixture]
-public partial class TestGameplayScreen : ZeroVTestScene {
+public partial class TestSceneGameplayScreen : ZeroVTestScene {
 
-    public TestGameplayScreen() {
+    public TestSceneGameplayScreen() {
         // For test, the beatmap instance will deserialize after beatmap selected.
         var beatmap = new Beatmap() {
             OrbitSources = [

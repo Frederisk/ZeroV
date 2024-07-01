@@ -32,21 +32,16 @@ public class AnnotationsValidator {
 
     private static Boolean tryValidateObjectRecursive(Object instance, IDictionary<Object, Object?>? validationContexts, ICollection<ValidationResult>? results, ISet<Object> validatedObjects) {
         // A short-circuit to avoid infinite loops on cyclical object graphs
-        if (validatedObjects.Contains(instance)) {
+        if (!validatedObjects.Add(instance)) {
             return true;
         }
-        validatedObjects.Add(instance);
 
         Boolean isValidate = Validator.TryValidateObject(instance, new ValidationContext(instance, null, validationContexts), results, true);
 
         // Validate each property recursively
         foreach (PropertyInfo property in instance.GetType().GetProperties()) {
             // Ignore:
-            if (!property.CanRead // Can not be read
-                || property.PropertyType == typeof(String) // String
-                || property.PropertyType.IsValueType // Value type
-                || property.GetIndexParameters().Length is not 0 // Has index parameters
-                || property.GetCustomAttribute(typeof(SkipRecursiveValidationAttribute), false) is not null) {
+            if (isIllegalProperty(property)) {
                 continue;
             }
 
@@ -57,13 +52,12 @@ public class AnnotationsValidator {
 
             if (value is IEnumerable enumValue) {
                 foreach (Object? item in enumValue) {
-                    if (item is not null) {
-                        List<ValidationResult> nestedResults = [];
-                        if (!tryValidateObjectRecursive(item, validationContexts, nestedResults, validatedObjects)) {
-                            isValidate = false;
-                            foreach (ValidationResult nestedItem in nestedResults) {
-                                results?.Add(new ValidationResult(nestedItem.ErrorMessage, nestedItem.MemberNames.Select(name => $"{property.Name}.{name}")));
-                            }
+                    if (item is null) { continue; }
+                    List<ValidationResult> nestedResults = [];
+                    if (!tryValidateObjectRecursive(item, validationContexts, nestedResults, validatedObjects)) {
+                        isValidate = false;
+                        foreach (ValidationResult nestedItem in nestedResults) {
+                            results?.Add(new ValidationResult(nestedItem.ErrorMessage, nestedItem.MemberNames.Select(name => $"{property.Name}.{name}")));
                         }
                     }
                 }
@@ -79,10 +73,17 @@ public class AnnotationsValidator {
         }
         return isValidate;
     }
+
+    private static Boolean isIllegalProperty(PropertyInfo property) =>
+        !property.CanRead // Can not be read
+        || property.PropertyType == typeof(String) // String
+        || property.PropertyType.IsValueType // Value type
+        || property.GetIndexParameters().Length > 0 // Has index parameters
+        || property.GetCustomAttributes(typeof(SkipRecursiveValidationAttribute), false).Length > 0;
 }
 
 /// <summary>
 /// Specifies that the property should not be validated recursively by <see cref="AnnotationsValidator"/>.
 /// </summary>
-[AttributeUsage(AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class SkipRecursiveValidationAttribute : Attribute { }

@@ -140,15 +140,6 @@ public class BeatmapWrapper {
 
     #region Wrapping static methods
 
-    private static MapInfo getMapInfoFromXml(MapXml mapXml) => new() {
-        MapOffset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset) : default,
-        Difficulty = default, // FIXME: calculate it
-        BlinkCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Blink.Count).Sum(),
-        PressCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Press.Count).Sum(),
-        SlideCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Slide.Count).Sum(),
-        StrokeCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Stroke.Count).Sum(),
-    };
-
     private static OrbitSource.KeyFrame getKeyFrameFromXml(KeyXml keyXml) =>
         new() {
             Time = TimeSpan.Parse(keyXml.Time).TotalMilliseconds,
@@ -204,6 +195,15 @@ public class BeatmapWrapper {
             OrbitSources = mapXml.Orbit.ConvertAll(getOrbitSourceFromXml),
             Offset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset).TotalMilliseconds : default,
         };
+
+    private static MapInfo getMapInfoFromXml(MapXml mapXml) => new() {
+        MapOffset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset) : default,
+        Difficulty = default, // FIXME: calculate it
+        BlinkCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Blink.Count).Sum(),
+        PressCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Press.Count).Sum(),
+        SlideCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Slide.Count).Sum(),
+        StrokeCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Stroke.Count).Sum(),
+    };
 
     #endregion Wrapping static methods
 }

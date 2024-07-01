@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
@@ -11,7 +9,7 @@ using osuTK;
 
 using ZeroV.Game.Configs;
 using ZeroV.Game.Data;
-using ZeroV.Game.Overlays;
+using ZeroV.Game.Data.KeyValueStorage;
 using ZeroV.Game.Utils;
 using ZeroV.Resources;
 
@@ -28,7 +26,7 @@ public partial class ZeroVGameBase : osu.Framework.Game {
 
     protected override Container<Drawable> Content { get; }
 
-    private DependencyContainer? dependencies;
+    private DependencyContainer dependencies = null!;
 
     protected ZeroVGameBase() {
         // Ensure game and tests scale with window size and screen DPI.
@@ -42,9 +40,11 @@ public partial class ZeroVGameBase : osu.Framework.Game {
     private void load(Storage storage, FrameworkConfigManager frameworkConfigManager) {
         this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
 
-        this.dependencies!.CacheAs<ZeroVGameBase>(this);
-        this.dependencies!.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
-        this.dependencies!.CacheAs<TrackInfoProvider>(new TrackInfoProvider(storage));
+        this.dependencies.CacheAs<ZeroVGameBase>(this);
+        this.dependencies.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
+        this.dependencies.CacheAs<TrackInfoProvider>(new TrackInfoProvider(storage));
+
+        this.dependencies.CacheAs<IKeyValueStorage>(new JsonKeyValueStorage(storage));
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
