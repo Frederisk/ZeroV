@@ -50,6 +50,14 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
         this.selectedItem = item;
     }
 
+    private TrackInfoListItem? expandedItem;
+    public void OnExpanded(TrackInfoListItem item) {
+        if (this.expandedItem != null) {
+            this.expandedItem.IsExpanded = false;
+        }
+        this.expandedItem = item;
+    }
+
     protected override void PopIn() {
         this.container.Clear();
         foreach (TrackInfo item in this.beatmapWrapperProvider.TrackInfoList) {
@@ -116,6 +124,9 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
         public partial class TrackInfoListItemHeader : CompositeDrawable {
 
             [Resolved]
+            private NowPlayingOverlay overlay { get; set; } = null!;
+
+            [Resolved]
             private TrackInfoListItem listItem { get; set; } = null!;
 
             [BackgroundDependencyLoader]
@@ -138,6 +149,9 @@ public partial class NowPlayingOverlay : FocusedOverlayContainer {
 
             protected override Boolean OnClick(ClickEvent e) {
                 this.listItem.IsExpanded = !this.listItem.IsExpanded;
+                if(this.listItem.IsExpanded) {
+                    this.overlay.OnExpanded(this.listItem);
+                }
                 return base.OnClick(e);
             }
         }
