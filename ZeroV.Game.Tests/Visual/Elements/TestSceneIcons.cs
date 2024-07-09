@@ -15,6 +15,7 @@ public partial class TestSceneIcons : ZeroVTestScene {
     [BackgroundDependencyLoader]
     private void load() {
         FillFlowContainer flower = new() {
+            Position = new Vector2(100, 100),
             Direction = FillDirection.Horizontal,
         };
         this.Child = flower;
@@ -22,15 +23,20 @@ public partial class TestSceneIcons : ZeroVTestScene {
         //    Size = new Vector2(20),
         //    Icon = ZeroVIcon.RulesetOsu,
         //});
+        // flower.Add(
+        //     new ZeroVIcon {
+        //         IconType = ZeroIconType.Exit,
+        //         Size = new Vector2(100),
+        //     });
+        // flower.Add(
+        //     new ZeroVIcon {
+        //         IconType = ZeroIconType.Exit,
+        //         Size = new Vector2(100),
+        //     });
         flower.Add(
-            new ZeroVIcon {
-                IconType = ZeroIconType.Exit,
+            new ZeroIcon {
                 Size = new Vector2(100),
-            });
-        flower.Add(
-            new ZeroVIcon {
-                IconType = ZeroIconType.Exit,
-                Size = new Vector2(100),
+                // Position = new Vector2(1000, 1000),
             });
     }
 }
