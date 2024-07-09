@@ -7,32 +7,53 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shapes;
+using ZeroV.Game.Graphics.Shapes;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Graphics;
 
 public partial class ZeroIcon : CompositeDrawable {
+
     public ZeroIcon() {
         this.Anchor = Anchor.Centre;
         this.Origin = Anchor.Centre;
-        // this.AutoSizeAxes = Axes.Both;
     }
 
     [BackgroundDependencyLoader]
     private void load(IRenderer renderer) {
-        this.InternalChild = new Container {
-            Anchor = Anchor.Centre,
-            Origin = Anchor.Centre,
-            RelativeSizeAxes = Axes.Both,
-            Size = new Vector2(0.95f),
-            Children = [
+        this.InternalChild
+            //// Start
+            //  = new OrientedTriangle(OrientedTriangle.Orientation.Right) {
+            //        Anchor = Anchor.CentreRight,
+            //        Origin = Anchor.CentreRight,
+            //        Height = ZeroVMath.SQRT_3 / 2.0f,
+            //        Width = 0.75f,
+            //        RelativeSizeAxes = Axes.Both,
+            //    };
+
+            // Pause
+            = new Container {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                RelativeSizeAxes = Axes.Both,
+                Size = new Vector2(ZeroVMath.SQRT_2 / 2f),
+                Children = [
                 new Box {
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
-
+                    Width = 1f /3f,
                     // Margin = new MarginPadding(10f),
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.Red,
-                }
+                    //Colour = Colour4.Red,
+                },
+                new Box {
+                    Anchor = Anchor.CentreRight,
+                    Origin = Anchor.CentreRight,
+                    Width = 1f / 3f,
+                    // Margin = new MarginPadding(10f),
+                    RelativeSizeAxes = Axes.Both,
+                    //Colour = Colour4.Red,
+                },
             ],
         };
     }
