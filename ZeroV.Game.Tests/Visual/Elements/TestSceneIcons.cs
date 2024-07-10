@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Containers;
 using osuTK;
 
 using ZeroV.Game.Graphics;
+using ZeroV.Game.Graphics.Icons;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
@@ -36,11 +37,17 @@ public partial class TestSceneIcons : ZeroVTestScene {
         //         IconType = ZeroIconType.Exit,
         //         Size = new Vector2(100),
         //     });
-        flower.Add(
-            new ZeroIcon {
+        flower.AddRange([
+            new StartIcon {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
                 Size = new Vector2(100),
-            });
+            },
+            new PauseIcon {
+                Anchor = Anchor.TopLeft,
+                Origin = Anchor.TopLeft,
+                Size = new Vector2(100),
+            }
+        ]);
     }
 }
