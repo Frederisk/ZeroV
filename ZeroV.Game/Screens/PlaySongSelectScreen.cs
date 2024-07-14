@@ -15,19 +15,31 @@ using ZeroV.Game.Objects;
 using osuTK.Graphics;
 using osu.Framework.Graphics.Shapes;
 using ZeroV.Game.Data;
+using osu.Framework.Graphics.Textures;
 
 namespace ZeroV.Game.Screens;
 
 [Cached]
 public partial class PlaySongSelectScreen : Screen {
+    private Sprite background = null!;
     private FillFlowContainer container = null!;
 
     [Resolved]
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
+    [Resolved]
+    private LargeTextureStore textureStore { get; set; } = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
         this.RelativeSizeAxes = Axes.Both;
+
+        this.background = new Sprite() {
+            RelativeSizeAxes = Axes.Both,
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            FillMode = FillMode.Fill
+        };
+        this.AddInternal(this.background);
 
         this.container = new FillFlowContainer() {
             RelativeSizeAxes = Axes.X,
@@ -60,10 +72,15 @@ public partial class PlaySongSelectScreen : Screen {
             this.expandedItem.IsExpanded = false;
         }
         this.expandedItem = item;
+
+        //var trackInfo = item.TrackInfo;
+        //TODO: TrackInfo Background
+        Texture? texture = this.textureStore.Get("test-background.webp");
+        this.background.Texture = texture;
     }
 
     public void ConfirmSelect() {
-
+        //TODO: Confirm select
     }
 
     [Cached]
@@ -134,10 +151,12 @@ public partial class PlaySongSelectScreen : Screen {
                     RelativeSizeAxes = Axes.Both,
                     Colour = Color4.Blue
                 });
+
+                var trackInfo = this.listItem.TrackInfo;
                 this.AddInternal(new SpriteText() {
-                    Origin = Anchor.TopCentre,
-                    Anchor = Anchor.TopCentre,
-                    Text = this.listItem.TrackInfo.Title,
+                    Origin = Anchor.Centre,
+                    Anchor = Anchor.Centre,
+                    Text = $"{trackInfo.Title} - {trackInfo.Artists} - {trackInfo.Album}",
                     Colour = Color4.Black,
                     Font = FontUsage.Default.With(size: 52)
                 });
@@ -155,6 +174,8 @@ public partial class PlaySongSelectScreen : Screen {
 
     public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
         private Boolean selected;
+
+        public MapInfo MapInfo => mapInfo;
 
         [Resolved]
         private PlaySongSelectScreen songSelect { get; set; } = null!;
@@ -176,7 +197,7 @@ public partial class PlaySongSelectScreen : Screen {
             this.AddInternal(new SpriteText() {
                 Origin = Anchor.TopCentre,
                 Anchor = Anchor.TopCentre,
-                Text = mapInfo.Difficulty.ToString(),
+                Text = $"Difficulty: {mapInfo.Difficulty}",
                 Colour = Color4.Black,
                 Font = FontUsage.Default.With(size: 52)
             });
@@ -189,7 +210,6 @@ public partial class PlaySongSelectScreen : Screen {
                 this.selected = true;
                 this.BorderThickness = 3;
             } else {
-                //TODO: Confirm select
                 this.songSelect.ConfirmSelect();
             }
         }

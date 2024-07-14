@@ -8,4 +8,7 @@
     <EmbeddedResource Include="Textures\**\*" />
     <EmbeddedResource Include="Tracks\**\*" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Textures\test-background.webp" />
+  </ItemGroup>
 </Project>

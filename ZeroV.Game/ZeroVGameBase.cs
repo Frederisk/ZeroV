@@ -1,7 +1,10 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Framework.Platform;
 
@@ -44,6 +47,11 @@ public partial class ZeroVGameBase : osu.Framework.Game {
         this.dependencies.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
 
         this.dependencies.CacheAs<IKeyValueStorage>(new JsonKeyValueStorage(storage));
+
+        IResourceStore<TextureUpload> resourceStore = this.Host.CreateTextureLoaderStore(new NamespacedResourceStore<Byte[]>(this.Resources, @"Textures"));
+        var largeStore = new LargeTextureStore(this.Host.Renderer, resourceStore);
+        largeStore.AddTextureSource(this.Host.CreateTextureLoaderStore(new OnlineStore()));
+        this.dependencies.Cache(largeStore);
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
