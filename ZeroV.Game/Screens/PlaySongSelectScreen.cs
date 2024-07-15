@@ -1,21 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 
+using osuTK;
+
 using ZeroV.Game.Objects;
-using osuTK.Graphics;
-using osu.Framework.Graphics.Shapes;
 using ZeroV.Game.Data;
-using osu.Framework.Graphics.Textures;
 
 namespace ZeroV.Game.Screens;
 
@@ -30,7 +27,7 @@ public partial class PlaySongSelectScreen : Screen {
     private LargeTextureStore textureStore { get; set; } = null!;
 
     [BackgroundDependencyLoader]
-    private void load() {
+    private async void load() {
         this.RelativeSizeAxes = Axes.Both;
 
         this.background = new Sprite() {
@@ -45,11 +42,11 @@ public partial class PlaySongSelectScreen : Screen {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
-            Spacing = new osuTK.Vector2(0, 10),
+            Spacing = new Vector2(0, 10),
             Padding = new MarginPadding(10)
         };
 
-        foreach (TrackInfo item in this.beatmapWrapperProvider.TrackInfoList) {
+        foreach (TrackInfo item in await this.beatmapWrapperProvider.GetTrackInfoListAsync() ?? []) {
             this.container.Add(new TrackInfoListItem(item));
         }
 
@@ -93,7 +90,7 @@ public partial class PlaySongSelectScreen : Screen {
         [BackgroundDependencyLoader]
         private void load() {
             this.Masking = true;
-            this.BorderColour = Color4.White;
+            this.BorderColour = Colour4.White;
             this.RelativeSizeAxes = Axes.X;
             this.AutoSizeAxes = Axes.Y;
 
@@ -101,7 +98,7 @@ public partial class PlaySongSelectScreen : Screen {
                 RelativeSizeAxes = Axes.X,
                 Height = 0,
                 Direction = FillDirection.Vertical,
-                Spacing = new osuTK.Vector2(0, 0),
+                Spacing = new Vector2(0, 0),
                 Margin = new MarginPadding(0) {
                     Left = 100
                 }
@@ -149,7 +146,7 @@ public partial class PlaySongSelectScreen : Screen {
 
                 this.AddInternal(new Box() {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Color4.Blue
+                    Colour = Colour4.Blue
                 });
 
                 var trackInfo = this.listItem.TrackInfo;
@@ -157,7 +154,7 @@ public partial class PlaySongSelectScreen : Screen {
                     Origin = Anchor.Centre,
                     Anchor = Anchor.Centre,
                     Text = $"{trackInfo.Title} - {trackInfo.Artists} - {trackInfo.Album}",
-                    Colour = Color4.Black,
+                    Colour = Colour4.Black,
                     Font = FontUsage.Default.With(size: 52)
                 });
             }
@@ -183,7 +180,7 @@ public partial class PlaySongSelectScreen : Screen {
         [BackgroundDependencyLoader]
         private void load() {
             this.Masking = true;
-            this.BorderColour = Color4.White;
+            this.BorderColour = Colour4.White;
             this.RelativeSizeAxes = Axes.X;
             this.Height = 50;
             this.Margin = new MarginPadding(0) {
@@ -198,7 +195,7 @@ public partial class PlaySongSelectScreen : Screen {
                 Origin = Anchor.TopCentre,
                 Anchor = Anchor.TopCentre,
                 Text = $"Difficulty: {mapInfo.Difficulty}",
-                Colour = Color4.Black,
+                Colour = Colour4.Black,
                 Font = FontUsage.Default.With(size: 52)
             });
         }

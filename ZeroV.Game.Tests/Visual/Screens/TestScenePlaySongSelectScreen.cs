@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -9,6 +10,7 @@ using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using ZeroV.Game.Data;
+using ZeroV.Game.Data.KeyValueStorage;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
@@ -20,7 +22,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
 
     [BackgroundDependencyLoader]
     private void load(Storage storage) {
-        this.dependencies!.CacheAs<TrackInfoProvider>(new FakeTrackInfoProvider(storage));
+        IKeyValueStorage keyValueStorage = new JsonKeyValueStorage(storage);
+        this.dependencies!.CacheAs<TrackInfoProvider>(new FakeTrackInfoProvider(keyValueStorage));
         this.Add(this.screenStack = new ScreenStack() { RelativeSizeAxes = Axes.Both });
     }
 
@@ -33,8 +36,10 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
         this.dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
-    private class FakeTrackInfoProvider(Storage storage) : TrackInfoProvider(storage) {
-        public override IReadOnlyList<TrackInfo> TrackInfoList => [
+    private class FakeTrackInfoProvider(IKeyValueStorage storage) : TrackInfoProvider(storage) {
+        public override Task<IReadOnlyList<TrackInfo>?> GetTrackInfoListAsync() => Task.FromResult(this.trackInfoList);
+
+        private IReadOnlyList<TrackInfo>? trackInfoList => [
             new() {
                 Title = "Test Title",
                 Album = "Test Album",

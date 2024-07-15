@@ -45,13 +45,14 @@ public partial class ZeroVGameBase : osu.Framework.Game {
 
         this.dependencies.CacheAs<ZeroVGameBase>(this);
         this.dependencies.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
-
-        this.dependencies.CacheAs<IKeyValueStorage>(new JsonKeyValueStorage(storage));
+        var jsonKeyValueStorage = new JsonKeyValueStorage(storage);
+        this.dependencies.CacheAs<IKeyValueStorage>(jsonKeyValueStorage);
+        this.dependencies.CacheAs<TrackInfoProvider>(new TrackInfoProvider(jsonKeyValueStorage));
 
         IResourceStore<TextureUpload> resourceStore = this.Host.CreateTextureLoaderStore(new NamespacedResourceStore<Byte[]>(this.Resources, @"Textures"));
-        var largeStore = new LargeTextureStore(this.Host.Renderer, resourceStore);
+        LargeTextureStore largeStore = new(this.Host.Renderer, resourceStore);
         largeStore.AddTextureSource(this.Host.CreateTextureLoaderStore(new OnlineStore()));
-        this.dependencies.Cache(largeStore);
+        this.dependencies.CacheAs<LargeTextureStore>(largeStore);
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
