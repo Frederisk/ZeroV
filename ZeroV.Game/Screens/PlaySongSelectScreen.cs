@@ -65,7 +65,7 @@ public partial class PlaySongSelectScreen : Screen {
 
     private TrackInfoListItem? expandedItem;
     public void OnExpanded(TrackInfoListItem item) {
-        if (this.expandedItem != null) {
+        if (this.expandedItem != item && this.expandedItem != null) {
             this.expandedItem.IsExpanded = false;
         }
         this.expandedItem = item;
