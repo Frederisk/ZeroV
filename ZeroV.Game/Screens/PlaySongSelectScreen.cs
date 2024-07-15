@@ -46,7 +46,7 @@ public partial class PlaySongSelectScreen : Screen {
             Padding = new MarginPadding(10)
         };
 
-        foreach (TrackInfo item in await this.beatmapWrapperProvider.GetTrackInfoListAsync() ?? []) {
+        foreach (TrackInfo item in await this.beatmapWrapperProvider.GetAsync() ?? []) {
             this.container.Add(new TrackInfoListItem(item));
         }
 

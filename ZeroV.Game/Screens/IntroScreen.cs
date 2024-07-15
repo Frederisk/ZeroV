@@ -64,13 +64,13 @@ public partial class IntroScreen : Screen {
     private ZeroVConfigManager configManager { get; set; } = null!;
 
     private async Task<IReadOnlyList<TrackInfo>> loadBeatmapsAsync() {
-        IReadOnlyList<TrackInfo>? trackInfoList = await this.trackInfoProvider.GetTrackInfoListAsync();
+        IReadOnlyList<TrackInfo>? trackInfoList = await this.trackInfoProvider.GetAsync();
         if (trackInfoList is null) {
             String beatmapStoragePath = this.configManager.Get<String>(ZeroVSetting.BeatmapStoragePath);
             List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
             List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
             trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
-            await this.trackInfoProvider.SetTrackInfoListAsync(trackInfoList);
+            await this.trackInfoProvider.SetAsync(trackInfoList);
 
         }
         return trackInfoList;
