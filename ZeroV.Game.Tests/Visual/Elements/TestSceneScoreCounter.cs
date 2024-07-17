@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Counters;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 

@@ -9,6 +9,7 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens;
@@ -44,6 +45,7 @@ public partial class MainScreen : Screen {
                         Y = 204,
                         Size = new Vector2(250),
                         Text = "Play",
+                        Action = () => this.Push(new PlaySongSelectScreen()),
                     },
                     new DiamondButton {
                         X = 986,

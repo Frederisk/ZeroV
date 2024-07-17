@@ -12,7 +12,6 @@ using osu.Framework.Screens;
 using ZeroV.Game.Configs;
 using ZeroV.Game.Data;
 using ZeroV.Game.Data.IO;
-using ZeroV.Game.Data.KeyValueStorage;
 using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
@@ -43,7 +42,7 @@ public partial class IntroScreen : Screen {
         base.LoadComplete();
         // TODO: Add cutscenes.
         this.Schedule(async () => {
-            Task<List<TrackInfo>> task = this.loadBeatmapsAsync();
+            Task<IReadOnlyList<TrackInfo>> task = this.loadBeatmapsAsync();
             //Task load = this.LoadComponentAsync(new MainScreen(), this.Push); && !load.IsCompletedSuccessfully
             while (!task.IsCompletedSuccessfully) {
                 if (task.IsFaulted) {
@@ -58,20 +57,22 @@ public partial class IntroScreen : Screen {
         });
     }
 
-    //[Resolved]
-    //IKeyValueStorage keyValueStorage { get; set; } = null!;
+    [Resolved]
+    private TrackInfoProvider trackInfoProvider { get; set; } = null!;
 
-    private async Task<List<TrackInfo>> loadBeatmapsAsync() {
-        // TODO: TrackInfoList
-        IKeyValueStorage keyValueStorage = this.Dependencies.Get<IKeyValueStorage>();
-        List<TrackInfo>? trackInfoList = await keyValueStorage.GetAsync<List<TrackInfo>>("TrackInfoList");
-        if (trackInfoList is null) {
-            String beatmapStoragePath = this.Dependencies.Get<ZeroVConfigManager>().Get<String>(ZeroVSetting.BeatmapStoragePath);
+    [Resolved]
+    private ZeroVConfigManager configManager { get; set; } = null!;
+
+    private async Task<IReadOnlyList<TrackInfo>> loadBeatmapsAsync() {
+        IReadOnlyList<TrackInfo>? trackInfoList = await this.trackInfoProvider.GetAsync();
+        // FIXME: Load from path every time to debug. Remove those comments after debugging.
+        //if (trackInfoList is null) {
+            String beatmapStoragePath = this.configManager.Get<String>(ZeroVSetting.BeatmapStoragePath);
             List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
             List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
             trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
-            await keyValueStorage.SetAsync("TrackInfoList", trackInfoList);
-        }
+            await this.trackInfoProvider.SetAsync(trackInfoList);
+        //}
         return trackInfoList;
     }
 }

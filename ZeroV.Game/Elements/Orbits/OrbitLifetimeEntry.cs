@@ -1,6 +1,6 @@
 using ZeroV.Game.Graphics;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Orbits;
 
 public class OrbitLifetimeEntry : ZeroVLifetimeEntry<OrbitSource, Orbit> {
 

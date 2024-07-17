@@ -5,7 +5,7 @@ using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
 
-using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;

@@ -9,7 +9,7 @@ using osu.Framework.Graphics.UserInterface;
 
 using osuTK;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Buttons;
 
 public partial class SwitchButton : Checkbox {
     private Drawable innerContainer = null!;

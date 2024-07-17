@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using osu.Framework.Graphics;
 
 using ZeroV.Game.Data.Schema.ZeroVMap;
-using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 
@@ -57,11 +57,11 @@ public class BeatmapWrapper {
     /// <summary>
     /// The file that the beatmap was read from.
     /// </summary>
-    public FileInfo File { get; }
+    public FileInfo BeatmapFile { get; }
 
     private BeatmapWrapper(ZeroVMapXml zeroVMap, FileInfo file) {
         this.ZeroVMap = zeroVMap;
-        this.File = file;
+        this.BeatmapFile = file;
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public class BeatmapWrapper {
     /// </returns>
     /// <exception cref="InvalidOperationException">Thrown when the track file and it's folder layout is invalid.</exception>
     public TrackInfo GetTrackInfo() {
-        DirectoryInfo? directory = this.File.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
+        DirectoryInfo? directory = this.BeatmapFile.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
         // TODO: match music file
         FileInfo[] files = directory.GetFiles("Track.*");
         if (files.Length < 1 || !files[0].Exists) {
@@ -134,7 +134,8 @@ public class BeatmapWrapper {
             Description = this.ZeroVMap.GameInfo.Description,
             GameVersion = new Version(this.ZeroVMap.GameInfo.GameVersion),
             Maps = this.ZeroVMap.BeatmapList.ConvertAll(getMapInfoFromXml),
-            File = files[0],
+            TrackFile = files[0],
+            InfoFile = this.BeatmapFile,
         };
     }
 

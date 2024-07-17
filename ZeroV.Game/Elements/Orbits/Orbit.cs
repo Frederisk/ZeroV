@@ -21,13 +21,12 @@ using ZeroV.Game.Scoring;
 using ZeroV.Game.Screens;
 using ZeroV.Game.Utils;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Orbits;
 
 /// <summary>
 /// OrbitSources that carry particles. It's also the main interactive object in this game.
 /// </summary>
 public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
-
     /// <summary>
     /// The position of the top of visible orbit.
     /// </summary>

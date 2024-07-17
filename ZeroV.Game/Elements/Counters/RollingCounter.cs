@@ -9,7 +9,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Localisation;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Counters;
 
 public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T> where T : struct, IEquatable<T> {
     private readonly BindableWithCurrent<T> current = new();
@@ -112,7 +112,7 @@ public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T>
     /// <param name="currentValue">Count value before modification.</param>
     /// <param name="newValue">Expected count value after modification.</param>
     protected virtual void TransformCount(T currentValue, T newValue) {
-        Double rollingTotalDuration =
+        var rollingTotalDuration =
             this.IsRollingProportional
                 ? this.GetProportionalDuration(currentValue, newValue)
                 : this.RollingDuration;
