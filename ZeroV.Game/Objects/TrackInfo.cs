@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace ZeroV.Game.Objects;
+
+/// <summary>
+/// Represents a track info.
+/// </summary>
 public record TrackInfo {
     public required String Title { get; init; }
 
@@ -28,18 +32,4 @@ public record TrackInfo {
 
     public required FileInfo InfoFile { get; init; }
     // TODO: add background image file info
-}
-
-public record MapInfo {
-    public required TimeSpan MapOffset { get; init; }
-
-    public required Double Difficulty { get; init; }
-
-    public required Int32 BlinkCount { get; init; }
-
-    public required Int32 PressCount { get; init; }
-
-    public required Int32 SlideCount { get; init; }
-
-    public required Int32 StrokeCount { get; init; }
 }
