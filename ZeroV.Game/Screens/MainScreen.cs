@@ -9,6 +9,7 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens;
