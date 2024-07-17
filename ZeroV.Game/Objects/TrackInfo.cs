@@ -24,7 +24,10 @@ public record TrackInfo {
 
     //public required FileInfo InfoFile { get; init; }
 
-    public required FileInfo File { get; init; }
+    public required FileInfo TrackFile { get; init; }
+
+    public required FileInfo InfoFile { get; init; }
+    // TODO: add background image file info
 }
 
 public record MapInfo {

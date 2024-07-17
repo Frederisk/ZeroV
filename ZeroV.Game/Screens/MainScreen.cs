@@ -44,6 +44,7 @@ public partial class MainScreen : Screen {
                         Y = 204,
                         Size = new Vector2(250),
                         Text = "Play",
+                        Action = () => this.Push(new PlaySongSelectScreen()),
                     },
                     new DiamondButton {
                         X = 986,

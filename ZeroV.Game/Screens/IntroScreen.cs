@@ -65,13 +65,14 @@ public partial class IntroScreen : Screen {
 
     private async Task<IReadOnlyList<TrackInfo>> loadBeatmapsAsync() {
         IReadOnlyList<TrackInfo>? trackInfoList = await this.trackInfoProvider.GetAsync();
-        if (trackInfoList is null) {
+        // FIXME: Load from path every time to debug. Remove those comments after debugging.
+        //if (trackInfoList is null) {
             String beatmapStoragePath = this.configManager.Get<String>(ZeroVSetting.BeatmapStoragePath);
             List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
             List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
             trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
             await this.trackInfoProvider.SetAsync(trackInfoList);
-        }
+        //}
         return trackInfoList;
     }
 }

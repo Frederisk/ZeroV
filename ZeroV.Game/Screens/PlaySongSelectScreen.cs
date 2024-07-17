@@ -23,6 +23,7 @@ public partial class PlaySongSelectScreen : Screen {
 
     [Resolved]
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
+
     [Resolved]
     private LargeTextureStore textureStore { get; set; } = null!;
 
@@ -54,16 +55,20 @@ public partial class PlaySongSelectScreen : Screen {
             RelativeSizeAxes = Axes.Both,
             Child = this.container
         };
-        this.AddInternal(child);
+
+        // TODO: make sure this is the correct way to add a child
+        this.Schedule(() => this.AddInternal(child));
     }
 
     private MapInfoListItem? selectedItem;
+
     public void OnSelect(MapInfoListItem item) {
         this.selectedItem?.OnSelectCancel();
         this.selectedItem = item;
     }
 
     private TrackInfoListItem? expandedItem;
+
     public void OnExpanded(TrackInfoListItem item) {
         if (this.expandedItem != item && this.expandedItem != null) {
             this.expandedItem.IsExpanded = false;
@@ -149,7 +154,7 @@ public partial class PlaySongSelectScreen : Screen {
                     Colour = Colour4.Blue
                 });
 
-                var trackInfo = this.listItem.TrackInfo;
+                TrackInfo trackInfo = this.listItem.TrackInfo;
                 this.AddInternal(new SpriteText() {
                     Origin = Anchor.Centre,
                     Anchor = Anchor.Centre,

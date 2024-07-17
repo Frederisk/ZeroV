@@ -68,7 +68,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         StrokeCount = 1
                     }
                 ],
-                File = new System.IO.FileInfo("testFileName.xml")
+                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                TrackFile = new System.IO.FileInfo("testFileName.wav")
             },
             new() {
                 Title = "Test Title2",
@@ -88,7 +89,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         SlideCount = 1,
                         StrokeCount = 1
                     }],
-                File = new System.IO.FileInfo("testFileName.xml")
+                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                TrackFile = new System.IO.FileInfo("testFileName.flac")
             }
         ];
     }
