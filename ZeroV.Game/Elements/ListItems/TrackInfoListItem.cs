@@ -8,7 +8,7 @@ using osuTK;
 
 using ZeroV.Game.Objects;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.ListItems;
 
 [Cached]
 public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {

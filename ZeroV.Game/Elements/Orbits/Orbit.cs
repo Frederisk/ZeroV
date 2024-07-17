@@ -21,7 +21,7 @@ using ZeroV.Game.Scoring;
 using ZeroV.Game.Screens;
 using ZeroV.Game.Utils;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Orbits;
 
 /// <summary>
 /// OrbitSources that carry particles. It's also the main interactive object in this game.
@@ -36,7 +36,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// <summary>
     /// The position beyond the Y-axis at the top of visible orbit.
     /// </summary>
-    private const Single visual_orbit_out_of_top = visual_orbit_top - (ZeroVMath.DIAMOND_SIZE / 2);
+    private const Single visual_orbit_out_of_top = visual_orbit_top - ZeroVMath.DIAMOND_SIZE / 2;
 
     /// <summary>
     /// The position of the bottom of visible orbit. It's also the offset of visible orbit relative to the screen.
@@ -51,7 +51,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// <summary>
     /// The position beyond the Y-axis at the bottom of visible orbit.
     /// </summary>
-    private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + (ZeroVMath.DIAMOND_SIZE / 2);
+    private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + ZeroVMath.DIAMOND_SIZE / 2;
 
     /// <summary>
     /// The container that contains all the elements of the orbit.

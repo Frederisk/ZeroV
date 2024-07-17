@@ -6,7 +6,7 @@ using osu.Framework.Graphics;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Orbits;
 
 public class OrbitSource : TimeSource {
     public override Double StartTime => this.KeyFrames[0].Time;

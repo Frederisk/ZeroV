@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using osu.Framework.Graphics;
 
 using ZeroV.Game.Data.Schema.ZeroVMap;
-using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 

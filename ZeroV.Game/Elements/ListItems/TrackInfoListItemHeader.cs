@@ -10,7 +10,7 @@ using osu.Framework.Input.Events;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.ListItems;
 
 public partial class TrackInfoListItemHeader : CompositeDrawable {
 

@@ -5,7 +5,7 @@ using osu.Framework.Extensions.LocalisationExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Localisation;
 
-namespace ZeroV.Game.Elements;
+namespace ZeroV.Game.Elements.Counters;
 
 public partial class ScoreCounter : RollingCounter<UInt32> {
     protected override Double RollingDuration => 500;

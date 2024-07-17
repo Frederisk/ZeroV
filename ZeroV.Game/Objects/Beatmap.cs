@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Orbits;
 
 namespace ZeroV.Game.Objects;
 
