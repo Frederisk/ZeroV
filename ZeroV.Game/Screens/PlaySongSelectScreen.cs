@@ -9,11 +9,13 @@ using osuTK;
 
 using ZeroV.Game.Objects;
 using ZeroV.Game.Data;
+using System.Threading.Tasks;
 using ZeroV.Game.Elements.ListItems;
 
 namespace ZeroV.Game.Screens;
 
 [Cached]
+[LongRunningLoad]
 public partial class PlaySongSelectScreen : Screen {
     private Sprite background = null!;
     private FillFlowContainer container = null!;
@@ -25,7 +27,7 @@ public partial class PlaySongSelectScreen : Screen {
     private LargeTextureStore textureStore { get; set; } = null!;
 
     [BackgroundDependencyLoader]
-    private async void load() {
+    private async Task load() {
         this.RelativeSizeAxes = Axes.Both;
 
         this.background = new Sprite() {
@@ -52,9 +54,7 @@ public partial class PlaySongSelectScreen : Screen {
             RelativeSizeAxes = Axes.Both,
             Child = this.container
         };
-
-        // TODO: make sure this is the correct way to add a child
-        this.Schedule(() => this.AddInternal(child));
+        this.AddInternal(child);
     }
 
     private MapInfoListItem? selectedItem;
