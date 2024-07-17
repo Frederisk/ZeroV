@@ -71,7 +71,6 @@ public partial class IntroScreen : Screen {
             List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
             trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
             await this.trackInfoProvider.SetAsync(trackInfoList);
-
         }
         return trackInfoList;
     }

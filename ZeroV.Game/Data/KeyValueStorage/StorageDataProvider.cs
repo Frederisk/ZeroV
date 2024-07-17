@@ -12,5 +12,4 @@ public abstract class StorageDataProvider<T>(IKeyValueStorage keyValueStorage) {
 
     public virtual async Task<T?> GetAsync() =>
         await this.KeyValueStorage.GetAsync<T>(this.StorageKey);
-
 }
