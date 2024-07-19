@@ -7,7 +7,6 @@ using osu.Framework.Graphics.Shapes;
 
 using osuTK;
 
-using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Icons;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
@@ -28,8 +27,9 @@ public partial class TestSceneIcons : ZeroVTestScene {
         flower.AddRange([
             GetIcon<StartIcon>(),
             GetIcon<PauseIcon>(),
-            GetIcon<LeftStartIcon>(),
             GetIcon<StopIcon>(),
+            GetIcon<CrossIcon>(),
+            GetIcon<NextIcon>(),
             ]);
     }
 
@@ -37,7 +37,7 @@ public partial class TestSceneIcons : ZeroVTestScene {
     private static Container GetIcon<T>() where T : IconBase, new() {
         //T icon = new();
         return new Container {
-            Size = new Vector2(128),
+            Size = new Vector2(56),
             //RelativeSizeAxes = Axes.Both,
             Children = [
                 new Box {
