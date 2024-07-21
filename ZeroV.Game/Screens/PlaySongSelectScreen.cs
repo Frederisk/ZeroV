@@ -11,6 +11,8 @@ using ZeroV.Game.Objects;
 using ZeroV.Game.Data;
 using System.Threading.Tasks;
 using ZeroV.Game.Elements.ListItems;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ZeroV.Game.Screens;
 
@@ -46,7 +48,9 @@ public partial class PlaySongSelectScreen : Screen {
             Padding = new MarginPadding(10)
         };
 
-        foreach (TrackInfo item in await this.beatmapWrapperProvider.GetAsync() ?? []) {
+        IReadOnlyList<TrackInfo> trackInfos = await this.beatmapWrapperProvider.GetAsync() ?? [];
+        IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);
+        foreach (TrackInfo item in trackInfoSort) {
             this.container.Add(new TrackInfoListItem(item));
         }
 
