@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
@@ -23,7 +23,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
     [BackgroundDependencyLoader]
     private void load() {
         this.RelativeSizeAxes = Axes.X;
-        this.Height = 100;
+        this.AutoSizeAxes = Axes.Y;
 
         this.AddInternal(new Box() {
             RelativeSizeAxes = Axes.Both,
@@ -31,12 +31,32 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
         });
 
         TrackInfo trackInfo = this.listItem.TrackInfo;
-        this.AddInternal(new SpriteText() {
-            Origin = Anchor.Centre,
-            Anchor = Anchor.Centre,
-            Text = $"{trackInfo.Title} - {trackInfo.Artists} - {trackInfo.Album}",
-            Colour = Colour4.Black,
-            Font = FontUsage.Default.With(size: 52)
+
+        var artists = trackInfo.Artists ?? "[No artists]";
+        var album = trackInfo.Album ?? "[No album]";
+
+        this.AddInternal(new FillFlowContainer() {
+            RelativeSizeAxes = Axes.X,
+            AutoSizeAxes = Axes.Y,
+            Direction = FillDirection.Vertical,
+            Spacing = new osuTK.Vector2(0, 5),
+            Padding = new MarginPadding(5),
+            Children = [
+                new SpriteText() {
+                    Origin = Anchor.CentreLeft,
+                    Anchor = Anchor.CentreLeft,
+                    Text = trackInfo.Title,
+                    Colour = Colour4.Black,
+                    Font = FontUsage.Default.With(size: 52)
+                },
+                new SpriteText() {
+                    Origin = Anchor.CentreLeft,
+                    Anchor = Anchor.CentreLeft,
+                    Text = $"{artists} - {album}",
+                    Colour = Colour4.Black,
+                    Font = FontUsage.Default.With(size: 32)
+                }
+             ]
         });
     }
 

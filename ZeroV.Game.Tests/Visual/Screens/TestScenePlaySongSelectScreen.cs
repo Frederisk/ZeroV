@@ -41,7 +41,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
 
         private IReadOnlyList<TrackInfo>? trackInfoList => [
             new() {
-                Title = "Test Title",
+                Title = "A - Test Title",
                 Album = "Test Album",
                 TrackOrder = 0,
                 Artists = "Test Artists",
@@ -72,7 +72,28 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 TrackFile = new System.IO.FileInfo("testFileName.wav")
             },
             new() {
-                Title = "Test Title2",
+                Title = "C - Test Title3",
+                Album = null,
+                TrackOrder = 0,
+                Artists = null,
+                FileOffset = TimeSpan.FromSeconds(1),
+                GameAuthor = "Test GameAuthor",
+                Description = "Test Description",
+                GameVersion = new Version(1,0,0),
+                Maps = [
+                    new MapInfo() {
+                        Difficulty = 1,
+                        MapOffset = TimeSpan.FromSeconds(2),
+                        BlinkCount = 1,
+                        PressCount = 1,
+                        SlideCount = 1,
+                        StrokeCount = 1
+                    }],
+                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                TrackFile = new System.IO.FileInfo("testFileName.flac")
+            },
+            new() {
+                Title = "B - Test Title2",
                 Album = "Test Album",
                 TrackOrder = 0,
                 Artists = "Test Artists",
