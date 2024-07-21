@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using ZeroV.Game.Elements.ListItems;
 using System.Linq;
 using System.Collections.Generic;
+using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.UserInterface;
+using ZeroV.Game.Elements.Buttons;
 
 namespace ZeroV.Game.Screens;
 
@@ -58,7 +61,27 @@ public partial class PlaySongSelectScreen : Screen {
             RelativeSizeAxes = Axes.Both,
             Child = this.container
         };
-        this.AddInternal(child);
+
+        var grid = new GridContainer()
+        {
+            RelativeSizeAxes = Axes.Both,
+            RowDimensions = [
+               new Dimension(GridSizeMode.AutoSize),
+               new Dimension(GridSizeMode.Relative, size: 1)
+               ],
+            Content = new Drawable[][] {
+                [
+                    new BackButton(this) {
+                        Height = 100,
+                        Width = 100,
+                        Text = "< Back"
+                    }
+                ],
+                [ child ]
+            }
+        };
+
+        this.AddInternal(grid);
     }
 
     private MapInfoListItem? selectedItem;
