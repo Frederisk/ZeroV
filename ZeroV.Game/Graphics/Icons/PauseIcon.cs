@@ -1,7 +1,6 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shapes;
 
 using osuTK;
@@ -13,7 +12,7 @@ namespace ZeroV.Game.Graphics.Icons;
 public partial class PauseIcon : IconBase {
 
     [BackgroundDependencyLoader]
-    private void load(IRenderer renderer) {
+    private void load() {
         this.InternalChild = new Container {
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,

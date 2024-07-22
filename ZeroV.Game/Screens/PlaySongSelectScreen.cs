@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
@@ -7,15 +11,10 @@ using osu.Framework.Screens;
 
 using osuTK;
 
-using ZeroV.Game.Objects;
 using ZeroV.Game.Data;
-using System.Threading.Tasks;
 using ZeroV.Game.Elements.ListItems;
-using System.Linq;
-using System.Collections.Generic;
-using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.UserInterface;
 using ZeroV.Game.Elements.Buttons;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
 
@@ -74,7 +73,7 @@ public partial class PlaySongSelectScreen : Screen {
                     new BackButton(this) {
                         Height = 100,
                         Width = 100,
-                        Text = "< Back"
+                        Text = "< Back",
                     }
                 ],
                 [ child ]
@@ -106,6 +105,7 @@ public partial class PlaySongSelectScreen : Screen {
     }
 
     public void ConfirmSelect() {
+        //this.Push(new GameplayScreen(this.selectedItem.));
         //TODO: Confirm select
     }
 }

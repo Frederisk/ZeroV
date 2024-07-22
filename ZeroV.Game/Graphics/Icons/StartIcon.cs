@@ -1,5 +1,4 @@
 using osu.Framework.Allocation;
-using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics;
 
 using ZeroV.Game.Utils;
@@ -10,7 +9,7 @@ namespace ZeroV.Game.Graphics.Icons;
 public partial class StartIcon : IconBase {
 
     [BackgroundDependencyLoader]
-    private void load(IRenderer renderer) {
+    private void load() {
         this.InternalChild = new OrientedTriangle(OrientedTriangle.Orientation.Right) {
             Anchor = Anchor.CentreRight,
             Origin = Anchor.CentreRight,

@@ -1,6 +1,5 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shapes;
 
 using ZeroV.Game.Utils;
@@ -12,7 +11,7 @@ namespace ZeroV.Game.Graphics.Icons;
 public partial class StopIcon : IconBase {
 
     [BackgroundDependencyLoader]
-    private void load(IRenderer renderer) {
+    private void load() {
         this.InternalChild = new Box {
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
