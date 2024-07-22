@@ -61,13 +61,12 @@ public partial class PlaySongSelectScreen : Screen {
             Child = this.container
         };
 
-        var grid = new GridContainer()
-        {
+        var grid = new GridContainer() {
             RelativeSizeAxes = Axes.Both,
             RowDimensions = [
-               new Dimension(GridSizeMode.AutoSize),
-               new Dimension(GridSizeMode.Relative, size: 1)
-               ],
+                new Dimension(GridSizeMode.AutoSize),
+                new Dimension(GridSizeMode.Relative, size: 1)
+            ],
             Content = new Drawable[][] {
                 [
                     new BackButton(this) {
@@ -76,7 +75,18 @@ public partial class PlaySongSelectScreen : Screen {
                         Text = "< Back",
                     }
                 ],
-                [ child ]
+                [
+                    new GridContainer() {
+                        RelativeSizeAxes = Axes.Both,
+                        ColumnDimensions = [
+                            new Dimension(GridSizeMode.Relative, size: 0.5f),
+                            new Dimension(GridSizeMode.Relative, size: 0.5f)
+                        ],
+                        Content = new Drawable?[][] {
+                            [ null, child ]
+                        }
+                    }
+                ]
             }
         };
 
@@ -105,7 +115,9 @@ public partial class PlaySongSelectScreen : Screen {
     }
 
     public void ConfirmSelect() {
-        //this.Push(new GameplayScreen(this.selectedItem.));
-        //TODO: Confirm select
+        var wrapper = BeatmapWrapper.Create(this.expandedItem!.TrackInfo.InfoFile);
+        Beatmap beatmap = wrapper.GetBeatmapAt(this.selectedItem!.Index);
+        var playScreen = new GameplayScreen(beatmap);
+        this.Push(playScreen);
     }
 }

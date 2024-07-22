@@ -14,6 +14,7 @@ namespace ZeroV.Game.Elements.ListItems;
 public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {
     private Boolean isExpanded;
     private FillFlowContainer container = null!;
+    private TrackInfoListItemHeader header = null!;
 
     public TrackInfo TrackInfo => info;
 
@@ -38,26 +39,30 @@ public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Children = [
-                new TrackInfoListItemHeader(),
+                this.header = new TrackInfoListItemHeader(),
                     this.container
             ]
         });
 
-        foreach (MapInfo item in info.Maps) {
-            this.container.Add(new MapInfoListItem(item));
+        for (var i = 0; i < info.Maps.Count; i++) {
+            MapInfo item = info.Maps[i];
+            this.container.Add(new MapInfoListItem(i, item));
         }
     }
 
     public Boolean IsExpanded {
         get => this.isExpanded;
         set {
+            this.isExpanded = value;
+
             if (value) {
                 this.container.AutoSizeAxes = Axes.Y;
+                this.header.TryBeginLongTitleScroll();
             } else {
                 this.container.AutoSizeAxes = Axes.None;
                 this.container.Height = 0;
+                this.header.TryEndLongTitleScroll();
             }
-            this.isExpanded = value;
         }
     }
 }

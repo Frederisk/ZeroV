@@ -12,9 +12,10 @@ using ZeroV.Game.Screens;
 
 namespace ZeroV.Game.Elements.ListItems;
 
-public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
+public partial class MapInfoListItem(Int32 index, MapInfo mapInfo) : CompositeDrawable {
     private Boolean selected;
 
+    public Int32 Index => index;
     public MapInfo MapInfo => mapInfo;
 
     [Resolved]
