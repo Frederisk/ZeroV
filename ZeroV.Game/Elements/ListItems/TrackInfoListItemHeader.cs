@@ -70,14 +70,14 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
     public void TryBeginLongTitleScroll() {
         if(this.IsHovered || this.listItem.IsExpanded) {
             if (!this.title.Transforms.Any() && this.title.DrawWidth > this.DrawWidth) {
-                var offset = this.title.DrawWidth - this.DrawWidth + padding * 2;
+                var offset = this.title.DrawWidth - this.DrawWidth + (padding * 2);
                 var duration = offset / long_title_scroll_speed;
 
                 var toMargin = new MarginPadding(0) { Left = -offset };
                 this.title.TransformTo(nameof(this.Margin), toMargin, duration);
             }
             if (!this.subTitle.Transforms.Any() && this.subTitle.DrawWidth > this.DrawWidth) {
-                var offset = this.subTitle.DrawWidth - this.DrawWidth + padding * 2;
+                var offset = this.subTitle.DrawWidth - this.DrawWidth + (padding * 2);
                 var duration = offset / long_title_scroll_speed;
 
                 var toMargin = new MarginPadding(0) { Left = -offset };
