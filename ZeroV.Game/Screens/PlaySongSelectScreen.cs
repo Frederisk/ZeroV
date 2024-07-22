@@ -62,8 +62,7 @@ public partial class PlaySongSelectScreen : Screen {
             Child = this.container
         };
 
-        var grid = new GridContainer()
-        {
+        var grid = new GridContainer() {
             RelativeSizeAxes = Axes.Both,
             RowDimensions = [
                new Dimension(GridSizeMode.AutoSize),
@@ -74,10 +73,21 @@ public partial class PlaySongSelectScreen : Screen {
                     new BackButton(this) {
                         Height = 100,
                         Width = 100,
-                        Text = "< Back"
+                        Text = "< Back",
                     }
                 ],
-                [ child ]
+                [
+                    new GridContainer() {
+                        RelativeSizeAxes = Axes.Both,
+                        ColumnDimensions = [
+                            new Dimension(GridSizeMode.Relative, size: 0.5f),
+                            new Dimension(GridSizeMode.Relative, size: 0.5f)
+                        ],
+                        Content = new Drawable?[][] {
+                            [ null, child ]
+                        }
+                    }
+                ]
             }
         };
 
