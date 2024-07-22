@@ -8,6 +8,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Performance;
 using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
@@ -16,6 +17,7 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Elements;
+using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Elements.Counters;
 using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
@@ -129,6 +131,13 @@ public partial class GameplayScreen : Screen {
                     Text = "ZeroV",
                     FontSize = 52,
                },
+               new DiamondButton() {
+                   Origin = Anchor.TopLeft,
+                   Anchor = Anchor.TopLeft,
+                   Size = new Vector2(120),
+                   Text = "Pause",
+                   Action = ()=> {if (this.GameplayTrack.IsRunning) { this.GameplayTrack.Stop(); } else { this.GameplayTrack.Start(); } },
+               }
             ],
         };
         // FIXME:

@@ -51,7 +51,7 @@ public partial class IntroScreen : Screen {
                 await Task.Delay(Random.Shared.Next(50, 500));
                 this.textFlow.AddParagraph("Reading...");
             }
-            //this.textFlow.FadeOut(1000).Schedule(this.continueToMain);
+            // this.textFlow.FadeOut(1000).Schedule(this.continueToMain);
             this.Push(new MainScreen());
             // task.Result;
         });
