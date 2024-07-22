@@ -24,12 +24,16 @@ public record TrackInfo {
 
     public required Version GameVersion { get; init; }
 
-    public required IReadOnlyList<MapInfo> Maps { get; init; }
+    public required IReadOnlyList<MapInfo> MapInfos { get; init; }
 
-    //public required FileInfo InfoFile { get; init; }
-
+    /// <summary>
+    /// The audio file that contains the track.
+    /// </summary>
     public required FileInfo TrackFile { get; init; }
 
-    public required FileInfo InfoFile { get; init; }
+    /// <summary>
+    /// The XML file that contains the beatmap information.
+    /// </summary>
+    public required FileInfo BeatmapFile { get; init; }
     // TODO: add background image file info
 }

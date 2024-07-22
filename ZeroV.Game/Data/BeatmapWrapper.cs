@@ -133,9 +133,9 @@ public class BeatmapWrapper {
             GameAuthor = this.ZeroVMap.GameInfo.Author,
             Description = this.ZeroVMap.GameInfo.Description,
             GameVersion = new Version(this.ZeroVMap.GameInfo.GameVersion),
-            Maps = this.ZeroVMap.BeatmapList.ConvertAll(getMapInfoFromXml),
+            MapInfos = this.ZeroVMap.BeatmapList.ConvertAll(getMapInfoFromXml),
             TrackFile = files[0],
-            InfoFile = this.BeatmapFile,
+            BeatmapFile = this.BeatmapFile,
         };
     }
 

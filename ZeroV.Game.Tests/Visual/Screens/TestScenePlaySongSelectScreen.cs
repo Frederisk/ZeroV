@@ -49,7 +49,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-                Maps = [
+                MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
                         MapOffset = TimeSpan.FromSeconds(2),
@@ -67,7 +67,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         StrokeCount = 1
                     }
                 ],
-                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
                 TrackFile = new System.IO.FileInfo("testFileName.wav")
             },
             new() {
@@ -79,7 +79,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-                Maps = [
+                MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
                         MapOffset = TimeSpan.FromSeconds(2),
@@ -88,7 +88,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         SlideCount = 1,
                         StrokeCount = 1
                     }],
-                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
                 TrackFile = new System.IO.FileInfo("testFileName.flac")
             },
             new() {
@@ -100,7 +100,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-                Maps = [
+                MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
                         MapOffset = TimeSpan.FromSeconds(2),
@@ -109,7 +109,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         SlideCount = 1,
                         StrokeCount = 1
                     }],
-                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
                 TrackFile = new System.IO.FileInfo("testFileName.flac")
             },
             new() {
@@ -121,7 +121,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-                Maps = [
+                MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
                         MapOffset = TimeSpan.FromSeconds(2),
@@ -130,7 +130,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         SlideCount = 1,
                         StrokeCount = 1
                     }],
-                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
                 TrackFile = new System.IO.FileInfo("testFileName.flac")
             }
         ];

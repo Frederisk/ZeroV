@@ -44,8 +44,8 @@ public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {
             ]
         });
 
-        for (var i = 0; i < info.Maps.Count; i++) {
-            MapInfo item = info.Maps[i];
+        for (var i = 0; i < info.MapInfos.Count; i++) {
+            MapInfo item = info.MapInfos[i];
             this.container.Add(new MapInfoListItem(i, item));
         }
     }
