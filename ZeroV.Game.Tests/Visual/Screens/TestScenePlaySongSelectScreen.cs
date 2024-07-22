@@ -49,7 +49,6 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-
                 Maps = [
                     new MapInfo() {
                         Difficulty = 1,
@@ -97,6 +96,27 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 Album = "Test Album",
                 TrackOrder = 0,
                 Artists = "Test Artists",
+                FileOffset = TimeSpan.FromSeconds(1),
+                GameAuthor = "Test GameAuthor",
+                Description = "Test Description",
+                GameVersion = new Version(1,0,0),
+                Maps = [
+                    new MapInfo() {
+                        Difficulty = 1,
+                        MapOffset = TimeSpan.FromSeconds(2),
+                        BlinkCount = 1,
+                        PressCount = 1,
+                        SlideCount = 1,
+                        StrokeCount = 1
+                    }],
+                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                TrackFile = new System.IO.FileInfo("testFileName.flac")
+            },
+            new() {
+                Title = "D - Test Looooooooooooooooooong Title2",
+                Album = "Test Looooooooooooooooooong Album",
+                TrackOrder = 0,
+                Artists = "Test Looooooooooooooooooong Artists",
                 FileOffset = TimeSpan.FromSeconds(1),
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",

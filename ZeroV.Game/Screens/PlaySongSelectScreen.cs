@@ -13,8 +13,6 @@ using System.Threading.Tasks;
 using ZeroV.Game.Elements.ListItems;
 using System.Linq;
 using System.Collections.Generic;
-using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.UserInterface;
 using ZeroV.Game.Elements.Buttons;
 
 namespace ZeroV.Game.Screens;
@@ -65,9 +63,9 @@ public partial class PlaySongSelectScreen : Screen {
         var grid = new GridContainer() {
             RelativeSizeAxes = Axes.Both,
             RowDimensions = [
-               new Dimension(GridSizeMode.AutoSize),
-               new Dimension(GridSizeMode.Relative, size: 1)
-               ],
+                new Dimension(GridSizeMode.AutoSize),
+                new Dimension(GridSizeMode.Relative, size: 1)
+            ],
             Content = new Drawable[][] {
                 [
                     new BackButton(this) {
