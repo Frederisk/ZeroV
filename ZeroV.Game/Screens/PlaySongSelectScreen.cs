@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
@@ -7,10 +11,10 @@ using osu.Framework.Screens;
 
 using osuTK;
 
-using ZeroV.Game.Objects;
 using ZeroV.Game.Data;
-using System.Threading.Tasks;
 using ZeroV.Game.Elements.ListItems;
+using ZeroV.Game.Elements.Buttons;
+using ZeroV.Game.Objects;
 
 namespace ZeroV.Game.Screens;
 
@@ -46,15 +50,28 @@ public partial class PlaySongSelectScreen : Screen {
             Padding = new MarginPadding(10)
         };
 
-        foreach (TrackInfo item in await this.beatmapWrapperProvider.GetAsync() ?? []) {
+        IReadOnlyList<TrackInfo> trackInfos = await this.beatmapWrapperProvider.GetAsync() ?? [];
+        IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);
+        foreach (TrackInfo item in trackInfoSort) {
             this.container.Add(new TrackInfoListItem(item));
         }
 
-        var child = new BasicScrollContainer() {
-            RelativeSizeAxes = Axes.Both,
-            Child = this.container
-        };
-        this.AddInternal(child);
+        this.InternalChildren = [
+            new BackButton(this) {
+                Anchor = Anchor.TopLeft,
+                Origin = Anchor.TopLeft,
+                Height = 48,
+                Width = 96,
+                Text = "< Back",
+            },
+            new BasicScrollContainer() {
+                Anchor = Anchor.CentreRight,
+                Origin = Anchor.CentreRight,
+                RelativeSizeAxes = Axes.Both,
+                Width = 0.5f,
+                Child = this.container
+            },
+        ];
     }
 
     private MapInfoListItem? selectedItem;
@@ -79,6 +96,9 @@ public partial class PlaySongSelectScreen : Screen {
     }
 
     public void ConfirmSelect() {
-        //TODO: Confirm select
+        var wrapper = BeatmapWrapper.Create(this.expandedItem!.TrackInfo.BeatmapFile);
+        Beatmap beatmap = wrapper.GetBeatmapAt(this.selectedItem!.Index);
+        var playScreen = new GameplayScreen(beatmap);
+        this.Push(playScreen);
     }
 }

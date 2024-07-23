@@ -1,7 +1,5 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Rendering;
-using osu.Framework.Graphics.Shapes;
 
 using ZeroV.Game.Utils;
 
@@ -14,7 +12,7 @@ namespace ZeroV.Game.Graphics.Icons;
 public partial class NextIcon : IconBase {
 
     [BackgroundDependencyLoader]
-    private void load(IRenderer renderer) {
+    private void load() {
         this.InternalChildren = [
             new Container {
                 Anchor = Anchor.Centre,

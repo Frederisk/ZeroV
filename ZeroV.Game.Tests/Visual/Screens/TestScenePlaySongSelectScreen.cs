@@ -41,7 +41,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
 
         private IReadOnlyList<TrackInfo>? trackInfoList => [
             new() {
-                Title = "Test Title",
+                Title = "A - Test Title",
                 Album = "Test Album",
                 TrackOrder = 0,
                 Artists = "Test Artists",
@@ -49,8 +49,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-
-                Maps = [
+                MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
                         MapOffset = TimeSpan.FromSeconds(2),
@@ -68,19 +67,19 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         StrokeCount = 1
                     }
                 ],
-                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
                 TrackFile = new System.IO.FileInfo("testFileName.wav")
             },
             new() {
-                Title = "Test Title2",
-                Album = "Test Album",
+                Title = "C - Test Title3",
+                Album = null,
                 TrackOrder = 0,
-                Artists = "Test Artists",
+                Artists = null,
                 FileOffset = TimeSpan.FromSeconds(1),
                 GameAuthor = "Test GameAuthor",
                 Description = "Test Description",
                 GameVersion = new Version(1,0,0),
-                Maps = [
+                MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
                         MapOffset = TimeSpan.FromSeconds(2),
@@ -89,7 +88,49 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         SlideCount = 1,
                         StrokeCount = 1
                     }],
-                InfoFile = new System.IO.FileInfo("testFileName.xml"),
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
+                TrackFile = new System.IO.FileInfo("testFileName.flac")
+            },
+            new() {
+                Title = "B - Test Title2",
+                Album = "Test Album",
+                TrackOrder = 0,
+                Artists = "Test Artists",
+                FileOffset = TimeSpan.FromSeconds(1),
+                GameAuthor = "Test GameAuthor",
+                Description = "Test Description",
+                GameVersion = new Version(1,0,0),
+                MapInfos = [
+                    new MapInfo() {
+                        Difficulty = 1,
+                        MapOffset = TimeSpan.FromSeconds(2),
+                        BlinkCount = 1,
+                        PressCount = 1,
+                        SlideCount = 1,
+                        StrokeCount = 1
+                    }],
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
+                TrackFile = new System.IO.FileInfo("testFileName.flac")
+            },
+            new() {
+                Title = "D - Test Looooooooooooooooooong Title2",
+                Album = "Test Looooooooooooooooooong Album",
+                TrackOrder = 0,
+                Artists = "Test Looooooooooooooooooong Artists",
+                FileOffset = TimeSpan.FromSeconds(1),
+                GameAuthor = "Test GameAuthor",
+                Description = "Test Description",
+                GameVersion = new Version(1,0,0),
+                MapInfos = [
+                    new MapInfo() {
+                        Difficulty = 1,
+                        MapOffset = TimeSpan.FromSeconds(2),
+                        BlinkCount = 1,
+                        PressCount = 1,
+                        SlideCount = 1,
+                        StrokeCount = 1
+                    }],
+                BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
                 TrackFile = new System.IO.FileInfo("testFileName.flac")
             }
         ];
