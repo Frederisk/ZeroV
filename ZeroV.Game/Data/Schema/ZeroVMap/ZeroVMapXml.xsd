@@ -17,7 +17,7 @@
               <!-- if TarckOrder is exist, Album must be exist. -->
               <!-- Album is optional. -->
               <sequence minOccurs="0">
-                <element name="Album" type="string" />
+                <element name="Album" type="string" minOccurs="0" />
                 <element name="TrackOrder" type="integer" minOccurs="0" />
               </sequence>
               <!--<element name="Artists" minOccurs="0">
