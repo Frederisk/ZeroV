@@ -56,41 +56,22 @@ public partial class PlaySongSelectScreen : Screen {
             this.container.Add(new TrackInfoListItem(item));
         }
 
-        var child = new BasicScrollContainer() {
-            RelativeSizeAxes = Axes.Both,
-            Child = this.container
-        };
-
-        var grid = new GridContainer() {
-            RelativeSizeAxes = Axes.Both,
-            RowDimensions = [
-                new Dimension(GridSizeMode.AutoSize),
-                new Dimension(GridSizeMode.Relative, size: 1)
-            ],
-            Content = new Drawable[][] {
-                [
-                    new BackButton(this) {
-                        Height = 100,
-                        Width = 100,
-                        Text = "< Back",
-                    }
-                ],
-                [
-                    new GridContainer() {
-                        RelativeSizeAxes = Axes.Both,
-                        ColumnDimensions = [
-                            new Dimension(GridSizeMode.Relative, size: 0.5f),
-                            new Dimension(GridSizeMode.Relative, size: 0.5f)
-                        ],
-                        Content = new Drawable?[][] {
-                            [ null, child ]
-                        }
-                    }
-                ]
-            }
-        };
-
-        this.AddInternal(grid);
+        this.InternalChildren = [
+            new BackButton(this) {
+                Anchor = Anchor.TopLeft,
+                Origin = Anchor.TopLeft,
+                Height = 48,
+                Width = 96,
+                Text = "< Back",
+            },
+            new BasicScrollContainer() {
+                Anchor = Anchor.CentreRight,
+                Origin = Anchor.CentreRight,
+                RelativeSizeAxes = Axes.Both,
+                Width = 0.5f,
+                Child = this.container
+            },
+        ];
     }
 
     private MapInfoListItem? selectedItem;
