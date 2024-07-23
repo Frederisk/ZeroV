@@ -20,9 +20,10 @@
                 <element name="Album" type="string" />
                 <element name="TrackOrder" type="integer" minOccurs="0" />
               </sequence>
-              <element name="Artists" minOccurs="0">
-                <!-- TODO: Clarify the type of this element. -->
-              </element>
+              <!--<element name="Artists" minOccurs="0">
+                --><!-- TODO: Clarify the type of this element. --><!--
+              </element>-->
+              <element name="Artists" type="string" minOccurs="0" />
               <element name="Length" type="zvm:timespan" />
               <element name="BPM" type="float" minOccurs="0" />
               <element name="FileOffset" type="zvm:timespan" />
