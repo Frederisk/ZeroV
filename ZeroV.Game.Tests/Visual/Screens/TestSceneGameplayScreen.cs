@@ -2,6 +2,7 @@ using System;
 
 using NUnit.Framework;
 
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
 
@@ -14,8 +15,16 @@ namespace ZeroV.Game.Tests.Visual.Screens;
 
 [TestFixture]
 public partial class TestSceneGameplayScreen : ZeroVTestScene {
+    [Cached]
+    private ScreenStack screenStack;
 
     public TestSceneGameplayScreen() {
+        this.screenStack = new ScreenStack() { RelativeSizeAxes = Axes.Both };
+        this.Add(this.screenStack);
+    }
+
+    [Test]
+    public void CreateScreen() {
         // For test, the beatmap instance will deserialize after beatmap selected.
         var beatmap = new Beatmap() {
             OrbitSources = [
@@ -91,6 +100,6 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
             ],
             Offset = 0,
         };
-        this.Add(new ScreenStack(new GameplayScreen(beatmap) { RelativeSizeAxes = Axes.Both }) { RelativeSizeAxes = Axes.Both });
+        this.screenStack.Push(new GameplayScreen(beatmap) { RelativeSizeAxes = Axes.Both });
     }
 }

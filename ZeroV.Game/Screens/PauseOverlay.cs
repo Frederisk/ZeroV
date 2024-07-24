@@ -18,6 +18,10 @@ public partial class PauseOverlay : OverlayContainer {
     protected const Int32 TRANSITION_DURATION = 200;
     private const Single background_alpha = 0.75f;
 
+    public Action? OnResume { get; init; }
+    public Action? OnRetry { get; init; }
+    public Action? OnQuit { get; init; }
+
     [BackgroundDependencyLoader]
     private void load() {
         this.RelativeSizeAxes = Axes.Both;
@@ -38,17 +42,20 @@ public partial class PauseOverlay : OverlayContainer {
                     new BasicButton() {
                         Height = 100,
                         Width = 100,
-                        Text = "Exit",
+                        Text = "Quit",
+                        Action = this.OnQuit
                     },
                     new BasicButton() {
                         Height = 100,
                         Width = 100,
                         Text = "Resume",
+                        Action = this.OnResume
                     },
                     new BasicButton() {
                         Height = 100,
                         Width = 100,
                         Text = "Retry",
+                        Action = this.OnRetry
                     }
                 ]
             }

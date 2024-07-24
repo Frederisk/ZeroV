@@ -19,6 +19,7 @@ public partial class ZeroVGame : ZeroVGameBase {
     /// <remarks>
     /// This field will never be null after <see cref="LoadComplete"/> has been called.
     /// </remarks>
+    [Cached]
     private ScreenStack screenStack = null!;
 
     [BackgroundDependencyLoader]

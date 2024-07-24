@@ -8,7 +8,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Performance;
 using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
@@ -34,6 +33,7 @@ public partial class GameplayScreen : Screen {
 
     public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
     public readonly Double ParticleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
+    
 
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
@@ -55,15 +55,21 @@ public partial class GameplayScreen : Screen {
     [Cached]
     protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
 
+    [Resolved]
+    private ScreenStack screenStack { get; set; } = null!;
+
+    private readonly Beatmap beatmap;
     private readonly LifetimeEntryManager lifetimeEntryManager = new();
     private Container<Orbit> orbits = null!;
     private Container overlay = null!;
     private ScoreCounter scoreCounter = null!;
     private ZeroVSpriteText topText = null!;
+    private PauseOverlay pauseOverlay = null!;
 
     public ScoringCalculator ScoringCalculator;
 
     public GameplayScreen(Beatmap beatmap) {
+        this.beatmap = beatmap;
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
 
@@ -136,7 +142,10 @@ public partial class GameplayScreen : Screen {
                    Anchor = Anchor.TopLeft,
                    Size = new Vector2(120),
                    Text = "Pause",
-                   Action = ()=> {if (this.GameplayTrack.IsRunning) { this.GameplayTrack.Stop(); } else { this.GameplayTrack.Start(); } },
+                   Action = ()=> {
+                       this.GameplayTrack.Stop();
+                       this.pauseOverlay.Show();
+                   },
                }
             ],
         };
@@ -169,6 +178,23 @@ public partial class GameplayScreen : Screen {
             Looping = false
         };
         this.GameplayTrack.Start();
+
+        this.pauseOverlay = new PauseOverlay() {
+            OnResume = () => {
+                this.pauseOverlay.Hide();
+                // TODO: Countdown 3 seconds
+                this.Scheduler.AddDelayed(() => this.GameplayTrack.Start(), 3000.0);
+            },
+            OnRetry = () => {
+                this.Exit();
+                this.screenStack.Push(new GameplayScreen(this.beatmap));
+            },
+            OnQuit = () => {
+                this.pauseOverlay.Hide();
+                this.Exit();
+            }
+        };
+        this.AddInternal(this.pauseOverlay);
     }
 
     public Dictionary<TouchSource, Vector2> TouchPositions = [];
