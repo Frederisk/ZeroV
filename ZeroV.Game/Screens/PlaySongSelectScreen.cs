@@ -31,7 +31,7 @@ public partial class PlaySongSelectScreen : Screen {
     private LargeTextureStore textureStore { get; set; } = null!;
 
     [BackgroundDependencyLoader]
-    private async Task load() {
+    private void load() {
         this.RelativeSizeAxes = Axes.Both;
 
         this.background = new Sprite() {
@@ -50,7 +50,11 @@ public partial class PlaySongSelectScreen : Screen {
             Padding = new MarginPadding(10)
         };
 
-        IReadOnlyList<TrackInfo> trackInfos = await this.beatmapWrapperProvider.GetAsync() ?? [];
+        //IReadOnlyList<TrackInfo> trackInfos = await this.beatmapWrapperProvider.GetAsync() ?? [];
+        //this.beatmapWrapperProvider.GetAsync
+        IReadOnlyList<TrackInfo> trackInfos =  this.beatmapWrapperProvider.Get() ?? new List<TrackInfo>();
+
+
         IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);
         foreach (TrackInfo item in trackInfoSort) {
             this.container.Add(new TrackInfoListItem(item));

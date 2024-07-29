@@ -27,7 +27,33 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
         //}
     }
 
-    public async ValueTask<T?> GetAsync<T>(String? key) {
+    //public async ValueTask<T?> GetAsync<T>(String? key) {
+    //    if (String.IsNullOrWhiteSpace(key) || key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
+    //        throw new ArgumentException("Invalid key.", nameof(key));
+    //    }
+
+    //    var fileName = $"{key}.json";
+    //    if (!this.Storage.Exists(fileName)) {
+    //        return default;
+    //    }
+
+    //    using Stream stream = this.Storage.GetStream(fileName, FileAccess.Read, FileMode.Open);
+    //    return await JsonSerializer.DeserializeAsync<T>(stream);
+    //}
+
+    //public async ValueTask SetAsync<T>(String key, T? value) {
+    //    if (String.IsNullOrWhiteSpace(key) || key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
+    //        throw new ArgumentException("Invalid key.", nameof(key));
+    //    }
+
+    //    var fileName = $"{key}.json";
+    //    using Stream stream = this.Storage.GetStream(fileName, FileAccess.Write, FileMode.Create);
+    //    await JsonSerializer.SerializeAsync(stream, value);
+
+    //    await stream.FlushAsync();
+    //}
+
+    public T? Get<T>(String key) {
         if (String.IsNullOrWhiteSpace(key) || key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
             throw new ArgumentException("Invalid key.", nameof(key));
         }
@@ -36,20 +62,19 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
         if (!this.Storage.Exists(fileName)) {
             return default;
         }
-
         using Stream stream = this.Storage.GetStream(fileName, FileAccess.Read, FileMode.Open);
-        return await JsonSerializer.DeserializeAsync<T>(stream);
+        return JsonSerializer.Deserialize<T>(stream);
     }
 
-    public async ValueTask SetAsync<T>(String key, T? value) {
+    public void Set<T>(String key, T value) {
         if (String.IsNullOrWhiteSpace(key) || key.AsSpan().ContainsAny(this.invalidFileNameChars)) {
             throw new ArgumentException("Invalid key.", nameof(key));
         }
 
         var fileName = $"{key}.json";
         using Stream stream = this.Storage.GetStream(fileName, FileAccess.Write, FileMode.Create);
-        await JsonSerializer.SerializeAsync(stream, value);
+        JsonSerializer.Serialize(stream, value);
 
-        await stream.FlushAsync();
+        stream.Flush();
     }
 }
