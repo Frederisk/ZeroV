@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -14,7 +10,6 @@ using osu.Framework.Input.Events;
 namespace ZeroV.Game.Screens;
 
 public partial class PauseOverlay : OverlayContainer {
-
     protected const Int32 TRANSITION_DURATION = 200;
     private const Single background_alpha = 0.75f;
 
@@ -63,9 +58,9 @@ public partial class PauseOverlay : OverlayContainer {
     }
 
     protected override void PopIn() => this.FadeIn(TRANSITION_DURATION, Easing.In);
+
     protected override void PopOut() => this.FadeOut(TRANSITION_DURATION, Easing.In);
 
     // Don't let touch down events through the overlay or people can touch particle while paused.
     protected override Boolean OnTouchDown(TouchDownEvent e) => true;
-
 }

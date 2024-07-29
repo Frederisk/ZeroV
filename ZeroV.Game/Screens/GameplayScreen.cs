@@ -33,7 +33,6 @@ public partial class GameplayScreen : Screen {
 
     public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
     public readonly Double ParticleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
-    
 
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
@@ -181,9 +180,11 @@ public partial class GameplayScreen : Screen {
 
         this.pauseOverlay = new PauseOverlay() {
             OnResume = () => {
-                this.pauseOverlay.Hide();
                 // TODO: Countdown 3 seconds
-                this.Scheduler.AddDelayed(() => this.GameplayTrack.Start(), 3000.0);
+                this.Scheduler.AddDelayed(() => {
+                    this.pauseOverlay.Hide();
+                    this.GameplayTrack.Start();
+                }, 3000.0);
             },
             OnRetry = () => {
                 this.Exit();
