@@ -20,13 +20,13 @@ public partial class ZeroVGame : ZeroVGameBase {
     /// This field will never be null after <see cref="LoadComplete"/> has been called.
     /// </remarks>
     [Cached]
-    private ScreenStack screenStack = null!;
+    private ScreenStack screenStack = new() { RelativeSizeAxes = Axes.Both };
 
     [BackgroundDependencyLoader]
     private void load() {
         // Add your top-level game components here.
         // A screen stack and sample screen has been provided for convenience, but you can replace it if you don't want to use screens.
-        this.Child = this.screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
+        this.Child = this.screenStack;
     }
 
     protected override void LoadComplete() {
