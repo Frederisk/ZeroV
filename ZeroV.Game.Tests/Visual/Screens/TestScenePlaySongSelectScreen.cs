@@ -37,7 +37,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
         this.dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
     private class FakeTrackInfoProvider(IKeyValueStorage storage) : TrackInfoProvider(storage) {
-        public override Task<IReadOnlyList<TrackInfo>?> GetAsync() => Task.FromResult(this.trackInfoList);
+        public override IReadOnlyList<TrackInfo>? Get() => this.trackInfoList;
+        //public override Task<IReadOnlyList<TrackInfo>?> GetAsync() => Task.FromResult(this.trackInfoList);
 
         private IReadOnlyList<TrackInfo>? trackInfoList => [
             new() {
