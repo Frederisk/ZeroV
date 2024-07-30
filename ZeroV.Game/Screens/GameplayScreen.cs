@@ -14,6 +14,7 @@ using osu.Framework.Input;
 using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
+using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -34,7 +35,7 @@ public partial class GameplayScreen : Screen {
     // [Cached]
     public Track GameplayTrack = null!;
 
-    public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(5).TotalMilliseconds;
+    public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(2).TotalMilliseconds;
     public readonly Double ParticleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
 
     /// <summary>
@@ -177,13 +178,18 @@ public partial class GameplayScreen : Screen {
         this.AddInternal(this.StrokeParticlePool);
 
         // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
-        this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {
-            Looping = false
+        //this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {
+        //    Looping = false
+        //};
+        StorageBackedResourceStore store = new(new NativeStorage(this.trackFileInfo.Directory!.FullName));
+        ITrackStore trackStore = audio.GetTrackStore(store);
+        this.GameplayTrack = trackStore.Get(this.trackFileInfo.Name);
+
+        this.GameplayTrack.Looping = false;
+        this.GameplayTrack.Completed += () => {
+            this.Exit();
+            //  this.screenStack.Push(new ResultScreen(this.ScoringCalculator));
         };
-
-        //ITrackStore trackStore = audio.GetTrackStore(new OnlineStore());
-
-        //this.GameplayTrack = trackStore.Get(this.trackFileInfo.FullName);
 
         this.GameplayTrack.Start();
 
