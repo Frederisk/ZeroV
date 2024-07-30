@@ -71,6 +71,9 @@ public class BeatmapWrapper {
     /// <returns>The new instance of <see cref="BeatmapWrapper"/>.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="file"/> is null.</exception>
     /// <exception cref="InvalidOperationException">An error occurred during deserialization. The original exception is available using the <see cref="Exception.InnerException"/> property.</exception>
+    /// <exception cref="UnauthorizedAccessException"></exception>
+    /// <exception cref="DirectoryNotFoundException"></exception>
+    /// <exception cref="IOException"></exception>
     public static BeatmapWrapper Create(FileInfo file) {
         ArgumentNullException.ThrowIfNull(file);
 

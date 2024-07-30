@@ -24,7 +24,7 @@ public partial class IntroScreen : Screen {
         this.textFlow = new TextFlowContainer {
             Anchor = Anchor.BottomLeft,
             Origin = Anchor.BottomLeft,
-            //Direction = FillDirection.Vertical,
+            // Direction = FillDirection.Vertical,
             AutoSizeAxes = Axes.Both,
             Text = "Loading ZeroV...",
         };
