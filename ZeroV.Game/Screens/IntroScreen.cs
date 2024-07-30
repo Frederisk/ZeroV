@@ -41,20 +41,23 @@ public partial class IntroScreen : Screen {
     protected override void LoadComplete() {
         base.LoadComplete();
         // TODO: Add cutscenes.
-        this.Schedule(async () => {
-            Task<IReadOnlyList<TrackInfo>> task = this.loadBeatmapsAsync();
-            //Task load = this.LoadComponentAsync(new MainScreen(), this.Push); && !load.IsCompletedSuccessfully
-            while (!task.IsCompletedSuccessfully) {
-                if (task.IsFaulted) {
-                    throw task.Exception;
-                }
-                await Task.Delay(Random.Shared.Next(50, 500));
-                this.textFlow.AddParagraph("Reading...");
-            }
-            // this.textFlow.FadeOut(1000).Schedule(this.continueToMain);
-            this.Push(new MainScreen());
-            // task.Result;
-        });
+        //this.Schedule(async () => {
+        //    Task<IReadOnlyList<TrackInfo>> task = this.loadBeatmapsAsync();
+        //    //Task load = this.LoadComponentAsync(new MainScreen(), this.Push); && !load.IsCompletedSuccessfully
+        //    while (!task.IsCompletedSuccessfully) {
+        //        if (task.IsFaulted) {
+        //            throw task.Exception;
+        //        }
+        //        await Task.Delay(Random.Shared.Next(50, 500));
+        //        this.textFlow.AddParagraph("Reading...");
+        //    }
+        //    // this.textFlow.FadeOut(1000).Schedule(this.continueToMain);
+        //    this.Push(new MainScreen());
+        //    // task.Result;
+        //});
+        //IReadOnlyList<TrackInfo>? maps = this.loadBeatmaps();
+        this.loadBeatmaps();
+        this.Push(new MainScreen());
     }
 
     [Resolved]
@@ -63,15 +66,28 @@ public partial class IntroScreen : Screen {
     [Resolved]
     private ZeroVConfigManager configManager { get; set; } = null!;
 
-    private async Task<IReadOnlyList<TrackInfo>> loadBeatmapsAsync() {
-        IReadOnlyList<TrackInfo>? trackInfoList = await this.trackInfoProvider.GetAsync();
-        // FIXME: Load from path every time to debug. Remove those comments after debugging.
+    //private async Task<IReadOnlyList<TrackInfo>> loadBeatmapsAsync() {
+    //    IReadOnlyList<TrackInfo>? trackInfoList = await this.trackInfoProvider.GetAsync();
+    //    // FIXME: Load from path every time to debug. Remove those comments after debugging.
+    //    //if (trackInfoList is null) {
+    //        String beatmapStoragePath = this.configManager.Get<String>(ZeroVSetting.BeatmapStoragePath);
+    //        //Console.WriteLine($"Beatmap storage path: {beatmapStoragePath}");
+    //        List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
+    //        List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
+    //        trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
+    //        await this.trackInfoProvider.SetAsync(trackInfoList);
+    //    //}
+    //    return trackInfoList;
+    //}
+
+    private IReadOnlyList<TrackInfo> loadBeatmaps() {
+        IReadOnlyList<TrackInfo>? trackInfoList = this.trackInfoProvider.Get();
         //if (trackInfoList is null) {
             String beatmapStoragePath = this.configManager.Get<String>(ZeroVSetting.BeatmapStoragePath);
             List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
             List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
             trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
-            await this.trackInfoProvider.SetAsync(trackInfoList);
+            this.trackInfoProvider.Set(trackInfoList);
         //}
         return trackInfoList;
     }
