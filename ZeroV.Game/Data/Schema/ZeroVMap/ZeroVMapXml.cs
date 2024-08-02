@@ -50,6 +50,14 @@ public partial class ZeroVMapXml {
     [Required]
     [XmlAttribute("MapVersion")]
     public String MapVersion { get; set; }
+
+    /// <summary>
+    /// <para xml:lang="en">Pattern: [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}</para>
+    /// </summary>
+    [RegularExpression(@"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")]
+    [Required]
+    [XmlAttribute("UUID")]
+    public String UUID { get; set; }
 }
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
@@ -158,14 +166,18 @@ public partial class MapXml {
     [XmlElement("Orbit")]
     public List<OrbitXml> Orbit { get; set; }
 
-    /// <summary>
-    /// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
-    /// </summary>
-    [RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
-    [AllowNull]
-    [MaybeNull]
-    [XmlAttribute("MapOffset")]
-    public String? MapOffset { get; set; }
+    ///// <summary>
+    ///// <para xml:lang="en">Pattern: -?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?.</para>
+    ///// </summary>
+    //[RegularExpression(@"-?([01]\d|2[0-3]):\d{2}:\d{2}(\.\d{1,7})?")]
+    //[AllowNull]
+    //[MaybeNull]
+    //[XmlAttribute("MapOffset")]
+    //public String? MapOffset { get; set; }
+
+    [Required]
+    [XmlElement("Index")]
+    public String Index { get; set; }
 }
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]

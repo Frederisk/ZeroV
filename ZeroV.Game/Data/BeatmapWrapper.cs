@@ -93,9 +93,9 @@ public class BeatmapWrapper {
     public List<Beatmap> GetAllBeatmaps() {
         List<Beatmap> beatmaps = [];
         beatmaps.AddRange(this.ZeroVMap.BeatmapList.ConvertAll(getBeatmapFromXml));
-        if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
-            beatmaps.ForEach(beatmap => beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds);
-        }
+        //if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
+        //    beatmaps.ForEach(beatmap => beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds);
+        //}
         return beatmaps;
     }
 
@@ -107,9 +107,9 @@ public class BeatmapWrapper {
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="index"/> is less than 0 or greater than or equal to the number of <see cref="Beatmap"/>s.</exception>
     public Beatmap GetBeatmapAt(Int32 index) {
         Beatmap beatmap = getBeatmapFromXml(this.ZeroVMap.BeatmapList[index]);
-        if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
-            beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds;
-        }
+        //if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
+        //    beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds;
+        //}
         return beatmap;
     }
 
@@ -128,6 +128,7 @@ public class BeatmapWrapper {
             throw new InvalidOperationException("Track file not found.");
         }
         return new() {
+            UUID = new Guid(this.ZeroVMap.UUID),
             Title = this.ZeroVMap.TrackInfo.Title,
             Album = this.ZeroVMap.TrackInfo.Album,
             TrackOrder = this.ZeroVMap.TrackInfo.TrackOrder is not null ? Int32.Parse(this.ZeroVMap.TrackInfo.TrackOrder) : null,
@@ -197,11 +198,13 @@ public class BeatmapWrapper {
     private static Beatmap getBeatmapFromXml(MapXml mapXml) =>
         new() {
             OrbitSources = mapXml.Orbit.ConvertAll(getOrbitSourceFromXml),
-            Offset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset).TotalMilliseconds : default,
+            //Offset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset).TotalMilliseconds : default,
+            //Offset = default,
         };
 
     private static MapInfo getMapInfoFromXml(MapXml mapXml) => new() {
-        MapOffset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset) : default,
+        //MapOffset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset) : default,
+        Index = Int32.Parse(mapXml.Index),
         Difficulty = default, // FIXME: calculate it
         BlinkCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Blink.Count).Sum(),
         PressCount = mapXml.Orbit.ConvertAll(orbit => orbit.Particles.Press.Count).Sum(),

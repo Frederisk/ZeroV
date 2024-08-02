@@ -25,16 +25,16 @@ public partial class TestSceneIcons : ZeroVTestScene {
         this.Child = flower;
 
         flower.AddRange([
-            GetIcon<StartIcon>(),
-            GetIcon<PauseIcon>(),
-            GetIcon<StopIcon>(),
-            GetIcon<CrossIcon>(),
-            GetIcon<NextIcon>(),
+            getIcon<StartIcon>(),
+            getIcon<PauseIcon>(),
+            getIcon<StopIcon>(),
+            getIcon<CrossIcon>(),
+            getIcon<NextIcon>(),
             ]);
     }
 
 
-    private static Container GetIcon<T>() where T : IconBase, new() {
+    private static Container getIcon<T>() where T : IconBase, new() {
         //T icon = new();
         return new Container {
             Size = new Vector2(56),
