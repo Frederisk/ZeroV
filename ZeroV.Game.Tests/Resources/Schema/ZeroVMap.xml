@@ -2,7 +2,8 @@
 <ZeroVMap
   xmlns="http://zerov.games/ZeroVMap"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  MapVersion="1.0.0.0">
+  MapVersion="1.0.0.0"
+  UUID="00000000-0000-0000-0000-000000000000">
   <TrackInfo>
     <Title>Brilliant World(Vocal Main Mix)</Title>
     <Length>00:04:24.7370000</Length>
@@ -15,7 +16,7 @@
     <GameVersion>0.0.0.0</GameVersion>
   </GameInfo>
   <BeatmapList>
-    <Map MapOffset="-00:00:00.4900000">
+    <Map Index="0">
       <Orbit>
         <Frames>
           <Key Time="00:00:00.9450000" Position="0" Width="1000" Colour="#abcdef" />
@@ -53,7 +54,7 @@
         <Particles />
       </Orbit>
     </Map>
-    <Map MapOffset="-00:00:00.4900000">
+    <Map Index="1">
       <Orbit>
         <Frames>
           <Key Time="00:00:00.9450000" Position="0" Width="1000" Colour="#abcdef" />

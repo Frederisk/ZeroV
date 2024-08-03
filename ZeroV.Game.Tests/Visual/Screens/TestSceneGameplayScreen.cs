@@ -99,7 +99,7 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
                     ]
                 }
             ],
-            Offset = 0,
+            //Offset = 0,
         };
         FileInfo file = new FileInfo("./Resources/Schema/Track.txt");
         this.screenStack.Push(new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both });

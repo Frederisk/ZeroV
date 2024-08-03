@@ -176,7 +176,7 @@ public partial class MapXml {
     //public String? MapOffset { get; set; }
 
     [Required]
-    [XmlElement("Index")]
+    [XmlAttribute("Index")]
     public String Index { get; set; }
 }
 

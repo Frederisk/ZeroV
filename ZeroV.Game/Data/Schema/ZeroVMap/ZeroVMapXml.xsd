@@ -20,9 +20,9 @@
                 <element name="Album" type="string" minOccurs="0" />
                 <element name="TrackOrder" type="integer" minOccurs="0" />
               </sequence>
-              <!--<element name="Artists" minOccurs="0">
-                --><!-- TODO: Clarify the type of this element. --><!--
-              </element>-->
+              <!--<element name="Artists" minOccurs="0">-->
+              <!-- TODO: Clarify the type of this element. -->
+              <!--</element>-->
               <element name="Artists" type="string" minOccurs="0" />
               <element name="Length" type="zvm:timespan" />
               <element name="BPM" type="float" minOccurs="0" />
@@ -120,8 +120,12 @@
               </element>
             </sequence>
           </complexType>
+          <!-- A check to ensure that the Maps.Index(Attribute) is unique. -->
+          <unique name="UniqueMapIndex" >
+            <selector xpath="zvm:Map" />
+            <field xpath="@Index" />
+          </unique>
         </element>
-
       </sequence>
       <attribute name="MapVersion" type="zvm:version" use="required" />
       <attribute name ="UUID" type="zvm:uuid" use="required" />
