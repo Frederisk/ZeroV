@@ -104,13 +104,14 @@ public class BeatmapWrapper {
     /// </summary>
     /// <param name="index">The index of the <see cref="Beatmap"/> to get.</param>
     /// <returns>The <see cref="Beatmap"/> at the specified index.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="index"/> is less than 0 or greater than or equal to the number of <see cref="Beatmap"/>s.</exception>
-    public Beatmap GetBeatmapAt(Int32 index) {
-        Beatmap beatmap = getBeatmapFromXml(this.ZeroVMap.BeatmapList[index]);
-        //if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
-        //    beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds;
-        //}
-        return beatmap;
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="index"/> is not found in the <see cref="ZeroVMapXml.BeatmapList"/>.</exception>
+    public Beatmap GetBeatmapByIndex(Int32 index) {
+        foreach (MapXml map in this.ZeroVMap.BeatmapList) {
+            if (Int32.TryParse(map.Index, out Int32 mapIndex) && mapIndex == index) {
+                return getBeatmapFromXml(map);
+            }
+        }
+        throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
     }
 
     /// <summary>

@@ -11,12 +11,12 @@ using ZeroV.Game.Objects;
 namespace ZeroV.Game.Elements.ListItems;
 
 [Cached]
-public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {
+public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable {
     private Boolean isExpanded;
     private FillFlowContainer container = null!;
     private TrackInfoListItemHeader header = null!;
 
-    public TrackInfo TrackInfo => info;
+    public TrackInfo TrackInfo => trackInfo;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -44,9 +44,8 @@ public partial class TrackInfoListItem(TrackInfo info) : CompositeDrawable {
             ]
         });
 
-        for (var i = 0; i < info.MapInfos.Count; i++) {
-            MapInfo item = info.MapInfos[i];
-            this.container.Add(new MapInfoListItem(i, item));
+        foreach (MapInfo mapInfo in trackInfo.MapInfos) {
+            this.container.Add(new MapInfoListItem(mapInfo));
         }
     }
 

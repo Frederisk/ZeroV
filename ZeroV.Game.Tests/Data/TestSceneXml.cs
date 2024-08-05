@@ -20,13 +20,13 @@ internal class TestSceneXml {
         BeatmapWrapper wrapper = BeatmapWrapper.Create(file);
         Assert.IsNotNull(wrapper.ZeroVMap);
         wrapper.GetTrackInfo();
-        wrapper.GetBeatmapAt(0);
-        wrapper.GetBeatmapAt(1);
+        wrapper.GetBeatmapByIndex(0);
+        wrapper.GetBeatmapByIndex(1);
         try {
-            wrapper.GetBeatmapAt(2);
+            wrapper.GetBeatmapByIndex(2);
             Assert.Fail("Expected an Exception");
-        } catch (IndexOutOfRangeException) {
-            Console.WriteLine($"Caught {nameof(IndexOutOfRangeException)}");
+        //} catch (IndexOutOfRangeException) {
+        //    Console.WriteLine($"Caught {nameof(IndexOutOfRangeException)}");
         } catch (ArgumentOutOfRangeException) {
             Console.WriteLine($"Caught {nameof(ArgumentOutOfRangeException)}");
         } catch (Exception e) {
