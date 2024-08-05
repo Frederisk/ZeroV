@@ -43,6 +43,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
         private IReadOnlyList<TrackInfo>? trackInfoList => [
             new() {
                 Title = "A - Test Title",
+                UUID = Guid.Empty,
                 Album = "Test Album",
                 TrackOrder = 0,
                 Artists = "Test Artists",
@@ -53,7 +54,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
-                        MapOffset = TimeSpan.FromSeconds(2),
+                        //MapOffset = TimeSpan.FromSeconds(2),
+                        Index = -114514,
                         BlinkCount = 1,
                         PressCount = 1,
                         SlideCount = 1,
@@ -61,7 +63,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                     },
                     new MapInfo() {
                         Difficulty = 2,
-                        MapOffset = TimeSpan.FromSeconds(2),
+                        //MapOffset = TimeSpan.FromSeconds(2),
+                        Index = 1919810,
                         BlinkCount = 1,
                         PressCount = 1,
                         SlideCount = 1,
@@ -73,6 +76,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
             },
             new() {
                 Title = "C - Test Title3",
+                UUID = Guid.Empty,
                 Album = null,
                 TrackOrder = 0,
                 Artists = null,
@@ -83,7 +87,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
-                        MapOffset = TimeSpan.FromSeconds(2),
+                        //MapOffset = TimeSpan.FromSeconds(2),
+                        Index = 0,
                         BlinkCount = 1,
                         PressCount = 1,
                         SlideCount = 1,
@@ -94,6 +99,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
             },
             new() {
                 Title = "B - Test Title2",
+                UUID = Guid.Empty,
                 Album = "Test Album",
                 TrackOrder = 0,
                 Artists = "Test Artists",
@@ -104,7 +110,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
-                        MapOffset = TimeSpan.FromSeconds(2),
+                        //MapOffset = TimeSpan.FromSeconds(2),
+                        Index = 1,
                         BlinkCount = 1,
                         PressCount = 1,
                         SlideCount = 1,
@@ -115,6 +122,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
             },
             new() {
                 Title = "D - Test Looooooooooooooooooong Title2",
+                UUID = Guid.Empty,
                 Album = "Test Looooooooooooooooooong Album",
                 TrackOrder = 0,
                 Artists = "Test Looooooooooooooooooong Artists",
@@ -125,7 +133,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                 MapInfos = [
                     new MapInfo() {
                         Difficulty = 1,
-                        MapOffset = TimeSpan.FromSeconds(2),
+                        //MapOffset = TimeSpan.FromSeconds(2),
+                        Index = -1,
                         BlinkCount = 1,
                         PressCount = 1,
                         SlideCount = 1,

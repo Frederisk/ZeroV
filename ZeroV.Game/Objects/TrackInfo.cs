@@ -10,6 +10,9 @@ namespace ZeroV.Game.Objects;
 /// Represents a track info.
 /// </summary>
 public record TrackInfo {
+    [JsonConverter(typeof(GuidJsonConverter))]
+    public required Guid UUID { get; init; }
+
     public required String Title { get; init; }
 
     public required String? Album { get; init; }
@@ -52,6 +55,17 @@ public record TrackInfo {
 
         public override void Write(Utf8JsonWriter writer, FileInfo value, JsonSerializerOptions options) {
             writer.WriteStringValue(value.FullName);
+        }
+    }
+
+    private class GuidJsonConverter : JsonConverter<Guid> {
+        public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+            String guidString = reader.GetString() ?? throw new JsonException("Expected a string value.");
+            return new Guid(guidString);
+        }
+
+        public override void Write(Utf8JsonWriter writer, Guid value, JsonSerializerOptions options) {
+            writer.WriteStringValue(value.ToString());
         }
     }
 }

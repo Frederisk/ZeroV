@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 using NUnit.Framework;
 
@@ -98,8 +99,9 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
                     ]
                 }
             ],
-            Offset = 0,
+            //Offset = 0,
         };
-        this.screenStack.Push(new GameplayScreen(beatmap) { RelativeSizeAxes = Axes.Both });
+        FileInfo file = new FileInfo("./Resources/Schema/Track.txt");
+        this.screenStack.Push(new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both });
     }
 }

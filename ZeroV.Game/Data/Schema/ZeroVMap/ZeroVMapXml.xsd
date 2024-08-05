@@ -20,9 +20,9 @@
                 <element name="Album" type="string" minOccurs="0" />
                 <element name="TrackOrder" type="integer" minOccurs="0" />
               </sequence>
-              <!--<element name="Artists" minOccurs="0">
-                --><!-- TODO: Clarify the type of this element. --><!--
-              </element>-->
+              <!--<element name="Artists" minOccurs="0">-->
+              <!-- TODO: Clarify the type of this element. -->
+              <!--</element>-->
               <element name="Artists" type="string" minOccurs="0" />
               <element name="Length" type="zvm:timespan" />
               <element name="BPM" type="float" minOccurs="0" />
@@ -114,15 +114,21 @@
                       </complexType>
                     </element>
                   </sequence>
-                  <attribute name="MapOffset" type="zvm:timespan" />
+                  <attribute name="Index" type="integer" use="required" />
+                  <!--<attribute name="MapOffset" type="zvm:timespan" />-->
                 </complexType>
               </element>
             </sequence>
           </complexType>
+          <!-- A check to ensure that the Maps.Index(Attribute) is unique. -->
+          <unique name="UniqueMapIndex" >
+            <selector xpath="zvm:Map" />
+            <field xpath="@Index" />
+          </unique>
         </element>
-
       </sequence>
       <attribute name="MapVersion" type="zvm:version" use="required" />
+      <attribute name ="UUID" type="zvm:uuid" use="required" />
     </complexType>
   </element>
   <simpleType name="version">
@@ -146,6 +152,11 @@
       <enumeration value="Right" />
       <enumeration value="Down" />
       <enumeration value="Left" />
+    </restriction>
+  </simpleType>
+  <simpleType name="uuid">
+    <restriction base="string">
+      <pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
     </restriction>
   </simpleType>
 </schema>
