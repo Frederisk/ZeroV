@@ -166,6 +166,7 @@ public partial class PressParticle : ParticleBase {
         // Reset Particle
         this.result = TargetResult.None;
         this.noTouchTime = null;
+        this.bottomDiamond.Y = 0;
         base.FreeAfterUse();
     }
 }
