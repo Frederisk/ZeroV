@@ -2,9 +2,12 @@ using System;
 
 namespace ZeroV.Game.Elements.Particles;
 
-public class SlideParticleSource(Double startTime, SlidingDirection direction) : ParticleSource {
-    public override Double StartTime => startTime;
-    public override Double EndTime => this.StartTime;
+public class SlideParticleSource : ParticleSource {
 
-    public SlidingDirection Direction => direction;
+    public SlideParticleSource(Double startTime, SlidingDirection direction) {
+        this.StartTimeValue = this.EndTimeValue = startTime;
+        this.Direction = direction;
+    }
+
+    public SlidingDirection Direction { get; }
 }

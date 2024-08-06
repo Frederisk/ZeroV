@@ -103,6 +103,7 @@ public partial class PlaySongSelectScreen : Screen {
         var wrapper = BeatmapWrapper.Create(this.expandedItem!.TrackInfo.BeatmapFile);
         Beatmap beatmap = wrapper.GetBeatmapByIndex(this.selectedItem!.MapInfo.Index);
         // FIXME: Apply offset here!
+        beatmap.ApplyOffset(-this.expandedItem!.TrackInfo.FileOffset.TotalMilliseconds);
         var playScreen = new GameplayScreen(beatmap, this.expandedItem!.TrackInfo.TrackFile);
         this.Push(playScreen);
     }

@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using System.Text.Json;
 
 using osu.Framework.Platform;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Data.KeyValueStorage;
 
 public partial class JsonKeyValueStorage : IKeyValueStorage {
-    private const String folder_path = "JsonKeyValueStorage";
+    private readonly String folder_path = ZeroVPath.JSON_KEY_VALUE_STORAGE_PATH;
     private readonly SearchValues<Char> invalidFileNameChars = SearchValues.Create(Path.GetInvalidFileNameChars());
 
     protected Storage Storage { get; private set; } = null!;

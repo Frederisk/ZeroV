@@ -13,6 +13,7 @@ using ZeroV.Game.Data.Schema.ZeroVMap;
 using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Data;
 
@@ -124,7 +125,7 @@ public class BeatmapWrapper {
     public TrackInfo GetTrackInfo() {
         DirectoryInfo? directory = this.BeatmapFile.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
         // TODO: match music file
-        FileInfo[] files = directory.GetFiles("Track.*");
+        FileInfo[] files = directory.GetFiles(ZeroVPath.TRACK_FILE_NAME_PATTERN);
         if (files.Length < 1 || !files[0].Exists) {
             throw new InvalidOperationException("Track file not found.");
         }

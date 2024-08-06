@@ -6,6 +6,7 @@ using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
+using osu.Framework.Testing;
 
 using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
@@ -24,8 +25,12 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
         this.Add(this.screenStack);
     }
 
-    [Test]
-    public void CreateScreen() {
+    [SetUpSteps]
+    public void SetUpSteps() {
+        this.AddStep("create screen", this.createScreen);
+    }
+
+    private void createScreen() {
         // For test, the beatmap instance will deserialize after beatmap selected.
         var beatmap = new Beatmap() {
             OrbitSources = [

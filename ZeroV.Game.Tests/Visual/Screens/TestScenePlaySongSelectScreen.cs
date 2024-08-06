@@ -8,6 +8,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
+using osu.Framework.Testing;
 
 using ZeroV.Game.Data;
 using ZeroV.Game.Data.KeyValueStorage;
@@ -27,8 +28,12 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
         this.Add(this.screenStack = new ScreenStack() { RelativeSizeAxes = Axes.Both });
     }
 
-    [Test]
-    public void CreateScreen() {
+    [SetUpSteps]
+    public void SetUpSteps() {
+        this.AddStep("create screen", this.createScreen);
+    }
+
+    private void createScreen() {
         this.screenStack.Push(new PlaySongSelectScreen() { RelativeSizeAxes = Axes.Both });
     }
 
