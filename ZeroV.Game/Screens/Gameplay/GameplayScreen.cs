@@ -27,7 +27,7 @@ using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 
-namespace ZeroV.Game.Screens;
+namespace ZeroV.Game.Screens.Gameplay;
 
 [Cached]
 public partial class GameplayScreen : Screen {
@@ -59,7 +59,7 @@ public partial class GameplayScreen : Screen {
     protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
 
     [Resolved]
-    private ScreenStack screenStack { get; set; } = null!;
+    private GameLoader gameLoader { get; set; } = null!;
 
     private readonly Beatmap beatmap;
     private readonly LifetimeEntryManager lifetimeEntryManager = new();
@@ -191,8 +191,6 @@ public partial class GameplayScreen : Screen {
             //  this.screenStack.Push(new ResultScreen(this.ScoringCalculator));
         };
 
-        this.GameplayTrack.Start();
-
         this.pauseOverlay = new PauseOverlay() {
             OnResume = () => {
                 // TODO: Countdown 3 seconds
@@ -203,14 +201,20 @@ public partial class GameplayScreen : Screen {
             },
             OnRetry = () => {
                 this.Exit();
-                this.screenStack.Push(new GameplayScreen(this.beatmap, this.trackFileInfo));
+                //this.screenStack.Push(new GameplayScreen(this.beatmap, this.trackFileInfo));
             },
             OnQuit = () => {
+                this.gameLoader.ExitRequested = true;
                 this.pauseOverlay.Hide();
                 this.Exit();
             }
         };
         this.AddInternal(this.pauseOverlay);
+    }
+
+    protected override void LoadComplete() {
+        base.LoadComplete();
+        this.GameplayTrack.Start();
     }
 
     public Dictionary<TouchSource, Vector2> TouchPositions = [];

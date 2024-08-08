@@ -8,7 +8,7 @@ using osu.Framework.Graphics.Shapes;
 
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Scoring;
-using ZeroV.Game.Screens;
+using ZeroV.Game.Screens.Gameplay;
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Elements.Particles;

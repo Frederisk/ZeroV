@@ -11,7 +11,7 @@ using osu.Framework.Testing;
 using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
-using ZeroV.Game.Screens;
+using ZeroV.Game.Screens.Gameplay;
 
 namespace ZeroV.Game.Tests.Visual.Screens;
 
@@ -107,6 +107,9 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
             //Offset = 0,
         };
         FileInfo file = new FileInfo("./Resources/Schema/Track.txt");
-        this.screenStack.Push(new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both });
+        //this.screenStack.Push(new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both });
+        this.screenStack.Push(new GameLoader(() => {
+            return new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both };
+        }));
     }
 }

@@ -18,7 +18,7 @@ using osuTK;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Scoring;
-using ZeroV.Game.Screens;
+using ZeroV.Game.Screens.Gameplay;
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Elements.Orbits;
