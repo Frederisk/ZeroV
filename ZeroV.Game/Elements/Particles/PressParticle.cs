@@ -158,7 +158,7 @@ public partial class PressParticle : ParticleBase {
     }
 
     public override void OnDequeueInJudge() {
-        // base.OnDequeueInJudge(); // this.Alpha = 0f;
+        base.OnDequeueInJudge(); // this.Alpha = 0f; and markup
         this.Alpha = this.result is TargetResult.Miss or TargetResult.None ? 0.5f : 0;
     }
 

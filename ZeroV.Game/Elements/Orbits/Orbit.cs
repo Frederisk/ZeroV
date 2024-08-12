@@ -27,6 +27,7 @@ namespace ZeroV.Game.Elements.Orbits;
 /// OrbitSources that carry particles. It's also the main interactive object in this game.
 /// </summary>
 public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
+
     /// <summary>
     /// The position of the top of visible orbit.
     /// </summary>
@@ -74,6 +75,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     [Resolved]
     private GameplayScreen gameplayScreen { get; set; } = null!;
+
     private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
     private Double particleFallingTime => this.gameplayScreen.ParticleFallingTime;
     private Double particleFadingTime => this.gameplayScreen.ParticleFadingTime;
@@ -170,7 +172,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <remarks>
     /// This field will never be null after <see cref="Source"/> has been set.
@@ -220,29 +222,28 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         }
 
         foreach (ParticleBase item in this.particles) {
-            //if (currTime < item.EndTime) {
-            var startTime = item.Source!.StartTime - this.particleFallingTime;
+            if (currTime < item.Source!.EndTime || item.IsJudged) {
+                var startTime = item.Source!.StartTime - this.particleFallingTime;
 
-            item.Y = Interpolation.ValueAt(currTime,
-            visual_orbit_out_of_top, visual_orbit_offset,
-            startTime, item.Source.StartTime);
-            //item.Y += 1;
-            //} else {
-            //    var endTime = item.EndTime + this.particleFadingTime;
-            //    var startOffset = visual_orbit_offset;
-            //    var endOffset = visual_orbit_out_of_bottom;
-            //    if (item is PressParticle press) {
-            //        startOffset -= press.Height;
-            //        endOffset -= press.Height;
-            //    }
+                item.Y = Interpolation.ValueAt(currTime,
+                visual_orbit_out_of_top, visual_orbit_offset,
+                startTime, item.Source.StartTime);
+            } else {
+                var endTime = item.Source.EndTime + this.particleFadingTime;
+                var startOffset = visual_orbit_offset;
+                var endOffset = visual_orbit_bottom;//visual_orbit_out_of_bottom - 25;
+                if (item is PressParticle press) {
+                    startOffset += press.Height;
+                    endOffset += press.Height;
+                }
 
-            //    item.Y = Interpolation.ValueAt(currTime,
-            //        startOffset, endOffset,
-            //        item.EndTime, endTime);
-            //    item.Alpha = Interpolation.ValueAt(currTime,
-            //        1f, 0f,
-            //        item.EndTime, endTime);
-            //}
+                item.Y = Interpolation.ValueAt(currTime,
+                    startOffset, endOffset,
+                    item.Source.EndTime, endTime);
+                item.Alpha = Interpolation.ValueAt(currTime,
+                    1f, 0f,
+                    item.Source.EndTime, endTime);
+            }
         }
 
         TargetResult? result = this.particles.PeekOrDefault()?.JudgeUpdate(this.currentTime, this.HasTouches);

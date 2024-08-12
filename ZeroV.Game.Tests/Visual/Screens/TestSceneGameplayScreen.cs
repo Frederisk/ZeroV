@@ -17,6 +17,7 @@ namespace ZeroV.Game.Tests.Visual.Screens;
 
 [TestFixture]
 public partial class TestSceneGameplayScreen : ZeroVTestScene {
+
     [Cached]
     private ScreenStack screenStack;
 
@@ -62,31 +63,31 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 7000,
-                             XPosition = 0,
+                             XPosition = -100,
                              Width = 128,
                              Colour = Colour4.Green
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 8000,
-                             XPosition = -60,
+                             XPosition = -90,
                              Width = 256,
                              Colour = Colour4.Cyan
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 9000,
-                             XPosition = -30,
+                             XPosition = -300,
                              Width = 162,
                              Colour = Colour4.Blue
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 10000,
-                             XPosition = 0,
+                             XPosition = -200,
                              Width = 128,
                              Colour = Colour4.Purple
                         },
                         new OrbitSource.KeyFrame() {
                              Time = 17000,
-                             XPosition = 0,
+                             XPosition = -300,
                              Width = 128,
                              Colour = Colour4.Purple
                         },
@@ -102,14 +103,41 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
                         new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
                         new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
                     ]
-                }
+                },
+                new OrbitSource() {
+                    KeyFrames = [
+                        new OrbitSource.KeyFrame() {
+                             Time = 0,
+                             XPosition = 0,
+                             Width = 1280,
+                             Colour = Colour4.Azure
+                        },
+                        new OrbitSource.KeyFrame() {
+                             Time = 17000,
+                             XPosition = 0,
+                             Width = 1280,
+                             Colour = Colour4.Purple
+                        },
+                    ],
+                    HitObjects = [
+                        new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
+                        new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
+                        new PressParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds, TimeSpan.FromSeconds(11).TotalMilliseconds),
+                        new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Left),
+                        new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Up),
+                        new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Right),
+                        new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
+                        new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
+                    ],
+                },
             ],
             //Offset = 0,
         };
         FileInfo file = new FileInfo("./Resources/Schema/Track.txt");
         //this.screenStack.Push(new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both });
         this.screenStack.Push(new GameLoader(() => {
-            return new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both };
+            return new GameplayScreen(beatmap, null!) { RelativeSizeAxes = Axes.Both };
         }));
     }
 }

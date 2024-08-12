@@ -7,15 +7,17 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 
-namespace ZeroV.Game.Screens;
+using osuTK;
+
+namespace ZeroV.Game.Screens.Gameplay;
 
 public partial class PauseOverlay : OverlayContainer {
     protected const Int32 TRANSITION_DURATION = 200;
     private const Single background_alpha = 0.75f;
 
-    public Action? OnResume { get; init; }
-    public Action? OnRetry { get; init; }
-    public Action? OnQuit { get; init; }
+    public required Action OnResume { get; init; }
+    public required Action OnRetry { get; init; }
+    public required Action OnQuit { get; init; }
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -30,7 +32,7 @@ public partial class PauseOverlay : OverlayContainer {
             new FillFlowContainer() {
                 AutoSizeAxes = Axes.Both,
                 Direction = FillDirection.Horizontal,
-                Spacing = new osuTK.Vector2(10, 0),
+                Spacing = new Vector2(10, 0),
                 Origin = Anchor.Centre,
                 Anchor = Anchor.Centre,
                 Children = [
@@ -38,7 +40,7 @@ public partial class PauseOverlay : OverlayContainer {
                         Height = 100,
                         Width = 100,
                         Text = "Quit",
-                        Action = this.OnQuit
+                        Action = this.OnQuit,
                     },
                     new BasicButton() {
                         Height = 100,

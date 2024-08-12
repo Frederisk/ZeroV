@@ -3,6 +3,7 @@ using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Input.Events;
 
 using osuTK;
 
@@ -54,5 +55,13 @@ public partial class DiamondButton : ClickableContainer {
 
     public override Boolean Contains(Vector2 screenSpacePos) {
         return this.outerDiamond.Contains(screenSpacePos);
+    }
+
+    protected override Boolean OnTouchDown(TouchDownEvent e) {
+        if (this.Enabled.Value) {
+            this.Action?.Invoke();
+        }
+
+        return true;
     }
 }

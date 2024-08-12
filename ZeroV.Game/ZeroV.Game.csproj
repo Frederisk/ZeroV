@@ -17,6 +17,6 @@
     <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework" Version="2024.217.0" />
+    <PackageReference Include="ppy.osu.Framework" Version="2024.809.2" />
   </ItemGroup>
 </Project>

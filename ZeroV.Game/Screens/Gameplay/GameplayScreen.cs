@@ -36,7 +36,7 @@ public partial class GameplayScreen : Screen {
     public Track GameplayTrack = null!;
 
     public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(2).TotalMilliseconds;
-    public readonly Double ParticleFadingTime = TimeSpan.FromSeconds(1.2).TotalMilliseconds;
+    public readonly Double ParticleFadingTime = 250;
 
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
@@ -61,8 +61,9 @@ public partial class GameplayScreen : Screen {
     [Resolved]
     private GameLoader gameLoader { get; set; } = null!;
 
-    private readonly Beatmap beatmap;
+    //private readonly Beatmap beatmap;
     private readonly LifetimeEntryManager lifetimeEntryManager = new();
+
     private Container<Orbit> orbits = null!;
     private Container overlay = null!;
     private ScoreCounter scoreCounter = null!;
@@ -72,7 +73,7 @@ public partial class GameplayScreen : Screen {
     public ScoringCalculator ScoringCalculator;
 
     public GameplayScreen(Beatmap beatmap, FileInfo trackFile) {
-        this.beatmap = beatmap;
+        //this.beatmap = beatmap;
         this.trackFileInfo = trackFile;
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
@@ -153,12 +154,36 @@ public partial class GameplayScreen : Screen {
                }
             ],
         };
+
+        this.pauseOverlay = new PauseOverlay() {
+            OnResume = () => {
+                // TODO: Countdown 3 seconds
+                this.Scheduler.AddDelayed(() => {
+                    this.pauseOverlay.Hide();
+                    this.GameplayTrack.Start();
+                }, 3000.0);
+            },
+            OnRetry = () => {
+                this.gameLoader.ExitRequested = false;
+                this.Exit();
+            },
+            OnQuit = () => {
+                this.gameLoader.ExitRequested = true;
+                this.pauseOverlay.Hide();
+                this.Exit();
+            }
+        };
         // FIXME:
         this.ScoringCalculator.ScoringChanged += delegate () {
             this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
             this.topText.Text = this.ScoringCalculator.CurrentTarget.ToString();
         };
         this.InternalChildren = [
+            this.orbitDrawablePool,
+            this.BlinkParticlePool,
+            this.PressParticlePool,
+            this.SlideParticlePool,
+            this.StrokeParticlePool,
             new PlayfieldBackground(),
             new Box() {
                 Origin = Anchor.BottomCentre,
@@ -170,46 +195,26 @@ public partial class GameplayScreen : Screen {
             },
             this.orbits,
             this.overlay,
+            this.pauseOverlay,
         ];
-        this.AddInternal(this.orbitDrawablePool);
-        this.AddInternal(this.BlinkParticlePool);
-        this.AddInternal(this.PressParticlePool);
-        this.AddInternal(this.SlideParticlePool);
-        this.AddInternal(this.StrokeParticlePool);
-
-        // FIXME: This is a temporary solution. The track should be loaded from the beatmap.
-        //this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {
-        //    Looping = false
-        //};
-        StorageBackedResourceStore store = new(new NativeStorage(this.trackFileInfo.Directory!.FullName));
-        ITrackStore trackStore = audio.GetTrackStore(store);
-        this.GameplayTrack = trackStore.Get(this.trackFileInfo.Name);
+#if DEBUG
+        if (this.trackFileInfo is null) {
+            this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {
+                Looping = false
+            };
+        } else {
+#endif
+            StorageBackedResourceStore store = new(new NativeStorage(this.trackFileInfo.Directory!.FullName));
+            ITrackStore trackStore = audio.GetTrackStore(store);
+            this.GameplayTrack = trackStore.Get(this.trackFileInfo.Name);
+#if DEBUG
+        }
+#endif
 
         this.GameplayTrack.Looping = false;
         this.GameplayTrack.Completed += () => {
             this.Exit();
-            //  this.screenStack.Push(new ResultScreen(this.ScoringCalculator));
         };
-
-        this.pauseOverlay = new PauseOverlay() {
-            OnResume = () => {
-                // TODO: Countdown 3 seconds
-                this.Scheduler.AddDelayed(() => {
-                    this.pauseOverlay.Hide();
-                    this.GameplayTrack.Start();
-                }, 3000.0);
-            },
-            OnRetry = () => {
-                this.Exit();
-                //this.screenStack.Push(new GameplayScreen(this.beatmap, this.trackFileInfo));
-            },
-            OnQuit = () => {
-                this.gameLoader.ExitRequested = true;
-                this.pauseOverlay.Hide();
-                this.Exit();
-            }
-        };
-        this.AddInternal(this.pauseOverlay);
     }
 
     protected override void LoadComplete() {
@@ -244,6 +249,6 @@ public partial class GameplayScreen : Screen {
     /// Encapsulates a touch update method.
     /// </summary>
     /// <param name="source">The source of the touch event.</param>
-    /// <param name="isNewTouch">Whether the touch event is a new touch. This is true if the touch event is a press, and false if the touch event is a move. Null if the touch event is a release.</param>
+    /// <param name="isNewTouch">Whether the touch event is a new touch. This is <see langword="true"/> if the touch event is a press, and <see langword="false"/> if the touch event is a move. <see langword="null"/> if the touch event is a release.</param>
     public delegate void TouchUpdateDelegate(TouchSource source, Boolean? isNewTouch);
 }

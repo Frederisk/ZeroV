@@ -15,11 +15,13 @@ namespace ZeroV.Game.Elements.Particles;
 /// </summary>
 public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSource> {
     //public ParticleType Type { get; protected init; }
+    public Boolean IsJudged { get; protected set; }
 
     public ParticleBase() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
         this.AutoSizeAxes = Axes.Both;
+        this.IsJudged = false;
         this.Y = -(ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2));
     }
 
@@ -27,6 +29,7 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
         // Reset Particle
         this.Y = -(ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2));
         this.Alpha = 1f;
+        this.IsJudged = false;
         base.FreeAfterUse();
     }
 
@@ -37,17 +40,18 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
         // late------------------------early
         // xxxxx-1000======0======+1000xxxxx
         return offset switch {
+            // Miss -1000 Normal 500
             // -1000~: None
-            var x when x is > +1000 => TargetResult.None,
+            var x when x is > +250 => TargetResult.None,
             // ~1000: Miss
-            var x when x is < -1000 => TargetResult.Miss,
-            // 1000~500: Bad
-            var x when x is < -500 => TargetResult.NormalLate,
-            var x when x is > +500 => TargetResult.NormalEarly,
-            // 500~300: Normal
-            var x when x is < -100 => TargetResult.PerfectLate,
-            var x when x is > +100 => TargetResult.PerfectEarly,
-            // 300~0: Perfect
+            var x when x is < -250 => TargetResult.Miss,
+            // 1000~500: Normal
+            var x when x is < -75 => TargetResult.NormalLate,
+            var x when x is > +75 => TargetResult.NormalEarly,
+            // 500~100: Perfect
+            var x when x is < -30 => TargetResult.PerfectLate,
+            var x when x is > +30 => TargetResult.PerfectEarly,
+            // 100~0: Perfect
             _ => TargetResult.MaxPerfect,
         };
     }
@@ -76,5 +80,6 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
 
     public virtual void OnDequeueInJudge() {
         this.Alpha = 0f;
+        this.IsJudged = true;
     }
 }
