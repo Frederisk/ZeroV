@@ -4,6 +4,7 @@ using System.IO;
 using NUnit.Framework;
 
 using osu.Framework.Allocation;
+using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
 using osu.Framework.Testing;
@@ -135,9 +136,9 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
             //Offset = 0,
         };
         FileInfo file = new FileInfo("./Resources/Schema/Track.txt");
-        //this.screenStack.Push(new GameplayScreen(beatmap, file) { RelativeSizeAxes = Axes.Both });
+        Track track = new TrackVirtual(length: TimeSpan.FromMinutes(3).TotalMilliseconds, name: "春日影");
         this.screenStack.Push(new GameLoader(() => {
-            return new GameplayScreen(beatmap, null!) { RelativeSizeAxes = Axes.Both };
+            return new GameplayScreen(beatmap, track) { RelativeSizeAxes = Axes.Both };
         }));
     }
 }

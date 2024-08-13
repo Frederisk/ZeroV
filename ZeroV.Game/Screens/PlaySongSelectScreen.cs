@@ -16,6 +16,11 @@ using ZeroV.Game.Elements.ListItems;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
+using osu.Framework.Audio;
+using osu.Framework.IO.Stores;
+using osu.Framework.Platform;
+using osu.Framework.Audio.Track;
+using System.IO;
 
 namespace ZeroV.Game.Screens;
 
@@ -109,7 +114,13 @@ public partial class PlaySongSelectScreen : Screen {
         //this.Push(playScreen);
 
         this.Push(new GameLoader(() => {
-            return new GameplayScreen(beatmap, this.expandedItem!.TrackInfo.TrackFile);
+            FileInfo trackFile = this.expandedItem.TrackInfo.TrackFile;
+            AudioManager audio = this.Dependencies.Get<AudioManager>();
+            NativeStorage storage = new NativeStorage(trackFile.Directory!.FullName);
+            StorageBackedResourceStore store = new(storage);
+            ITrackStore trackStore = audio.GetTrackStore(store);
+            Track track = trackStore.Get(trackFile.Name);
+            return new GameplayScreen(beatmap, track);
         }));
     }
 }

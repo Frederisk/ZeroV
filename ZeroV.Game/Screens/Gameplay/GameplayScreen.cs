@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq; // sum
 
 using osu.Framework.Allocation;
-using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -12,9 +11,7 @@ using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
-using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
-using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -26,13 +23,12 @@ using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.Gameplay;
 
 [Cached]
 public partial class GameplayScreen : Screen {
-
-    // [Cached]
     public Track GameplayTrack = null!;
 
     public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(2).TotalMilliseconds;
@@ -61,7 +57,6 @@ public partial class GameplayScreen : Screen {
     [Resolved]
     private GameLoader gameLoader { get; set; } = null!;
 
-    //private readonly Beatmap beatmap;
     private readonly LifetimeEntryManager lifetimeEntryManager = new();
 
     private Container<Orbit> orbits = null!;
@@ -69,12 +64,10 @@ public partial class GameplayScreen : Screen {
     private ScoreCounter scoreCounter = null!;
     private ZeroVSpriteText topText = null!;
     private PauseOverlay pauseOverlay = null!;
-    private FileInfo trackFileInfo;
     public ScoringCalculator ScoringCalculator;
 
-    public GameplayScreen(Beatmap beatmap, FileInfo trackFile) {
-        //this.beatmap = beatmap;
-        this.trackFileInfo = trackFile;
+    public GameplayScreen(Beatmap beatmap, Track track) {
+        this.GameplayTrack = track;
         this.Anchor = Anchor.BottomCentre;
         this.Origin = Anchor.BottomCentre;
 
@@ -82,12 +75,8 @@ public partial class GameplayScreen : Screen {
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
 
         // FIXME: Need a better way to calculate the count of hit objects.
-        UInt32 count = 0;
-        foreach (OrbitSource i in beatmap.OrbitSources) {
-            foreach (ParticleSource ii in i.HitObjects) {
-                count++;
-            }
-        }
+        UInt32 count = (UInt32)beatmap.OrbitSources.Sum(orbit => orbit.HitObjects.Count);
+
         this.ScoringCalculator = new ScoringCalculator(count);
 
         foreach (OrbitSource item in beatmap.OrbitSources) {
@@ -124,7 +113,7 @@ public partial class GameplayScreen : Screen {
     }
 
     [BackgroundDependencyLoader]
-    private void load(AudioManager audio) {
+    private void load() {
         this.orbits = new Container<Orbit> {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
@@ -173,11 +162,7 @@ public partial class GameplayScreen : Screen {
                 this.Exit();
             }
         };
-        // FIXME:
-        this.ScoringCalculator.ScoringChanged += delegate () {
-            this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
-            this.topText.Text = this.ScoringCalculator.CurrentTarget.ToString();
-        };
+
         this.InternalChildren = [
             this.orbitDrawablePool,
             this.BlinkParticlePool,
@@ -188,7 +173,7 @@ public partial class GameplayScreen : Screen {
             new Box() {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
-                Position = new Vector2(0, -50),
+                Position = new Vector2(0, -ZeroVMath.SCREEN_GAME_BASELINE_Y),
                 RelativeSizeAxes = Axes.X,
                 Height = 10,
                 Colour = Colour4.Red,
@@ -197,23 +182,17 @@ public partial class GameplayScreen : Screen {
             this.overlay,
             this.pauseOverlay,
         ];
-#if DEBUG
-        if (this.trackFileInfo is null) {
-            this.GameplayTrack = new TrackVirtual(length: 1000 * 60 * 3, "春日影") {
-                Looping = false
-            };
-        } else {
-#endif
-            StorageBackedResourceStore store = new(new NativeStorage(this.trackFileInfo.Directory!.FullName));
-            ITrackStore trackStore = audio.GetTrackStore(store);
-            this.GameplayTrack = trackStore.Get(this.trackFileInfo.Name);
-#if DEBUG
-        }
-#endif
 
         this.GameplayTrack.Looping = false;
+        // FIXME: Add result screen/overlay
         this.GameplayTrack.Completed += () => {
+            this.gameLoader.ExitRequested = true;
             this.Exit();
+        };
+        // FIXME: Add Combo
+        this.ScoringCalculator.ScoringChanged += delegate () {
+            this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
+            this.topText.Text = this.ScoringCalculator.CurrentTarget.ToString();
         };
     }
 
