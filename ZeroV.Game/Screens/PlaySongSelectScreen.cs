@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
@@ -58,7 +57,7 @@ public partial class PlaySongSelectScreen : Screen {
 
         //IReadOnlyList<TrackInfo> trackInfos = await this.beatmapWrapperProvider.GetAsync() ?? [];
         //this.beatmapWrapperProvider.GetAsync
-        IReadOnlyList<TrackInfo> trackInfos =  this.beatmapWrapperProvider.Get() ?? new List<TrackInfo>();
+        IReadOnlyList<TrackInfo> trackInfos =  this.beatmapWrapperProvider.Get() ?? [];
 
 
         IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);

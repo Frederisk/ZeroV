@@ -136,7 +136,7 @@ public partial class GameplayScreen : Screen {
                    Anchor = Anchor.TopLeft,
                    Size = new Vector2(120),
                    Text = "Pause",
-                   Action = ()=> {
+                   Action = () => {
                        this.GameplayTrack.Stop();
                        this.pauseOverlay.Show();
                    },
