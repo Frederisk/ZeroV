@@ -157,9 +157,6 @@ public partial class GameplayScreen : Screen {
                 this.retryThisGamePlay();
             },
             OnQuit = () => {
-                //this.gameLoader.ExitRequested = true;
-                //this.pauseOverlay.Hide();
-                //this.Exit();
                 this.exitThisGamePlay();
             }
         };
@@ -191,7 +188,7 @@ public partial class GameplayScreen : Screen {
             this.Exit();
         };
         // FIXME: Add Combo
-        this.ScoringCalculator.ScoringChanged += delegate () {
+        this.ScoringCalculator.ScoringChanged += () => {
             this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
             this.topText.Text = this.ScoringCalculator.CurrentTarget.ToString();
         };
@@ -242,17 +239,10 @@ public partial class GameplayScreen : Screen {
     /// <param name="isNewTouch">Whether the touch event is a new touch. This is <see langword="true"/> if the touch event is a press, and <see langword="false"/> if the touch event is a move. <see langword="null"/> if the touch event is a release.</param>
     public delegate void TouchUpdateDelegate(TouchSource source, Boolean? isNewTouch);
 
-    //protected override void Dispose(Boolean isDisposing) {
-    //    base.Dispose(isDisposing);
-    //    if (isDisposing) {
-    //        this.GameplayTrack.Dispose();
-    //        //this.orbitDrawablePool.Dispose();
-    //        //this.lifetimeEntryManager.Dis
-    //        this.orbits.Dispose();
-    //        this.overlay.Dispose();
-    //        this.scoreCounter.Dispose();
-    //        this.topText.Dispose();
-    //        this.pauseOverlay.Dispose();
-    //    }
-    //}
+    protected override void Dispose(Boolean isDisposing) {
+        base.Dispose(isDisposing);
+        if (isDisposing) {
+            this.GameplayTrack.Dispose();
+        }
+    }
 }
