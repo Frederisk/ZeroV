@@ -21,12 +21,12 @@ public partial class GameLoader : Screen {
         this.contentIn();
         // TODO: We temporarily wait it loaded and push it here simply.
         // Scheduler.Add(new ScheduledDelegate(pushWhenLoaded, Clock.CurrentTime + PlayerPushDelay, 0));
-        //if (this.CurrentScreen is not null) {
-        //    this.Push(this.CurrentScreen);
-        //} else {
-        //    throw new InvalidOperationException("CurrentScreen is null, this should not happen.");
-        //    //this.Exit();
-        //}
+        // if (this.CurrentScreen is not null) {
+        //     this.Push(this.CurrentScreen);
+        // } else {
+        //     throw new InvalidOperationException("CurrentScreen is null, this should not happen.");
+        //     this.Exit();
+        // }
     }
 
     public override void OnResuming(ScreenTransitionEvent e) {
@@ -38,7 +38,6 @@ public partial class GameLoader : Screen {
             this.contentIn();
         }
         //this.contentIn();
-        //throw new NotImplementedException();
         //if (this.CurrentScreen is not null) {
         //    this.Push(this.CurrentScreen);
         //} else {
@@ -48,25 +47,19 @@ public partial class GameLoader : Screen {
     }
 
     private void contentIn() {
-        //
         // content.ScaleTo(1, 650, Easing.OutQuint).Then().Schedule(prepareNewPlayer);
         // prepareNewPlayer here
         //this.CurrentScreen = this.createTargetScreen();
         //this.Schedule(() => {
-            this.CurrentScreen = this.createTargetScreen();
-            this.LoadComponentAsync(this.CurrentScreen, _ => {
-                this.OnPlayerLoaded();
-            });
+        this.CurrentScreen = this.createTargetScreen();
+        this.LoadComponentAsync(this.CurrentScreen, _ => {
+            this.OnPlayerLoaded();
+        });
         //});
 
         // TODO: We temporarily wait it loaded and push it here simply.
         // Scheduler.Add(new ScheduledDelegate(pushWhenLoaded, Clock.CurrentTime + PlayerPushDelay, 0));
-        if (this.CurrentScreen is not null) {
-            this.Push(this.CurrentScreen);
-        } else {
-            throw new InvalidOperationException("CurrentScreen is null, this should not happen.");
-            //this.Exit();
-        }
+        this.Push(this.CurrentScreen);
     }
 
     protected virtual void OnPlayerLoaded() {

@@ -64,7 +64,8 @@ public partial class GameplayScreen : Screen {
     private ScoreCounter scoreCounter = null!;
     private ZeroVSpriteText topText = null!;
     private PauseOverlay pauseOverlay = null!;
-
+    private ResultOverlay resultOverlay = null!;
+    [Cached]
     public readonly ScoringCalculator ScoringCalculator;
 
     public GameplayScreen(Beatmap beatmap, Track track) {
@@ -160,6 +161,7 @@ public partial class GameplayScreen : Screen {
                 this.exitThisGamePlay();
             }
         };
+        this.resultOverlay = new ResultOverlay();
 
         this.InternalChildren = [
             this.orbitDrawablePool,
@@ -179,13 +181,15 @@ public partial class GameplayScreen : Screen {
             this.orbits,
             this.overlay,
             this.pauseOverlay,
+            this.resultOverlay,
         ];
 
         this.GameplayTrack.Looping = false;
         // FIXME: Add result screen/overlay
         this.GameplayTrack.Completed += () => {
-            this.gameLoader.ExitRequested = true;
-            this.Exit();
+            this.Schedule(() => {
+                this.resultOverlay.Show();
+            });
         };
         // FIXME: Add Combo
         this.ScoringCalculator.ScoringChanged += () => {

@@ -30,7 +30,7 @@ public partial class TestSceneIcons : ZeroVTestScene {
             getIcon<StopIcon>(),
             getIcon<CrossIcon>(),
             getIcon<NextIcon>(),
-            ]);
+        ]);
     }
 
 
