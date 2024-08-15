@@ -31,6 +31,7 @@ public partial class GameLoader : Screen {
 
     public override void OnResuming(ScreenTransitionEvent e) {
         base.OnResuming(e);
+        //this.CurrentScreen?.Dispose();
         if (this.ExitRequested) {
             this.Exit();
         } else {

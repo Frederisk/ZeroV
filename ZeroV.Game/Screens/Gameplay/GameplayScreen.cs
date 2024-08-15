@@ -64,7 +64,8 @@ public partial class GameplayScreen : Screen {
     private ScoreCounter scoreCounter = null!;
     private ZeroVSpriteText topText = null!;
     private PauseOverlay pauseOverlay = null!;
-    public ScoringCalculator ScoringCalculator;
+
+    public readonly ScoringCalculator ScoringCalculator;
 
     public GameplayScreen(Beatmap beatmap, Track track) {
         this.GameplayTrack = track;
@@ -153,13 +154,13 @@ public partial class GameplayScreen : Screen {
                 }, 3000.0);
             },
             OnRetry = () => {
-                this.gameLoader.ExitRequested = false;
-                this.Exit();
+                this.retryThisGamePlay();
             },
             OnQuit = () => {
-                this.gameLoader.ExitRequested = true;
-                this.pauseOverlay.Hide();
-                this.Exit();
+                //this.gameLoader.ExitRequested = true;
+                //this.pauseOverlay.Hide();
+                //this.Exit();
+                this.exitThisGamePlay();
             }
         };
 
@@ -219,6 +220,16 @@ public partial class GameplayScreen : Screen {
         this.TouchUpdate?.Invoke(e.Touch.Source, null);
     }
 
+    private void exitThisGamePlay() {
+        this.gameLoader.ExitRequested = true;
+        this.Exit();
+    }
+
+    private void retryThisGamePlay() {
+        this.gameLoader.ExitRequested = false;
+        this.Exit();
+    }
+
     /// <summary>
     /// Occurs when a touch event is updated. Such events include press, move, and release.
     /// </summary>
@@ -230,4 +241,18 @@ public partial class GameplayScreen : Screen {
     /// <param name="source">The source of the touch event.</param>
     /// <param name="isNewTouch">Whether the touch event is a new touch. This is <see langword="true"/> if the touch event is a press, and <see langword="false"/> if the touch event is a move. <see langword="null"/> if the touch event is a release.</param>
     public delegate void TouchUpdateDelegate(TouchSource source, Boolean? isNewTouch);
+
+    //protected override void Dispose(Boolean isDisposing) {
+    //    base.Dispose(isDisposing);
+    //    if (isDisposing) {
+    //        this.GameplayTrack.Dispose();
+    //        //this.orbitDrawablePool.Dispose();
+    //        //this.lifetimeEntryManager.Dis
+    //        this.orbits.Dispose();
+    //        this.overlay.Dispose();
+    //        this.scoreCounter.Dispose();
+    //        this.topText.Dispose();
+    //        this.pauseOverlay.Dispose();
+    //    }
+    //}
 }

@@ -21,11 +21,7 @@ namespace ZeroV.Game.Tests.Visual.Screens;
 /// </remarks>
 public partial class Pentagon : Sprite, ISourceGeneratedDependencyActivator, ISourceGeneratedHandleInputCache, ISourceGeneratedLongRunningLoadCache {
 
-    private class PentagonDrawNode : SpriteDrawNode {
-
-        public PentagonDrawNode(Pentagon source) : base(source) {
-        }
-
+    private class PentagonDrawNode(Pentagon source) : SpriteDrawNode(source) {
         protected override void Blit(IRenderer renderer) {
             if (this.DrawRectangle.Width != 0f && this.DrawRectangle.Height != 0f) {
                 Triangle[] triangles = toPentagonTriangles(this.ScreenSpaceDrawQuad);

@@ -65,4 +65,5 @@ public partial class PauseOverlay : OverlayContainer {
 
     // Don't let touch down events through the overlay or people can touch particle while paused.
     protected override Boolean OnTouchDown(TouchDownEvent e) => true;
+    //protected override Boolean OnClick(ClickEvent e) => true;
 }
