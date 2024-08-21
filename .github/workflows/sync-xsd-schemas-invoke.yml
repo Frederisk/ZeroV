@@ -1,0 +1,29 @@
+name: Sync XSD schemas invoke
+on:
+  push:
+    branches: [ main, master ]
+    paths: ZeroV.Game/Data/Schema/ZeroVMap/ZeroVMapXml.xsd
+
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read the XSD file
+        id: read-xsd
+        run: |
+          CONTENT="$(cat ./ZeroV.Game/Data/Schema/ZeroVMap/ZeroVMapXml.xsd | base64 -w 0)"
+          echo "schema_content=$CONTENT" >> $GITHUB_OUTPUT
+
+      - name: Invoke the workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: Frederisk/ZeroV-Schemas
+          event-type: sync-xsd-schemas
+          client-payload: |-
+            {
+              "schema_content": "${{ steps.read-xsd.outputs.schema_content }}"
+            }

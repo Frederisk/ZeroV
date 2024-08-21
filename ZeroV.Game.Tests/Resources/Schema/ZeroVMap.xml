@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ZeroVMap
-  xmlns="http://zerov.games/ZeroVMap"
+  xmlns="http://schemas.zerov.net/2024/ZeroVMap"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   MapVersion="1.0.0.0"
   UUID="00000000-0000-0000-0000-000000000000">

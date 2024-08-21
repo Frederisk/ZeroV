@@ -15,7 +15,7 @@ namespace ZeroV.Game.Data.Schema.ZeroVMap;
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(DirectionXml), Namespace = "http://zerov.games/ZeroVMap")]
+[XmlType(nameof(DirectionXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap")]
 public enum DirectionXml {
     Up,
     Right,
@@ -25,9 +25,9 @@ public enum DirectionXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(ZeroVMapXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(ZeroVMapXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
-[XmlRoot("ZeroVMap", Namespace = "http://zerov.games/ZeroVMap")]
+[XmlRoot("ZeroVMap", Namespace = "http://schemas.zerov.net/2024/ZeroVMap")]
 public partial class ZeroVMapXml {
 
     [Required]
@@ -40,7 +40,7 @@ public partial class ZeroVMapXml {
 
     [Required]
     [XmlArray("BeatmapList")]
-    [XmlArrayItem("Map", Namespace = "http://zerov.games/ZeroVMap")]
+    [XmlArrayItem("Map", Namespace = "http://schemas.zerov.net/2024/ZeroVMap")]
     public List<MapXml> BeatmapList { get; set; }
 
     /// <summary>
@@ -62,7 +62,7 @@ public partial class ZeroVMapXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(TrackInfoXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(TrackInfoXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class TrackInfoXml {
 
@@ -125,7 +125,7 @@ public partial class TrackInfoXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(GameInfoXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(GameInfoXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class GameInfoXml {
 
@@ -149,7 +149,7 @@ public partial class GameInfoXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(BeatmapListXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(BeatmapListXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class BeatmapListXml {
 
@@ -159,7 +159,7 @@ public partial class BeatmapListXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(MapXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(MapXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class MapXml {
 
@@ -182,7 +182,7 @@ public partial class MapXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(OrbitXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(OrbitXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class OrbitXml {
 
@@ -197,7 +197,7 @@ public partial class OrbitXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(FramesXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(FramesXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class FramesXml {
 
@@ -211,7 +211,7 @@ public partial class FramesXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(KeyXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(KeyXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class KeyXml {
 
@@ -242,7 +242,7 @@ public partial class KeyXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(ParticlesXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(ParticlesXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class ParticlesXml {
 
@@ -261,7 +261,7 @@ public partial class ParticlesXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(BlinkXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(BlinkXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class BlinkXml {
 
@@ -276,7 +276,7 @@ public partial class BlinkXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(PressXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(PressXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class PressXml {
 
@@ -299,7 +299,7 @@ public partial class PressXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(SlideXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(SlideXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class SlideXml {
 
@@ -318,7 +318,7 @@ public partial class SlideXml {
 
 [GeneratedCode("XmlSchemaClassGenerator-Modified", "2.1.1094.0")]
 [Serializable]
-[XmlType(nameof(StrokeXml), Namespace = "http://zerov.games/ZeroVMap", AnonymousType = true)]
+[XmlType(nameof(StrokeXml), Namespace = "http://schemas.zerov.net/2024/ZeroVMap", AnonymousType = true)]
 [DesignerCategory("code")]
 public partial class StrokeXml {
 
