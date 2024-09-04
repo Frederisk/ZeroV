@@ -16,7 +16,7 @@ public partial class StopIcon : IconBase {
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
             RelativeSizeAxes = Axes.Both,
-            Size = new Vector2(ZeroVMath.SQRT_2 / 2),
+            Size = new Vector2(ZeroVMath.SQRT_2 / 2f), // 0.7071067811865476
         };
     }
 }

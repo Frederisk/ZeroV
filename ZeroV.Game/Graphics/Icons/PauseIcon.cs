@@ -17,7 +17,7 @@ public partial class PauseIcon : IconBase {
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
             RelativeSizeAxes = Axes.Both,
-            Size = new Vector2(ZeroVMath.SQRT_2 / 2f),
+            Size = new Vector2(ZeroVMath.SQRT_2 / 2f), // 0.7071067811865476
             Children = [
                 new Box {
                     Anchor = Anchor.CentreLeft,
