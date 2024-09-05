@@ -1,10 +1,11 @@
 using System;
 using System.Buffers;
 using System.IO;
-using System.Threading.Tasks;
 using System.Text.Json;
 
+using osu.Framework.Logging;
 using osu.Framework.Platform;
+
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Data.KeyValueStorage;
@@ -61,10 +62,19 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
 
         var fileName = $"{key}.json";
         if (!this.Storage.Exists(fileName)) {
+            Logger.Log($"File {fileName} does not exist.");
             return default;
         }
-        using Stream stream = this.Storage.GetStream(fileName, FileAccess.Read, FileMode.Open);
-        return JsonSerializer.Deserialize<T>(stream);
+
+        T? result = default;
+        try {
+            using Stream stream = this.Storage.GetStream(fileName, FileAccess.Read, FileMode.Open);
+            result = JsonSerializer.Deserialize<T>(stream);
+        }
+        catch (Exception e) {
+            Logger.Error(e, $"Error while opening or deserializing {fileName}.");
+        }
+        return result;
     }
 
     public void Set<T>(String key, T value) {

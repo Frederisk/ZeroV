@@ -83,8 +83,7 @@ public partial class IntroScreen : Screen {
     private IReadOnlyList<TrackInfo> loadBeatmaps() {
         // FIXME: Load from path every time to debug. Remove those comments after debugging.
         // FIXME: When the map version is updated, an exception may be caused here because it cannot be deserialized correctly.
-        IReadOnlyList<TrackInfo>? trackInfoList = null;
-        try { trackInfoList = this.trackInfoProvider.Get(); } catch { }
+        IReadOnlyList<TrackInfo>? trackInfoList = this.trackInfoProvider.Get();
         //if (trackInfoList is null) {
             String beatmapStoragePath = this.configManager.Get<String>(ZeroVSetting.BeatmapStoragePath);
             List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);

@@ -15,4 +15,4 @@ public class FileInfoJsonConverter : JsonConverter<FileInfo> {
     public override void Write(Utf8JsonWriter writer, FileInfo value, JsonSerializerOptions options) {
         writer.WriteStringValue(value.FullName);
     }
-}}
+}

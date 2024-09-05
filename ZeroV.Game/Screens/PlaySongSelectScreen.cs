@@ -33,6 +33,9 @@ public partial class PlaySongSelectScreen : Screen {
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
 
     [Resolved]
+    private ResultInfoProvider resultInfoProvider { get; set; } = null!;
+
+    [Resolved]
     private LargeTextureStore textureStore { get; set; } = null!;
 
     [BackgroundDependencyLoader]
@@ -55,12 +58,11 @@ public partial class PlaySongSelectScreen : Screen {
             Padding = new MarginPadding(10)
         };
 
-        //IReadOnlyList<TrackInfo> trackInfos = await this.beatmapWrapperProvider.GetAsync() ?? [];
-        //this.beatmapWrapperProvider.GetAsync
-        IReadOnlyList<TrackInfo> trackInfos =  this.beatmapWrapperProvider.Get() ?? [];
-
+        IReadOnlyList<TrackInfo> trackInfos = this.beatmapWrapperProvider.Get() ?? [];
+        IReadOnlyList<ResultInfo> resultInfos = this.resultInfoProvider.Get() ?? [];
 
         IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);
+
         foreach (TrackInfo item in trackInfoSort) {
             this.container.Add(new TrackInfoListItem(item));
         }

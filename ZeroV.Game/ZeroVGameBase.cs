@@ -48,6 +48,7 @@ public partial class ZeroVGameBase : osu.Framework.Game {
         var jsonKeyValueStorage = new JsonKeyValueStorage(storage);
         this.dependencies.CacheAs<IKeyValueStorage>(jsonKeyValueStorage);
         this.dependencies.CacheAs<TrackInfoProvider>(new TrackInfoProvider(jsonKeyValueStorage));
+        this.dependencies.CacheAs<ResultInfoProvider>(new ResultInfoProvider(jsonKeyValueStorage));
 
         IResourceStore<TextureUpload> resourceStore = this.Host.CreateTextureLoaderStore(new NamespacedResourceStore<Byte[]>(this.Resources, @"Textures"));
         LargeTextureStore largeStore = new(this.Host.Renderer, resourceStore);
