@@ -17,7 +17,7 @@ public partial class ZeroVGame : ZeroVGameBase {
     /// The screen stack that manages the game screens.
     /// </summary>
     /// <remarks>
-    /// This field will never be null after <see cref="LoadComplete"/> has been called.
+    /// This field will never be <see langword="null"/> after <see cref="LoadComplete"/> has been called.
     /// </remarks>
     private ScreenStack screenStack = null!;
 

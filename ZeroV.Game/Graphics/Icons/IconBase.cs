@@ -1,14 +1,5 @@
-using System;
-
-using osuTK;
-
-using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Rendering;
-using osu.Framework.Graphics.Shapes;
-using ZeroV.Game.Graphics.Shapes;
-using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Graphics.Icons;
 

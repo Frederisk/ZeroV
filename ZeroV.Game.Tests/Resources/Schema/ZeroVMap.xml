@@ -1,98 +1,185 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ZeroVMap
-  xmlns="http://zerov.games/ZeroVMap"
+<?xml version="1.0" encoding="UTF-8"?>
+<ZeroVMap MapVersion="0.0.1.0" xmlns="http://schemas.zerov.net/2024/ZeroVMap"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  MapVersion="1.0.0.0"
-  UUID="00000000-0000-0000-0000-000000000000">
+  xsi:schemaLocation="http://schemas.zerov.net/2024/ZeroVMap http://schemas.zerov.net/2024/ZeroVMap.xsd"
+  UUID="4441eb7d-4cfa-4a8a-a7db-cd87ee219506">
   <TrackInfo>
-    <Title>Brilliant World(Vocal Main Mix)</Title>
-    <Length>00:04:24.7370000</Length>
-    <BPM>127</BPM>
-    <FileOffset>00:00:00</FileOffset>
-    <!-- Offset is editable. -->
+    <Title>Akari (VOEZ Ver.)</Title>
+    <Album>VOEZ SoundTracks</Album>
+    <Length>00:02:53.611</Length>
+    <BPM>140</BPM>
+    <FileOffset>00:00:00.491</FileOffset>
   </TrackInfo>
   <GameInfo>
-    <Author>Rowe Wilson Frederisk Holme</Author>
-    <GameVersion>0.0.0.0</GameVersion>
+    <Author>VOEZ; RWFH; Jing 8956</Author>
+    <Description>Normal Game</Description>
+    <GameVersion>0.0.0.3</GameVersion>
   </GameInfo>
   <BeatmapList>
     <Map Index="0">
+      <!-- 1 -->
       <Orbit>
         <Frames>
-          <Key Time="00:00:00.9450000" Position="0" Width="1000" Colour="#abcdef" />
-          <!-- Real time is: 0.945 - 0.49 = 0.896-->
-          <Key Time="00:00:20.1230000" Position="3000" Width="13" Colour="#123345"/>
-          <!-- Colour="Azure", it's the same as above one. -->
-          <Key Time="00:00:00.9450000" Position="0" Width="1000" Colour="#FFFF9999"></Key>
+          <Key Time="00:00:00" Position="-640" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:00.2500000" Position="490" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01" Position="490" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.1875000" Position="-337.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.5625000" Position="112.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:04.5625000" Position="212.5" Width="150" Colour="#62B1AC" />
+
+          <Key Time="00:00:31.5625000" Position="212.5" Width="150" Colour="#62B1AC" />
         </Frames>
         <Particles>
-          <Blink Time="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Blink Time="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Slide Time="00:00:00" Direction="Left" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Slide Time="00:00:00" Direction="Right" />
-          <Blink Time="00:00:00" />
-          <Blink Time="00:00:00" />
-          <Blink Time="00:00:00" />
+          <Blink Time="00:00:03.857" />
+          <Press StartTime="00:00:04.929" EndTime="00:00:05.571" />
+          <Blink Time="00:00:06.429" />
+          <Blink Time="00:00:07.071" />
+          <Blink Time="00:00:07.929" />
+          <Blink Time="00:00:10.741" />
+          <Blink Time="00:00:11.357" />
+          <Blink Time="00:00:13.286" />
+          <Blink Time="00:00:14.143" />
+          <Blink Time="00:00:17.571" />
+          <Blink Time="00:00:20.143" />
+          <Blink Time="00:00:20.786" />
+          <Blink Time="00:00:24.429" />
+          <Blink Time="00:00:25.071" />
+          <Blink Time="00:00:27.000" />
+          <Blink Time="00:00:28.071" />
+
         </Particles>
       </Orbit>
+      <!-- 2 -->
       <Orbit>
         <Frames>
-          <Key Time="00:00:01.8900000" Position="-700" Width="1000" Colour="#FFFFFFFF" />
-        </Frames>
-        <Particles />
-      </Orbit>
-      <Orbit>
-        <Frames>
-          <Key Time="00:00:02.8350000" Position="700" Width="1000" Colour="#FFFFFF" />
-        </Frames>
-        <Particles />
-      </Orbit>
-    </Map>
-    <Map Index="1">
-      <Orbit>
-        <Frames>
-          <Key Time="00:00:00.9450000" Position="0" Width="1000" Colour="#abcdef" />
-          <!-- Real time is:
-                      0.945 - 0.49 = 0.896-->
-          <Key Time="00:00:20.1230000" Position="3000" Width="13" Colour="#123345"/>
-          <!-- Colour="Azure", it's the same as above
-                      one. -->
-          <Key Time="00:00:00.9450000" Position="0" Width="1000" Colour="#FFFF9999"></Key>
+          <Key Time="00:00:00.2500000" Position="-865" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:00.5000000" Position="265" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01" Position="265" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.1875000" Position="337.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.3750000" Position="-337.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.5625000" Position="-112.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:04.5625000" Position="-212.5" Width="150" Colour="#62B1AC" />
+
+          <Key Time="00:00:31.5625000" Position="-212.5" Width="150" Colour="#62B1AC" />
         </Frames>
         <Particles>
-          <Blink Time="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Blink Time="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Slide Time="00:00:00" Direction="Left" />
-          <Press StartTime="00:00:00" EndTime="00:00:00" />
-          <Slide Time="00:00:00" Direction="Right" />
-          <Blink Time="00:00:00" />
-          <Blink Time="00:00:00" />
-          <Blink Time="00:00:00" />
+          <Blink Time="00:00:03.643" />
+          <Blink Time="00:00:04.500" />
+          <Blink Time="00:00:06.000" />
+          <Blink Time="00:00:07.286" />
+          <Press StartTime="00:00:08.367" EndTime="00:00:09.000" />
+          <Blink Time="00:00:10.500" />
+          <Blink Time="00:00:10.929" />
+          <Press StartTime="00:00:11.786" EndTime="00:00:12.429" />
+          <Blink Time="00:00:13.741" />
+          <Blink Time="00:00:13.929" />
+          <Blink Time="00:00:14.786" />
+          <Blink Time="00:00:17.357" />
+          <Blink Time="00:00:19.714" />
+          <Blink Time="00:00:21.000" />
+          <Press StartTime="00:00:22.071" EndTime="00:00:22.714" />
+          <Blink Time="00:00:24.214" />
+          <Blink Time="00:00:27.857" />
+          <Press StartTime="00:00:28.929" EndTime="00:00:29.571" />
         </Particles>
       </Orbit>
+      <!-- 3 -->
       <Orbit>
         <Frames>
-          <Key Time="00:00:01.8900000" Position="-700" Width="1000" Colour="#FFFFFFFF" />
+          <Key Time="00:00:00.5000000" Position="-1090" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:00.7500000" Position="40" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01" Position="40" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.1875000" Position="112.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.3750000" Position="337.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.5625000" Position="-337.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:04.5625000" Position="-437.5" Width="150" Colour="#62B1AC" />
+
+          <Key Time="00:00:31.5625000" Position="-437.5" Width="150" Colour="#62B1AC" />
         </Frames>
-        <Particles />
+        <Particles>
+          <Blink Time="00:00:03.429" />
+          <Blink Time="00:00:07.500" />
+          <Blink Time="00:00:10.286" />
+          <Blink Time="00:00:17.143" />
+          <Blink Time="00:00:18.214" />
+          <Blink Time="00:00:21.214" />
+          <Blink Time="00:00:24.000" />
+          <Press StartTime="00:00:25.500" EndTime="00:00:26.143" />
+          <Blink Time="00:00:27.429" />
+          <Blink Time="00:00:27.643" />
+        </Particles>
       </Orbit>
+      <!-- 4 -->
       <Orbit>
         <Frames>
-          <Key Time="00:00:02.8350000" Position="700" Width="1000" Colour="#FFFFFF" />
+          <Key Time="00:00:00.7500000" Position="-1315" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01" Position="-185" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01" Position="-185" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.1875000" Position="-112.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.3750000" Position="112.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:01.5625000" Position="337.5" Width="150" Colour="#62B1AC" />
+          <Key Time="00:00:04.5625000" Position="437.5" Width="150" Colour="#62B1AC" />
+
+          <Key Time="00:00:31.5625000" Position="437.5" Width="150" Colour="#62B1AC" />
         </Frames>
-        <Particles />
+        <Particles>
+          <Blink Time="00:00:04.071" />
+          <Blink Time="00:00:06.857" />
+          <Blink Time="00:00:12.857" />
+          <Blink Time="00:00:14.357" />
+          <Press StartTime="00:00:15.214" EndTime="00:00:15.857" />
+          <Blink Time="00:00:17.786" />
+          <Press StartTime="00:00:18.643" EndTime="00:00:19.286" />
+          <Blink Time="00:00:20.571" />
+          <Blink Time="00:00:21.643" />
+          <Blink Time="00:00:24.643" />
+          <Blink Time="00:00:26.571" />
+          <Blink Time="00:00:28.500" />
+        </Particles>
       </Orbit>
+
+      <!--
+      <Orbit>
+        <Particles>
+          <Press StartTime="00:00:34.286" EndTime="00:00:35.357" />
+          <Blink Time="00:00:34.714" />
+          <Blink Time="00:00:34.929" />
+          <Blink Time="00:00:35.143" />
+          <Press StartTime="00:00:35.571" EndTime="00:00:36.643" />
+          <Press StartTime="00:00:36.857" EndTime="00:00:37.500" />
+          <Press StartTime="00:00:37.714" EndTime="00:00:38.786" />
+          <Blink Time="00:00:39.000" />
+          <Press StartTime="00:00:39.429" EndTime="00:00:40.071" />
+          <Press StartTime="00:00:40.286" EndTime="00:00:40.929" />
+          <Press StartTime="00:00:41.143" EndTime="00:00:43.714" />
+
+          <Press StartTime="00:00:46.286" EndTime="00:00:47.357" />
+          <Blink Time="00:00:47.571" />
+          <Press StartTime="00:00:48.000" EndTime="00:00:49.071" />
+          <Blink Time="00:00:49.286" />
+          <Press StartTime="00:00:49.714" EndTime="00:00:50.786" />
+          <Blink Time="00:00:51.000" />
+          <Press StartTime="00:00:51.429" EndTime="00:00:52.929" />
+          <Blink Time="00:00:51.429" />
+          <Press StartTime="00:00:53.143" EndTime="00:00:54.643" />
+          <Blink Time="00:00:53.143" />
+          <Press StartTime="00:00:54.857" EndTime="00:00:57.000" />
+          <Blink Time="00:00:54.857" />
+          <Blink Time="00:00:55.714" />
+          <Blink Time="00:00:56.143" />
+          <Blink Time="00:00:56.357" />
+          <Blink Time="00:00:56.571" />
+
+          <Blink Time="00:00:57.214" />
+          <Blink Time="00:00:57.214" />
+          <Blink Time="00:00:57.429" />
+          <Blink Time="00:00:57.429" />
+
+
+        </Particles>
+      </Orbit> -->
     </Map>
   </BeatmapList>
+
+
 </ZeroVMap>

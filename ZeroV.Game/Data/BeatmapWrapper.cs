@@ -30,9 +30,9 @@ public class BeatmapWrapper {
     private static XmlReaderSettings createXmlReaderSettings() {
         XmlReaderSettings settings = new();
         settings.ValidationType = ValidationType.Schema;
-        settings.Schemas.Add("http://zerov.games/ZeroVMap", "./Data/Schema/ZeroVMap/ZeroVMapXml.xsd");
+        settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", "./Data/Schema/ZeroVMap/ZeroVMapXml.xsd");
         // XmlReader xmlReader = XmlReader.Create(new StreamReader("./Data/Schema/ZeroVMap/ZeroVMapXml.xsd"));
-        // settings.Schemas.Add("http://zerov.games/ZeroVMap", xmlReader);
+        // settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", xmlReader);
 
         settings.ValidationEventHandler += validationEventHandler;
         settings.ValidationFlags = XmlSchemaValidationFlags.ProcessIdentityConstraints

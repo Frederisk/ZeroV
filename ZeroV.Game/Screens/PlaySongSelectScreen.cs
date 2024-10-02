@@ -1,11 +1,17 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using osu.Framework.Allocation;
+using osu.Framework.Audio;
+using osu.Framework.Audio.Track;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics;
+using osu.Framework.IO.Stores;
+using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -15,11 +21,7 @@ using ZeroV.Game.Elements.ListItems;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
-using osu.Framework.Audio;
-using osu.Framework.IO.Stores;
-using osu.Framework.Platform;
-using osu.Framework.Audio.Track;
-using System.IO;
+using ZeroV.Game.Configs;
 
 namespace ZeroV.Game.Screens;
 
@@ -33,7 +35,13 @@ public partial class PlaySongSelectScreen : Screen {
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
 
     [Resolved]
+    private ResultInfoProvider resultInfoProvider { get; set; } = null!;
+
+    [Resolved]
     private LargeTextureStore textureStore { get; set; } = null!;
+
+    [Resolved]
+    private ZeroVConfigManager configManager { get; set; } = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -45,7 +53,6 @@ public partial class PlaySongSelectScreen : Screen {
             Origin = Anchor.Centre,
             FillMode = FillMode.Fill
         };
-        this.AddInternal(this.background);
 
         this.container = new FillFlowContainer() {
             RelativeSizeAxes = Axes.X,
@@ -55,17 +62,17 @@ public partial class PlaySongSelectScreen : Screen {
             Padding = new MarginPadding(10)
         };
 
-        //IReadOnlyList<TrackInfo> trackInfos = await this.beatmapWrapperProvider.GetAsync() ?? [];
-        //this.beatmapWrapperProvider.GetAsync
-        IReadOnlyList<TrackInfo> trackInfos =  this.beatmapWrapperProvider.Get() ?? [];
-
+        IReadOnlyList<TrackInfo> trackInfos = this.beatmapWrapperProvider.Get() ?? [];
+        IReadOnlyList<ResultInfo> resultInfos = this.resultInfoProvider.Get() ?? [];
 
         IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);
+
         foreach (TrackInfo item in trackInfoSort) {
             this.container.Add(new TrackInfoListItem(item));
         }
 
         this.InternalChildren = [
+            this.background,
             new BackButton(this) {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
@@ -107,10 +114,10 @@ public partial class PlaySongSelectScreen : Screen {
     public void ConfirmSelect() {
         var wrapper = BeatmapWrapper.Create(this.expandedItem!.TrackInfo.BeatmapFile);
         Beatmap beatmap = wrapper.GetBeatmapByIndex(this.selectedItem!.MapInfo.Index);
-        // FIXME: Apply offset here!
-        beatmap.ApplyOffset(this.expandedItem!.TrackInfo.FileOffset.TotalMilliseconds);
-        //var playScreen = new GameplayScreen(beatmap, this.expandedItem!.TrackInfo.TrackFile);
-        //this.Push(playScreen);
+        // Apply offset
+        Double deviceOffset = this.configManager.Get<Double>(ZeroVSetting.GlobalSoundOffset);
+        Double trackOffset = this.expandedItem!.TrackInfo.FileOffset.TotalMilliseconds;
+        beatmap.ApplyOffset(deviceOffset + trackOffset);
 
         this.Push(new GameLoader(() => {
             FileInfo trackFile = this.expandedItem.TrackInfo.TrackFile;

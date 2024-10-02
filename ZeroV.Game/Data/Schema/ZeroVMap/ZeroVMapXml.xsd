@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema
   xmlns="http://www.w3.org/2001/XMLSchema"
-  xmlns:zvm="http://zerov.games/ZeroVMap"
-  targetNamespace="http://zerov.games/ZeroVMap"
+  xml:lang="EN" version="1.0"
+  xmlns:zvm="http://schemas.zerov.net/2024/ZeroVMap"
+  targetNamespace="http://schemas.zerov.net/2024/ZeroVMap"
   elementFormDefault="qualified"
   attributeFormDefault="unqualified">
   <!-- ZeroVMap -->
@@ -17,12 +18,9 @@
               <!-- if TarckOrder is exist, Album must be exist. -->
               <!-- Album is optional. -->
               <sequence minOccurs="0">
-                <element name="Album" type="string" minOccurs="1" />
+                <element name="Album" type="string" />
                 <element name="TrackOrder" type="integer" minOccurs="0" />
               </sequence>
-              <!--<element name="Artists" minOccurs="0">-->
-              <!-- TODO: Clarify the type of this element. -->
-              <!--</element>-->
               <element name="Artists" type="string" minOccurs="0" />
               <element name="Length" type="zvm:timespan" />
               <element name="BPM" type="float" minOccurs="0" />
@@ -121,14 +119,14 @@
             </sequence>
           </complexType>
           <!-- A check to ensure that the Maps.Index(Attribute) is unique. -->
-          <unique name="UniqueMapIndex" >
+          <unique name="UniqueMapIndex">
             <selector xpath="zvm:Map" />
             <field xpath="@Index" />
           </unique>
         </element>
       </sequence>
       <attribute name="MapVersion" type="zvm:version" use="required" />
-      <attribute name ="UUID" type="zvm:uuid" use="required" />
+      <attribute name="UUID" type="zvm:uuid" use="required" />
     </complexType>
   </element>
   <simpleType name="version">
