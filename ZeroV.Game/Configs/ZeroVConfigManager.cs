@@ -15,5 +15,6 @@ public partial class ZeroVConfigManager(Storage storage, IDictionary<ZeroVSettin
         // base.InitialiseDefaults(); // It's empty.
         this.SetDefault<Double>(ZeroVSetting.GlobalSoundOffset, 0);
         this.SetDefault<String>(ZeroVSetting.BeatmapStoragePath, this.Storage.GetFullPath(ZeroVPath.BEATMAPS_STORAGE_PATH));
+        this.SetDefault<Double>(ZeroVSetting.GamePlayParticleFallingTime, TimeSpan.FromSeconds(2).TotalMilliseconds);
     }
 }

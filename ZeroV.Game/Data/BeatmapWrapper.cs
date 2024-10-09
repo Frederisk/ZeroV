@@ -81,7 +81,12 @@ public class BeatmapWrapper {
         using FileStream xmlStream = file.OpenRead();
         using XmlReader reader = XmlReader.Create(xmlStream, xml_reader_settings);
         // Deserialize the XML
-        var map = (ZeroVMapXml)zero_v_map_serializer.Deserialize(reader)!;
+        ZeroVMapXml map = (ZeroVMapXml)zero_v_map_serializer.Deserialize(reader)!;
+        // No longer used as xsd can now be used to verify validity.
+        // var result = AnnotationsValidator.TryValidateObjectRecursive(map, null, null);
+        // if (!result) {
+        //     throw new InvalidOperationException("The XML file is invalid.");
+        // }
         return new BeatmapWrapper(map, file);
     }
 

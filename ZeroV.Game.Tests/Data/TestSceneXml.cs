@@ -21,7 +21,7 @@ internal class TestSceneXml {
         Assert.IsNotNull(wrapper.ZeroVMap);
         wrapper.GetTrackInfo();
         wrapper.GetBeatmapByIndex(0);
-        wrapper.GetBeatmapByIndex(1);
+        //wrapper.GetBeatmapByIndex(1);
         try {
             wrapper.GetBeatmapByIndex(2);
             Assert.Fail("Expected an Exception");

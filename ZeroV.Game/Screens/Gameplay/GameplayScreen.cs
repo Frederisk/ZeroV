@@ -16,6 +16,7 @@ using osu.Framework.Screens;
 
 using osuTK;
 
+using ZeroV.Game.Configs;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Elements.Counters;
@@ -31,8 +32,8 @@ namespace ZeroV.Game.Screens.Gameplay;
 public partial class GameplayScreen : Screen {
     public Track GameplayTrack = null!;
 
-    public readonly Double ParticleFallingTime = TimeSpan.FromSeconds(2).TotalMilliseconds;
-    public readonly Double ParticleFadingTime = 250;
+    public Double ParticleFallingTime { get; private set; } //TimeSpan.FromSeconds(2).TotalMilliseconds;
+    public Double ParticleFadingTime { get; } = 250;
 
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
@@ -57,6 +58,9 @@ public partial class GameplayScreen : Screen {
     [Resolved]
     private GameLoader gameLoader { get; set; } = null!;
 
+    //[Resolved]
+    //private ZeroVConfigManager configManager { get; set; } = null!;
+
     private readonly LifetimeEntryManager lifetimeEntryManager = new();
 
     private Container<Orbit> orbits = null!;
@@ -76,7 +80,7 @@ public partial class GameplayScreen : Screen {
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
 
-        // FIXME: Need a better way to calculate the count of hit objects.
+        // TODO: Need a better way to calculate the count of hit objects.
         UInt32 count = (UInt32)beatmap.OrbitSources.Sum(orbit => orbit.HitObjects.Count);
 
         this.ScoringCalculator = new ScoringCalculator(count);
@@ -108,14 +112,14 @@ public partial class GameplayScreen : Screen {
     protected override Boolean CheckChildrenLife() {
         var result = base.CheckChildrenLife();
         var currTime = this.GameplayTrack.CurrentTime;
-        //var startTime = currTime - 2000;
-        //var endTime = currTime + 1000;
         result |= this.lifetimeEntryManager.Update(currTime);
         return result;
     }
 
     [BackgroundDependencyLoader]
-    private void load() {
+    private void load(ZeroVConfigManager configManager) {
+        this.ParticleFallingTime = configManager.Get<Double>(ZeroVSetting.GamePlayParticleFallingTime);
+
         this.orbits = new Container<Orbit> {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
@@ -146,7 +150,7 @@ public partial class GameplayScreen : Screen {
             ],
         };
 
-        this.pauseOverlay = new PauseOverlay() {
+        this.pauseOverlay = new PauseOverlay {
             OnResume = () => {
                 // TODO: Countdown 3 seconds
                 this.Scheduler.AddDelayed(() => {
