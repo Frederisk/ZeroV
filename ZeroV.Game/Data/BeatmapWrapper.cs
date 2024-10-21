@@ -129,7 +129,7 @@ public class BeatmapWrapper {
     /// <exception cref="InvalidOperationException">Thrown when the track file and it's folder layout is invalid.</exception>
     public TrackInfo GetTrackInfo() {
         DirectoryInfo? directory = this.BeatmapFile.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
-        // TODO: match music file
+        // TODO: Need a better way to match music file
         FileInfo[] files = directory.GetFiles(ZeroVPath.TRACK_FILE_NAME_PATTERN);
         if (files.Length < 1 || !files[0].Exists) {
             throw new InvalidOperationException("Track file not found.");

@@ -36,7 +36,7 @@ public class AnnotationsValidator {
             return true;
         }
 
-        var isValidate = Validator.TryValidateObject(instance, new ValidationContext(instance, null, validationContexts), results, true);
+        Boolean isValidate = Validator.TryValidateObject(instance, new ValidationContext(instance, null, validationContexts), results, true);
 
         // Validate each property recursively
         foreach (PropertyInfo property in instance.GetType().GetProperties()) {
@@ -45,13 +45,13 @@ public class AnnotationsValidator {
                 continue;
             }
 
-            var value = property.GetValue(instance, null);
+            Object? value = property.GetValue(instance, null);
             if (value is null) {
                 continue;
             }
 
             if (value is IEnumerable enumValue) {
-                foreach (var item in enumValue) {
+                foreach (Object? item in enumValue) {
                     if (item is null) { continue; }
                     List<ValidationResult> nestedResults = [];
                     if (!tryValidateObjectRecursive(item, validationContexts, nestedResults, validatedObjects)) {

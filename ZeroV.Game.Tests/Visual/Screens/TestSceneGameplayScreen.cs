@@ -135,8 +135,7 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
             ],
             //Offset = 0,
         };
-        FileInfo file = new FileInfo("./Resources/Schema/Track.txt");
-        Track track = new TrackVirtual(length: TimeSpan.FromMinutes(3).TotalMilliseconds, name: "春日影");
+        TrackVirtual track = new(length: TimeSpan.FromMinutes(3).TotalMilliseconds, name: "春日影");
         this.screenStack.Push(new GameLoader(() => {
             return new GameplayScreen(beatmap, track) { RelativeSizeAxes = Axes.Both };
         }));

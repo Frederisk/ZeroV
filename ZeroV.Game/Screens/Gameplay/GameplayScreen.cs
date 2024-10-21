@@ -187,9 +187,7 @@ public partial class GameplayScreen : Screen {
             this.pauseOverlay,
             this.resultOverlay,
         ];
-
         this.GameplayTrack.Looping = false;
-        // FIXME: Add result screen/overlay
         this.GameplayTrack.Completed += () => {
             this.Schedule(() => {
                 this.resultOverlay.Show();
