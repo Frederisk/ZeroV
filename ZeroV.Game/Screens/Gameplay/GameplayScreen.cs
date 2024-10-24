@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq; // sum
 
 using osu.Framework.Allocation;
+using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -11,12 +13,15 @@ using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
+using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
+using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using osuTK;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.Data;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Elements.Counters;
@@ -30,10 +35,39 @@ namespace ZeroV.Game.Screens.Gameplay;
 
 [Cached]
 public partial class GameplayScreen : Screen {
-    public Track GameplayTrack = null!;
+    public TrackInfo TrackInfo { get; }
+
+    public MapInfo MapInfo { get; }
+
+    public Track GameplayTrack { get; private set; } = null!;
+    public ScoringCalculator ScoringCalculator { get; private set; } = null!;
+
+    [Resolved]
+    private GameLoader gameLoader { get; set; } = null!;
 
     public Double ParticleFallingTime { get; private set; } //TimeSpan.FromSeconds(2).TotalMilliseconds;
     public Double ParticleFadingTime { get; } = 250;
+
+    private Container<Orbit> orbits = null!;
+    private Container overlay = null!;
+    private ScoreCounter scoreCounter = null!;
+    private ZeroVSpriteText topText = null!;
+    private PauseOverlay pauseOverlay = null!;
+    private ResultOverlay resultOverlay = null!;
+
+    public GameplayScreen(TrackInfo trackInfo, MapInfo mapInfo) {
+        this.TrackInfo = trackInfo;
+        this.MapInfo = mapInfo;
+        this.Anchor = Anchor.BottomCentre;
+        this.Origin = Anchor.BottomCentre;
+
+        this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
+        this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
+    }
+
+    #region Lifetime
+
+    private readonly LifetimeEntryManager lifetimeEntryManager = new();
 
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
@@ -54,42 +88,6 @@ public partial class GameplayScreen : Screen {
 
     [Cached]
     protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
-
-    [Resolved]
-    private GameLoader gameLoader { get; set; } = null!;
-
-    //[Resolved]
-    //private ZeroVConfigManager configManager { get; set; } = null!;
-
-    private readonly LifetimeEntryManager lifetimeEntryManager = new();
-
-    private Container<Orbit> orbits = null!;
-    private Container overlay = null!;
-    private ScoreCounter scoreCounter = null!;
-    private ZeroVSpriteText topText = null!;
-    private PauseOverlay pauseOverlay = null!;
-    private ResultOverlay resultOverlay = null!;
-    [Cached]
-    public readonly ScoringCalculator ScoringCalculator;
-
-    public GameplayScreen(Beatmap beatmap, Track track) {
-        this.GameplayTrack = track;
-        this.Anchor = Anchor.BottomCentre;
-        this.Origin = Anchor.BottomCentre;
-
-        this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
-        this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
-
-        // TODO: Need a better way to calculate the count of hit objects.
-        UInt32 count = (UInt32)beatmap.OrbitSources.Sum(orbit => orbit.HitObjects.Count);
-
-        this.ScoringCalculator = new ScoringCalculator(count);
-
-        foreach (OrbitSource item in beatmap.OrbitSources) {
-            var entry = new OrbitLifetimeEntry(item);
-            this.lifetimeEntryManager.AddEntry(entry);
-        }
-    }
 
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;
@@ -116,9 +114,42 @@ public partial class GameplayScreen : Screen {
         return result;
     }
 
+    #endregion Lifetime
+
     [BackgroundDependencyLoader]
-    private void load(ZeroVConfigManager configManager) {
+    private void load(ZeroVConfigManager configManager, AudioManager audioManager) {
         this.ParticleFallingTime = configManager.Get<Double>(ZeroVSetting.GamePlayParticleFallingTime);
+
+        #region Load track
+
+        FileInfo trackFile = this.TrackInfo.TrackFile;
+        NativeStorage storage = new(trackFile.Directory!.FullName);
+        StorageBackedResourceStore store = new(storage);
+        ITrackStore trackStore = audioManager.GetTrackStore(store);
+        Track track = trackStore.Get(trackFile.Name);
+        this.GameplayTrack = track;
+
+        #endregion Load track
+
+        #region Load beatmap
+
+        var wrapper = BeatmapWrapper.Create(this.TrackInfo.BeatmapFile);
+        Beatmap beatmap = wrapper.GetBeatmapByIndex(this.MapInfo.Index);
+        Double deviceOffset = configManager.Get<Double>(ZeroVSetting.GlobalSoundOffset);
+        Double trackOffset = this.TrackInfo.FileOffset.TotalMilliseconds;
+        beatmap.ApplyOffset(deviceOffset + trackOffset);
+
+        // TODO: Need a better way to calculate the count of hit objects.
+        UInt32 count = (UInt32)beatmap.OrbitSources.Sum(orbit => orbit.HitObjects.Count);
+        this.ScoringCalculator = new ScoringCalculator(count);
+        foreach (OrbitSource item in beatmap.OrbitSources) {
+            var entry = new OrbitLifetimeEntry(item);
+            this.lifetimeEntryManager.AddEntry(entry);
+        }
+
+        #endregion Load beatmap
+
+        #region Load drawable
 
         this.orbits = new Container<Orbit> {
             Origin = Anchor.BottomCentre,
@@ -165,7 +196,7 @@ public partial class GameplayScreen : Screen {
                 this.exitThisGamePlay();
             }
         };
-        this.resultOverlay = new ResultOverlay();
+        this.resultOverlay = new ResultOverlay() { };
 
         this.InternalChildren = [
             this.orbitDrawablePool,
@@ -174,6 +205,7 @@ public partial class GameplayScreen : Screen {
             this.SlideParticlePool,
             this.StrokeParticlePool,
             new PlayfieldBackground(),
+            // underline
             new Box() {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
@@ -198,12 +230,16 @@ public partial class GameplayScreen : Screen {
             this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
             this.topText.Text = this.ScoringCalculator.CurrentTarget.ToString();
         };
+
+        #endregion Load drawable
     }
 
     protected override void LoadComplete() {
         base.LoadComplete();
         this.GameplayTrack.Start();
     }
+
+    #region Touch
 
     public Dictionary<TouchSource, Vector2> TouchPositions = [];
 
@@ -223,16 +259,6 @@ public partial class GameplayScreen : Screen {
         this.TouchUpdate?.Invoke(e.Touch.Source, null);
     }
 
-    private void exitThisGamePlay() {
-        this.gameLoader.ExitRequested = true;
-        this.Exit();
-    }
-
-    private void retryThisGamePlay() {
-        this.gameLoader.ExitRequested = false;
-        this.Exit();
-    }
-
     /// <summary>
     /// Occurs when a touch event is updated. Such events include press, move, and release.
     /// </summary>
@@ -250,5 +276,17 @@ public partial class GameplayScreen : Screen {
         if (isDisposing) {
             this.GameplayTrack.Dispose();
         }
+    }
+
+    #endregion Touch
+
+    private void exitThisGamePlay() {
+        this.gameLoader.ExitRequested = true;
+        this.Exit();
+    }
+
+    private void retryThisGamePlay() {
+        this.gameLoader.ExitRequested = false;
+        this.Exit();
     }
 }

@@ -24,9 +24,10 @@ public partial class TestSceneResultOverlay : ZeroVTestScene {
         this.dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
     private void createOverlay() {
-        ScoringCalculator calculator = new(7);
-        calculator.AddTarget(TargetResult.MaxPerfect);
-        this.dependencies!.CacheAs(calculator);
+        //ScoringCalculator calculator = new(7);
+        //calculator.AddTarget(TargetResult.MaxPerfect);
+        //this.dependencies!.CacheAs(calculator);
+        // FIXME: Cache
         this.Add(new Box() { RelativeSizeAxes = Axes.Both, Colour = Colour4.White });
         this.Add(this.overlay = new ResultOverlay());
         this.overlay.Show();

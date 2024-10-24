@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using osu.Framework.Allocation;
-using osu.Framework.Audio;
-using osu.Framework.Audio.Track;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics;
-using osu.Framework.IO.Stores;
-using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -39,9 +34,6 @@ public partial class PlaySongSelectScreen : Screen {
 
     [Resolved]
     private LargeTextureStore textureStore { get; set; } = null!;
-
-    [Resolved]
-    private ZeroVConfigManager configManager { get; set; } = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -112,21 +104,10 @@ public partial class PlaySongSelectScreen : Screen {
     }
 
     public void ConfirmSelect() {
-        var wrapper = BeatmapWrapper.Create(this.expandedItem!.TrackInfo.BeatmapFile);
-        Beatmap beatmap = wrapper.GetBeatmapByIndex(this.selectedItem!.MapInfo.Index);
-        // Apply offset
-        Double deviceOffset = this.configManager.Get<Double>(ZeroVSetting.GlobalSoundOffset);
-        Double trackOffset = this.expandedItem!.TrackInfo.FileOffset.TotalMilliseconds;
-        beatmap.ApplyOffset(deviceOffset + trackOffset);
-
+        TrackInfo trackInfo = this.expandedItem!.TrackInfo;
+        MapInfo mapInfo = this.selectedItem!.MapInfo;
         this.Push(new GameLoader(() => {
-            FileInfo trackFile = this.expandedItem.TrackInfo.TrackFile;
-            AudioManager audio = this.Dependencies.Get<AudioManager>();
-            NativeStorage storage = new NativeStorage(trackFile.Directory!.FullName);
-            StorageBackedResourceStore store = new(storage);
-            ITrackStore trackStore = audio.GetTrackStore(store);
-            Track track = trackStore.Get(trackFile.Name);
-            return new GameplayScreen(beatmap, track);
+            return new GameplayScreen(trackInfo, mapInfo);
         }));
     }
 }

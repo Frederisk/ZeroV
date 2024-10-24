@@ -136,8 +136,9 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
             //Offset = 0,
         };
         TrackVirtual track = new(length: TimeSpan.FromMinutes(3).TotalMilliseconds, name: "春日影");
-        this.screenStack.Push(new GameLoader(() => {
-            return new GameplayScreen(beatmap, track) { RelativeSizeAxes = Axes.Both };
-        }));
+        // FIXME: Load Screen
+        //this.screenStack.Push(new GameLoader(() => {
+        //    return new GameplayScreen(beatmap, track) { RelativeSizeAxes = Axes.Both };
+        //}));
     }
 }

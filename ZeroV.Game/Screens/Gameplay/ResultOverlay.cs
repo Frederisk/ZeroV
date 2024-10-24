@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 using osu.Framework.Allocation;
@@ -7,16 +8,21 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 
+using ZeroV.Game.Data;
+using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Screens.Gameplay;
-public partial class ResultOverlay : OverlayContainer {
 
+public partial class ResultOverlay : OverlayContainer {
     protected const Int32 TRANSITION_DURATION = 1000;
     private const Single background_alpha = 0.75f;
 
     [Resolved]
-    private ScoringCalculator scoringCalculator { get; set; } = null!;
+    private GameplayScreen screen { get; set; } = null!;
+
+    [Resolved]
+    private ResultInfoProvider resultInfoProvider { get; set; } = null!;
 
     private ZeroVSpriteText scoringNumber = null!;
 
@@ -44,13 +50,28 @@ public partial class ResultOverlay : OverlayContainer {
     }
 
     protected override void PopIn() {
-        this.scoringNumber.Text = this.scoringCalculator.DisplayScoring.ToString(new String('0', 7), CultureInfo.InvariantCulture);
-        this.scoringNumber.Colour = this.scoringCalculator switch {
+        ScoringCalculator scoringCalculator = this.screen.ScoringCalculator;
+        ResultInfo result = new() {
+            UUID = this.screen.TrackInfo.UUID,
+            GameVersion = this.screen.TrackInfo.GameVersion,
+            Index = this.screen.MapInfo.Index,
+            IsAllDone = scoringCalculator.IsAllDone,
+            IsAllPerfect = scoringCalculator.IsAllPerfect,
+            IsFullCombo = scoringCalculator.IsFullCombo,
+            Scoring = scoringCalculator.Scoring,
+        };
+        List<ResultInfo> infoList = this.resultInfoProvider.Get() ?? [];
+        infoList.Add(result);
+        this.resultInfoProvider.Set(infoList);
+
+        this.scoringNumber.Text = scoringCalculator.DisplayScoring.ToString(new String('0', 7), CultureInfo.InvariantCulture);
+        this.scoringNumber.Colour = result switch {
             { IsAllPerfect: true } and { IsAllDone: true } => Colour4.Gold,
             { IsFullCombo: true } and { IsAllDone: true } => Colour4.Blue,
             { IsAllDone: false } => Colour4.Red,
             _ => Colour4.Wheat,
         };
+
         //String formatString = new ('0', 7);
         //LocalisableString formattedCount = this.ScoringCalculator.DisplayScoring.ToLocalisableString(formatString);
         //this.scoringNumber.Text = formattedCount;
