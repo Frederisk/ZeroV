@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq; // sum
+using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
@@ -183,11 +184,18 @@ public partial class GameplayScreen : Screen {
 
         this.pauseOverlay = new PauseOverlay {
             OnResume = () => {
-                // TODO: Countdown 3 seconds
-                this.Scheduler.AddDelayed(() => {
+                this.Schedule(async() => {
+                    this.pauseOverlay.ButtonsContainer.Hide();
+                    this.pauseOverlay.CountdownDisplay.Show();
+                    this.pauseOverlay.CountdownDisplay.Text = "3";
+                    await Task.Delay(1000);
+                    this.pauseOverlay.CountdownDisplay.Text = "2";
+                    await Task.Delay(1000);
+                    this.pauseOverlay.CountdownDisplay.Text = "1";
+                    await Task.Delay(1000);
                     this.pauseOverlay.Hide();
                     this.GameplayTrack.Start();
-                }, 3000.0);
+                });
             },
             OnRetry = () => {
                 this.retryThisGamePlay();

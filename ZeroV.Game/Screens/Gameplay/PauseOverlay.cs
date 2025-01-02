@@ -19,9 +19,55 @@ public partial class PauseOverlay : OverlayContainer {
     public required Action OnRetry { get; init; }
     public required Action OnQuit { get; init; }
 
+    private BasicButton quitButton = null!;
+    private BasicButton resumeButton = null!;
+    private BasicButton retryButton = null!;
+
+    public FillFlowContainer ButtonsContainer = null!;
+
+    public ZeroVSpriteText CountdownDisplay = null!;
+
     [BackgroundDependencyLoader]
     private void load() {
         this.RelativeSizeAxes = Axes.Both;
+
+        this.quitButton = new BasicButton() {
+            Height = 100,
+            Width = 100,
+            Text = "Quit",
+            Action = this.OnQuit,
+        };
+        this.resumeButton = new BasicButton() {
+            Height = 100,
+            Width = 100,
+            Text = "Resume",
+            Action = this.OnResume
+        };
+        this.retryButton = new BasicButton() {
+            Height = 100,
+            Width = 100,
+            Text = "Retry",
+            Action = this.OnRetry
+        };
+
+        this.ButtonsContainer = new FillFlowContainer() {
+            AutoSizeAxes = Axes.Both,
+            Direction = FillDirection.Horizontal,
+            Spacing = new Vector2(10, 0),
+            Origin = Anchor.Centre,
+            Anchor = Anchor.Centre,
+            Children = [
+                    this.quitButton,
+                    this.resumeButton,
+                    this.retryButton,
+            ],
+        };
+
+        this.CountdownDisplay = new ZeroVSpriteText {
+            Origin = Anchor.Centre,
+            Anchor = Anchor.Centre,
+        };
+        this.CountdownDisplay.Hide();
 
         this.Children = [
             new Box() {
@@ -29,33 +75,8 @@ public partial class PauseOverlay : OverlayContainer {
                 Colour = Colour4.Black,
                 Alpha = background_alpha,
             },
-            new FillFlowContainer() {
-                AutoSizeAxes = Axes.Both,
-                Direction = FillDirection.Horizontal,
-                Spacing = new Vector2(10, 0),
-                Origin = Anchor.Centre,
-                Anchor = Anchor.Centre,
-                Children = [
-                    new BasicButton() {
-                        Height = 100,
-                        Width = 100,
-                        Text = "Quit",
-                        Action = this.OnQuit,
-                    },
-                    new BasicButton() {
-                        Height = 100,
-                        Width = 100,
-                        Text = "Resume",
-                        Action = this.OnResume
-                    },
-                    new BasicButton() {
-                        Height = 100,
-                        Width = 100,
-                        Text = "Retry",
-                        Action = this.OnRetry
-                    }
-                ]
-            }
+            this.CountdownDisplay,
+            this.ButtonsContainer,
         ];
     }
 
