@@ -52,6 +52,7 @@ public partial class GameplayScreen : Screen {
     private Container<Orbit> orbits = null!;
     private Container overlay = null!;
     private ScoreCounter scoreCounter = null!;
+    private ComboCounter comboCounter = null!;
     private ZeroVSpriteText topText = null!;
     private PauseOverlay pauseOverlay = null!;
     private ResultOverlay resultOverlay = null!;
@@ -163,6 +164,12 @@ public partial class GameplayScreen : Screen {
                     Origin = Anchor.TopRight,
                     Anchor = Anchor.TopRight,
                },
+               this.comboCounter = new ComboCounter {
+                      Origin = Anchor.TopRight,
+                      Anchor = Anchor.TopRight,
+                      Y = 75.0F,
+                      X = -25.0F,
+                },
                this.topText = new ZeroVSpriteText {
                     Origin = Anchor.TopCentre,
                     Anchor = Anchor.TopCentre,
@@ -236,6 +243,7 @@ public partial class GameplayScreen : Screen {
         // FIXME: Add Combo
         this.ScoringCalculator.ScoringChanged += () => {
             this.scoreCounter.Current.Value = this.ScoringCalculator.DisplayScoring;
+            this.comboCounter.Current.Value = this.ScoringCalculator.CurrentCombo;
             this.topText.Text = this.ScoringCalculator.CurrentTarget.ToString();
         };
 

@@ -66,6 +66,7 @@ public partial class PauseOverlay : OverlayContainer {
         this.CountdownDisplay = new ZeroVSpriteText {
             Origin = Anchor.Centre,
             Anchor = Anchor.Centre,
+            FontSize = 48,
         };
         this.CountdownDisplay.Hide();
 
