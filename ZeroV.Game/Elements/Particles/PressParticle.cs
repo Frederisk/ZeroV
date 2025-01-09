@@ -150,7 +150,7 @@ public partial class PressParticle : ParticleBase {
     }
 
     [Resolved]
-    private GameplayScreen gameplayScreen { get; set; } = null!;
+    private IGameplayInfo gameplayScreen { get; set; } = null!;
 
     public void UpdateLength(Double startTime, Double endTime) {
         this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2) - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);

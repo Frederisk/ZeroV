@@ -19,7 +19,7 @@ public partial class ResultOverlay : OverlayContainer {
     private const Single background_alpha = 0.75f;
 
     [Resolved]
-    private GameplayScreen screen { get; set; } = null!;
+    private IGameplayInfo screen { get; set; } = null!;
 
     [Resolved]
     private ResultInfoProvider resultInfoProvider { get; set; } = null!;

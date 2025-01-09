@@ -74,7 +74,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     public new Single Width { get => base.Width; set => base.Width = value; }
 
     [Resolved]
-    private GameplayScreen gameplayScreen { get; set; } = null!;
+    private IGameplayInfo gameplayScreen { get; set; } = null!;
 
     private Double currentTime => this.gameplayScreen.GameplayTrack.CurrentTime;
     private Double particleFallingTime => this.gameplayScreen.ParticleFallingTime;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +15,6 @@ using ZeroV.Game.Elements.ListItems;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
-using ZeroV.Game.Configs;
 
 namespace ZeroV.Game.Screens;
 

@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 using NUnit.Framework;
 
@@ -12,7 +11,6 @@ using osu.Framework.Testing;
 using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
-using ZeroV.Game.Screens.Gameplay;
 
 namespace ZeroV.Game.Tests.Visual.Screens;
 

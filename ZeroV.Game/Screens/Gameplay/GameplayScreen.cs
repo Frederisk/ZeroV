@@ -34,8 +34,9 @@ using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.Gameplay;
 
-[Cached]
-public partial class GameplayScreen : Screen {
+//[Cached]
+[Cached(Type = typeof(IGameplayInfo))]
+public partial class GameplayScreen : Screen, IGameplayInfo {
     public TrackInfo TrackInfo { get; }
 
     public MapInfo MapInfo { get; }
@@ -211,7 +212,7 @@ public partial class GameplayScreen : Screen {
                 this.exitThisGamePlay();
             }
         };
-        this.resultOverlay = new ResultOverlay() { };
+        this.resultOverlay = new ResultOverlay();
 
         this.InternalChildren = [
             this.orbitDrawablePool,
@@ -257,40 +258,32 @@ public partial class GameplayScreen : Screen {
 
     #region Touch
 
-    public Dictionary<TouchSource, Vector2> TouchPositions = [];
+    private Dictionary<TouchSource, Vector2> touchPositions = [];
+
+    public IReadOnlyDictionary<TouchSource, Vector2> TouchPositions => this.touchPositions;
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        this.TouchPositions.Add(e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        this.touchPositions.Add(e.Touch.Source, e.ScreenSpaceTouchDownPosition);
         this.TouchUpdate?.Invoke(e.Touch.Source, true);
         return true;
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
-        this.TouchPositions[e.Touch.Source] = e.ScreenSpaceLastTouchPosition;
+        this.touchPositions[e.Touch.Source] = e.ScreenSpaceLastTouchPosition;
         this.TouchUpdate?.Invoke(e.Touch.Source, false);
     }
 
     protected override void OnTouchUp(TouchUpEvent e) {
-        this.TouchPositions.Remove(e.Touch.Source);
+        this.touchPositions.Remove(e.Touch.Source);
         this.TouchUpdate?.Invoke(e.Touch.Source, null);
     }
 
-    /// <summary>
-    /// Occurs when a touch event is updated. Such events include press, move, and release.
-    /// </summary>
-    public event TouchUpdateDelegate? TouchUpdate;
-
-    /// <summary>
-    /// Encapsulates a touch update method.
-    /// </summary>
-    /// <param name="source">The source of the touch event.</param>
-    /// <param name="isNewTouch">Whether the touch event is a new touch. This is <see langword="true"/> if the touch event is a press, and <see langword="false"/> if the touch event is a move. <see langword="null"/> if the touch event is a release.</param>
-    public delegate void TouchUpdateDelegate(TouchSource source, Boolean? isNewTouch);
+    public event IGameplayInfo.TouchUpdateDelegate? TouchUpdate;
 
     protected override void Dispose(Boolean isDisposing) {
         base.Dispose(isDisposing);
         if (isDisposing) {
-            this.GameplayTrack.Dispose();
+            this.GameplayTrack?.Dispose();
         }
     }
 
