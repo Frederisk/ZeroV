@@ -127,10 +127,9 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
         FileInfo trackFile = this.TrackInfo.TrackFile;
         NativeStorage storage = new(trackFile.Directory!.FullName);
-        StorageBackedResourceStore store = new(storage);
+        using StorageBackedResourceStore store = new(storage);
         ITrackStore trackStore = audioManager.GetTrackStore(store);
-        Track track = trackStore.Get(trackFile.Name);
-        this.GameplayTrack = track;
+        this.GameplayTrack = trackStore.Get(trackFile.Name);
 
         #endregion Load track
 

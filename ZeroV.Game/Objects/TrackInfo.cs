@@ -46,4 +46,7 @@ public record TrackInfo {
     [JsonConverter(typeof(FileInfoJsonConverter))]
     public required FileInfo BeatmapFile { get; init; }
     // TODO: add background image file info
+
+    [JsonConverter(typeof(FileInfoJsonConverter))]
+    public required FileInfo? BackgroundFile { get; init; }
 }

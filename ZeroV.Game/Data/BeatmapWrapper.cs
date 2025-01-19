@@ -130,9 +130,14 @@ public class BeatmapWrapper {
     public TrackInfo GetTrackInfo() {
         DirectoryInfo? directory = this.BeatmapFile.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
         // TODO: Need a better way to match music file
-        FileInfo[] files = directory.GetFiles(ZeroVPath.TRACK_FILE_NAME_PATTERN);
-        if (files.Length < 1 || !files[0].Exists) {
+        FileInfo[] backgrounds = directory.GetFiles(ZeroVPath.TRACK_FILE_BACKGROUND_IMAGE_PATTERN);
+        FileInfo? backgroud = backgrounds.Length >= 1 && backgrounds[0].Exists ? backgrounds[0] : null;
+        FileInfo[] trackFiles = directory.GetFiles(ZeroVPath.TRACK_FILE_NAME_PATTERN);
+        if (trackFiles.Length < 1 || !trackFiles[0].Exists) {
             throw new InvalidOperationException("Track file not found.");
+        }
+        if (backgrounds.Length < 1 || !backgrounds[0].Exists) {
+            //throw new InvalidOperationException("Background file not found.");
         }
         return new() {
             UUID = new Guid(this.ZeroVMap.UUID),
@@ -145,8 +150,9 @@ public class BeatmapWrapper {
             Description = this.ZeroVMap.GameInfo.Description,
             GameVersion = new Version(this.ZeroVMap.GameInfo.GameVersion),
             MapInfos = this.ZeroVMap.BeatmapList.ConvertAll(getMapInfoFromXml),
-            TrackFile = files[0],
+            TrackFile = trackFiles[0],
             BeatmapFile = this.BeatmapFile,
+            BackgroundFile = backgroud,
         };
     }
 

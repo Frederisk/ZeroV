@@ -12,6 +12,8 @@ public static class ZeroVPath {
 
     public const String TRACK_FILE_NAME_PATTERN = "Track.*";
 
+    public const String TRACK_FILE_BACKGROUND_IMAGE_PATTERN = "Background.*";
+
     public const String JSON_KEY_VALUE_STORAGE_PATH = "JsonKeyValueStorage";
 
     public const String TRACK_INFO_JSON_FILE = "TrackInfoList"; // JsonKeyValueStorage/TrackInfoList.json

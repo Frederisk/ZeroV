@@ -15,6 +15,11 @@ using ZeroV.Game.Elements.ListItems;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
+using osu.Framework.Platform;
+using osu.Framework.IO.Stores;
+using osu.Framework.Graphics.Rendering;
+using osu.Framework.Testing;
+using System.IO;
 
 namespace ZeroV.Game.Screens;
 
@@ -30,8 +35,11 @@ public partial class PlaySongSelectScreen : Screen {
     [Resolved]
     private ResultInfoProvider resultInfoProvider { get; set; } = null!;
 
+    //[Resolved]
+    //private LargeTextureStore textureStore { get; set; } = null!;
+
     [Resolved]
-    private LargeTextureStore textureStore { get; set; } = null!;
+    private IRenderer renderer { get; set; } = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -90,15 +98,28 @@ public partial class PlaySongSelectScreen : Screen {
     private TrackInfoListItem? expandedItem;
 
     public void OnExpanded(TrackInfoListItem item) {
-        if (this.expandedItem != item && this.expandedItem != null) {
-            this.expandedItem.IsExpanded = false;
+        if (this.expandedItem != item) {
+            if (this.expandedItem is not null) {
+                this.expandedItem.IsExpanded = false;
+            }
+            // TODO: TrackInfo Background
+            FileInfo? file = item.TrackInfo.BackgroundFile;
+            if (file is not null) {
+                NativeStorage storage = new(file.Directory!.FullName);
+                using StorageBackedResourceStore store = new(storage);
+                using TextureLoaderStore a = new(store);
+                using TextureStore b = new(this.renderer, a);
+                Texture? old = this.background.Texture;
+                this.background.Texture = b.Get(file.Name);
+                old?.Dispose();
+                old = null;
+            } else {
+                this.background.Texture.Dispose();
+                this.background.Texture = null;
+            }
         }
-        this.expandedItem = item;
 
-        //var trackInfo = item.TrackInfo;
-        //TODO: TrackInfo Background
-        Texture? texture = this.textureStore.Get("test-background.webp");
-        this.background.Texture = texture;
+        this.expandedItem = item;
     }
 
     public void ConfirmSelect() {
