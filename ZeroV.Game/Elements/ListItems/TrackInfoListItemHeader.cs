@@ -38,8 +38,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
 
         var artists = trackInfo.Artists ?? "[No artists]";
         var album = trackInfo.Album ?? "[No album]";
-
-        this.AddInternal(this.titleContainer = new FillFlowContainer() {
+        this.titleContainer = new FillFlowContainer() {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
@@ -61,7 +60,8 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
                     Font = FontUsage.Default.With(size: 32)
                 }
              ]
-        });
+        };
+        this.AddInternal(this.titleContainer);
     }
 
     private const Single padding = 5;

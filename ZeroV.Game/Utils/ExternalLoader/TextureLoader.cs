@@ -14,20 +14,21 @@ public class TextureLoader : IDisposable {
     private TextureLoaderStore loaderStore;
     private TextureStore store;
 
-    public Texture Texture { get; private set; }
+    public Texture? Texture { get; private set; }
 
     public TextureLoader(FileInfo file, IRenderer renderer, Boolean largeTexture) {
         NativeStorage storage = new(file.Directory!.FullName);
         this.backedStore = new(storage);
         this.loaderStore = new(this.backedStore);
         this.store = largeTexture ? new LargeTextureStore(renderer, this.loaderStore) : new TextureStore(renderer, this.loaderStore);
+        // FIXME: Note, Texture may be null.
         this.Texture = this.store.Get(file.Name);
     }
 
     protected virtual void Dispose(Boolean disposing) {
         if (!this.disposedValue) {
             if (disposing) {
-                this.Texture.Dispose();
+                this.Texture?.Dispose();
                 this.store.Dispose();
                 this.loaderStore.Dispose();
                 this.backedStore.Dispose();
