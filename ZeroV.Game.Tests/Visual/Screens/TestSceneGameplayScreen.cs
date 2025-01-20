@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 using NUnit.Framework;
 
@@ -8,9 +9,11 @@ using osu.Framework.Graphics;
 using osu.Framework.Screens;
 using osu.Framework.Testing;
 
+using ZeroV.Game.Data;
 using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Screens.Gameplay;
 
 namespace ZeroV.Game.Tests.Visual.Screens;
 
@@ -31,110 +34,117 @@ public partial class TestSceneGameplayScreen : ZeroVTestScene {
     }
 
     private void createScreen() {
-        // For test, the beatmap instance will deserialize after beatmap selected.
-        var beatmap = new Beatmap() {
-            OrbitSources = [
-                new OrbitSource() {
-                    KeyFrames = [
-                        new OrbitSource.KeyFrame() {
-                             Time = 0,
-                             XPosition = 0,
-                             Width = 128,
-                             Colour = Colour4.Azure
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 4000,
-                             XPosition = 0,
-                             Width = 128,
-                             Colour = Colour4.Red
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 5000,
-                             XPosition = 256,
-                             Width = 256,
-                             Colour = Colour4.Orange
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 6000,
-                             XPosition = 256,
-                             Width = 256,
-                             Colour = Colour4.Yellow
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 7000,
-                             XPosition = -100,
-                             Width = 128,
-                             Colour = Colour4.Green
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 8000,
-                             XPosition = -90,
-                             Width = 256,
-                             Colour = Colour4.Cyan
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 9000,
-                             XPosition = -300,
-                             Width = 162,
-                             Colour = Colour4.Blue
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 10000,
-                             XPosition = -200,
-                             Width = 128,
-                             Colour = Colour4.Purple
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 17000,
-                             XPosition = -300,
-                             Width = 128,
-                             Colour = Colour4.Purple
-                        },
-                    ],
-                    HitObjects = [
-                        new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
-                        new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
-                        new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
-                        new PressParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds, TimeSpan.FromSeconds(11).TotalMilliseconds),
-                        new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Left),
-                        new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Up),
-                        new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Right),
-                        new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
-                        new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
-                    ]
-                },
-                new OrbitSource() {
-                    KeyFrames = [
-                        new OrbitSource.KeyFrame() {
-                             Time = 0,
-                             XPosition = 0,
-                             Width = 1280,
-                             Colour = Colour4.Azure
-                        },
-                        new OrbitSource.KeyFrame() {
-                             Time = 17000,
-                             XPosition = 0,
-                             Width = 1280,
-                             Colour = Colour4.Purple
-                        },
-                    ],
-                    HitObjects = [
-                        new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
-                        new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
-                        new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
-                        new PressParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds, TimeSpan.FromSeconds(11).TotalMilliseconds),
-                        new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Left),
-                        new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Up),
-                        new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Right),
-                        new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
-                        new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
-                    ],
-                },
-            ],
-            //Offset = 0,
-        };
-        TrackVirtual track = new(length: TimeSpan.FromMinutes(3).TotalMilliseconds, name: "春日影");
+        //// For test, the beatmap instance will deserialize after beatmap selected.
+        //var beatmap = new Beatmap() {
+        //    OrbitSources = [
+        //        new OrbitSource() {
+        //            KeyFrames = [
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 0,
+        //                     XPosition = 0,
+        //                     Width = 128,
+        //                     Colour = Colour4.Azure
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 4000,
+        //                     XPosition = 0,
+        //                     Width = 128,
+        //                     Colour = Colour4.Red
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 5000,
+        //                     XPosition = 256,
+        //                     Width = 256,
+        //                     Colour = Colour4.Orange
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 6000,
+        //                     XPosition = 256,
+        //                     Width = 256,
+        //                     Colour = Colour4.Yellow
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 7000,
+        //                     XPosition = -100,
+        //                     Width = 128,
+        //                     Colour = Colour4.Green
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 8000,
+        //                     XPosition = -90,
+        //                     Width = 256,
+        //                     Colour = Colour4.Cyan
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 9000,
+        //                     XPosition = -300,
+        //                     Width = 162,
+        //                     Colour = Colour4.Blue
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 10000,
+        //                     XPosition = -200,
+        //                     Width = 128,
+        //                     Colour = Colour4.Purple
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 17000,
+        //                     XPosition = -300,
+        //                     Width = 128,
+        //                     Colour = Colour4.Purple
+        //                },
+        //            ],
+        //            HitObjects = [
+        //                new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
+        //                new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
+        //                new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
+        //                new PressParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds, TimeSpan.FromSeconds(11).TotalMilliseconds),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Left),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Up),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Right),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
+        //                new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
+        //            ]
+        //        },
+        //        new OrbitSource() {
+        //            KeyFrames = [
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 0,
+        //                     XPosition = 0,
+        //                     Width = 1280,
+        //                     Colour = Colour4.Azure
+        //                },
+        //                new OrbitSource.KeyFrame() {
+        //                     Time = 17000,
+        //                     XPosition = 0,
+        //                     Width = 1280,
+        //                     Colour = Colour4.Purple
+        //                },
+        //            ],
+        //            HitObjects = [
+        //                new BlinkParticleSource(TimeSpan.FromSeconds(3).TotalMilliseconds),
+        //                new BlinkParticleSource(TimeSpan.FromSeconds(8).TotalMilliseconds),
+        //                new BlinkParticleSource(TimeSpan.FromSeconds(9).TotalMilliseconds),
+        //                new PressParticleSource(TimeSpan.FromSeconds(10).TotalMilliseconds, TimeSpan.FromSeconds(11).TotalMilliseconds),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(12).TotalMilliseconds, SlidingDirection.Left),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(13).TotalMilliseconds, SlidingDirection.Up),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(14).TotalMilliseconds, SlidingDirection.Right),
+        //                new SlideParticleSource(TimeSpan.FromSeconds(15).TotalMilliseconds, SlidingDirection.Down),
+        //                new StrokeParticleSource(TimeSpan.FromSeconds(16).TotalMilliseconds),
+        //            ],
+        //        },
+        //    ],
+        //    //Offset = 0,
+        //};
+        //TrackVirtual track = new(length: TimeSpan.FromMinutes(3).TotalMilliseconds, name: "春日影");
+        FileInfo file = new FileInfo("./Resources/Schema/ZeroVMap.xml");
+        BeatmapWrapper wrapper = BeatmapWrapper.Create(file);
+        TrackInfo trackInfo = wrapper.GetTrackInfo();
         // FIXME: Load Screen
+        this.screenStack.Push(
+            new GameLoader(() => {
+                return new GameplayScreen(trackInfo, trackInfo.MapInfos[0]);
+            }));
         //this.screenStack.Push(new GameLoader(() => {
         //    return new GameplayScreen(beatmap, track) { RelativeSizeAxes = Axes.Both };
         //}));

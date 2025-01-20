@@ -26,10 +26,17 @@ public partial class TestSceneResultOverlay : ZeroVTestScene {
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
         this.dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+    [BackgroundDependencyLoader]
+    private void load() {
+        //this.AddStep("remove all", this.removeAll);
+        //this.AddStep("create overlay", this.createOverlay);
+        this.dependencies!.CacheAs<IGameplayInfo>(new GameplayDemo());
+    }
 
     [SetUpSteps]
     public void SetUpSteps() {
-        this.dependencies!.CacheAs<IGameplayInfo>(new GameplayDemo());
+        //Assert.IsNotNull(this.dependencies);
+        // FIXME: dependencies is null while debugging
         this.AddStep("remove all", this.removeAll);
         this.AddStep("create overlay", this.createOverlay);
     }
