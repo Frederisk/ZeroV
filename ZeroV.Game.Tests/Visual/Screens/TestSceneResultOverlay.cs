@@ -59,7 +59,8 @@ public partial class TestSceneResultOverlay : ZeroVTestScene {
             MapInfos = default!,
             Title = default!,
             TrackFile = default!,
-            TrackOrder = default
+            TrackOrder = default,
+            BackgroundFile = default,
         };
 
         public MapInfo MapInfo => new() {

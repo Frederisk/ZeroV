@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,11 +16,9 @@ using ZeroV.Game.Elements.ListItems;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
-using osu.Framework.Platform;
-using osu.Framework.IO.Stores;
 using osu.Framework.Graphics.Rendering;
-using osu.Framework.Testing;
 using System.IO;
+using ZeroV.Game.Utils.ExternalLoader;
 
 namespace ZeroV.Game.Screens;
 
@@ -28,6 +27,7 @@ namespace ZeroV.Game.Screens;
 public partial class PlaySongSelectScreen : Screen {
     private Sprite background = null!;
     private FillFlowContainer container = null!;
+    private TextureLoader? textureLoader;
 
     [Resolved]
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
@@ -105,17 +105,24 @@ public partial class PlaySongSelectScreen : Screen {
             // TODO: TrackInfo Background
             FileInfo? file = item.TrackInfo.BackgroundFile;
             if (file is not null) {
-                NativeStorage storage = new(file.Directory!.FullName);
-                using StorageBackedResourceStore store = new(storage);
-                using TextureLoaderStore a = new(store);
-                using TextureStore b = new(this.renderer, a);
-                Texture? old = this.background.Texture;
-                this.background.Texture = b.Get(file.Name);
+                TextureLoader? old = this.textureLoader;
+                this.textureLoader = new(file, this.renderer, true);
+                this.background.Texture = this.textureLoader.Texture;
                 old?.Dispose();
-                old = null;
+                //NativeStorage storage = new(file.Directory!.FullName);
+                //using StorageBackedResourceStore store = new(storage);
+                //using TextureLoaderStore a = new(store);
+                ////using TextureStore b = new(this.renderer, a);
+                //using LargeTextureStore c = new LargeTextureStore(this.renderer, a);
+                //Texture? old = this.background.Texture;
+                //this.background.Texture = c.Get(file.Name);
+                //old?.Dispose();
+                //old = null;
             } else {
-                this.background.Texture.Dispose();
                 this.background.Texture = null;
+                this.textureLoader?.Dispose();
+                //this.background.Texture?.Dispose();
+                //this.background.Texture = null;
             }
         }
 
@@ -128,5 +135,12 @@ public partial class PlaySongSelectScreen : Screen {
         this.Push(new GameLoader(() => {
             return new GameplayScreen(trackInfo, mapInfo);
         }));
+    }
+
+    protected override void Dispose(Boolean disposing) {
+        base.Dispose(disposing);
+        if (disposing) {
+            this.textureLoader?.Dispose();
+        }
     }
 }

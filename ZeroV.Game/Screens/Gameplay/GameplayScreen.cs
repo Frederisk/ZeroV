@@ -14,9 +14,7 @@ using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
-using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
-using osu.Framework.Platform;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -31,6 +29,7 @@ using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 using ZeroV.Game.Utils;
+using ZeroV.Game.Utils.ExternalLoader;
 
 namespace ZeroV.Game.Screens.Gameplay;
 
@@ -41,7 +40,10 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
     public MapInfo MapInfo { get; }
 
-    public Track GameplayTrack { get; private set; } = null!;
+    public Track GameplayTrack => this.trackLoader.Track;
+
+    private TrackLoader trackLoader = null!;
+
     public ScoringCalculator ScoringCalculator { get; private set; } = null!;
 
     [Resolved]
@@ -125,11 +127,12 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
         #region Load track
 
-        FileInfo trackFile = this.TrackInfo.TrackFile;
-        NativeStorage storage = new(trackFile.Directory!.FullName);
-        using StorageBackedResourceStore store = new(storage);
-        ITrackStore trackStore = audioManager.GetTrackStore(store);
-        this.GameplayTrack = trackStore.Get(trackFile.Name);
+        //FileInfo trackFile = this.TrackInfo.TrackFile;
+        //NativeStorage storage = new(trackFile.Directory!.FullName);
+        //using StorageBackedResourceStore store = new(storage);
+        //ITrackStore trackStore = audioManager.GetTrackStore(store);
+        //this.GameplayTrack = trackStore.Get(trackFile.Name);
+        this.trackLoader = new(this.TrackInfo.TrackFile, audioManager);
 
         #endregion Load track
 
@@ -282,7 +285,8 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     protected override void Dispose(Boolean isDisposing) {
         base.Dispose(isDisposing);
         if (isDisposing) {
-            this.GameplayTrack?.Dispose();
+            //this.GameplayTrack?.Dispose();
+            this.trackLoader.Dispose();
         }
     }
 

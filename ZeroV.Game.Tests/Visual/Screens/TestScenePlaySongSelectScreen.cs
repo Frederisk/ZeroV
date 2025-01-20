@@ -77,7 +77,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                     }
                 ],
                 BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
-                TrackFile = new System.IO.FileInfo("testFileName.wav")
+                TrackFile = new System.IO.FileInfo("testFileName.wav"),
+                BackgroundFile = default,
             },
             new() {
                 Title = "C - Test Title3",
@@ -100,7 +101,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         StrokeCount = 1
                     }],
                 BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
-                TrackFile = new System.IO.FileInfo("testFileName.flac")
+                TrackFile = new System.IO.FileInfo("testFileName.flac"),
+                BackgroundFile = default,
             },
             new() {
                 Title = "B - Test Title2",
@@ -123,7 +125,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         StrokeCount = 1
                     }],
                 BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
-                TrackFile = new System.IO.FileInfo("testFileName.flac")
+                TrackFile = new System.IO.FileInfo("testFileName.flac"),
+                BackgroundFile = default,
             },
             new() {
                 Title = "D - Test Looooooooooooooooooong Title2",
@@ -146,7 +149,8 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
                         StrokeCount = 1
                     }],
                 BeatmapFile = new System.IO.FileInfo("testFileName.xml"),
-                TrackFile = new System.IO.FileInfo("testFileName.flac")
+                TrackFile = new System.IO.FileInfo("testFileName.flac"),
+                BackgroundFile = default,
             }
         ];
     }
