@@ -105,7 +105,7 @@ public partial class PlaySongSelectScreen : Screen {
             FileInfo? file = item.TrackInfo.BackgroundFile;
             if (file is not null) {
                 TextureLoader? old = this.textureLoader;
-                this.textureLoader = new(file, this.renderer, true);
+                this.textureLoader = new(file, this.renderer);
                 this.background.Texture = this.textureLoader.Texture;
                 old?.Dispose();
                 //NativeStorage storage = new(file.Directory!.FullName);

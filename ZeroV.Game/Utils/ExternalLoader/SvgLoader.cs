@@ -27,8 +27,8 @@ internal class SvgLoader : IDisposable {
             throw new NullReferenceException(nameof(svg.Picture) + " is null."); ;
         }
         SKRect bounds = svg.Picture.CullRect;
-        using SKBitmap bitmap = new((Int32)bounds.Width, (Int32)bounds.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
-        using SKCanvas canvas = new(bitmap);
+        this.bitmap = new((Int32)bounds.Width, (Int32)bounds.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
+        using SKCanvas canvas = new(this.bitmap);
         canvas.Clear(SKColors.Transparent);
         // canvas.Scale(1,1);
         // CullRect may not be at (0, 0)
@@ -36,7 +36,7 @@ internal class SvgLoader : IDisposable {
         canvas.DrawPicture(svg.Picture);
         canvas.Flush();
 
-        this.image = Image.LoadPixelData<Rgba32>(bitmap.GetPixelSpan(), bitmap.Width, bitmap.Height);
+        this.image = Image.LoadPixelData<Rgba32>(this.bitmap.GetPixelSpan(), this.bitmap.Width, this.bitmap.Height);
         this.upload = new TextureUpload(this.image);
         this.Texture = renderer.CreateTexture(this.image.Width, this.image.Height);
         this.Texture.SetData(this.upload);

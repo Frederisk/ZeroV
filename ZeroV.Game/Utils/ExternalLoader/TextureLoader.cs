@@ -3,8 +3,6 @@ using System.IO;
 
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.IO.Stores;
-using osu.Framework.Platform;
 
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
@@ -52,7 +50,7 @@ public class TextureLoader : IDisposable {
     private TextureUpload upload;
     public Texture? Texture { get; private set; }
 
-    public TextureLoader(FileInfo file, IRenderer renderer, Boolean largeTexture) {
+    public TextureLoader(FileInfo file, IRenderer renderer) {
         this.image = Image.Load<Rgba32>(file.FullName);
         this.upload = new TextureUpload(this.image);
         this.Texture = renderer.CreateTexture(this.image.Width, this.image.Height);
