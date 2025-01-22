@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq; // sum
 using System.Threading.Tasks;
 
@@ -194,7 +193,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
         this.pauseOverlay = new PauseOverlay {
             OnResume = () => {
-                this.Schedule(async() => {
+                this.Schedule(async () => {
                     this.pauseOverlay.ButtonsContainer.Hide();
                     this.pauseOverlay.CountdownDisplay.Show();
                     this.pauseOverlay.CountdownDisplay.Text = "3";

@@ -13,7 +13,7 @@ public class TrackLoader : IDisposable {
     private StorageBackedResourceStore backedStore;
     private ITrackStore trackStore;
 
-    public Track Track { get; private set; }
+    public Track Track { get; init; }
 
     public TrackLoader(FileInfo file, AudioManager audioManager) {
         NativeStorage storage = new(file.Directory!.FullName);
@@ -25,9 +25,9 @@ public class TrackLoader : IDisposable {
     protected virtual void Dispose(Boolean disposing) {
         if (!this.disposedValue) {
             if (disposing) {
-                this.Track.Dispose();
-                this.trackStore.Dispose();
-                this.backedStore.Dispose();
+                this.Track?.Dispose();
+                this.trackStore?.Dispose();
+                this.backedStore?.Dispose();
             }
             this.disposedValue = true;
         }
