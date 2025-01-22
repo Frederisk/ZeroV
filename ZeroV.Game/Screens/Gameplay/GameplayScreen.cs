@@ -214,7 +214,10 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
                 this.exitThisGamePlay();
             }
         };
-        this.resultOverlay = new ResultOverlay();
+        this.resultOverlay = new ResultOverlay {
+            OnRetry = this.retryThisGamePlay,
+            OnQuit = this.exitThisGamePlay,
+        };
 
         this.InternalChildren = [
             this.orbitDrawablePool,

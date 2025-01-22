@@ -43,7 +43,7 @@ public partial class TestSceneResultOverlay : ZeroVTestScene {
 
     private void createOverlay() {
         this.Add(new Box() { RelativeSizeAxes = Axes.Both, Colour = Colour4.White });
-        this.Add(this.overlay = new ResultOverlay());
+        this.Add(this.overlay = new ResultOverlay { OnQuit = () => { }, OnRetry = () => { } });
         this.overlay.Show();
     }
 

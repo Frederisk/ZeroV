@@ -6,6 +6,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 
 using ZeroV.Game.Data;
@@ -15,6 +16,9 @@ using ZeroV.Game.Scoring;
 namespace ZeroV.Game.Screens.Gameplay;
 
 public partial class ResultOverlay : OverlayContainer {
+    public required Action OnQuit { get; init; }
+    public required Action OnRetry { get; init; }
+
     protected const Int32 TRANSITION_DURATION = 1000;
     private const Single background_alpha = 0.75f;
 
@@ -25,6 +29,8 @@ public partial class ResultOverlay : OverlayContainer {
     private ResultInfoProvider resultInfoProvider { get; set; } = null!;
 
     private ZeroVSpriteText scoringNumber = null!;
+    private BasicButton quitButton = null!;
+    private BasicButton retryButton = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -39,6 +45,27 @@ public partial class ResultOverlay : OverlayContainer {
             //ShadowColour = Colour4.Black,
             //ShadowOffset = new(16),
         };
+        this.quitButton = new BasicButton {
+            Origin = Anchor.CentreRight,
+            Anchor = Anchor.CentreRight,
+            Y = 180,
+            X = -50,
+            Height = 50,
+            Width = 120,
+            Text = "Next",
+            Action = this.OnQuit,
+        };
+        this.retryButton = new BasicButton {
+            Origin = Anchor.CentreRight,
+            Anchor = Anchor.CentreRight,
+            Y = 180,
+            X = -170,
+            Height = 50,
+            Width = 120,
+            Text = "Retry",
+            Action = this.OnRetry,
+        };
+
         this.InternalChildren = [
             new Box() {
                 RelativeSizeAxes = Axes.Both,
@@ -46,6 +73,8 @@ public partial class ResultOverlay : OverlayContainer {
                 Alpha = background_alpha,
             },
             this.scoringNumber,
+            this.quitButton,
+            this.retryButton,
         ];
     }
 
