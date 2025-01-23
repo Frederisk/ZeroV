@@ -27,22 +27,6 @@ public partial class TestSceneParticles : ZeroVTestScene {
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
         this.dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
-    [SetUpSteps]
-    public void SetUpSteps() {
-        //Assert.IsNotNull(this.dependencies);
-        // FIXME: dependencies is null while debugging
-        //this.AddStep("remove all", this.removeAll);
-        //this.AddStep("create overlay", this.createOverlay);
-        //this.AddStep("FUCK", () => {
-        //    PressParticle pressParticle = new PressParticle {
-        //        Y = 0,
-        //        X = 320,
-        //    };
-        //    pressParticle.UpdateLength(0, 20);
-        //    this.Add(pressParticle);
-        //});
-    }
-
     [BackgroundDependencyLoader]
     private void load() {
         this.dependencies!.CacheAs<IGameplayInfo>(new GameplayDemo());
