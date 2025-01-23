@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 
 using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 
 using ZeroV.Game.Objects;
@@ -65,24 +65,22 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
     }
 
     private const Single padding = 5;
-    private const Double long_title_scroll_speed = 0.2;
+    private const Double long_title_scroll_speed = 0.1;
 
     public void TryBeginLongTitleScroll() {
-        // FIXME: Clean up
         void scroll(Drawable drawable) {
-            if (this.title.Transforms.Any() || drawable.DrawWidth < this.DrawWidth) {
+            if (drawable.Transforms.Any() || drawable.DrawWidth < this.DrawWidth) {
                 return;
             }
             var offset = drawable.DrawWidth - this.DrawWidth + (padding * 2);
             var duration = offset / long_title_scroll_speed;
 
             var toMargin = new MarginPadding { Left = -offset };
-            this.title
-                .TransformTo(nameof(drawable.Margin), toMargin, duration).Then()
-                .Delay(1000).Then()
-                .TransformTo(nameof(drawable.Margin), new MarginPadding(), duration).Then()
-                .Delay(1000).Then()
-                .Loop();
+            drawable.TransformTo(nameof(drawable.Margin), toMargin, duration).Then()
+                    .Delay(1000).Then()
+                    .TransformTo(nameof(drawable.Margin), new MarginPadding(), duration).Then()
+                    .Delay(1000).Then()
+                    .Loop();
         }
 
         if (this.IsHovered || this.listItem.IsExpanded) {
@@ -106,15 +104,5 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
             this.songSelectScreen.OnExpanded(this.listItem);
         }
         return base.OnClick(e);
-    }
-
-    protected override Boolean OnHover(HoverEvent e) {
-        this.TryBeginLongTitleScroll();
-        return base.OnHover(e);
-    }
-
-    protected override void OnHoverLost(HoverLostEvent e) {
-        this.TryEndLongTitleScroll();
-        base.OnHoverLost(e);
     }
 }

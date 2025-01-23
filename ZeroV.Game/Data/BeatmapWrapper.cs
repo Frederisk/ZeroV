@@ -26,18 +26,17 @@ public class BeatmapWrapper {
 
     #region createXmlReaderSettings
 
-    [SuppressMessage("Style", "IDE0017")]
     private static XmlReaderSettings createXmlReaderSettings() {
-        XmlReaderSettings settings = new();
-        settings.ValidationType = ValidationType.Schema;
+        XmlReaderSettings settings = new() {
+            ValidationType = ValidationType.Schema,
+            ValidationFlags = XmlSchemaValidationFlags.ProcessIdentityConstraints
+                            | XmlSchemaValidationFlags.AllowXmlAttributes
+                            | XmlSchemaValidationFlags.ReportValidationWarnings,
+        };
+        settings.ValidationEventHandler += validationEventHandler;
         settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", "./Data/Schema/ZeroVMap/ZeroVMapXml.xsd");
         // XmlReader xmlReader = XmlReader.Create(new StreamReader("./Data/Schema/ZeroVMap/ZeroVMapXml.xsd"));
         // settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", xmlReader);
-
-        settings.ValidationEventHandler += validationEventHandler;
-        settings.ValidationFlags = XmlSchemaValidationFlags.ProcessIdentityConstraints
-                                 | XmlSchemaValidationFlags.AllowXmlAttributes
-                                 | XmlSchemaValidationFlags.ReportValidationWarnings;
 
         return settings;
     }
@@ -96,14 +95,8 @@ public class BeatmapWrapper {
     /// <returns>
     /// A list of all <see cref="Beatmap"/>s in the file.
     /// </returns>
-    public List<Beatmap> GetAllBeatmaps() {
-        List<Beatmap> beatmaps = [];
-        beatmaps.AddRange(this.ZeroVMap.BeatmapList.ConvertAll(getBeatmapFromXml));
-        //if (this.ZeroVMap.TrackInfo.FileOffset is not null) {
-        //    beatmaps.ForEach(beatmap => beatmap.Offset += TimeSpan.Parse(this.ZeroVMap.TrackInfo.FileOffset).TotalMilliseconds);
-        //}
-        return beatmaps;
-    }
+    public List<Beatmap> GetAllBeatmaps() =>
+        this.ZeroVMap.BeatmapList.ConvertAll(getBeatmapFromXml);
 
     /// <summary>
     /// Get the <see cref="Beatmap"/> at the specified index.
@@ -136,9 +129,9 @@ public class BeatmapWrapper {
         if (trackFiles.Length < 1 || !trackFiles[0].Exists) {
             throw new InvalidOperationException("Track file not found.");
         }
-        if (backgrounds.Length < 1 || !backgrounds[0].Exists) {
-            //throw new InvalidOperationException("Background file not found.");
-        }
+        //if (backgrounds.Length < 1 || !backgrounds[0].Exists) {
+        //    throw new InvalidOperationException("Background file not found.");
+        //}
         return new() {
             UUID = new Guid(this.ZeroVMap.UUID),
             Title = this.ZeroVMap.TrackInfo.Title,
@@ -211,8 +204,6 @@ public class BeatmapWrapper {
     private static Beatmap getBeatmapFromXml(MapXml mapXml) =>
         new() {
             OrbitSources = mapXml.Orbit.ConvertAll(getOrbitSourceFromXml),
-            //Offset = mapXml.MapOffset is not null ? TimeSpan.Parse(mapXml.MapOffset).TotalMilliseconds : default,
-            //Offset = default,
         };
 
     private static MapInfo getMapInfoFromXml(MapXml mapXml) => new() {
