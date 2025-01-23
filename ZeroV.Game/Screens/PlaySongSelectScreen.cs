@@ -101,27 +101,17 @@ public partial class PlaySongSelectScreen : Screen {
             if (this.expandedItem is not null) {
                 this.expandedItem.IsExpanded = false;
             }
-            // TODO: TrackInfo Background
+            item.SelectFirst();
+            // TODO: Load a simple icon instead of a background
             FileInfo? file = item.TrackInfo.BackgroundFile;
             if (file is not null) {
                 TextureLoader? old = this.textureLoader;
                 this.textureLoader = new(file, this.renderer);
                 this.background.Texture = this.textureLoader.Texture;
                 old?.Dispose();
-                //NativeStorage storage = new(file.Directory!.FullName);
-                //using StorageBackedResourceStore store = new(storage);
-                //using TextureLoaderStore a = new(store);
-                ////using TextureStore b = new(this.renderer, a);
-                //using LargeTextureStore c = new LargeTextureStore(this.renderer, a);
-                //Texture? old = this.background.Texture;
-                //this.background.Texture = c.Get(file.Name);
-                //old?.Dispose();
-                //old = null;
             } else {
                 this.background.Texture = null;
                 this.textureLoader?.Dispose();
-                //this.background.Texture?.Dispose();
-                //this.background.Texture = null;
             }
         }
 

@@ -13,13 +13,13 @@ using ZeroV.Game.Screens;
 namespace ZeroV.Game.Elements.ListItems;
 
 public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
-    private Boolean selected;
+    public Boolean IsSelected { get; private set; }
 
     //public Int32 Index => index;
     public MapInfo MapInfo => mapInfo;
 
     [Resolved]
-    private PlaySongSelectScreen songSelect { get; set; } = null!;
+    private PlaySongSelectScreen songSelectScreen { get; set; } = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -45,18 +45,18 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
     }
 
     public void OnSelect() {
-        if (!this.selected) {
-            this.songSelect.OnSelect(this);
+        if (!this.IsSelected) {
+            this.songSelectScreen.OnSelect(this);
 
-            this.selected = true;
+            this.IsSelected = true;
             this.BorderThickness = 3;
         } else {
-            this.songSelect.ConfirmSelect();
+            this.songSelectScreen.ConfirmSelect();
         }
     }
 
     public void OnSelectCancel() {
-        this.selected = false;
+        this.IsSelected = false;
         this.BorderThickness = 0;
     }
 

@@ -7,13 +7,14 @@ using osu.Framework.Graphics;
 using osuTK;
 
 using ZeroV.Game.Objects;
+using System.Linq;
 
 namespace ZeroV.Game.Elements.ListItems;
 
 [Cached]
 public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable {
     private Boolean isExpanded;
-    private FillFlowContainer container = null!;
+    private FillFlowContainer<MapInfoListItem> container = null!;
     private TrackInfoListItemHeader header = null!;
 
     public TrackInfo TrackInfo => trackInfo;
@@ -25,7 +26,7 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
         this.RelativeSizeAxes = Axes.X;
         this.AutoSizeAxes = Axes.Y;
 
-        this.container = new FillFlowContainer() {
+        this.container = new FillFlowContainer<MapInfoListItem>() {
             RelativeSizeAxes = Axes.X,
             Height = 0,
             Direction = FillDirection.Vertical,
@@ -40,12 +41,19 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
             AutoSizeAxes = Axes.Y,
             Children = [
                 this.header = new TrackInfoListItemHeader(),
-                    this.container
+                this.container
             ]
         });
 
         foreach (MapInfo mapInfo in trackInfo.MapInfos) {
             this.container.Add(new MapInfoListItem(mapInfo));
+        }
+    }
+
+    public void SelectFirst() {
+        if (this.container.Children.Count > 0) {
+            if (this.container.Children.Any(child => child.IsSelected)) { return; }
+            this.container.Children[0].OnSelect();
         }
     }
 

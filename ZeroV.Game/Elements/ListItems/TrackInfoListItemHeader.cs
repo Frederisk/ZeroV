@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
@@ -9,7 +10,6 @@ using osu.Framework.Input.Events;
 
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens;
-using System.Linq;
 
 namespace ZeroV.Game.Elements.ListItems;
 
@@ -19,7 +19,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
     private SpriteText subTitle = null!;
 
     [Resolved]
-    private PlaySongSelectScreen songSelect { get; set; } = null!;
+    private PlaySongSelectScreen songSelectScreen { get; set; } = null!;
 
     [Resolved]
     private TrackInfoListItem listItem { get; set; } = null!;
@@ -36,8 +36,8 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
 
         TrackInfo trackInfo = this.listItem.TrackInfo;
 
-        var artists = trackInfo.Artists ?? "[No artists]";
-        var album = trackInfo.Album ?? "[No album]";
+        String artists = trackInfo.Artists ?? "[No artists]";
+        String album = trackInfo.Album ?? "[No album]";
         this.titleContainer = new FillFlowContainer() {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
@@ -66,27 +66,33 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
 
     private const Single padding = 5;
     private const Double long_title_scroll_speed = 0.2;
-    
+
     public void TryBeginLongTitleScroll() {
-        if(this.IsHovered || this.listItem.IsExpanded) {
-            if (!this.title.Transforms.Any() && this.title.DrawWidth > this.DrawWidth) {
-                var offset = this.title.DrawWidth - this.DrawWidth + (padding * 2);
-                var duration = offset / long_title_scroll_speed;
-
-                var toMargin = new MarginPadding(0) { Left = -offset };
-                this.title.TransformTo(nameof(this.Margin), toMargin, duration);
+        // FIXME: Clean up
+        void scroll(Drawable drawable) {
+            if (this.title.Transforms.Any() || drawable.DrawWidth < this.DrawWidth) {
+                return;
             }
-            if (!this.subTitle.Transforms.Any() && this.subTitle.DrawWidth > this.DrawWidth) {
-                var offset = this.subTitle.DrawWidth - this.DrawWidth + (padding * 2);
-                var duration = offset / long_title_scroll_speed;
+            var offset = drawable.DrawWidth - this.DrawWidth + (padding * 2);
+            var duration = offset / long_title_scroll_speed;
 
-                var toMargin = new MarginPadding(0) { Left = -offset };
-                this.subTitle.TransformTo(nameof(this.Margin), toMargin, duration);
-            }
+            var toMargin = new MarginPadding { Left = -offset };
+            this.title
+                .TransformTo(nameof(drawable.Margin), toMargin, duration).Then()
+                .Delay(1000).Then()
+                .TransformTo(nameof(drawable.Margin), new MarginPadding(), duration).Then()
+                .Delay(1000).Then()
+                .Loop();
+        }
+
+        if (this.IsHovered || this.listItem.IsExpanded) {
+            scroll(this.title);
+            scroll(this.subTitle);
         }
     }
+
     public void TryEndLongTitleScroll() {
-        if(!this.IsHovered && !this.listItem.IsExpanded) {
+        if (!this.IsHovered && !this.listItem.IsExpanded) {
             this.title.ClearTransforms();
             this.title.Margin = new MarginPadding(0);
             this.subTitle.ClearTransforms();
@@ -97,7 +103,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
     protected override Boolean OnClick(ClickEvent e) {
         this.listItem.IsExpanded = !this.listItem.IsExpanded;
         if (this.listItem.IsExpanded) {
-            this.songSelect.OnExpanded(this.listItem);
+            this.songSelectScreen.OnExpanded(this.listItem);
         }
         return base.OnClick(e);
     }
@@ -106,6 +112,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
         this.TryBeginLongTitleScroll();
         return base.OnHover(e);
     }
+
     protected override void OnHoverLost(HoverLostEvent e) {
         this.TryEndLongTitleScroll();
         base.OnHoverLost(e);
