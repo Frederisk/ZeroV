@@ -10,6 +10,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Performance;
 using osu.Framework.Graphics.Pooling;
+using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
@@ -51,6 +52,8 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     public Double ParticleFallingTime { get; private set; } //TimeSpan.FromSeconds(2).TotalMilliseconds;
     public Double ParticleFadingTime { get; } = 250;
 
+    private PlayfieldBackground background = null!;
+    private TextureLoader textureLoader = null!;
     private Container<Orbit> orbits = null!;
     private Container overlay = null!;
     private ScoreCounter scoreCounter = null!;
@@ -121,8 +124,15 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     #endregion Lifetime
 
     [BackgroundDependencyLoader]
-    private void load(ZeroVConfigManager configManager, AudioManager audioManager) {
+    private void load(ZeroVConfigManager configManager, AudioManager audioManager, IRenderer renderer) {
         this.ParticleFallingTime = configManager.Get<Double>(ZeroVSetting.GamePlayParticleFallingTime);
+
+        #region Load Background
+
+        this.textureLoader = new TextureLoader(this.TrackInfo.BackgroundFile, renderer);
+        this.background = new PlayfieldBackground(this.textureLoader.Texture);
+
+        #endregion Load Background
 
         #region Load track
 
@@ -224,7 +234,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
             this.PressParticlePool,
             this.SlideParticlePool,
             this.StrokeParticlePool,
-            new PlayfieldBackground(),
+            this.background,
             // underline
             new Box() {
                 Origin = Anchor.BottomCentre,
@@ -288,7 +298,8 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
         base.Dispose(isDisposing);
         if (isDisposing) {
             //this.GameplayTrack?.Dispose();
-            this.trackLoader.Dispose();
+            this.trackLoader?.Dispose();
+            this.textureLoader?.Dispose();
         }
     }
 

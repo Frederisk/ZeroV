@@ -22,20 +22,18 @@ using ZeroV.Game.Utils.ExternalLoader;
 namespace ZeroV.Game.Screens;
 
 [Cached]
-[LongRunningLoad]
+//[LongRunningLoad]
 public partial class PlaySongSelectScreen : Screen {
     private Sprite background = null!;
     private FillFlowContainer container = null!;
     private TextureLoader? textureLoader;
+    //private Container miniInfoDisplay = null!;
 
     [Resolved]
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
 
     [Resolved]
     private ResultInfoProvider resultInfoProvider { get; set; } = null!;
-
-    //[Resolved]
-    //private LargeTextureStore textureStore { get; set; } = null!;
 
     [Resolved]
     private IRenderer renderer { get; set; } = null!;
@@ -77,7 +75,7 @@ public partial class PlaySongSelectScreen : Screen {
                 Width = 96,
                 Text = "< Back",
             },
-            new BasicScrollContainer() {
+            new BasicScrollContainer(Direction.Vertical) {
                 Anchor = Anchor.CentreRight,
                 Origin = Anchor.CentreRight,
                 RelativeSizeAxes = Axes.Both,
@@ -90,6 +88,9 @@ public partial class PlaySongSelectScreen : Screen {
     private MapInfoListItem? selectedItem;
 
     public void OnSelect(MapInfoListItem item) {
+        if (this.selectedItem == item) {
+            return;
+        }
         this.selectedItem?.OnSelectCancel();
         this.selectedItem = item;
     }
@@ -97,22 +98,23 @@ public partial class PlaySongSelectScreen : Screen {
     private TrackInfoListItem? expandedItem;
 
     public void OnExpanded(TrackInfoListItem item) {
-        if (this.expandedItem != item) {
-            if (this.expandedItem is not null) {
-                this.expandedItem.IsExpanded = false;
-            }
-            item.SelectFirst();
-            // TODO: Load a simple icon instead of a background
-            FileInfo? file = item.TrackInfo.BackgroundFile;
-            if (file is not null) {
-                TextureLoader? old = this.textureLoader;
-                this.textureLoader = new(file, this.renderer);
-                this.background.Texture = this.textureLoader.Texture;
-                old?.Dispose();
-            } else {
-                this.background.Texture = null;
-                this.textureLoader?.Dispose();
-            }
+        if (this.expandedItem == item) {
+            return;
+        }
+        if (this.expandedItem is not null) {
+            this.expandedItem.IsExpanded = false;
+        }
+        item.SelectFirst();
+        // TODO: Load a simple icon instead of a background
+        FileInfo? file = item.TrackInfo.BackgroundFile;
+        if (file is not null) {
+            TextureLoader? old = this.textureLoader;
+            this.textureLoader = new(file, this.renderer);
+            this.background.Texture = this.textureLoader.Texture;
+            old?.Dispose();
+        } else {
+            this.background.Texture = null;
+            this.textureLoader?.Dispose();
         }
 
         this.expandedItem = item;
