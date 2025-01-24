@@ -54,11 +54,10 @@ public partial class PlaySongSelectScreen : Screen {
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
             Spacing = new Vector2(0, 10),
-            Padding = new MarginPadding(10)
         };
 
         IReadOnlyList<TrackInfo> trackInfos = this.beatmapWrapperProvider.Get() ?? [];
-        IReadOnlyList<ResultInfo> resultInfos = this.resultInfoProvider.Get() ?? [];
+        //IReadOnlyList<ResultInfo> resultInfos = this.resultInfoProvider.Get() ?? [];
 
         IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);
 
@@ -80,7 +79,18 @@ public partial class PlaySongSelectScreen : Screen {
                 Origin = Anchor.CentreRight,
                 RelativeSizeAxes = Axes.Both,
                 Width = 0.5f,
-                Child = this.container
+                Padding = new MarginPadding(32),
+                Child = this.container,
+            },
+            new Container{
+                Anchor = Anchor.CentreLeft,
+                Origin = Anchor.CentreLeft,
+                RelativeSizeAxes = Axes.Both,
+                Width = 0.5f,
+                Padding = new MarginPadding(32),
+                Children = [
+                    // TODO: add a bulletin board.
+                ],
             },
         ];
     }
@@ -93,6 +103,24 @@ public partial class PlaySongSelectScreen : Screen {
         }
         this.selectedItem?.OnSelectCancel();
         this.selectedItem = item;
+        this.updateInfoDisplay();
+    }
+
+    private void updateInfoDisplay() {
+        IReadOnlyList<ResultInfo> resultInfos = this.resultInfoProvider.Get() ?? [];
+        TrackInfo trackInfo = this.expandedItem!.TrackInfo;
+        MapInfo mapInfo = this.selectedItem!.MapInfo;
+
+        IOrderedEnumerable<ResultInfo> r =
+            from result in resultInfos
+            where result.UUID == trackInfo.UUID
+               && result.GameVersion == trackInfo.GameVersion
+               && result.Index == mapInfo.Index
+            orderby result.Scoring descending
+            select result;
+        foreach (ResultInfo resultInfo in resultInfos.Take(3)) {
+            // TODO: truncate and insert
+        }
     }
 
     private TrackInfoListItem? expandedItem;
@@ -112,7 +140,7 @@ public partial class PlaySongSelectScreen : Screen {
             this.textureLoader = new(file, this.renderer);
             this.background.Texture = this.textureLoader.Texture;
             old?.Dispose();
-        } else {
+        } else { // file is null
             this.background.Texture = null;
             this.textureLoader?.Dispose();
         }
