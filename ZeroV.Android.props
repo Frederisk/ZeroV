@@ -12,7 +12,7 @@
     <NoWarn>$(NoWarn);XA4218</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework.Android" Version="2024.217.0" />
+    <PackageReference Include="ppy.osu.Framework.Android" Version="2025.117.0" />
   </ItemGroup>
   <PropertyGroup>
     <!-- Fody does not handle Android build well, and warns when unchanged.
