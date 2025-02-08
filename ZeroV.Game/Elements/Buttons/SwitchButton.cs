@@ -9,6 +9,8 @@ using osu.Framework.Graphics.UserInterface;
 
 using osuTK;
 
+using ZeroV.Game.Graphics.Shapes;
+
 namespace ZeroV.Game.Elements.Buttons;
 
 public partial class SwitchButton : Checkbox {

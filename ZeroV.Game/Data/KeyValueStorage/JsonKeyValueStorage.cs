@@ -25,7 +25,7 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
 
     public JsonKeyValueStorage(Storage storage) {
         //if (!storage.ExistsDirectory(folder_path)) {
-        this.Storage = storage.GetStorageForDirectory(folder_path);
+        this.Storage = storage.GetStorageForDirectory(this.folder_path);
         //}
     }
 

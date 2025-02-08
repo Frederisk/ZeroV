@@ -7,7 +7,7 @@ using osu.Framework.Graphics.Shapes;
 
 using osuTK;
 
-namespace ZeroV.Game;
+namespace ZeroV.Game.Graphics.Shapes;
 
 /// <summary>
 /// A diamond shape. Can be coloured using the <see cref="Drawable.Colour"/> property.

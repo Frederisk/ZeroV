@@ -5,6 +5,7 @@ using osu.Framework.Graphics;
 
 using osuTK;
 
+using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Scoring;
 using ZeroV.Game.Utils;
 

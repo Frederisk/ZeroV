@@ -9,6 +9,7 @@ using osu.Framework.Graphics.Shapes;
 using osuTK;
 using osuTK.Graphics;
 
+using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Scoring;
 using ZeroV.Game.Utils;
 

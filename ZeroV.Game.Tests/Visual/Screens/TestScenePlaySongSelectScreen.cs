@@ -22,7 +22,7 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
 
     [BackgroundDependencyLoader]
     private void load(Storage storage) {
-        IKeyValueStorage keyValueStorage = new JsonKeyValueStorage(storage);
+        JsonKeyValueStorage keyValueStorage = new(storage);
         this.dependencies!.CacheAs<TrackInfoProvider>(new FakeTrackInfoProvider(keyValueStorage));
         this.Add(this.screenStack = new ScreenStack() { RelativeSizeAxes = Axes.Both });
     }
@@ -41,10 +41,10 @@ public partial class TestScenePlaySongSelectScreen : ZeroVTestScene {
         this.dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
     private class FakeTrackInfoProvider(IKeyValueStorage storage) : TrackInfoProvider(storage) {
-        public override IReadOnlyList<TrackInfo> Get() => this.trackInfoList;
+        public override IReadOnlyList<TrackInfo> Get() => trackInfoList;
         //public override Task<IReadOnlyList<TrackInfo>?> GetAsync() => Task.FromResult(this.trackInfoList);
 
-        private IReadOnlyList<TrackInfo> trackInfoList => [
+        private static IReadOnlyList<TrackInfo> trackInfoList => [
             new() {
                 Title = "A - Test Title",
                 UUID = Guid.Empty,

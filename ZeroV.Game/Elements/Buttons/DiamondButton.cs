@@ -7,6 +7,8 @@ using osu.Framework.Input.Events;
 
 using osuTK;
 
+using ZeroV.Game.Graphics.Shapes;
+
 namespace ZeroV.Game.Elements.Buttons;
 
 public partial class DiamondButton : ClickableContainer {
