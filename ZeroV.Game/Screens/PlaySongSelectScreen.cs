@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using osu.Framework.Allocation;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Sprites;
+using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -15,14 +18,11 @@ using ZeroV.Game.Elements.ListItems;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
-using osu.Framework.Graphics.Rendering;
-using System.IO;
 using ZeroV.Game.Utils.ExternalLoader;
 
 namespace ZeroV.Game.Screens;
 
 [Cached]
-//[LongRunningLoad]
 public partial class PlaySongSelectScreen : Screen {
     private Sprite background = null!;
     private FillFlowContainer container = null!;
@@ -56,22 +56,19 @@ public partial class PlaySongSelectScreen : Screen {
             Spacing = new Vector2(0, 10),
         };
 
-        IReadOnlyList<TrackInfo> trackInfos = this.beatmapWrapperProvider.Get() ?? [];
-        //IReadOnlyList<ResultInfo> resultInfos = this.resultInfoProvider.Get() ?? [];
-
-        IEnumerable<TrackInfo> trackInfoSort = trackInfos.OrderBy(i => i.Title);
-
-        foreach (TrackInfo item in trackInfoSort) {
-            this.container.Add(new TrackInfoListItem(item));
-        }
+        this.beatmapWrapperProvider.Get()?
+            .OrderBy(i => i.Title)
+            .ForEach(trackInfo => {
+                this.container.Add(new TrackInfoListItem(trackInfo));
+            });
 
         this.InternalChildren = [
             this.background,
             new BackButton(this) {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
-                Height = 48,
-                Width = 96,
+                Height = 52,
+                Width = 108,
                 Text = "< Back",
             },
             new BasicScrollContainer(Direction.Vertical) {
@@ -95,6 +92,7 @@ public partial class PlaySongSelectScreen : Screen {
         ];
     }
 
+    private TrackInfoListItem? expandedItem;
     private MapInfoListItem? selectedItem;
 
     public void OnSelect(MapInfoListItem item) {
@@ -107,23 +105,24 @@ public partial class PlaySongSelectScreen : Screen {
     }
 
     private void updateInfoDisplay() {
-        IReadOnlyList<ResultInfo> resultInfos = this.resultInfoProvider.Get() ?? [];
         TrackInfo trackInfo = this.expandedItem!.TrackInfo;
         MapInfo mapInfo = this.selectedItem!.MapInfo;
+        //if (trackInfo is null || mapInfo is null) {
+        //    return;
+        //}
 
-        IOrderedEnumerable<ResultInfo> r =
-            from result in resultInfos
+        IReadOnlyList<ResultInfo> resultList = this.resultInfoProvider.Get() ?? [];
+        IOrderedEnumerable<ResultInfo> orderedResultList =
+            from result in resultList
             where result.UUID == trackInfo.UUID
                && result.GameVersion == trackInfo.GameVersion
                && result.Index == mapInfo.Index
             orderby result.Scoring descending
             select result;
-        foreach (ResultInfo resultInfo in resultInfos.Take(3)) {
+        foreach (ResultInfo resultInfo in orderedResultList.Take(3)) {
             // TODO: truncate and insert
         }
     }
-
-    private TrackInfoListItem? expandedItem;
 
     public void OnExpanded(TrackInfoListItem item) {
         if (this.expandedItem == item) {
@@ -132,7 +131,6 @@ public partial class PlaySongSelectScreen : Screen {
         if (this.expandedItem is not null) {
             this.expandedItem.IsExpanded = false;
         }
-        item.SelectFirst();
         // TODO: Load a simple icon instead of a background
         FileInfo? file = item.TrackInfo.BackgroundFile;
         if (file is not null) {
@@ -144,8 +142,9 @@ public partial class PlaySongSelectScreen : Screen {
             this.background.Texture = null;
             this.textureLoader?.Dispose();
         }
-
         this.expandedItem = item;
+        // TODO: Which one to select?
+        item.SelectFirst();
     }
 
     public void ConfirmSelect() {

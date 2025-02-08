@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
@@ -7,7 +8,6 @@ using osu.Framework.Graphics;
 using osuTK;
 
 using ZeroV.Game.Objects;
-using System.Linq;
 
 namespace ZeroV.Game.Elements.ListItems;
 
@@ -51,10 +51,18 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
     }
 
     public void SelectFirst() {
-        if (this.container.Children.Count > 0) {
-            if (this.container.Children.Any(child => child.IsSelected)) { return; }
-            this.container.Children[0].OnSelect();
+        if (this.container.Children.Count <= 0 || this.container.Children.Any(item => item.IsSelected)) {
+            return;
         }
+
+        //if (this.container.Children.Count > 0) {
+        //    foreach(MapInfoListItem item in this.container.Children) {
+        //        if (item.IsSelected) {
+        //            return;
+        //        }
+        //    }
+            this.container.Children[0].OnSelect();
+        //}
     }
 
     public Boolean IsExpanded {
