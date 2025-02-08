@@ -4,6 +4,8 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.Textures;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -16,7 +18,7 @@ namespace ZeroV.Game.Screens;
 public partial class MainScreen : Screen {
 
     [BackgroundDependencyLoader]
-    private void load() {
+    private void load(TextureStore textureStore) {
         this.InternalChildren = [
             new Box {
                 Colour = Colour4.Violet,
@@ -31,14 +33,20 @@ public partial class MainScreen : Screen {
                         Colour = Colour4.White,
                         RelativeSizeAxes = Axes.Both,
                     },
-                    // TODO: Logo here
-                    new ZeroVSpriteText {
-                        Text = "ZeroV",
-                        FontSize = 128,
-                        Colour = Colour4.Black,
+                    // TODO: Logo here,
+                    new Sprite {
+                        Size = new(256),
                         X = 136,
                         Y = 100,
+                        Texture = textureStore.Get(@"MyGo.svg"),
                     },
+                    //new ZeroVSpriteText {
+                    //    Text = "ZeroV",
+                    //    FontSize = 128,
+                    //    Colour = Colour4.Black,
+                    //    X = 136,
+                    //    Y = 100,
+                    //},
                     new DiamondButton {
                         X = 1106,
                         Y = 204,

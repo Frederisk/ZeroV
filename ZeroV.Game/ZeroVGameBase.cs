@@ -13,6 +13,7 @@ using osuTK;
 using ZeroV.Game.Configs;
 using ZeroV.Game.Data;
 using ZeroV.Game.Data.KeyValueStorage;
+using ZeroV.Game.Graphics.Textures;
 using ZeroV.Game.Utils;
 using ZeroV.Resources;
 
@@ -45,15 +46,17 @@ public partial class ZeroVGameBase : osu.Framework.Game {
 
         this.dependencies.CacheAs<ZeroVGameBase>(this);
         this.dependencies.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));
-        var jsonKeyValueStorage = new JsonKeyValueStorage(storage);
-        this.dependencies.CacheAs<IKeyValueStorage>(jsonKeyValueStorage);
+        JsonKeyValueStorage jsonKeyValueStorage = new(storage);
+        //this.dependencies.CacheAs<IKeyValueStorage>(jsonKeyValueStorage);
         this.dependencies.CacheAs<TrackInfoProvider>(new TrackInfoProvider(jsonKeyValueStorage));
         this.dependencies.CacheAs<ResultInfoProvider>(new ResultInfoProvider(jsonKeyValueStorage));
 
-        IResourceStore<TextureUpload> resourceStore = this.Host.CreateTextureLoaderStore(new NamespacedResourceStore<Byte[]>(this.Resources, @"Textures"));
-        LargeTextureStore largeStore = new(this.Host.Renderer, resourceStore);
+        LargeTextureStore largeStore = new(this.Host.Renderer, this.Host.CreateTextureLoaderStore(new NamespacedResourceStore<Byte[]>(this.Resources, @"Textures")), this.DefaultTextureFilteringMode);
         largeStore.AddTextureSource(this.Host.CreateTextureLoaderStore(new OnlineStore()));
         this.dependencies.CacheAs<LargeTextureStore>(largeStore);
+
+        IResourceStore<TextureUpload> svgTextureLoaderStore = new SvgTextureLoaderStore(new NamespacedResourceStore<Byte[]>(this.Resources, @"SvgTexture"));
+        this.Textures.AddTextureSource(svgTextureLoaderStore);
     }
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
