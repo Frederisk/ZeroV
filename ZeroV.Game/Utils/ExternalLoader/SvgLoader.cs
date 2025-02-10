@@ -7,9 +7,7 @@ using osu.Framework.Graphics.Textures;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-using SkiaSharp;
-
-using Svg.Skia;
+using ZeroV.Game.Graphics.Textures;
 
 namespace ZeroV.Game.Utils.ExternalLoader;
 
@@ -28,25 +26,13 @@ internal class SvgLoader : IDisposable {
     /// </summary>
     /// <param name="file">The SVG file to load.</param>
     /// <param name="renderer">The renderer to create the Texture.</param>
-    public SvgLoader(FileInfo file, IRenderer renderer) {
-        using SKSvg svg = new();
-        svg.Load(file.FullName);
-        //if (svg.Picture is null) {
-        //    throw new NullReferenceException(nameof(svg.Picture) + " is null."); ;
-        //}
-        SKRect bounds = svg.Picture!.CullRect;
-        using SKBitmap bitmap = new((Int32)bounds.Width, (Int32)bounds.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
-        using SKCanvas canvas = new(bitmap);
-        canvas.Clear(SKColors.Transparent);
-        // canvas.Scale(1,1);
-        // CullRect may not be at (0, 0)
-        canvas.Translate(-bounds.Left, -bounds.Top);
-        canvas.DrawPicture(svg.Picture);
-        canvas.Flush();
-        // The PixelSpan of the bitmap will be copied to the Image, so it's safe to dispose the bitmap.
-        this.image = Image.LoadPixelData<Rgba32>(bitmap.GetPixelSpan(), bitmap.Width, bitmap.Height);
+    /// <param name="size">The Rasterization size. When it's <see langword="null"/>, the size specified by SVG itself will be used.</param>
+    public SvgLoader(FileInfo file, IRenderer renderer, osuTK.Vector2? size = null) {
+        this.image = TextureUploadExtensions.LoadFromSvgStream<Rgba32>(file.OpenRead(), size);
+        // Image will be disposed after TextureUpload is disposed.
         this.upload = new TextureUpload(this.image);
         this.Texture = renderer.CreateTexture(this.image.Width, this.image.Height);
+        // The provided upload will be disposed after the upload is completed.
         this.Texture.SetData(this.upload);
     }
 
@@ -59,8 +45,8 @@ internal class SvgLoader : IDisposable {
         if (!this.disposedValue) {
             if (disposing) {
                 this.Texture?.Dispose();
-                this.image?.Dispose();
-                // this.bitmap?.Dispose();
+                //this.upload?.Dispose();
+                //this.image?.Dispose();
             }
             this.disposedValue = true;
         }
