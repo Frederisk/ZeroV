@@ -20,11 +20,12 @@ public class TextureLoader : IDisposable {
         try {
             ArgumentNullException.ThrowIfNull(file);
             this.image = Image.Load<Rgba32>(file.FullName);
+            // Image will be disposed after TextureUpload is disposed.
             this.upload = new TextureUpload(this.image);
             this.Texture = renderer.CreateTexture(this.image.Width, this.image.Height);
+            // The provided upload will be disposed after the upload is completed.
             this.Texture.SetData(this.upload);
         } catch (Exception e) {
-            //Console.WriteLine(e);
             Logger.Log($"Failed to load texture from {file?.FullName ?? nameof(file)}. Message: {e.Message}", LoggingTarget.Runtime, LogLevel.Important);
             this.Texture = null;
         }
@@ -39,8 +40,8 @@ public class TextureLoader : IDisposable {
         if (!this.disposedValue) {
             if (disposing) {
                 this.Texture?.Dispose();
-                this.upload?.Dispose();
-                this.image?.Dispose();
+                //this.upload?.Dispose();
+                //this.image?.Dispose();
             }
             this.disposedValue = true;
         }

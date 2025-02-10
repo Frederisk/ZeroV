@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 
-using osuTK;
-
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -14,7 +12,7 @@ namespace ZeroV.Game.Graphics.Textures;
 
 public static class TextureUploadExtensions {
 
-    public static Image<TPixel> LoadFromSvgStream<TPixel>(Stream stream, Vector2? size = null) where TPixel : unmanaged, IPixel<TPixel> {
+    public static Image<TPixel> LoadFromSvgStream<TPixel>(Stream stream, osuTK.Vector2? size = null) where TPixel : unmanaged, IPixel<TPixel> {
         using SKSvg svg = new();
         svg.Load(stream);
         //if (svg.Picture is null) {
@@ -32,6 +30,6 @@ public static class TextureUploadExtensions {
         canvas.DrawPicture(svg.Picture);
         canvas.Flush();
         // The PixelSpan of the bitmap will be copied to the Image, so it's safe to dispose the bitmap.
-        return SixLabors.ImageSharp.Image.LoadPixelData<TPixel>(bitmap.GetPixelSpan(), bitmap.Width, bitmap.Height);
+        return Image.LoadPixelData<TPixel>(bitmap.GetPixelSpan(), bitmap.Width, bitmap.Height);
     }
 }

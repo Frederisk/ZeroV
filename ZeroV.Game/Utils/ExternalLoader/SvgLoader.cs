@@ -14,7 +14,6 @@ namespace ZeroV.Game.Utils.ExternalLoader;
 internal class SvgLoader : IDisposable {
     private Boolean disposedValue = false;
 
-    //private SKBitmap bitmap;
     private Image<Rgba32> image;
 
     private TextureUpload upload;
