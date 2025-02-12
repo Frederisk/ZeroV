@@ -127,16 +127,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                     Origin = Anchor.Centre,
                     Anchor = Anchor.Centre,
                     RelativeSizeAxes = Axes.Both,
-                    Blending = new BlendingParameters {
-                        // Don't change the destination colour.
-                        RGBEquation = BlendingEquation.Add,
-                        Source = BlendingType.Zero,
-                        Destination = BlendingType.One,
-                        // Subtract the cover's alpha from the destination (points with alpha 1 should make the destination completely transparent).
-                        AlphaEquation = BlendingEquation.Add,
-                        SourceAlpha = BlendingType.Zero,
-                        DestinationAlpha = BlendingType.OneMinusSrcAlpha
-                    },
+                    Blending = BlendingParametersExtensions.TransparentAlphaMinus,
                     Children = [
                         new Box {
                             Anchor = Anchor.TopLeft,

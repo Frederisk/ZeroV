@@ -183,7 +183,7 @@ public partial class OffsetScreen : Screen {
         this.offsetText.Text = e.NewValue + "ms";
     }
 
-    protected override Boolean OnTouchDown(TouchDownEvent e) {
+    protected override Boolean OnClick(ClickEvent e) {
         BlinkDiamond tempLine = new() {
             RelativePositionAxes = Axes.X,
             X = (Single)this.relativePosition,
@@ -191,7 +191,6 @@ public partial class OffsetScreen : Screen {
 
         this.tempDisplayContainer.Add(tempLine);
         tempLine.FadeIn(100).ScaleTo(Vector2.One, 300, Easing.OutQuint).Delay(400).FadeOut(500).Expire();
-
         return true;
     }
 
@@ -204,7 +203,7 @@ public partial class OffsetScreen : Screen {
     internal partial class ArrowButton : Container {
         private readonly OrientedTriangle triangle;
 
-        public Action<TouchDownEvent>? TouchDown;
+        public Action<ClickEvent>? TouchDown;
 
         public ArrowButton(OrientedTriangle.Orientation orientation) {
             this.Anchor = Anchor.Centre;
@@ -222,7 +221,7 @@ public partial class OffsetScreen : Screen {
             this.Add(this.triangle);
         }
 
-        protected override Boolean OnTouchDown(TouchDownEvent e) {
+        protected override Boolean OnClick(ClickEvent e) {
             this.TouchDown?.Invoke(e);
             return true;
         }

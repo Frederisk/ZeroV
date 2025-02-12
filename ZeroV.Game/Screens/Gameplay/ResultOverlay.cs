@@ -41,9 +41,6 @@ public partial class ResultOverlay : OverlayContainer {
             Y = 64,
             X = -24,
             FontSize = 128,
-            //Shadow = true,
-            //ShadowColour = Colour4.Black,
-            //ShadowOffset = new(16),
         };
         this.quitButton = new BasicButton {
             Origin = Anchor.CentreRight,
@@ -111,5 +108,5 @@ public partial class ResultOverlay : OverlayContainer {
 
     protected override Boolean OnTouchDown(TouchDownEvent e) => true;
 
-    //protected override Boolean OnClick(ClickEvent e) => true;
+    protected override Boolean OnClick(ClickEvent e) => true;
 }

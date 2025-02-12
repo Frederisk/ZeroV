@@ -9,6 +9,7 @@ using osu.Framework.Graphics.UserInterface;
 
 using osuTK;
 
+using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game.Elements.Buttons;
@@ -46,11 +47,7 @@ public partial class SwitchButton : Checkbox {
                                 Colour = Colour4.White,
                                 Size = new Vector2(0.5f, 1),
                             },
-                            Blending = new BlendingParameters {
-                                AlphaEquation = BlendingEquation.Add,
-                                SourceAlpha = BlendingType.Zero,
-                                DestinationAlpha = BlendingType.OneMinusSrcAlpha
-                            },
+                            Blending = BlendingParametersExtensions.TransparentAlphaMinus,
                         },
                         new Container {
                             Origin = Anchor.CentreRight,
@@ -64,11 +61,7 @@ public partial class SwitchButton : Checkbox {
                                 Colour = Colour4.White,
                                 Size = new Vector2(0.5f, 1),
                             },
-                            Blending = new BlendingParameters {
-                                AlphaEquation = BlendingEquation.Add,
-                                SourceAlpha = BlendingType.Zero,
-                                DestinationAlpha = BlendingType.OneMinusSrcAlpha
-                            },
+                            Blending = BlendingParametersExtensions.TransparentAlphaMinus,
                         },
                     ],
                 },

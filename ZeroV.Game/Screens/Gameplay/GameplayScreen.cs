@@ -33,7 +33,6 @@ using ZeroV.Game.Utils.ExternalLoader;
 
 namespace ZeroV.Game.Screens.Gameplay;
 
-//[Cached]
 [Cached(Type = typeof(IGameplayInfo))]
 public partial class GameplayScreen : Screen, IGameplayInfo {
     public TrackInfo TrackInfo { get; }
@@ -136,11 +135,6 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
         #region Load track
 
-        //FileInfo trackFile = this.TrackInfo.TrackFile;
-        //NativeStorage storage = new(trackFile.Directory!.FullName);
-        //using StorageBackedResourceStore store = new(storage);
-        //ITrackStore trackStore = audioManager.GetTrackStore(store);
-        //this.GameplayTrack = trackStore.Get(trackFile.Name);
         this.trackLoader = new(this.TrackInfo.TrackFile, audioManager);
 
         #endregion Load track
@@ -177,10 +171,10 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
                     Anchor = Anchor.TopRight,
                },
                this.comboCounter = new ComboCounter {
-                      Origin = Anchor.TopRight,
-                      Anchor = Anchor.TopRight,
-                      Y = 75.0F,
-                      X = -25.0F,
+                    Origin = Anchor.TopRight,
+                    Anchor = Anchor.TopRight,
+                    Y = 75.0F,
+                    X = -25.0F,
                 },
                this.topText = new ZeroVSpriteText {
                     Origin = Anchor.TopCentre,
@@ -188,13 +182,24 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
                     Text = "ZeroV",
                     FontSize = 52,
                },
-               new DiamondButton() {
+               new DiamondButton {
                    Origin = Anchor.TopLeft,
                    Anchor = Anchor.TopLeft,
                    Size = new Vector2(120),
-                   Text = "Pause",
+                   DiamondPadding = 8,
+                   InnerColour = Colour4.White,
+                   OuterColour = Colour4.Red,
+                   Text = new ZeroVSpriteText {
+                       Origin = Anchor.Centre,
+                       Anchor = Anchor.Centre,
+                       Colour = Colour4.Black,
+                       Text = "Pause",
+                       FontSize = 36,
+                   },
                    Action = () => {
                        this.GameplayTrack.Stop();
+                       this.pauseOverlay.CountdownDisplay.Hide();
+                       this.pauseOverlay.ButtonsContainer.Show();
                        this.pauseOverlay.Show();
                    },
                }
@@ -279,7 +284,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     protected override Boolean OnTouchDown(TouchDownEvent e) {
         this.touchPositions.Add(e.Touch.Source, e.ScreenSpaceTouchDownPosition);
         this.TouchUpdate?.Invoke(e.Touch.Source, true);
-        return true;
+        return false;
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
