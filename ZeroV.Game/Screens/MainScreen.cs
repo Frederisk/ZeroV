@@ -38,7 +38,8 @@ public partial class MainScreen : Screen {
                         //Size = new(256),
                         X = 150,
                         Y = 120,
-                        Texture = textureStore.Get(@"MyGo.svg"),
+                        Texture = textureStore.Get(@"Logo.svg"),
+                        // Scale = new(1.5f),
                     },
                     //new ZeroVSpriteText {
                     //    Text = "ZeroV",
