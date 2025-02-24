@@ -78,6 +78,7 @@ public partial class MainScreen : Screen {
                             Text = "Options",
                             FontSize = 48,
                         },
+                        Action = () => this.Push(new PreferenceScreen()),
                     },
                     new DiamondButton {
                         X = 1106,

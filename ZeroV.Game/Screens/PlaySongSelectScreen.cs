@@ -25,7 +25,7 @@ namespace ZeroV.Game.Screens;
 [Cached]
 public partial class PlaySongSelectScreen : Screen {
     private Sprite background = null!;
-    private FillFlowContainer container = null!;
+    private FillFlowContainer<TrackInfoListItem> container = null!;
     private TextureLoader? textureLoader;
     //private Container miniInfoDisplay = null!;
 
@@ -49,7 +49,7 @@ public partial class PlaySongSelectScreen : Screen {
             FillMode = FillMode.Fill
         };
 
-        this.container = new FillFlowContainer() {
+        this.container = new FillFlowContainer<TrackInfoListItem>() {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
@@ -71,7 +71,7 @@ public partial class PlaySongSelectScreen : Screen {
                 Width = 108,
                 Text = "< Back",
             },
-            new BasicScrollContainer(Direction.Vertical) {
+            new BasicScrollContainer<FillFlowContainer<TrackInfoListItem>>(Direction.Vertical) {
                 Anchor = Anchor.CentreRight,
                 Origin = Anchor.CentreRight,
                 RelativeSizeAxes = Axes.Both,
