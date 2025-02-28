@@ -11,11 +11,12 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Elements.Buttons;
+using ZeroV.Game.Screens.Preference;
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens;
 
-public partial class MainScreen : Screen {
+public partial class MainScreen : BaseUserInterfaceScreen {
 
     [BackgroundDependencyLoader]
     private void load(TextureStore textureStore) {

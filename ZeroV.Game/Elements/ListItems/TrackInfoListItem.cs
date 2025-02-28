@@ -56,12 +56,13 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
         }
 
         //if (this.container.Children.Count > 0) {
-        //    foreach(MapInfoListItem item in this.container.Children) {
-        //        if (item.IsSelected) {
-        //            return;
-        //        }
-        //    }
-            this.container.Children[0].OnSelect();
+        // This method is called only when the item is exoanded for the first time.
+        // foreach(MapInfoListItem item in this.container.Children) {
+        //     if (item.IsSelected) {
+        //         return;
+        //     }
+        // }
+        this.container.Children.FirstOrDefault()?.OnSelect();
         //}
     }
 

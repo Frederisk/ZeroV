@@ -23,7 +23,7 @@ using ZeroV.Game.Utils.ExternalLoader;
 namespace ZeroV.Game.Screens;
 
 [Cached]
-public partial class PlaySongSelectScreen : Screen {
+public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     private Sprite background = null!;
     private FillFlowContainer<TrackInfoListItem> container = null!;
     private TextureLoader? textureLoader;

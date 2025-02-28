@@ -16,7 +16,7 @@ using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game.Screens;
 
-public partial class OffsetScreen : Screen {
+public partial class OffsetScreen : BaseUserInterfaceScreen {
 
     private Bindable<Double> offset = null!;
 
