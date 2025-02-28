@@ -55,15 +55,15 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
             return;
         }
 
-        //if (this.container.Children.Count > 0) {
-        // This method is called only when the item is exoanded for the first time.
-        // foreach(MapInfoListItem item in this.container.Children) {
-        //     if (item.IsSelected) {
-        //         return;
-        //     }
-        // }
-        this.container.Children.FirstOrDefault()?.OnSelect();
-        //}
+        if (this.container.Children.Count > 0) {
+            // This method is called only when the item is exoanded for the first time.
+            // foreach(MapInfoListItem item in this.container.Children) {
+            //     if (item.IsSelected) {
+            //         return;
+            //     }
+            // }
+            this.container.Children[0].OnSelect();
+        }
     }
 
     public Boolean IsExpanded {
