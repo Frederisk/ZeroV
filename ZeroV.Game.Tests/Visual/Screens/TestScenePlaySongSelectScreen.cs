@@ -12,7 +12,7 @@ using osu.Framework.Testing;
 using ZeroV.Game.Data;
 using ZeroV.Game.Data.KeyValueStorage;
 using ZeroV.Game.Objects;
-using ZeroV.Game.Screens;
+using ZeroV.Game.Screens.PlaySongSelect;
 
 namespace ZeroV.Game.Tests.Visual.Screens;
 

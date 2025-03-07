@@ -8,9 +8,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 
 using ZeroV.Game.Objects;
-using ZeroV.Game.Screens;
 
-namespace ZeroV.Game.Elements.ListItems;
+namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
 
 public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
     public Boolean IsSelected { get; private set; }

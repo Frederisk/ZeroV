@@ -9,9 +9,8 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 
 using ZeroV.Game.Objects;
-using ZeroV.Game.Screens;
 
-namespace ZeroV.Game.Elements.ListItems;
+namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
 
 public partial class TrackInfoListItemHeader : CompositeDrawable {
     private FillFlowContainer titleContainer = null!;
@@ -36,8 +35,8 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
 
         TrackInfo trackInfo = this.listItem.TrackInfo;
 
-        String artists = trackInfo.Artists ?? "[No artists]";
-        String album = trackInfo.Album ?? "[No album]";
+        var artists = trackInfo.Artists ?? "[No artists]";
+        var album = trackInfo.Album ?? "[No album]";
         this.titleContainer = new FillFlowContainer() {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
@@ -72,7 +71,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
             if (drawable.Transforms.Any() || drawable.DrawWidth < this.DrawWidth) {
                 return;
             }
-            var offset = drawable.DrawWidth - this.DrawWidth + (padding * 2);
+            var offset = drawable.DrawWidth - this.DrawWidth + padding * 2;
             var duration = offset / long_title_scroll_speed;
 
             var toMargin = new MarginPadding { Left = -offset };

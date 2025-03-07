@@ -11,6 +11,7 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Elements.Buttons;
+using ZeroV.Game.Screens.PlaySongSelect;
 using ZeroV.Game.Screens.Preference;
 using ZeroV.Game.Utils;
 

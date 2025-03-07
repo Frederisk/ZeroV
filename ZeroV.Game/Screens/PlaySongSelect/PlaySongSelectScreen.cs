@@ -14,13 +14,13 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Data;
-using ZeroV.Game.Elements.ListItems;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
+using ZeroV.Game.Screens.PlaySongSelect.ListItems;
 using ZeroV.Game.Utils.ExternalLoader;
 
-namespace ZeroV.Game.Screens;
+namespace ZeroV.Game.Screens.PlaySongSelect;
 
 [Cached]
 public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {

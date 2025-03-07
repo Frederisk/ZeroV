@@ -9,7 +9,7 @@ using osuTK;
 
 using ZeroV.Game.Objects;
 
-namespace ZeroV.Game.Elements.ListItems;
+namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
 
 [Cached]
 public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable {
