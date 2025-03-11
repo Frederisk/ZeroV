@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -41,12 +40,12 @@ public abstract partial class BasePreferenceListItem<T> : CompositeDrawable {
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
                     Padding = new(24),
-                    Children = this.LoadInputController(),
+                    Child = this.LoadInputController(),
                 },
             ],
         };
         configManager.BindWith(this.Setting, this.Current);
     }
 
-    protected abstract IReadOnlyList<Drawable> LoadInputController();
+    protected abstract Drawable LoadInputController();
 }

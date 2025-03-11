@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -13,11 +12,11 @@ public partial class CheckBoxListItem : BasePreferenceListItem<Boolean> {
 
     private SwitchButton switchButton = null!;
 
-    protected override IReadOnlyList<Drawable> LoadInputController() {
+    protected override Drawable LoadInputController() {
         this.switchButton = new SwitchButton {
             Anchor = Anchor.CentreRight,
             Origin = Anchor.CentreRight,
         };
-        return [this.switchButton];
+        return this.switchButton;
     }
 }
