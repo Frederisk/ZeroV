@@ -2,7 +2,8 @@
   <PropertyGroup>
     <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
     <RuntimeIdentifiers Condition="$(TargetFramework.Contains('-android'))">
-      android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
+      android-arm;android-arm64;android-x86;android-x64
+    </RuntimeIdentifiers>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <MandroidI18n>CJK;Mideast;Rare;West;Other;</MandroidI18n>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidMessageHandler</AndroidHttpClientHandlerType>

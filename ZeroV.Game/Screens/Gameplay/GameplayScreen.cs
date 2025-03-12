@@ -48,8 +48,19 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     [Resolved]
     private GameLoader gameLoader { get; set; } = null!;
 
-    public Double ParticleFallingTime { get; private set; } //TimeSpan.FromSeconds(2).TotalMilliseconds;
-    public Double ParticleFadingTime { get; } = 250;
+    /// <summary>
+    /// The time it takes for particles to fall from the top of the screen to the baseline.
+    /// </summary>
+    public Double ParticleFallingTime { get; private set; }
+
+    /// <summary>
+    /// The fading time of particle after they fall below the baseline.
+    /// </summary>
+    /// <remarks>
+    /// The fading time should not be great than the time it's determined to be a miss,
+    /// because when a particle misses, it will be hidden.
+    /// </remarks>
+    public Double ParticleFadingTime { get; } = ZeroVMath.JUDGE_TIME_MILLISECONDS_NONE_OR_MISS;
 
     private PlayfieldBackground background = null!;
     private TextureLoader textureLoader = null!;

@@ -14,4 +14,8 @@ public static class ZeroVMath {
     public const Single SCREEN_DRAWABLE_X = 1366;
     public const Single SCREEN_DRAWABLE_Y = 768;
     public const Single SCREEN_GAME_BASELINE_Y = 50;
+    public const Double JUDGE_TIME_MILLISECONDS_NONE_OR_MISS = 250;
+    public const Double JUDGE_TIME_MILLISECONDS_NORMAL = 75;
+    public const Double JUDGE_TIME_MILLISECONDS_PERFECT = 30;
+    //public const Double JUDGE_TIME_MILLISECONDS_MAX_PERFECT = 0;
 }

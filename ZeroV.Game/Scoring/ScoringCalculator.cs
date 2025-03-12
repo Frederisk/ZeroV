@@ -15,8 +15,19 @@ public class ScoringCalculator {
     /// </summary>
     public const Double MAX_SCORING = 1_000_000;
 
+    /// <summary>
+    /// The current score for display.
+    /// </summary>
     public UInt32 DisplayScoring => Convert.ToUInt32(this.Scoring);
+
+    /// <summary>
+    /// The accurate current score.
+    /// </summary>
     public Double Scoring { get; private set; } = 0;
+
+    /// <summary>
+    /// The basic score for each hit used in calculations.
+    /// </summary>
     public Double BaseScoring { get; private init; }
 
     public UInt32 JudgedCount => this.MissCount + this.NormalCount + this.PerfectCount + this.MaxPerfectCount;

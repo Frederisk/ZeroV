@@ -152,14 +152,15 @@ public partial class PressParticle : ParticleBase {
     [Resolved]
     private IGameplayInfo gameplayScreen { get; set; } = null!;
 
-    public void UpdateLength(Double startTime, Double endTime) {
-        this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2) - ZeroVMath.SCREEN_GAME_BASELINE_Y) * (endTime - startTime) / this.gameplayScreen.ParticleFallingTime);
+    public void SetupLength(Double startTime, Double endTime) {
+        this.Height = (Single)((ZeroVMath.SCREEN_DRAWABLE_Y + (ZeroVMath.DIAMOND_SIZE / 2) - ZeroVMath.SCREEN_GAME_BASELINE_Y) * ((endTime - startTime) / this.gameplayScreen.ParticleFallingTime));
         this.pillarBox.Height = this.Height;
     }
 
     public override void OnDequeueInJudge() {
-        base.OnDequeueInJudge(); // this.Alpha = 0f; and markup
+        //base.OnDequeueInJudge(); // this.Alpha = 0f; and markup
         this.Alpha = this.result is TargetResult.Miss or TargetResult.None ? 0.5f : 0;
+        this.IsHidden = this.result is not TargetResult.None and not TargetResult.Miss;
     }
 
     protected override void FreeAfterUse() {

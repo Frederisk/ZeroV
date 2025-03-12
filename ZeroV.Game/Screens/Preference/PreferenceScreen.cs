@@ -1,3 +1,5 @@
+using System;
+
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -32,6 +34,14 @@ public partial class PreferenceScreen : Screen {
                         Spacing = new Vector2(0,10),
                         Children = [
                             // TODO: Add controllers.
+                            new SliderBarListItem<Double> {
+                                Setting = ZeroVSetting.GamePlayParticleFallingTime,
+                                LabelText = "Particle Falling Time",
+                                MinValue = TimeSpan.FromSeconds(0.1).TotalMilliseconds,
+                                MaxValue = TimeSpan.FromSeconds(5).TotalMilliseconds,
+                                Precision = TimeSpan.FromSeconds(0.1).TotalMilliseconds,
+                                FormattingDisplayText = value => $"{TimeSpan.FromMilliseconds(value).TotalSeconds} s",
+                            }
                             //new CheckBoxListItem{
                             //    Setting = ZeroVSetting.Test1,
                             //    LabelText = "1",

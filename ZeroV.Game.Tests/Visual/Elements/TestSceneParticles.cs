@@ -74,7 +74,7 @@ public partial class TestSceneParticles : ZeroVTestScene {
             pressParticle,
         ];
         particles.ForEach(this.Add);
-        pressParticle.UpdateLength(0, 256);
+        pressParticle.SetupLength(0, 256);
     }
 
     private class GameplayDemo : IGameplayInfo {

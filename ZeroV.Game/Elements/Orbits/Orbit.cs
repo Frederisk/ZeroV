@@ -213,27 +213,37 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         }
 
         foreach (ParticleBase item in this.particles) {
-            if (currTime < item.Source!.EndTime || item.IsJudged) {
+            // It has not timed out or has been hidden, the particle falls normally.
+            if (currTime < item.Source!.EndTime || item.IsHidden) {
                 var startTime = item.Source!.StartTime - this.particleFallingTime;
 
                 item.Y = Interpolation.ValueAt(currTime,
                 visual_orbit_out_of_top, visual_orbit_offset,
                 startTime, item.Source.StartTime);
+            // Timed out and not been hidden.
             } else {
-                var endTime = item.Source.EndTime + this.particleFadingTime;
+                var fadingStartTime = item.Source.EndTime;
+                var fadingEndTime = item.Source.EndTime + this.particleFadingTime;
                 var startOffset = visual_orbit_offset;
-                var endOffset = visual_orbit_bottom;//visual_orbit_out_of_bottom - 25;
+                var endOffset = visual_orbit_bottom; // visual_orbit_out_of_bottom - 25;
                 if (item is PressParticle press) {
                     startOffset += press.Height;
                     endOffset += press.Height;
-                }
 
-                item.Y = Interpolation.ValueAt(currTime,
-                    startOffset, endOffset,
-                    item.Source.EndTime, endTime);
-                item.Alpha = Interpolation.ValueAt(currTime,
-                    1f, 0f,
-                    item.Source.EndTime, endTime);
+                    item.Y = Interpolation.ValueAt(currTime,
+                        startOffset, endOffset,
+                        fadingStartTime, fadingEndTime);
+                    item.Alpha = Interpolation.ValueAt(currTime,
+                        0.5f, 0f,
+                        fadingStartTime, fadingEndTime);
+                } else {
+                    item.Y = Interpolation.ValueAt(currTime,
+                        startOffset, endOffset,
+                        fadingStartTime, fadingEndTime);
+                    item.Alpha = Interpolation.ValueAt(currTime,
+                        1f, 0f,
+                        fadingStartTime, fadingEndTime);
+                }
             }
         }
 
@@ -278,7 +288,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         entry.Drawable = entry.Source switch {
             BlinkParticleSource blinkSource => this.blinkParticlePool.Get(),
             PressParticleSource pressSource => this.pressParticlePool.Get(p => {
-                p.UpdateLength(pressSource.StartTime, pressSource.EndTime);
+                p.SetupLength(pressSource.StartTime, pressSource.EndTime);
             }),
             SlideParticleSource slideSource => this.slideParticlePool.Get(p => {
                 p.Direction = slideSource.Direction;
