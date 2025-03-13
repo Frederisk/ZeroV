@@ -19,9 +19,9 @@ public partial class ParticleQueue : Container<ParticleBase> {
 
     public Boolean TryPeek([MaybeNullWhen(false)] out ParticleBase result) => this.innerQueue.TryPeek(out result);
 
-    public void DequeueInJudgeOnly() {
+    public void DequeueInJudgeOnly(TargetResult result) {
         ParticleBase particle = this.innerQueue.Dequeue();
-        particle.OnDequeueInJudge();
+        particle.OnDequeueInJudge(result);
     }
 
     public void Dequeue() {

@@ -378,7 +378,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private void processTarget(TargetResult? result) {
         if (result is not null and not TargetResult.None) {
             this.gameplayScreen.ScoringCalculator.AddTarget(result.Value);
-            this.particles.DequeueInJudgeOnly();
+            this.particles.DequeueInJudgeOnly(result.Value);
         }
     }
 

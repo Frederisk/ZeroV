@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -157,10 +158,17 @@ public partial class PressParticle : ParticleBase {
         this.pillarBox.Height = this.Height;
     }
 
-    public override void OnDequeueInJudge() {
+    public override void OnDequeueInJudge(TargetResult result) {
         //base.OnDequeueInJudge(); // this.Alpha = 0f; and markup
-        this.Alpha = this.result is TargetResult.Miss or TargetResult.None ? 0.5f : 0;
-        this.IsHidden = this.result is not TargetResult.None and not TargetResult.Miss;
+        //this.Alpha = this.result is TargetResult.Miss or TargetResult.None ? 0.5f : 0;
+        //this.IsHidden = this.result is not TargetResult.None and not TargetResult.Miss;
+        Debug.Assert(result is not TargetResult.None);
+        if (result is not TargetResult.Miss) {
+            this.Alpha = 0;
+            this.IsHidden = true;
+        } else {
+            this.Alpha = 0.5f;
+        }
     }
 
     protected override void FreeAfterUse() {

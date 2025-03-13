@@ -56,11 +56,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     /// <summary>
     /// The fading time of particle after they fall below the baseline.
     /// </summary>
-    /// <remarks>
-    /// The fading time should not be great than the time it's determined to be a miss,
-    /// because when a particle misses, it will be hidden.
-    /// </remarks>
-    public Double ParticleFadingTime { get; } = ZeroVMath.JUDGE_TIME_MILLISECONDS_NONE_OR_MISS;
+    public Double ParticleFadingTime { get; } = ZeroVMath.PARTICLE_FADING_TIME;
 
     private PlayfieldBackground background = null!;
     private TextureLoader textureLoader = null!;
@@ -89,22 +85,19 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     /// <summary>
     /// Drawable pool for <see cref="Orbit"/> objects.
     /// </summary>
-    /// <remarks>
-    /// FIXME: Appropriate maximum size value needs to be determined in the actual situation.
-    /// </remarks>
-    private readonly DrawablePool<Orbit> orbitDrawablePool = new(10, 15);
+    private readonly DrawablePool<Orbit> orbitDrawablePool = new(ZeroVMath.DRAWABLE_POOL_INITIAL_SIZE_ORBIT, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_ORBIT);
 
     [Cached]
-    protected readonly DrawablePool<BlinkParticle> BlinkParticlePool = new(10, 15);
+    protected readonly DrawablePool<BlinkParticle> BlinkParticlePool = new(ZeroVMath.DRAWABLE_POLL_INITIAL_SIZE_PARTICLE, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_PARTICLE);
 
     [Cached]
-    protected readonly DrawablePool<PressParticle> PressParticlePool = new(10, 15);
+    protected readonly DrawablePool<PressParticle> PressParticlePool = new(ZeroVMath.DRAWABLE_POLL_INITIAL_SIZE_PARTICLE, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_PARTICLE);
 
     [Cached]
-    protected readonly DrawablePool<SlideParticle> SlideParticlePool = new(10, 15);
+    protected readonly DrawablePool<SlideParticle> SlideParticlePool = new(ZeroVMath.DRAWABLE_POLL_INITIAL_SIZE_PARTICLE, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_PARTICLE);
 
     [Cached]
-    protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(10, 15);
+    protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(ZeroVMath.DRAWABLE_POLL_INITIAL_SIZE_PARTICLE, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_PARTICLE);
 
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;

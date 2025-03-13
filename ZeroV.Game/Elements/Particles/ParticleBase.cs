@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 using osu.Framework.Graphics;
 
@@ -70,8 +71,11 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
         return null;
     }
 
-    public virtual void OnDequeueInJudge() {
-        this.Alpha = 0f;
-        this.IsHidden = true;
+    public virtual void OnDequeueInJudge(TargetResult result) {
+        Debug.Assert(result is not TargetResult.None);
+        if (result is not TargetResult.Miss) {
+            this.Alpha = 0f;
+            this.IsHidden = true;
+        }
     }
 }

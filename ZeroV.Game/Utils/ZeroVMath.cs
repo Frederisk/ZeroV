@@ -18,4 +18,9 @@ public static class ZeroVMath {
     public const Double JUDGE_TIME_MILLISECONDS_NORMAL = 75;
     public const Double JUDGE_TIME_MILLISECONDS_PERFECT = 30;
     //public const Double JUDGE_TIME_MILLISECONDS_MAX_PERFECT = 0;
+    public const Double PARTICLE_FADING_TIME = 300;
+    public const Int32 DRAWABLE_POOL_INITIAL_SIZE_ORBIT = 10;
+    public const Int32 DRAWABLE_POLL_INITIAL_SIZE_PARTICLE = 20;
+    public static readonly Int32? DRAWABLE_POOL_MAX_SIZE_ORBIT = 15;
+    public static readonly Int32? DRAWABLE_POOL_MAX_SIZE_PARTICLE = 25;
 }
