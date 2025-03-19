@@ -3,7 +3,6 @@ using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 
-using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Buttons;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
