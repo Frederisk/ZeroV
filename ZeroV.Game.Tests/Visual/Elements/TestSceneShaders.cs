@@ -18,25 +18,32 @@ public partial class TestSceneShaders : ZeroVTestScene {
             RelativeSizeAxes = Axes.Both,
             Colour = Colour4.Red,
         });
-        //this.Add(new Box {
-        //    Size = new Vector2(100),
-        //    Origin = Anchor.Centre,
-        //    Anchor = Anchor.Centre,
-        //});
+        this.Add(new RainbowBox {
+            Size = new Vector2(256),
+            X = 128,
+            Origin = Anchor.Centre,
+            Anchor = Anchor.Centre,
+        });
         this.Add(new TapLight {
             Size = new Vector2(128, 512),
+            X = -128,
             Origin = Anchor.Centre,
             Anchor = Anchor.Centre,
         });
     }
 
-    public partial class TapLight: Box, ITexturedShaderDrawable {
+    public partial class TapLight : Box, ITexturedShaderDrawable {
         [BackgroundDependencyLoader]
         private void load(ShaderManager shaders) {
             this.TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "OrbitSelfLuminous");
         }
     }
 
-    //public partial class
+    public partial class RainbowBox : Box, ITexturedShaderDrawable {
+        [BackgroundDependencyLoader]
+        private void load(ShaderManager shaders) {
+            this.TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "SpinRainbow");
+        }
+    }
 
 }
