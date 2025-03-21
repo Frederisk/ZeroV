@@ -1,8 +1,14 @@
 #ifndef ORBIT_SELF_LUMINOUS_FS
 #define ORBIT_SELF_LUMINOUS_FS
 
+#undef HIGH_PRECISION_VERTEX
+#define HIGH_PRECISION_VERTEX
+
+#include "sh_Utils.h"
+#include "sh_Masking.h"
+
 layout(location = 2) in highp vec2 v_TexCoord;
-layout(location = 3) in highp vec4 v_TexRect;
+//layout(location = 3) in highp vec4 v_TexRect;
 
 layout(location = 0) out vec4 o_Colour;
 
@@ -26,8 +32,7 @@ void main(void)
     */
 
     float glowStrength = smoothstep(0.5, 0.9, distanceToBottom);
-    // vec4 color = vec4(glowColor, 0.9 * glowStrength);
-    o_Colour = vec4(glowColor, 0.9 * glowStrength);
+    o_Colour = getRoundedColor(vec4(glowColor, 0.9 * glowStrength), v_TexCoord);
 }
 
 #endif
