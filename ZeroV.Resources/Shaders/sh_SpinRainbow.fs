@@ -4,6 +4,9 @@
 #undef PI
 #define PI 3.14159265359
 
+#undef SQRT2
+#define SQRT2 1.41421356237
+
 #undef HIGH_PRECISION_VERTEX
 #define HIGH_PRECISION_VERTEX
 
@@ -17,18 +20,10 @@ layout(std140, set = 0, binding = 0) uniform m_SpinRanbowFrameParameters
 {
     vec4 hsvaColour;
     float sizeRatio;
-    float widthRatio;
+    float borderRatio;
 };
 
 layout(location = 0) out vec4 o_Colour;
-
-/*
-float SampleGaussian(float x, float width)
-{
-    // return exp(-x * x / (2.0 * width * width));
-    return (width - x) * (width + x) / (width * width);
-}
-*/
 
 float atan2(float y, float x){
     float basicAtan = atan(y/x);
@@ -40,6 +35,10 @@ float atan2(float y, float x){
     return 0.0;
 }
 
+float fadeOutEdge(float x, float width) {
+    return (width - x) * (width + x) / (width * width);
+}
+
 void main(void)
 {
     vec2 uv = v_TexCoord / vec2(v_TexRect[2] - v_TexRect[0], v_TexRect[3] - v_TexRect[1]);
@@ -49,10 +48,23 @@ void main(void)
     if (angleRad < 0.0) angleRad += 2.0 * PI;
     float roundRad = angleRad / (2.0 * PI);
 
-    if (hsvaColour.x < 0) {
-        o_Colour = getRoundedColor(hsv2rgb(vec4(roundRad, hsvaColour.y, hsvaColour.z, hsvaColour.w)), v_TexCoord);
+    //float sizeRatio = sizeRatio - w * SQRT2;
+    float effect = 0.0;
+
+    vec2 uvAbs = abs(uvCentered);
+    if (abs(uvAbs.x - uvAbs.y) < sizeRatio)
+    if (abs(uvAbs.x + uvAbs.y - sizeRatio) < borderRatio * SQRT2)
+    effect = fadeOutEdge((uvAbs.x + uvAbs.y - sizeRatio) / SQRT2, borderRatio);
+    if (abs(uvAbs.x - uvAbs.y) > sizeRatio) {
+        effect  = 1.0;
+        vec2 temp = uvAbs.x > uvAbs.y ? uvAbs : vec2(uvAbs.y, uvAbs.x);
+        effect = fadeOutEdge(distance(temp, vec2(sizeRatio, 0)), borderRatio);
+    }
+
+    if (hsvaColour.x < 0.0) {
+        o_Colour = getRoundedColor(hsv2rgb(vec4(roundRad, hsvaColour.yz, hsvaColour.w * effect)), v_TexCoord);
     } else {
-        o_Colour = getRoundedColor(hsvaColour, v_TexCoord);
+        o_Colour = effect * getRoundedColor(vec4(hsvaColour.xyz , hsvaColour.w * effect), v_TexCoord);
     }
 }
 

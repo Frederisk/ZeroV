@@ -12,35 +12,44 @@ using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shaders.Types;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.Textures;
-using osu.Framework.Graphics.Transforms;
 
 using osuTK;
+
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
 [TestFixture]
 public partial class TestSceneShaders : ZeroVTestScene {
 
+    private RainbowBox box = new() {
+        Size = new Vector2(256),
+        X = 128,
+        Origin = Anchor.Centre,
+        Anchor = Anchor.Centre,
+        HsvaColour = new Vector4(-1, 0.5f, 1, 0.7f),
+        SizeRatio = 1,
+        BorderRatio = 0.04f,
+    };
+
     public TestSceneShaders() {
-        this.Add(new Box {
-            RelativeSizeAxes = Axes.Both,
-            Colour = Colour4.Red,
-        });
+        //this.Add(new Box {
+        //    RelativeSizeAxes = Axes.Both,
+        //    Colour = Colour4.Red,
+        //});
+        this.Add(this.box);
         this.Add(new TapLight {
-            Size = new Vector2(256),
-            X = 128,
-            Origin = Anchor.Centre,
-            Anchor = Anchor.Centre,
-        });
-        this.Add(new RainbowBox {
             Size = new Vector2(128, 512),
             X = -128,
             Origin = Anchor.Centre,
             Anchor = Anchor.Centre,
-            HsvaColour = new Vector4(-1, 1, 1, 1),
-            //WidthRatio = 100,
         });
+    }
+
+    protected override void Update() {
+        base.Update();
+        var time = (this.Time.Current / 1000 / 3) % 1;
+        this.box.SizeRatio = (Single)time;
     }
 
     public partial class TapLight : Box, ITexturedShaderDrawable {
@@ -65,16 +74,16 @@ public partial class TestSceneShaders : ZeroVTestScene {
             }
         }
 
-        private Single widthRatio;
+        private Single borderRatio;
 
-        public Single WidthRatio {
-            get => this.widthRatio;
+        public Single BorderRatio {
+            get => this.borderRatio;
             set {
-                if (this.widthRatio == value) {
+                if (this.borderRatio == value) {
                     return;
                 }
 
-                this.widthRatio = value;
+                this.borderRatio = value;
                 this.Invalidate(Invalidation.DrawNode);
             }
         }
@@ -98,8 +107,8 @@ public partial class TestSceneShaders : ZeroVTestScene {
 
         [BackgroundDependencyLoader]
         private void load(ShaderManager shaders, IRenderer renderer) {
-            Texture ??= renderer.WhitePixel;
-            TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "SpinRainbow");
+            this.Texture ??= renderer.WhitePixel;
+            this.TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "SpinRainbow");
         }
 
         protected override DrawNode CreateDrawNode() => new CircularProgressDrawNode(this);
@@ -112,18 +121,18 @@ public partial class TestSceneShaders : ZeroVTestScene {
             }
 
             protected Single SizeRatio { get; private set; }
-            protected Single WidthRatio { get; private set; }
+            protected Single BorderRatio { get; private set; }
             protected Vector4 HsvaColour { get; private set; }
 
             public override void ApplyState() {
                 base.ApplyState();
 
                 this.SizeRatio = this.Source.SizeRatio;
-                this.WidthRatio = this.Source.WidthRatio;
+                this.BorderRatio = this.Source.BorderRatio;
                 this.HsvaColour = this.Source.HsvaColour;
             }
 
-            private IUniformBuffer<CircularProgressParameters> parametersBuffer;
+            private IUniformBuffer<CircularProgressParameters>? parametersBuffer;
 
             protected override void Blit(IRenderer renderer) {
                 //if (InnerRadius == 0 || (!RoundedCaps && Progress == 0))
@@ -138,11 +147,11 @@ public partial class TestSceneShaders : ZeroVTestScene {
                 this.parametersBuffer ??= renderer.CreateUniformBuffer<CircularProgressParameters>();
                 this.parametersBuffer.Data = new CircularProgressParameters {
                     HsvaColour = this.HsvaColour,
-                    SizeRatio = this.SizeRatio,
-                    WidthRatio = this.WidthRatio,
+                    SizeRatio = (this.SizeRatio - this.BorderRatio * ZeroVMath.SQRT_2) / 2,
+                    BorderRatio = this.BorderRatio / 2,
                 };
 
-                shader.BindUniformBlock("m_SpinRanbowFrameParameters", parametersBuffer);
+                shader.BindUniformBlock("m_SpinRanbowFrameParameters", this.parametersBuffer);
             }
 
             protected override Boolean CanDrawOpaqueInterior => false;
@@ -156,7 +165,7 @@ public partial class TestSceneShaders : ZeroVTestScene {
             private record struct CircularProgressParameters {
                 public UniformVector4 HsvaColour;
                 public UniformFloat SizeRatio;
-                public UniformFloat WidthRatio;
+                public UniformFloat BorderRatio;
                 public UniformPadding8 Padding;
             }
         }
