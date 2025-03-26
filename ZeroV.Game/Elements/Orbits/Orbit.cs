@@ -17,6 +17,8 @@ using osuTK;
 
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
+using ZeroV.Game.Graphics.Shapes;
+using ZeroV.Game.Graphics.Shapes.Orbit;
 using ZeroV.Game.Scoring;
 using ZeroV.Game.Screens.Gameplay;
 using ZeroV.Game.Utils;
@@ -62,8 +64,14 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     private BufferedContainer container = null!;
 
-    private Box innerBox = null!;
-    private Box innerLine = null!;
+    private Box orbitColour = null!;
+    private Box middleBlackLine = null!;
+    private Box lightLineLeft = null!;
+    private Box lightLineRight = null!;
+    private Box lightLineBottom = null!;
+    private Diamond littleBlackDiamond = null!;
+    private Box defaultLight = null!;
+    private TouchHighlight touchHighlight = null!;
     private ParticleQueue particles = null!;
 
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
@@ -89,16 +97,15 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.innerBox = new Box {
+        this.orbitColour = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
-            Colour = Colour4.Azure,
+            Alpha = 0.8f,
             RelativeSizeAxes = Axes.Both,
-            // Size = new Vector2(5000, 768-50),
-            // XPosition = new Vector2(0, -50),
             Y = visual_orbit_offset,
+            EdgeSmoothness = new Vector2(3, 0),
         };
-        this.innerLine = new Box {
+        this.middleBlackLine = new Box {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Colour = Colour4.Black,
@@ -106,20 +113,78 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Width = 1,
             EdgeSmoothness = new Vector2(1, 0),
             Y = visual_orbit_offset,
-            // XPosition = new Vector2(0, visual_orbit_offset),
         };
-        this.particles = new ParticleQueue() {
+        this.lightLineLeft = new Box {
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomLeft,
+            Colour = Colour4.White,
+            RelativeSizeAxes = Axes.Y,
+            Width = 2,
+            EdgeSmoothness = new Vector2(2, 0),
+            Y = visual_orbit_offset,
+        };
+        this.lightLineRight = new Box {
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomRight,
+            Colour = Colour4.White,
+            RelativeSizeAxes = Axes.Y,
+            Width = 2,
+            EdgeSmoothness = new Vector2(2, 0),
+            Y = visual_orbit_offset,
+        };
+        this.lightLineBottom = new Box {
+            Origin = Anchor.Centre,
+            Anchor = Anchor.BottomCentre,
+            Colour = Colour4.White,
+            RelativeSizeAxes = Axes.X,
+            Height = 2,
+            EdgeSmoothness = new Vector2(0, 2),
+            Y = visual_orbit_offset,
+        };
+        this.littleBlackDiamond = new Diamond {
+            Origin = Anchor.Centre,
+            Anchor = Anchor.BottomCentre,
+            Colour = Colour4.Black,
+            Size = new Vector2(24),
+            Y = visual_orbit_offset,
+        };
+        this.defaultLight = new Box {
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomCentre,
+            RelativeSizeAxes = Axes.Both,
+            Height = 0.05f,
+            Colour = ColourInfo.GradientVertical(
+                Colour4.White.Opacity(0f),
+                Colour4.White.Opacity(0.9f)
+            ),
+            Y = visual_orbit_offset,
+        };
+        this.touchHighlight = new TouchHighlight {
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomCentre,
+            RelativeSizeAxes = Axes.Both,
+            Y = visual_orbit_offset,
+        };
+        this.touchHighlight.FadeOut();
+        this.particles = new ParticleQueue {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
-        this.container = new BufferedContainer() {
+
+        this.container = new BufferedContainer {
             RelativeSizeAxes = Axes.Both,
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             Children = [
-                //this.TouchSpace,
-                this.innerBox,
-                this.innerLine,
+                this.orbitColour,
+                this.defaultLight,
+                this.middleBlackLine,
+                this.lightLineLeft,
+                this.lightLineRight,
+                this.lightLineBottom,
+                this.touchHighlight,
+                this.littleBlackDiamond,
+                // Particles
                 this.particles,
                 // From `osu.Game.Rulesets.Mania.UI.PlayfieldCoveringWrapper`
                 // Partially hidden
@@ -158,12 +223,10 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         // FIXME: Just for test, remove it.
         base.Height = ZeroVMath.SCREEN_DRAWABLE_Y;
-        base.Y = 0;
-        this.Alpha = 0.9f;
     }
 
     /// <summary>
-    ///
+    /// All remaining animation <see cref="OrbitSource.KeyFrame"/>s for this <see cref="Orbit"/>.
     /// </summary>
     /// <remarks>
     /// This field will never be null after <see cref="Source"/> has been set.
@@ -185,7 +248,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             OrbitSource.KeyFrame currKeyFrame = this.keyFrames[0];
             OrbitSource.KeyFrame nextKeyFrame = this.keyFrames[1];
 
-            this.innerBox.Colour = Interpolation.ValueAt(currTime,
+            this.orbitColour.Colour = Interpolation.ValueAt(currTime,
                 currKeyFrame.Colour, nextKeyFrame.Colour,
                 currKeyFrame.Time, nextKeyFrame.Time);
 

@@ -2,14 +2,12 @@ using System;
 
 using NUnit.Framework;
 
-using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Shaders;
-using osu.Framework.Graphics.Shapes;
 
 using osuTK;
 
 using ZeroV.Game.Graphics.Shapes;
+using ZeroV.Game.Graphics.Shapes.Orbit;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
@@ -32,7 +30,7 @@ public partial class TestSceneShaders : ZeroVTestScene {
         //    Colour = Colour4.Red,
         //});
         this.Add(this.box);
-        this.Add(new TapLight {
+        this.Add(new TouchHighlight {
             Size = new Vector2(128, 512),
             X = -128,
             Origin = Anchor.Centre,
@@ -44,13 +42,5 @@ public partial class TestSceneShaders : ZeroVTestScene {
         base.Update();
         var time = (this.Time.Current / 1000 / 3) % 1;
         this.box.SizeRatio = (Single)time;
-    }
-
-    public partial class TapLight : Box, ITexturedShaderDrawable {
-
-        [BackgroundDependencyLoader]
-        private void load(ShaderManager shaders) {
-            this.TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "OrbitSelfLuminous");
-        }
     }
 }
