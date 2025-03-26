@@ -315,11 +315,11 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 # Suppress: EC112
 
 #Private method is unused
-dotnet_diagnostic.IDE0051.severity = silent
+dotnet_diagnostic.IDE0051.severity = none
 #Private member is unused
-dotnet_diagnostic.IDE0052.severity = silent
+dotnet_diagnostic.IDE0052.severity = none
 
 #Rules for disposable
-dotnet_diagnostic.IDE0067.severity = none
-dotnet_diagnostic.IDE0068.severity = none
-dotnet_diagnostic.IDE0069.severity = none
+#dotnet_diagnostic.IDE0067.severity = none
+#dotnet_diagnostic.IDE0068.severity = none
+#dotnet_diagnostic.IDE0069.severity = none

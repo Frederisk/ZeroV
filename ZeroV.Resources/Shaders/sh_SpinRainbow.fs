@@ -36,6 +36,7 @@ float atan2(float y, float x){
 }
 
 float fadeOutEdge(float x, float width) {
+    if (abs(x) > width) return 0.0;
     return (width - x) * (width + x) / (width * width);
 }
 
