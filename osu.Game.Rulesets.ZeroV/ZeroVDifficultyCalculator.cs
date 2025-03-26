@@ -19,7 +19,7 @@ public class ZeroVDifficultyCalculator : DifficultyCalculator {
         return new DifficultyAttributes(mods, 0);
     }
 
-    protected override IEnumerable<DifficultyHitObject> CreateDifficultyHitObjects(IBeatmap beatmap, double clockRate) => Enumerable.Empty<DifficultyHitObject>();
+    protected override IEnumerable<DifficultyHitObject> CreateDifficultyHitObjects(IBeatmap beatmap, Double clockRate) => Enumerable.Empty<DifficultyHitObject>();
 
-    protected override Skill[] CreateSkills(IBeatmap beatmap, Mod[] mods, double clockRate) => Array.Empty<Skill>();
+    protected override Skill[] CreateSkills(IBeatmap beatmap, Mod[] mods, Double clockRate) => Array.Empty<Skill>();
 }

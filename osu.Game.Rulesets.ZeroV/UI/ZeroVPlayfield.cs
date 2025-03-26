@@ -60,7 +60,7 @@ public partial class ZeroVPlayfield : ScrollingPlayfield {
             RelativeSizeAxes = Axes.Both,
         };
 
-        protected override Container<Drawable> Content => content;
+        protected override Container<Drawable> Content => this.content;
 
         [BackgroundDependencyLoader]
         private void load(OsuColour colours) {

@@ -8,5 +8,5 @@ namespace osu.Game.Rulesets.ZeroV.Mods;
 
 public class ZeroVModAutoplay : ModAutoplay {
     public override ModReplayData CreateReplayData(IBeatmap beatmap, IReadOnlyList<Mod> mods)
-        => new ModReplayData(new ZeroVAutoGenerator(beatmap).Generate(), new ModCreatedUser { Username = "sample" });
+        => new(new ZeroVAutoGenerator(beatmap).Generate(), new ModCreatedUser { Username = "sample" });
 }

@@ -2,7 +2,7 @@ using System;
 
 using osu.Framework.Graphics.Sprites;
 
-namespace ZeroV.Game;
+namespace ZeroV.Game.Graphics;
 
 public partial class ZeroVSpriteText : SpriteText {
 

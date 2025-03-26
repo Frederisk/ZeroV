@@ -3,21 +3,25 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <!--<EnableTrimAnalyzer>True</EnableTrimAnalyzer>-->
   </PropertyGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Remove="Data\Schema\**\*.xsd" />
-  </ItemGroup>
-  <ItemGroup>
+  </ItemGroup>-->
+  <!--<ItemGroup>
     <Content Include="Data\Schema\**\*.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>-->
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Schema\**\*.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework" Version="2025.117.0" />
+    <PackageReference Include="ppy.osu.Framework" Version="2025.129.1" />
     <PackageReference Include="Svg.Skia" Version="2.0.0.4" />
   </ItemGroup>
 </Project>

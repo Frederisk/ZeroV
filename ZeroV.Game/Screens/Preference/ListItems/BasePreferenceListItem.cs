@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.Graphics;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 

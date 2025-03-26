@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq; // Just to use the Sum() method.
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -33,7 +34,11 @@ public class BeatmapWrapper {
                             | XmlSchemaValidationFlags.ReportValidationWarnings,
         };
         settings.ValidationEventHandler += validationEventHandler;
-        settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", "./Data/Schema/ZeroVMap/ZeroVMapXml.xsd");
+        var assembly = Assembly.GetExecutingAssembly();
+        using Stream stream = assembly.GetManifestResourceStream("ZeroV.Game.Data.Schema.ZeroVMap.ZeroVMapXml.xsd") ?? throw new InvalidOperationException("The schema file is missing.");
+        using XmlReader xmlReader = XmlReader.Create(stream);
+        settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", xmlReader);
+        //settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", "./Data/Schema/ZeroVMap/ZeroVMapXml.xsd");
         // XmlReader xmlReader = XmlReader.Create(new StreamReader("./Data/Schema/ZeroVMap/ZeroVMapXml.xsd"));
         // settings.Schemas.Add("http://schemas.zerov.net/2024/ZeroVMap", xmlReader);
 

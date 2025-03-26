@@ -20,7 +20,7 @@ public class ZeroVRuleset : Ruleset {
 
     public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new ZeroVBeatmapConverter(beatmap, this);
 
-    public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new ZeroVDifficultyCalculator(RulesetInfo, beatmap);
+    public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new ZeroVDifficultyCalculator(this.RulesetInfo, beatmap);
 
     public override IEnumerable<Mod> GetModsFor(ModType type) {
         switch (type) {

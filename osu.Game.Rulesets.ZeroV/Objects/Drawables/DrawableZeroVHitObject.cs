@@ -17,7 +17,7 @@ using osuTK.Graphics;
 namespace osu.Game.Rulesets.ZeroV.Objects.Drawables;
 
 public partial class DrawableZeroVHitObject : DrawableHitObject<ZeroVHitObject> {
-    private BindableNumber<int> currentLane;
+    private BindableNumber<Int32> currentLane;
 
     public DrawableZeroVHitObject(ZeroVHitObject hitObject)
         : base(hitObject) {

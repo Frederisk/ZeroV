@@ -12,6 +12,7 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game.Screens;

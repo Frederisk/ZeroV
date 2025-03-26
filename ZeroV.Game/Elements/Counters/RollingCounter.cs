@@ -9,6 +9,8 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Localisation;
 
+using ZeroV.Game.Graphics;
+
 namespace ZeroV.Game.Elements.Counters;
 
 public abstract partial class RollingCounter<T> : Container, IHasCurrentValue<T> where T : struct, IEquatable<T> {

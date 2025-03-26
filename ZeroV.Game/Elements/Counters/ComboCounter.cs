@@ -5,6 +5,8 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
+using ZeroV.Game.Graphics;
+
 namespace ZeroV.Game.Elements.Counters;
 
 public partial class ComboCounter : Container {

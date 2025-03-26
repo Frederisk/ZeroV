@@ -10,6 +10,7 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 
 using ZeroV.Game.Data;
+using ZeroV.Game.Graphics;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 

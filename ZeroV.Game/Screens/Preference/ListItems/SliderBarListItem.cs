@@ -7,6 +7,8 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Localisation;
 
+using ZeroV.Game.Graphics;
+
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
 public partial class SliderBarListItem<T> : BasePreferenceListItem<T> where T : struct, INumber<T>, IMinMaxValue<T> {

@@ -103,7 +103,7 @@ public partial class TrackInfoXml {
     /// </summary>
     [XmlIgnoreAttribute()]
     [EditorBrowsableAttribute(EditorBrowsableState.Never)]
-    public bool BpmValueSpecified { get; set; }
+    public Boolean BpmValueSpecified { get; set; }
 
     [XmlIgnoreAttribute()]
     public Nullable<Single> Bpm {
