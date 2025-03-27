@@ -7,6 +7,7 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 
 using ZeroV.Game.Utils;
+using ZeroV.Game.Utils.Json;
 
 namespace ZeroV.Game.Data.KeyValueStorage;
 
@@ -15,6 +16,10 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
     private readonly SearchValues<Char> invalidFileNameChars = SearchValues.Create(Path.GetInvalidFileNameChars());
 
     protected Storage Storage { get; private set; } = null!;
+
+    private JsonSerializerOptions serializerOptions = new() {
+        TypeInfoResolver = StorageJsonContext.Default,
+    };
 
     //[BackgroundDependencyLoader]
     //private void load(Storage storage) {
@@ -69,7 +74,7 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
         T? result = default;
         try {
             using Stream stream = this.Storage.GetStream(fileName, FileAccess.Read, FileMode.Open);
-            result = JsonSerializer.Deserialize<T>(stream);
+            result = JsonSerializer.Deserialize<T>(stream, serializerOptions);
         }
         catch (Exception e) {
             Logger.Error(e, $"Error while opening or deserializing {fileName}.");
@@ -84,7 +89,7 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
 
         var fileName = $"{key}.json";
         using Stream stream = this.Storage.GetStream(fileName, FileAccess.Write, FileMode.Create);
-        JsonSerializer.Serialize(stream, value);
+        JsonSerializer.Serialize<T>(stream, value, serializerOptions);
 
         stream.Flush();
     }
