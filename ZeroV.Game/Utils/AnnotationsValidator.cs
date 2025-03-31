@@ -1,3 +1,4 @@
+/* // Unused code
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -87,3 +88,4 @@ public class AnnotationsValidator {
 /// </summary>
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class SkipRecursiveValidationAttribute : Attribute { }
+*/

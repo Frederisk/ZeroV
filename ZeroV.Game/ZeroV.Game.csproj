@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <!--<EnableTrimAnalyzer>True</EnableTrimAnalyzer>-->
+    <EnableTrimAnalyzer>True</EnableTrimAnalyzer>
   </PropertyGroup>
   <!--<ItemGroup>
     <None Remove="Data\Schema\**\*.xsd" />
@@ -17,10 +17,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Schema\**\*.xsd" />
   </ItemGroup>
+  <!--<ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.3" />
+  </ItemGroup>-->
   <ItemGroup>
     <ProjectReference Include="..\ZeroV.Resources\ZeroV.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <!--<PackageReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.3" />-->
     <PackageReference Include="ppy.osu.Framework" Version="2025.129.1" />
     <PackageReference Include="Svg.Skia" Version="2.0.0.4" />
   </ItemGroup>

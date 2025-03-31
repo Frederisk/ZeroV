@@ -17,9 +17,9 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
 
     protected Storage Storage { get; private set; } = null!;
 
-    private JsonSerializerOptions serializerOptions = new() {
-        TypeInfoResolver = StorageJsonContext.Default,
-    };
+    //private JsonSerializerOptions serializerOptions = new() {
+    //    TypeInfoResolver = StorageJsonContext.Default,
+    //};
 
     //[BackgroundDependencyLoader]
     //private void load(Storage storage) {
@@ -74,7 +74,8 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
         T? result = default;
         try {
             using Stream stream = this.Storage.GetStream(fileName, FileAccess.Read, FileMode.Open);
-            result = JsonSerializer.Deserialize<T>(stream, serializerOptions);
+            //result = JsonSerializer.Deserialize<T>(stream, serializerOptions);
+            result = (T)JsonSerializer.Deserialize(stream, typeof(T), StorageJsonContext.Default)!;
         }
         catch (Exception e) {
             Logger.Error(e, $"Error while opening or deserializing {fileName}.");
@@ -89,7 +90,8 @@ public partial class JsonKeyValueStorage : IKeyValueStorage {
 
         var fileName = $"{key}.json";
         using Stream stream = this.Storage.GetStream(fileName, FileAccess.Write, FileMode.Create);
-        JsonSerializer.Serialize<T>(stream, value, serializerOptions);
+        //JsonSerializer.Serialize<T>(stream, value, serializerOptions);
+        JsonSerializer.Serialize(stream, value, typeof(T), StorageJsonContext.Default);
 
         stream.Flush();
     }
