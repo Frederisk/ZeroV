@@ -55,25 +55,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </summary>
     private const Single visual_orbit_out_of_bottom = visual_orbit_bottom + (ZeroVMath.DIAMOND_SIZE / 2);
 
-    /// <summary>
-    /// The container that contains all the elements of the orbit.
-    /// </summary>
-    /// <remarks>
-    /// This field will never be null after <see cref="LoadComplete"/> has been called.
-    /// It's a <see cref="BufferedContainer"/> because we need to use <see cref="BufferedContainer.Blending"/> to make the orbit partially hidden.
-    /// </remarks>
-    private BufferedContainer container = null!;
-
-    private Box orbitColour = null!;
-    private Box middleBlackLine = null!;
-    private Box lightLineLeft = null!;
-    private Box lightLineRight = null!;
-    private Box lightLineBottom = null!;
-    private Diamond littleBlackDiamond = null!;
-    private Box defaultLight = null!;
-    private TouchHighlight touchHighlight = null!;
-    private ParticleQueue particles = null!;
-
     // FIXME: These properties are redundant. In the future, they will be obtained by some fade-in animations.
     public new Single Y => base.Y;
 
@@ -94,6 +75,29 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         this.lifetimeEntryManager.EntryBecameAlive += this.lifetimeEntryManager_EntryBecameAlive;
         this.lifetimeEntryManager.EntryBecameDead += this.lifetimeEntryManager_EntryBecameDead;
     }
+
+    #region Drawable
+
+    /// <summary>
+    /// The container that contains all the elements of the orbit.
+    /// </summary>
+    /// <remarks>
+    /// This field will never be null after <see cref="LoadComplete"/> has been called.
+    /// It's a <see cref="BufferedContainer"/> because we need to use <see cref="BufferedContainer.Blending"/> to make the orbit partially hidden.
+    /// </remarks>
+    private BufferedContainer container = null!;
+
+    private Box orbitColour = null!;
+    private Box middleBlackLine = null!;
+    private Box lightLineLeft = null!;
+    private Box lightLineRight = null!;
+    private Box lightLineBottom = null!;
+    private Diamond littleBlackDiamond = null!;
+    private Box defaultLight = null!;
+    private TouchHighlight touchHighlight = null!;
+    private TouchHighlight touchHighlightR = null!;
+    private TouchHighlight touchHighlightL = null!;
+    private ParticleQueue particles = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -159,18 +163,30 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             ),
             Y = visual_orbit_offset,
         };
-        this.touchHighlight = new TouchHighlight {
+        this.touchHighlight = new TouchHighlight(TouchHighlight.HighlightPosition.Middle) {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             RelativeSizeAxes = Axes.Both,
             Y = visual_orbit_offset,
         };
-        this.touchHighlight.FadeOut();
+        this.touchHighlightL = new TouchHighlight(TouchHighlight.HighlightPosition.Left) {
+            Origin = Anchor.BottomRight,
+            Anchor = Anchor.BottomLeft,
+            RelativeSizeAxes = Axes.Y,
+            Width = 24,
+            Y = visual_orbit_offset,
+        };
+        this.touchHighlightR = new TouchHighlight(TouchHighlight.HighlightPosition.Right) {
+            Origin = Anchor.BottomLeft,
+            Anchor = Anchor.BottomRight,
+            RelativeSizeAxes = Axes.Y,
+            Width = 24,
+            Y = visual_orbit_offset,
+        };
         this.particles = new ParticleQueue {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
-
         this.container = new BufferedContainer {
             RelativeSizeAxes = Axes.Both,
             Origin = Anchor.BottomCentre,
@@ -216,14 +232,24 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                             )
                         },
                     ],
-                }
+                },
             ]
         };
-        this.InternalChild = this.container;
-
+        this.InternalChild = new Container {
+            RelativeSizeAxes = Axes.Both,
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomCentre,
+            Children = [
+                this.container,
+                this.touchHighlightR,
+                this.touchHighlightL,
+            ]
+        };
         // FIXME: Just for test, remove it.
         base.Height = ZeroVMath.SCREEN_DRAWABLE_Y;
     }
+
+    #endregion Drawable
 
     /// <summary>
     /// All remaining animation <see cref="OrbitSource.KeyFrame"/>s for this <see cref="Orbit"/>.
@@ -421,9 +447,16 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     protected void OnTouchEnter(TouchSource source, Boolean isTouchDown) {
+        Int32 oldCount = this.touches.Count;
         this.touches.Add(source);
         TargetResult? result = this.particles.PeekOrDefault()?.JudgeEnter(this.currentTime, isTouchDown);
         this.processTarget(result);
+        Int32 newCount = this.touches.Count;
+        if (oldCount is 0 && newCount is 1) {
+            this.touchHighlight.Show();
+            this.touchHighlightL.Show();
+            this.touchHighlightR.Show();
+        }
     }
 
     protected override void OnTouchMove(TouchMoveEvent e) {
@@ -433,9 +466,16 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     }
 
     protected void OnTouchLeave(TouchSource source) {
+        Int32 oldCount = this.touches.Count;
         this.touches.Remove(source);
         TargetResult? result = this.particles.PeekOrDefault()?.JudgeLeave(this.currentTime, false);
         this.processTarget(result);
+        Int32 newCount = this.touches.Count;
+        if (oldCount is 1 && newCount is 0) {
+            this.touchHighlight.Hide();
+            this.touchHighlightL.Hide();
+            this.touchHighlightR.Hide();
+        }
     }
 
     private void processTarget(TargetResult? result) {
