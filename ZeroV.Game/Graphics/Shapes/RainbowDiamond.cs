@@ -88,12 +88,12 @@ public partial class RainbowDiamond : Sprite {
 
         private IUniformBuffer<CircularProgressParameters>? parametersBuffer;
 
-        protected override void Blit(IRenderer renderer) {
-            //if (InnerRadius == 0 || (!RoundedCaps && Progress == 0))
-            //    return;
+        //protected override void Blit(IRenderer renderer) {
+        //    //if (InnerRadius == 0 || (!RoundedCaps && Progress == 0))
+        //    //    return;
 
-            base.Blit(renderer);
-        }
+        //    base.Blit(renderer);
+        //}
 
         protected override void BindUniformResources(IShader shader, IRenderer renderer) {
             base.BindUniformResources(shader, renderer);

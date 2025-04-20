@@ -152,7 +152,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
             RelativeSizeAxes = Axes.Both,
-            Height = 0.05f,
+            Height = 0.07f,
             Colour = ColourInfo.GradientVertical(
                 Colour4.White.Opacity(0f),
                 Colour4.White.Opacity(0.9f)
