@@ -100,7 +100,7 @@ public partial class RainbowDiamond : Sprite {
             this.parametersBuffer ??= renderer.CreateUniformBuffer<CircularProgressParameters>();
             this.parametersBuffer.Data = new CircularProgressParameters {
                 HsvaColour = this.HsvaColour,
-                SizeRatio = (this.SizeRatio - this.BorderRatio * ZeroVMath.SQRT_2) / 2,
+                SizeRatio = (this.SizeRatio - (this.BorderRatio * ZeroVMath.SQRT_2)) / 2,
                 BorderRatio = this.BorderRatio / 2,
             };
 

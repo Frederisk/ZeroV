@@ -71,7 +71,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
             if (drawable.Transforms.Any() || drawable.DrawWidth < this.DrawWidth) {
                 return;
             }
-            var offset = drawable.DrawWidth - this.DrawWidth + padding * 2;
+            var offset = drawable.DrawWidth - this.DrawWidth + (padding * 2);
             var duration = offset / long_title_scroll_speed;
 
             var toMargin = new MarginPadding { Left = -offset };
