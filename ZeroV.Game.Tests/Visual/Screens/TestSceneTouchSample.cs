@@ -39,11 +39,11 @@ public partial class TestSceneTouchSample : ZeroVTestScene {
                 Y = 100,
                 TouchValue = true,
             },
-            new Pentagon() {
-                X = 500,
-                Y = 500,
-                Size = new Vector2(100),
-            },
+            //new Pentagon() {
+            //    X = 500,
+            //    Y = 500,
+            //    Size = new Vector2(100),
+            //},
         ];
     }
 

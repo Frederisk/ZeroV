@@ -55,7 +55,6 @@ public partial class RainbowDiamond : Sprite {
             }
 
             this.hsvaColour = value;
-
             this.Invalidate(Invalidation.DrawNode);
         }
     }
