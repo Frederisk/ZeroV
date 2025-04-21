@@ -8,6 +8,7 @@ using osu.Framework.Graphics.Shapes;
 using osuTK;
 
 using ZeroV.Game.Graphics.Shapes;
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Elements;
 
@@ -26,11 +27,20 @@ public partial class TargetSpinEffect : PoolableDrawable {
             Origin = Anchor.Centre,
             Anchor = Anchor.Centre,
             RelativeSizeAxes = Axes.Both,
-            HsvaColour = new Vector4(-1, 0.5f, 1, 0.7f),
+            // HsvaColour = new Vector4(-1, 0.5f, 1, 0.7f),
             SizeRatio = 0,
             BorderRatio = 0.04f,
         };
         this.InternalChild = this.rainbowDiamond;
+    }
+
+    public void SetUpTargetColour(TargetResult result) {
+        this.rainbowDiamond.HsvaColour = result switch {
+            TargetResult.MaxPerfect => new Vector4(-1, 0.5f, 1, 0.7f),
+            TargetResult.PerfectEarly or TargetResult.PerfectLate => new Vector4(0.123f, 0.65f, 1, 0.7f),
+            TargetResult.NormalEarly or TargetResult.NormalLate => new Vector4(0.517f, 0.5f, 1, 0.7f),
+            _ => throw new InvalidOperationException(),
+        };
     }
 
     protected override void PrepareForUse() {

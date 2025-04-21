@@ -27,7 +27,6 @@ using ZeroV.Game.Elements.Counters;
 using ZeroV.Game.Elements.Orbits;
 using ZeroV.Game.Elements.Particles;
 using ZeroV.Game.Graphics;
-using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 using ZeroV.Game.Utils;
@@ -248,6 +247,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
             this.PressParticlePool,
             this.SlideParticlePool,
             this.StrokeParticlePool,
+            this.TargetSpinEffectPool,
             this.background,
             // underline
             new Box() {

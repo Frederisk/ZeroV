@@ -65,7 +65,7 @@ void main(void)
     if (hsvaColour.x < 0.0) {
         o_Colour = getRoundedColor(hsv2rgb(vec4(roundRad, hsvaColour.yz, hsvaColour.w * effect)), v_TexCoord);
     } else {
-        o_Colour = effect * getRoundedColor(vec4(hsvaColour.xyz , hsvaColour.w * effect), v_TexCoord);
+        o_Colour = getRoundedColor(hsv2rgb(vec4(hsvaColour.xyz , hsvaColour.w * effect)), v_TexCoord);
     }
 }
 

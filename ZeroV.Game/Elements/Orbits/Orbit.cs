@@ -98,6 +98,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     private TouchHighlight touchHighlightR = null!;
     private TouchHighlight touchHighlightL = null!;
     private ParticleQueue particles = null!;
+    private Container<TargetSpinEffect> targetSpinContainer = null!;
 
     [BackgroundDependencyLoader]
     private void load() {
@@ -235,6 +236,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 },
             ]
         };
+        this.targetSpinContainer = new Container<TargetSpinEffect> {
+            Size = Vector2.Zero,
+            Origin = Anchor.BottomCentre,
+            Anchor = Anchor.BottomCentre,
+            Y = visual_orbit_offset,
+        };
         this.InternalChild = new Container {
             RelativeSizeAxes = Axes.Both,
             Origin = Anchor.BottomCentre,
@@ -243,6 +250,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                 this.container,
                 this.touchHighlightR,
                 this.touchHighlightL,
+                this.targetSpinContainer,
             ]
         };
         // FIXME: Just for test, remove it.
@@ -355,6 +363,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
     [Resolved]
     private DrawablePool<StrokeParticle> strokeParticlePool { get; set; } = null!;
+
+    [Resolved]
+    private DrawablePool<TargetSpinEffect> targetSpinEffectPool { get; set; } = null!;
 
     public override OrbitSource? Source {
         get => base.Source;
@@ -482,6 +493,12 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         if (result is not null and not TargetResult.None) {
             this.gameplayScreen.ScoringCalculator.AddTarget(result.Value);
             this.particles.DequeueInJudgeOnly(result.Value);
+
+            if (result.Value is TargetResult.PerfectEarly or TargetResult.PerfectLate
+                or TargetResult.NormalEarly or TargetResult.NormalLate or TargetResult.MaxPerfect
+                ) {
+                this.targetSpinContainer.Add(this.targetSpinEffectPool.Get(t => t.SetUpTargetColour(result.Value)));
+            }
         }
     }
 
