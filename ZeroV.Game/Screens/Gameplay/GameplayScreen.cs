@@ -101,8 +101,8 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     [Cached]
     protected readonly DrawablePool<StrokeParticle> StrokeParticlePool = new(ZeroVMath.DRAWABLE_POLL_INITIAL_SIZE_PARTICLE, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_PARTICLE);
 
-    //[Cached]
-    //protected readonly DrawablePool<RainbowDiamond> RainbowDiamondPool = new(ZeroVMath.DRAWABLE_POLL_INITIAL_SIZE_PARTICLE, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_PARTICLE);
+    [Cached]
+    protected readonly DrawablePool<TargetSpinEffect> TargetSpinEffectPool = new(ZeroVMath.DRAWABLE_POLL_INITIAL_SIZE_PARTICLE, ZeroVMath.DRAWABLE_POOL_MAX_SIZE_PARTICLE);
 
     private void lifetimeEntryManager_EntryBecameAlive(LifetimeEntry obj) {
         var entry = (OrbitLifetimeEntry)obj;

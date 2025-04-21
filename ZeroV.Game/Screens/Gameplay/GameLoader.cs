@@ -52,7 +52,7 @@ public partial class GameLoader : Screen {
         //this.CurrentScreen = this.createTargetScreen();
         //this.Schedule(() => {
         this.CurrentScreen = this.createTargetScreen();
-        this.LoadComponentAsync(this.CurrentScreen, _ => {
+        _ = this.LoadComponentAsync(this.CurrentScreen, _ => {
             this.OnPlayerLoaded();
         });
         //});

@@ -56,7 +56,9 @@ public partial class IntroScreen : Screen {
         //});
         //IReadOnlyList<TrackInfo>? maps = this.loadBeatmaps();
         this.loadBeatmaps();
-        this.Push(new MainScreen());
+        MainScreen mainScreen = new MainScreen();
+        _ = this.LoadComponentAsync(mainScreen);
+        this.Push(mainScreen);
     }
 
     [Resolved]

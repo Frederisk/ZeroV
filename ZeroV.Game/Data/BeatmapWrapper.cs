@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq; // Just to use the Sum() method.
 using System.Reflection;
@@ -21,7 +22,18 @@ namespace ZeroV.Game.Data;
 /// A wrapper for XML beatmap files to make it easier to read and use the data.
 /// </summary>
 public class BeatmapWrapper {
-    private static readonly XmlSerializer zero_v_map_serializer = new(typeof(ZeroVMapXml));
+
+    // FIXME: Determine if there is a better solution.
+    [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2026:RequiresUnreferencedCode", Justification = "the constructor will keep all necessary members of the target type.")]
+    private class MyXmlSerializer : XmlSerializer {
+
+        public MyXmlSerializer([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type type) : base(type) {
+        }
+
+        public new Object? Deserialize(XmlReader reader) => base.Deserialize(reader);
+    }
+
+    private static readonly MyXmlSerializer zero_v_map_serializer = new(typeof(ZeroVMapXml));
     private static readonly XmlReaderSettings xml_reader_settings = createXmlReaderSettings();
 
     #region createXmlReaderSettings

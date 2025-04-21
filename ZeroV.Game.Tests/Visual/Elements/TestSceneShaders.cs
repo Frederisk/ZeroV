@@ -45,7 +45,7 @@ public partial class TestSceneShaders : ZeroVTestScene {
 
     protected override void Update() {
         base.Update();
-        var time = (this.Time.Current / 1000 / 3) % 1;
+        var time = (this.Time.Current / 1000 / 3) % 2 - 0.5; // -0.5 ~ 1.5
         this.box.SizeRatio = (Single)time;
     }
 }
