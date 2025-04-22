@@ -107,12 +107,12 @@ public class ScoringCalculator {
 
             case TargetResult.NormalEarly:
                 this.NormalEarlyCount++;
-                targetMultiplier = 0.3;
+                targetMultiplier = 0.5;
                 break;
 
             case TargetResult.NormalLate:
                 this.NormalLateCount++;
-                targetMultiplier = 0.3;
+                targetMultiplier = 0.5;
                 break;
 
             case TargetResult.PerfectEarly:

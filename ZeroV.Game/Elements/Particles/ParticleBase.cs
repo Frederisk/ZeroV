@@ -15,7 +15,6 @@ namespace ZeroV.Game.Elements.Particles;
 /// The base class for all particles.
 /// </summary>
 public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSource> {
-    //public ParticleType Type { get; protected init; }
     public Boolean IsHidden { get; protected set; }
 
     public ParticleBase() {

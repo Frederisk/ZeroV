@@ -281,7 +281,13 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
     protected override void LoadComplete() {
         base.LoadComplete();
-        this.GameplayTrack.Start();
+        // TODO: wait 1000 ms and play transition animation.
+        // Or maybe GameLoader?
+        this.orbits.Hide();
+        this.Scheduler.AddDelayed(() => {
+            this.GameplayTrack.Start();
+            this.orbits.Show();
+        }, 1000);
     }
 
     #region Touch

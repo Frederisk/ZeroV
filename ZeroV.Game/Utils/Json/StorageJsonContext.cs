@@ -8,7 +8,8 @@ using ZeroV.Game.Objects;
 namespace ZeroV.Game.Utils.Json;
 
 [JsonSerializable(typeof(IReadOnlyList<TrackInfo>))]
-[JsonSerializable(typeof(TrackInfo))]
+[JsonSerializable(typeof(List<ResultInfo>))]
+//[JsonSerializable(typeof(TrackInfo))]
 //[JsonSerializable(typeof(Guid))]
 //[JsonSerializable(typeof(String))]
 //[JsonSerializable(typeof(Int32?))]
