@@ -12,7 +12,7 @@ public static class BeatmapReader {
         var info = new DirectoryInfo(beatmapsFolder);
         List<FileInfo> children = [];
         if (!info.Exists) {
-            Directory.CreateDirectory(info.FullName); // FIXME: IO Exception
+            info.Create(); // FIXME: IO Exception
             return children;
         }
         foreach (DirectoryInfo child in info.GetDirectories()) {
