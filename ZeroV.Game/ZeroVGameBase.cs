@@ -41,7 +41,7 @@ public partial class ZeroVGameBase : osu.Framework.Game {
     }
 
     [BackgroundDependencyLoader]
-    private void load(Storage storage, FrameworkConfigManager frameworkConfigManager) {
+    private void load(Storage storage /*, FrameworkConfigManager frameworkConfigManager*/) {
         this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
 
         this.dependencies.CacheAs<ZeroVGameBase>(this);

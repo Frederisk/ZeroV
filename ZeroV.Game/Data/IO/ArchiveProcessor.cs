@@ -8,8 +8,19 @@ using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Data.IO;
 
-public static class ArchiveReading {
+public static class ArchiveProcessor {
 
+    /// <summary>
+    /// Extracts the contents of a ZeroV beatmap archive file to a specified directory.
+    /// </summary>
+    /// <param name="archiveFilePath">The path to the ZeroV beatmap archive file.</param>
+    /// <param name="storagePath">
+    /// The path to the directory where the contents of the archive will be extracted.
+    /// </param>
+    /// <returns>
+    /// <see langword="true" /> if the extraction was successful;
+    /// otherwise, <see langword="false" />.
+    /// </returns>
     public static Boolean ExtractZeroVFile(String archiveFilePath, String storagePath) {
         try {
             // Prepare the archive object and the target directory.
@@ -60,7 +71,7 @@ public static class ArchiveReading {
                         // If it's a directory, create it.
                         if (entry.Name is "") {
                             Directory.CreateDirectory(targetDestinationPath);
-                            // Or it's a file, extract it.
+                        // Or it's a file, extract it.
                         } else {
                             FileInfo entryTargetFile = new(targetDestinationPath);
                             entryTargetFile.Directory?.Create();
