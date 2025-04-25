@@ -20,7 +20,7 @@ using ZeroV.Resources;
 namespace ZeroV.Game;
 
 /// <summary>
-/// The most basic <see cref="Game"/> that can be used to host osu! components and systems.
+/// The most basic <see cref="osu.Framework.Game"/> that can be used to host osu! components and systems.
 /// This class will not load any kind of UI, allowing it to be used for provide dependencies to test cases without interfering with them.
 /// </summary>
 public partial class ZeroVGameBase : osu.Framework.Game {

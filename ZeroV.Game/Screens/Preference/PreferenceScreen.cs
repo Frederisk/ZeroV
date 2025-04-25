@@ -37,7 +37,13 @@ public partial class PreferenceScreen : Screen {
                                 MinValue = TimeSpan.FromSeconds(0.1).TotalMilliseconds,
                                 MaxValue = TimeSpan.FromSeconds(5).TotalMilliseconds,
                                 Precision = TimeSpan.FromSeconds(0.1).TotalMilliseconds,
-                                FormattingDisplayText = value => $"{TimeSpan.FromMilliseconds(value).TotalSeconds} s",
+                                FormattingDisplayText = value => $"{value} ms",
+                            },
+                            new ButtonListItem<Double> {
+                                Setting = ZeroVSetting.GlobalSoundOffset,
+                                LabelText = "Setup Offset",
+                                Action = () => this.Push(new OffsetScreen()),
+                                FormattingDisplayText = value => $"{value} ms",
                             }
                             //new CheckBoxListItem{
                             //    Setting = ZeroVSetting.Test1,

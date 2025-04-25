@@ -5,7 +5,6 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.UserInterface;
-using osu.Framework.Localisation;
 
 using ZeroV.Game.Graphics;
 
@@ -38,7 +37,7 @@ public partial class SliderBarListItem<T> : BasePreferenceListItem<T> where T : 
             Text = this.FormattingDisplayText(this.sliderBar.Current.Value),
             FontSize = 25,
         };
-        this.sliderBar.Current.ValueChanged += this.updateDisplayText;
+        this.sliderBar.Current.ValueChanged += this.UpdateDisplayText;
         return new FillFlowContainer {
             Anchor = Anchor.CentreRight,
             Origin = Anchor.CentreRight,
@@ -52,8 +51,6 @@ public partial class SliderBarListItem<T> : BasePreferenceListItem<T> where T : 
         };
     }
 
-    private void updateDisplayText(ValueChangedEvent<T> value) =>
+    protected override void UpdateDisplayText(ValueChangedEvent<T> value) =>
        this.displayText.Text = this.FormattingDisplayText(value.NewValue);
-
-    public Func<T, LocalisableString> FormattingDisplayText { get; init; } = value => value.ToString() ?? "";
 }

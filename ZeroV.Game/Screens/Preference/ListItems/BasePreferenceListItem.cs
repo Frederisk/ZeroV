@@ -5,6 +5,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Localisation;
 
 using ZeroV.Game.Configs;
 using ZeroV.Game.Graphics;
@@ -49,4 +50,8 @@ public abstract partial class BasePreferenceListItem<T> : CompositeDrawable {
     }
 
     protected abstract Drawable LoadInputController();
+
+    protected virtual void UpdateDisplayText(ValueChangedEvent<T> value) { }
+
+    public virtual Func<T, LocalisableString> FormattingDisplayText { get; init; } = value => value?.ToString() ?? "";
 }
