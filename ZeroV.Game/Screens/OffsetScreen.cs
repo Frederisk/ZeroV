@@ -9,17 +9,18 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
+using osu.Framework.Threading;
 
 using osuTK;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game.Screens;
 
 public partial class OffsetScreen : BaseUserInterfaceScreen {
-
     private Bindable<Double> offset = null!;
 
     private Track offsetBeatTrack = null!;
@@ -52,18 +53,18 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
             RelativePositionAxes = Axes.Both,
             Y = 0.25f,
             FontSize = 64,
-            Text = this.offset.Value + "ms",
+            Text = this.offset.Value + " ms",
         };
 
         ArrowButton leftArrow = new(OrientedTriangle.Orientation.Left) {
             Y = 0.25f,
             X = -0.2f,
-            TouchDown = e => this.offset.Value--,
+            Action = () => this.offset.Value--,
         };
         ArrowButton rightArrow = new(OrientedTriangle.Orientation.Right) {
             Y = 0.25f,
             X = +0.2f,
-            TouchDown = e => this.offset.Value++,
+            Action = () => this.offset.Value++,
         };
         //ArrowButton leftFastArrow = new(OrientedTriangle.Orientation.Left) {
         //    Y = 0.25f,
@@ -114,6 +115,7 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
             this.offsetText,
             leftArrow,
             rightArrow,
+            new BackButton(this),
             //leftFastArrow,
             //rightFastArrow,
         ];
@@ -182,7 +184,7 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
 
     private void offsetChanged(ValueChangedEvent<Double> e) {
         // TODD: display offset
-        this.offsetText.Text = e.NewValue + "ms";
+        this.offsetText.Text = e.NewValue + " ms";
     }
 
     protected override Boolean OnClick(ClickEvent e) {
@@ -202,10 +204,14 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
         base.Dispose(isDisposing);
     }
 
-    internal partial class ArrowButton : Container {
+    private partial class ArrowButton : Button {
         private readonly OrientedTriangle triangle;
 
-        public Action<ClickEvent>? TouchDown;
+        private readonly Double repeatDelay = 500;
+
+        private readonly Double repeatInterval = 50;
+
+        private ScheduledDelegate? repeatDelegate;
 
         public ArrowButton(OrientedTriangle.Orientation orientation) {
             this.Anchor = Anchor.Centre;
@@ -223,9 +229,44 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
             this.Add(this.triangle);
         }
 
-        protected override Boolean OnClick(ClickEvent e) {
-            this.TouchDown?.Invoke(e);
+        protected override Boolean OnClick(ClickEvent e) => true;
+
+        protected override Boolean OnMouseDown(MouseDownEvent e) => this.attachDown();
+
+        protected override void OnMouseUp(MouseUpEvent e) => this.releaseUp();
+
+        protected override Boolean OnTouchDown(TouchDownEvent e) => this.attachDown();
+
+        protected override void OnTouchUp(TouchUpEvent e) => this.releaseUp();
+
+        private Boolean attachDown() {
+            if (this.Enabled.Value) {
+                this.Action?.Invoke();
+                this.repeatDelegate?.Cancel();
+                this.repeatDelegate = null;
+
+                this.repeatDelegate = this.Scheduler.AddDelayed(this.repeatAction, this.repeatDelay);
+            }
             return true;
+        }
+
+        private void releaseUp() {
+            if (!this.Enabled.Value) {
+                return;
+            }
+            this.repeatDelegate?.Cancel();
+            this.repeatDelegate = null;
+        }
+
+        private void repeatAction() {
+            this.Action?.Invoke();
+            this.repeatDelegate = this.Scheduler.AddDelayed(this.repeatAction, this.repeatInterval);
+        }
+
+        protected override void Dispose(Boolean isDisposing) {
+            this.repeatDelegate?.Cancel();
+            this.repeatDelegate = null;
+            base.Dispose(isDisposing);
         }
     }
 }

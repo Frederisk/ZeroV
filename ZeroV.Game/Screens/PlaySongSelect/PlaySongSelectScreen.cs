@@ -67,9 +67,6 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             new BackButton(this) {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
-                Height = 52,
-                Width = 108,
-                Text = "< Back",
             },
             new BasicScrollContainer<FillFlowContainer<TrackInfoListItem>>(Direction.Vertical) {
                 Anchor = Anchor.CentreRight,

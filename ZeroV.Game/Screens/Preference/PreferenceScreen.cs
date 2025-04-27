@@ -28,7 +28,7 @@ public partial class PreferenceScreen : Screen {
                         RelativeSizeAxes = Axes.X,
                         //Size = new Vector2(100),
                         Direction = FillDirection.Vertical,
-                        Spacing = new Vector2(0,10),
+                        Spacing = new Vector2(0, 10),
                         Children = [
                             // TODO: Add controllers.
                             new SliderBarListItem<Double> {
@@ -44,7 +44,7 @@ public partial class PreferenceScreen : Screen {
                                 LabelText = "Setup Offset",
                                 Action = () => this.Push(new OffsetScreen()),
                                 FormattingDisplayText = value => $"{value} ms",
-                            }
+                            },
                             //new CheckBoxListItem{
                             //    Setting = ZeroVSetting.Test1,
                             //    LabelText = "1",
@@ -65,9 +65,6 @@ public partial class PreferenceScreen : Screen {
             new BackButton(this) {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
-                Height = 52,
-                Width = 108,
-                Text = "< Back",
             },
         ];
     }
