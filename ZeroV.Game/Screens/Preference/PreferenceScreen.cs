@@ -45,6 +45,12 @@ public partial class PreferenceScreen : Screen {
                                 Action = () => this.Push(new OffsetScreen()),
                                 FormattingDisplayText = value => $"{value} ms",
                             },
+                            new ButtonListItem<String> {
+                                Setting = default,
+                                LabelText = "Storage Path",
+                                Action = () => this.Push(new DirectorySelectorScreen()),
+                                //FormattingDisplayText = value => 
+                            }
                             //new CheckBoxListItem{
                             //    Setting = ZeroVSetting.Test1,
                             //    LabelText = "1",

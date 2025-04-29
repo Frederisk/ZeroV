@@ -66,16 +66,6 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
             X = +0.2f,
             Action = () => this.offset.Value++,
         };
-        //ArrowButton leftFastArrow = new(OrientedTriangle.Orientation.Left) {
-        //    Y = 0.25f,
-        //    X = -0.25f,
-        //    TouchDown = e => this.offset.Value -= 10,
-        //};
-        //ArrowButton rightFastArrow = new(OrientedTriangle.Orientation.Right) {
-        //    Y = 0.25f,
-        //    X = +0.25f,
-        //    TouchDown = e => this.offset.Value += 10,
-        //};
 
         Drawable[] items = [
             // Visual offset
@@ -183,7 +173,6 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
     }
 
     private void offsetChanged(ValueChangedEvent<Double> e) {
-        // TODD: display offset
         this.offsetText.Text = e.NewValue + " ms";
     }
 

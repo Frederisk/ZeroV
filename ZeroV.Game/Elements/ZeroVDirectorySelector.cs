@@ -21,7 +21,5 @@ public partial class ZeroVDirectorySelector : DirectorySelector {
 
     protected override ScrollContainer<Drawable> CreateScrollContainer() => new BasicScrollContainer();
 
-    protected override void NotifySelectionError() {
-        this.FlashColour(Colour4.Red, 300);
-    }
+    protected override void NotifySelectionError() => this.FlashColour(Colour4.Red, 300);
 }
