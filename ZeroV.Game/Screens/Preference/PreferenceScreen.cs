@@ -46,7 +46,7 @@ public partial class PreferenceScreen : Screen {
                                 FormattingDisplayText = value => $"{value} ms",
                             },
                             new ButtonListItem<String> {
-                                Setting = default,
+                                Setting = ZeroVSetting.BeatmapStoragePath,
                                 LabelText = "Storage Path",
                                 Action = () => this.Push(new DirectorySelectorScreen()),
                                 //FormattingDisplayText = value => 

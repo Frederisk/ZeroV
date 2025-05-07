@@ -1,31 +1,70 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Screens;
 
+using osuTK;
+
+using ZeroV.Game.Configs;
+using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Buttons;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens;
 
 public partial class DirectorySelectorScreen : BaseUserInterfaceScreen {
+    private Bindable<String> currentStoragePath = null!;
+
+    private ZeroVDirectorySelector directorySelector = null!;
 
     [BackgroundDependencyLoader]
-    private void load() {
+    private void load(ZeroVConfigManager configManager) {
+        this.currentStoragePath = configManager.GetBindable<String>(ZeroVSetting.BeatmapStoragePath);
+        this.directorySelector = new ZeroVDirectorySelector(this.currentStoragePath.Value) {
+            RelativeSizeAxes = Axes.Both,
+        };
         this.InternalChild = new FillFlowContainer {
             Direction = FillDirection.Vertical,
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Children = [
-                new BackButton(this){
-                    Anchor = Anchor.TopLeft,
-                    Origin = Anchor.TopLeft,
+                new BackButton(this){},
+                new DrawSizePreservingFillContainer() {
+                    TargetDrawSize = new Vector2(ZeroVMath.SCREEN_DRAWABLE_X / 3, ZeroVMath.SCREEN_DRAWABLE_Y / 3),
+                    RelativeSizeAxes = Axes.X,
+                    Height = 660,
+                    Child = this.directorySelector,
                 },
-            ]
+                new FillFlowContainer {
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    Direction = FillDirection.Horizontal,
+                    AutoSizeAxes = Axes.Both,
+                    Children = [
+                        new BasicButton {
+                            Size = new Vector2(180, 64),
+                            Text = "OK",
+                            Action = ()=>{
+                                moveAllFile(this.currentStoragePath.Value, this.directorySelector.CurrentPath.Value.FullName);
+                                //this.currentStoragePath.Value = this.directorySelector.CurrentPath.Value.FullName;
+                            },
+                        },
+                        new BasicButton {
+                            Size = new Vector2(180, 64),
+                            Text = "Cancel",
+                            Action = this.Exit,
+                        },
+                    ],
+                },
+            ],
         };
+    }
+
+    private static void moveAllFile(String fromPath, String toPath) {
+
     }
 }
