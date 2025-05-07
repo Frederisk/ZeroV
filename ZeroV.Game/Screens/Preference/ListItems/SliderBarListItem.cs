@@ -47,7 +47,7 @@ public partial class SliderBarListItem<T> : BasePreferenceListItem<T> where T : 
             Children = [
                 this.displayText,
                 this.sliderBar,
-            ]
+            ],
         };
     }
 

@@ -19,6 +19,7 @@ public partial class PreferenceScreen : Screen {
     private void load() {
         this.InternalChildren = [
             new Container {
+                Y = 32,
                 Padding = new MarginPadding(32),
                 RelativeSizeAxes = Axes.Both,
                 Child = new BasicScrollContainer<FillFlowContainer>(Direction.Vertical) {
@@ -26,11 +27,9 @@ public partial class PreferenceScreen : Screen {
                     Child = new FillFlowContainer{
                         AutoSizeAxes = Axes.Y,
                         RelativeSizeAxes = Axes.X,
-                        //Size = new Vector2(100),
                         Direction = FillDirection.Vertical,
                         Spacing = new Vector2(0, 10),
                         Children = [
-                            // TODO: Add controllers.
                             new SliderBarListItem<Double> {
                                 Setting = ZeroVSetting.GamePlayParticleFallingTime,
                                 LabelText = "Particle Falling Time",
@@ -49,21 +48,8 @@ public partial class PreferenceScreen : Screen {
                                 Setting = ZeroVSetting.BeatmapStoragePath,
                                 LabelText = "Storage Path",
                                 Action = () => this.Push(new DirectorySelectorScreen()),
-                                //FormattingDisplayText = value => 
-                            }
-                            //new CheckBoxListItem{
-                            //    Setting = ZeroVSetting.Test1,
-                            //    LabelText = "1",
-                            //},
-                            //new CheckBoxListItem{
-                            //    Setting = ZeroVSetting.Test2,
-                            //    LabelText = "2",
-                            //},
-                            //new Box() {
-                            //    RelativeSizeAxes = Axes.X,
-                            //    Height = 100,
-                            //    Colour = Colour4.Red,
-                            //}
+                                FormattingDisplayText = value => "Config",
+                            },
                         ],
                     },
                 },

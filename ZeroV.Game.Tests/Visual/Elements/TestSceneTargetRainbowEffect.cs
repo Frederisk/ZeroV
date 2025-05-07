@@ -36,7 +36,7 @@ public partial class TestSceneTargetRainbowEffect : ZeroVTestScene {
     [Test]
     public void TestRainbowEffect() {
         this.AddStep("Add one effect", () => {
-            TargetSpinEffect target = this.rainbowPool.Get();
+            TargetSpinEffect target = this.rainbowPool.Get(t => t.SetUpTargetColour(Game.Scoring.TargetResult.PerfectEarly));
             this.container.Add(target);
             this.text.Text = this.container.Count.ToString();
         });
