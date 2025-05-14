@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq; // Just to use the Sum() method.
+using System.Net.Security;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
@@ -91,10 +92,14 @@ public class BeatmapWrapper {
     /// <exception cref="DirectoryNotFoundException"></exception>
     /// <exception cref="IOException"></exception>
     public static BeatmapWrapper Create(FileInfo file) {
-        ArgumentNullException.ThrowIfNull(file);
-
+        //ArgumentNullException.ThrowIfNull(file);
         using FileStream xmlStream = file.OpenRead();
-        using XmlReader reader = XmlReader.Create(xmlStream, xml_reader_settings);
+        ZeroVMapXml map = DeserializeZeroVMapXml(xmlStream);
+        return new BeatmapWrapper(map, file);
+    }
+
+    public static ZeroVMapXml DeserializeZeroVMapXml(Stream stream) {
+        using XmlReader reader = XmlReader.Create(stream, xml_reader_settings);
         // Deserialize the XML
         ZeroVMapXml map = (ZeroVMapXml)zero_v_map_serializer.Deserialize(reader)!;
         // No longer used as xsd can now be used to verify validity.
@@ -102,7 +107,7 @@ public class BeatmapWrapper {
         // if (!result) {
         //     throw new InvalidOperationException("The XML file is invalid.");
         // }
-        return new BeatmapWrapper(map, file);
+        return map;
     }
 
     /// <summary>

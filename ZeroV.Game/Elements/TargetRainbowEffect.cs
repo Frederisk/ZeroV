@@ -40,10 +40,10 @@ public partial class TargetSpinEffect : PoolableDrawable {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.Centre,
             RelativeSizeAxes = Axes.Both,
-            Size = new Vector2(0.5f, 0.25f),
+            Size = new Vector2(0.4f, 0.2f),
             Colour = ColourInfo.GradientVertical(
                 Colour4.SteelBlue.Opacity(1f),
-                Colour4.SteelBlue.Opacity(0f)
+                Colour4.SteelBlue.Opacity(0.3f)
             ),
         };
         this.earlyTriangle.FadeOut();
@@ -51,10 +51,10 @@ public partial class TargetSpinEffect : PoolableDrawable {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.Centre,
             RelativeSizeAxes = Axes.Both,
-            Size = new Vector2(0.5f, -0.25f),
+            Size = new Vector2(0.4f, -0.2f),
             Colour = ColourInfo.GradientVertical(
                 Colour4.Red.Opacity(1f),
-                Colour4.Red.Opacity(0f)
+                Colour4.Red.Opacity(0.3f)
             ),
         };
         this.laterTriangle.FadeOut();

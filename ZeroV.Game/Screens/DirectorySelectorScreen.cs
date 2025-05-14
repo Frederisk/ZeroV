@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -10,6 +11,7 @@ using osu.Framework.Screens;
 using osuTK;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.Data.IO;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Utils;
@@ -34,7 +36,7 @@ public partial class DirectorySelectorScreen : BaseUserInterfaceScreen {
             Children = [
                 new BackButton(this){},
                 new DrawSizePreservingFillContainer() {
-                    TargetDrawSize = new Vector2(ZeroVMath.SCREEN_DRAWABLE_X / 3, ZeroVMath.SCREEN_DRAWABLE_Y / 3),
+                    TargetDrawSize = new Vector2(ZeroVMath.SCREEN_DRAWABLE_X / 2, ZeroVMath.SCREEN_DRAWABLE_Y / 2),
                     RelativeSizeAxes = Axes.X,
                     Height = 660,
                     Child = this.directorySelector,
@@ -49,8 +51,9 @@ public partial class DirectorySelectorScreen : BaseUserInterfaceScreen {
                             Size = new Vector2(180, 64),
                             Text = "OK",
                             Action = ()=>{
-                                moveAllFile(this.currentStoragePath.Value, this.directorySelector.CurrentPath.Value.FullName);
+                                if (FileManager.MoveFolder(new DirectoryInfo(this.currentStoragePath.Value), this.directorySelector.CurrentPath.Value)){
                                 //this.currentStoragePath.Value = this.directorySelector.CurrentPath.Value.FullName;
+                                }
                             },
                         },
                         new BasicButton {
@@ -62,9 +65,5 @@ public partial class DirectorySelectorScreen : BaseUserInterfaceScreen {
                 },
             ],
         };
-    }
-
-    private static void moveAllFile(String fromPath, String toPath) {
-
     }
 }
