@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq; // Just to use the Sum() method.
-using System.Net.Security;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
@@ -98,6 +97,16 @@ public class BeatmapWrapper {
         return new BeatmapWrapper(map, file);
     }
 
+    /// <summary>
+    /// Deserializes a <see cref="ZeroVMapXml"/> object from the specified XML stream.
+    /// </summary>
+    /// <remarks>The method uses an <see cref="XmlReader"/> with predefined settings to deserialize the XML
+    /// data. Ensure that the input stream contains valid XML conforming to the expected schema for <see
+    /// cref="ZeroVMapXml"/>.</remarks>
+    /// <param name="stream">The input <see cref="Stream"/> containing the XML data to deserialize. Must not be <see langword="null"/>.</param>
+    /// <returns>A <see cref="ZeroVMapXml"/> object deserialized from the provided stream.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="file"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">An error occurred during deserialization. The original exception is available using the <see cref="Exception.InnerException"/> property.</exception>
     public static ZeroVMapXml DeserializeZeroVMapXml(Stream stream) {
         using XmlReader reader = XmlReader.Create(stream, xml_reader_settings);
         // Deserialize the XML
