@@ -100,10 +100,13 @@ public class BeatmapWrapper {
     /// <summary>
     /// Deserializes a <see cref="ZeroVMapXml"/> object from the specified XML stream.
     /// </summary>
-    /// <remarks>The method uses an <see cref="XmlReader"/> with predefined settings to deserialize the XML
-    /// data. Ensure that the input stream contains valid XML conforming to the expected schema for <see
-    /// cref="ZeroVMapXml"/>.</remarks>
-    /// <param name="stream">The input <see cref="Stream"/> containing the XML data to deserialize. Must not be <see langword="null"/>.</param>
+    /// <remarks>
+    /// The method uses an <see cref="XmlReader"/> with predefined settings to deserialize the XML data.
+    /// Ensure that the input stream contains valid XML conforming to the expected schema for <see cref="ZeroVMapXml"/>.
+    /// </remarks>
+    /// <param name="stream">
+    /// The input <see cref="Stream"/> containing the XML data to deserialize. Must not be <see langword="null"/>.
+    /// </param>
     /// <returns>A <see cref="ZeroVMapXml"/> object deserialized from the provided stream.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="file"/> is null.</exception>
     /// <exception cref="InvalidOperationException">An error occurred during deserialization. The original exception is available using the <see cref="Exception.InnerException"/> property.</exception>

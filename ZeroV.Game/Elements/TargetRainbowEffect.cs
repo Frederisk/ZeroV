@@ -82,9 +82,12 @@ public partial class TargetSpinEffect : PoolableDrawable {
         this.rainbowDiamond.TransformTo<RainbowDiamond, Single>(nameof(this.rainbowDiamond.SizeRatio), 1, 500, Easing.Out);
         this.rainbowDiamond.RotateTo(180, 500, Easing.Out);
         this.rainbowDiamond.Delay(400).Then().FadeOut(100);
-        if (this.result.HasFlagFast(TargetResult.Early)) {
+
+        if (this.result is TargetResult.MaxPerfect) {
+            // Do nothing.
+        } else if (this.result.HasFlagFast(TargetResult.Early)) {
             this.earlyTriangle.FadeIn(400, Easing.Out).Then().FadeOut(100);
-        } else if (this.result.HasFlagFast(TargetResult.NormalLate)) {
+        } else {
             this.laterTriangle.FadeIn(400, Easing.Out).Then().FadeOut(100);
         }
 
