@@ -1,10 +1,16 @@
-# ZeroV
+# ZeroV 
+
+![Logo](https://github.com/user-attachments/assets/80961332-37b6-45b5-a3e8-5a248defd020)
 
 [![Build All](https://github.com/Frederisk/ZeroV/actions/workflows/build-all.yml/badge.svg)](https://github.com/Frederisk/ZeroV/actions/workflows/build-all.yml)[![CodeFactor](https://www.codefactor.io/repository/github/frederisk/zerov/badge/main?s=3406e769eea539563486745d747e228e80182355)](https://www.codefactor.io/repository/github/frederisk/zerov/overview/main)
 
 ## Introduction
 
 This project is deeply inspired by the classic mobile rhythm game **VOEZ**, aiming to build an open-source, sustainable, and community-content-driven rhythm game platform.
+
+### Screenshots
+
+![a ZeroV gameplay screenshot](https://github.com/user-attachments/assets/58fbf9bc-429f-476b-acbd-08732cfca08b)
 
 ### Why this project?
 
@@ -33,10 +39,6 @@ This project is currently in **Early Development** phase.
 - APIs and internal structures may undergo significant changes.
 
 Your testing feedback and contributions are highly appreciated!
-
-## Screenshots
-
-![a ZeroV gameplay screenshot](https://github.com/user-attachments/assets/58fbf9bc-429f-476b-acbd-08732cfca08b)
 
 <!--
 ## For Players
