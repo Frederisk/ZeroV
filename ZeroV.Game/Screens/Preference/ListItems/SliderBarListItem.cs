@@ -10,22 +10,22 @@ using ZeroV.Game.Graphics;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
-public partial class SliderBarListItem<T> : BasePreferenceListItem<T> where T : struct, INumber<T>, IMinMaxValue<T> {
-    public required T MaxValue { get; init; }
+public partial class SliderBarListItem<TValue, TSetting> : BasePreferenceListItem<TValue, TSetting> where TValue : struct, INumber<TValue>, IMinMaxValue<TValue> where TSetting : struct, Enum {
+    public required TValue MaxValue { get; init; }
 
-    public required T MinValue { get; init; }
+    public required TValue MinValue { get; init; }
 
-    public required T Precision { get; init; }
+    public required TValue Precision { get; init; }
 
-    public override Bindable<T> Current => this.sliderBar.Current;
+    public override Bindable<TValue> Current => this.sliderBar.Current;
 
-    private BasicSliderBar<T> sliderBar = null!;
+    private BasicSliderBar<TValue> sliderBar = null!;
     private ZeroVSpriteText displayText = null!;
 
     protected override Drawable LoadInputController() {
-        this.sliderBar = new BasicSliderBar<T> {
+        this.sliderBar = new BasicSliderBar<TValue> {
             Size = new osuTK.Vector2(200, 25),
-            Current = new BindableNumber<T>() {
+            Current = new BindableNumber<TValue>() {
                 MaxValue = this.MaxValue,
                 MinValue = this.MinValue,
                 Precision = this.Precision,
@@ -37,7 +37,7 @@ public partial class SliderBarListItem<T> : BasePreferenceListItem<T> where T : 
             Text = this.FormattingDisplayText(this.sliderBar.Current.Value),
             FontSize = 25,
         };
-        this.sliderBar.Current.ValueChanged += this.UpdateDisplayText;
+        this.sliderBar.Current.ValueChanged += this.OnUpdateSettingDisplay;
         return new FillFlowContainer {
             Anchor = Anchor.CentreRight,
             Origin = Anchor.CentreRight,
@@ -51,6 +51,6 @@ public partial class SliderBarListItem<T> : BasePreferenceListItem<T> where T : 
         };
     }
 
-    protected override void UpdateDisplayText(ValueChangedEvent<T> value) =>
+    protected override void OnUpdateSettingDisplay(ValueChangedEvent<TValue> value) =>
        this.displayText.Text = this.FormattingDisplayText(value.NewValue);
 }

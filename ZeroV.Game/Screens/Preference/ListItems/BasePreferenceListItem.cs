@@ -2,25 +2,26 @@ using System;
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Localisation;
 
-using ZeroV.Game.Configs;
 using ZeroV.Game.Graphics;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
-public abstract partial class BasePreferenceListItem<T> : CompositeDrawable {
-    public required ZeroVSetting Setting { get; init; }
+public abstract partial class BasePreferenceListItem<TValue, TSetting> : CompositeDrawable where TSetting : struct, Enum {
+    public required IniConfigManager<TSetting> ConfigManager { get; init; }
+    public required TSetting Setting { get; init; }
 
     public required String LabelText { get; init; }
 
-    public abstract Bindable<T> Current { get; }
+    public abstract Bindable<TValue> Current { get; }
 
     [BackgroundDependencyLoader]
-    private void load(ZeroVConfigManager configManager) {
+    private void load() {
         this.RelativeSizeAxes = Axes.X;
         this.AutoSizeAxes = Axes.Y;
         this.InternalChild = new Container {
@@ -46,12 +47,12 @@ public abstract partial class BasePreferenceListItem<T> : CompositeDrawable {
                 },
             ],
         };
-        configManager.BindWith(this.Setting, this.Current);
+        this.ConfigManager.BindWith<TValue>(this.Setting, this.Current);
     }
 
     protected abstract Drawable LoadInputController();
 
-    protected virtual void UpdateDisplayText(ValueChangedEvent<T> value) { }
+    protected virtual void OnUpdateSettingDisplay(ValueChangedEvent<TValue> value) { }
 
-    public virtual Func<T, LocalisableString> FormattingDisplayText { get; init; } = value => value?.ToString() ?? "";
+    public virtual Func<TValue, LocalisableString> FormattingDisplayText { get; init; } = value => value?.ToString() ?? "";
 }

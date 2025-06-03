@@ -9,11 +9,11 @@ using osuTK;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
-public partial class ButtonListItem<T> : BasePreferenceListItem<T> {
-    public override Bindable<T> Current => this.current;
+public partial class ButtonListItem<TValue, TSetting> : BasePreferenceListItem<TValue, TSetting> where TSetting : struct, Enum {
+    public override Bindable<TValue> Current => this.current;
     public required Action Action { get; set; }
 
-    private readonly Bindable<T> current = new();
+    private readonly Bindable<TValue> current = new();
 
     private BasicButton button = null!;
 
@@ -25,10 +25,10 @@ public partial class ButtonListItem<T> : BasePreferenceListItem<T> {
             Text = this.FormattingDisplayText(this.current.Value),
             Action = this.Action,
         };
-        this.current.ValueChanged += this.UpdateDisplayText;
+        this.current.ValueChanged += this.OnUpdateSettingDisplay;
         return this.button;
     }
 
-    protected override void UpdateDisplayText(ValueChangedEvent<T> value) =>
+    protected override void OnUpdateSettingDisplay(ValueChangedEvent<TValue> value) =>
         this.button.Text = this.FormattingDisplayText(value.NewValue);
 }
