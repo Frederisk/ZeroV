@@ -122,13 +122,8 @@ public partial class ResultOverlay : OverlayContainer {
         this.title.Text = this.screen.TrackInfo.Title;
         this.version.Text = this.screen.TrackInfo.GameVersion.ToString();
         this.difficulty.Text = this.screen.MapInfo.Difficulty.ToString("#.##");
-        this.scoringNumber.Text = scoringCalculator.DisplayScoring.ToString(new String('0', 7), CultureInfo.InvariantCulture);
-        this.scoringNumber.Colour = result switch {
-            { IsAllPerfect: true } and { IsAllDone: true } => Colour4.Gold,
-            { IsFullCombo: true } and { IsAllDone: true } => Colour4.Blue,
-            { IsAllDone: false } => Colour4.Red,
-            _ => Colour4.Wheat,
-        };
+        this.scoringNumber.Text = scoringCalculator.Scoring.ToDisplayScoring();
+        this.scoringNumber.Colour = result.ToResultColour();
 
         //String formatString = new ('0', 7);
         //LocalisableString formattedCount = this.ScoringCalculator.DisplayScoring.ToLocalisableString(formatString);

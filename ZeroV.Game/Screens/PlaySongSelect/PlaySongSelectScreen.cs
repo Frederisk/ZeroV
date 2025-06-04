@@ -27,6 +27,9 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     private Sprite background = null!;
     private FillFlowContainer<TrackInfoListItem> container = null!;
     private TextureLoader? textureLoader;
+
+    private BasicScrollContainer<FillFlowContainer<ResultInfoListItem>> scroingRankListScroller;
+    private FillFlowContainer<ResultInfoListItem> scroingRankList;
     //private Container miniInfoDisplay = null!;
 
     [Resolved]
@@ -41,26 +44,35 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     [BackgroundDependencyLoader]
     private void load() {
         this.RelativeSizeAxes = Axes.Both;
-
         this.background = new Sprite() {
             RelativeSizeAxes = Axes.Both,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
             FillMode = FillMode.Fill
         };
-
         this.container = new FillFlowContainer<TrackInfoListItem>() {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
             Spacing = new Vector2(0, 10),
         };
-
         this.beatmapWrapperProvider.Get()?
             .OrderBy(i => i.Title)
             .ForEach(trackInfo => {
                 this.container.Add(new TrackInfoListItem(trackInfo));
             });
+
+        this.scroingRankList = new() {
+            AutoSizeAxes = Axes.Y,
+            RelativeSizeAxes = Axes.X,
+        };
+        this.scroingRankListScroller = new() {
+            Anchor = Anchor.BottomCentre,
+            Origin = Anchor.BottomCentre,
+            RelativeSizeAxes = Axes.Both,
+            Size = new(0.95f, 0.45f),
+            Child = this.scroingRankList,
+        };
 
         this.InternalChildren = [
             this.background,
@@ -83,6 +95,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                 Width = 0.5f,
                 Padding = new MarginPadding(32),
                 Children = [
+                    this.scroingRankListScroller,
                     // TODO: add a bulletin board.
                 ],
             },
@@ -116,8 +129,10 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                && result.Index == mapInfo.Index
             orderby result.Scoring descending
             select result;
-        foreach (ResultInfo resultInfo in orderedResultList.Take(3)) {
-            // TODO: truncate and insert
+
+        this.scroingRankList.Clear();
+        foreach (ResultInfo resultInfo in orderedResultList.Take(10)) {
+            this.scroingRankList.Add(new ResultInfoListItem(resultInfo));
         }
     }
 
