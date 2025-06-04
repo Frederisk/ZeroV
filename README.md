@@ -10,7 +10,7 @@ This project is deeply inspired by the classic mobile rhythm game **VOEZ**, aimi
 
 ### Screenshots
 
-![a ZeroV gameplay screenshot](https://github.com/user-attachments/assets/58fbf9bc-429f-476b-acbd-08732cfca08b)
+![ZeroV gameplay screenshot](https://github.com/user-attachments/assets/58fbf9bc-429f-476b-acbd-08732cfca08b)
 
 ### Why this project?
 
@@ -24,12 +24,12 @@ As dedicated fans of VOEZ, I loved its unique dynamic lane mechanics and fluid g
 
 ## Key Features
 
-- **VOEZ-Style Dynamic Lane Gameplay**: Recreating and continuously improving the core VOEZ mechanics, including dynamically changing lanes and mutiple note types.
+- **VOEZ-Style Dynamic Lane Gameplay**: Recreating and continuously improving the core VOEZ mechanics, including dynamically changing lanes and multiple note types.
 - **Support for Custom Music and Beatmaps**: A core functionality. Allow players to import their own music and beatmaps for gameplay.
 - **Open-Source and Based on osu!framework**: The entire project code is open-source, built upon the osu!framework, providing a solid foundation for rhythm game development.
 - **Early Playable Build**: The project is currently in the early stages of development, but it already has basic game functionality and can load beatmaps for gameplay.
 
-## Prohect Status & Notes
+## Project Status & Notes
 
 This project is currently in **Early Development** phase.
 
@@ -63,6 +63,6 @@ It is inspired by the gameplay mechanics and style of the game VOEZ.
 
 VOEZ is a trademark or registered trademark of Rayark Inc.
 
-All original VOEZ assets (graphics, sounds, music, logos, etc.) are copyrighted by Rayark Inc. This project does not include any orginal VOEZ assets and relies on its own code and assets (or assets licensed under compatible open licenses).
+All original VOEZ assets (graphics, sounds, music, logos, etc.) are copyrighted by Rayark Inc. This project does not include any original VOEZ assets and relies on its own code and assets (or assets licensed under compatible open licenses).
 
 Any resemblance in gameplay mechanics or visual appearance is solely due to inspiration and the attempt to recreate similar gameplay elements as a tribute within a new, independent implementation.
