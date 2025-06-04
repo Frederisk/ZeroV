@@ -1,3 +1,5 @@
+using System;
+
 using Android.App;
 using Android.Content.PM;
 
@@ -12,7 +14,7 @@ public class ZeroVActivity : AndroidGameActivity {
 
     protected override osu.Framework.Game CreateGame() => new ZeroVGame();
 
-    public override void SetOrientationBis(System.Int32 p0, System.Int32 p1, System.Boolean p2, System.String? p3) {
+    public override void SetOrientationBis(Int32 p0, Int32 p1, Boolean p2, String? p3) {
         // Do nothing here to avoid setting orientation by SDL.
         // base.SetOrientationBis(p0, p1, p2, p3);
     }

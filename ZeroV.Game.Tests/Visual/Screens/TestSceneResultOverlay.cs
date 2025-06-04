@@ -52,7 +52,7 @@ public partial class TestSceneResultOverlay : ZeroVTestScene {
 
         public TrackInfo TrackInfo => new() {
             UUID = Guid.Empty,
-            GameVersion = new Version(),
+            GameVersion = new Version(1, 0, 0, 0),
 
             Album = default,
             Artists = default,
@@ -61,7 +61,7 @@ public partial class TestSceneResultOverlay : ZeroVTestScene {
             FileOffset = default,
             GameAuthor = default!,
             MapInfos = default!,
-            Title = default!,
+            Title = "Sample Music",
             TrackFile = default!,
             TrackOrder = default,
             BackgroundFile = default,
@@ -70,7 +70,7 @@ public partial class TestSceneResultOverlay : ZeroVTestScene {
         public MapInfo MapInfo => new() {
             Index = 0,
 
-            Difficulty = default,
+            Difficulty = 3.14,
             BlinkCount = default,
             PressCount = default,
             SlideCount = default,

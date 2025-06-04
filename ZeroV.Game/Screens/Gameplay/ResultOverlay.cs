@@ -29,6 +29,9 @@ public partial class ResultOverlay : OverlayContainer {
     [Resolved]
     private ResultInfoProvider resultInfoProvider { get; set; } = null!;
 
+    private ZeroVSpriteText title = null!;
+    private ZeroVSpriteText version = null!;
+    private ZeroVSpriteText difficulty = null!;
     private ZeroVSpriteText scoringNumber = null!;
     private BasicButton quitButton = null!;
     private BasicButton retryButton = null!;
@@ -36,7 +39,28 @@ public partial class ResultOverlay : OverlayContainer {
     [BackgroundDependencyLoader]
     private void load() {
         this.RelativeSizeAxes = Axes.Both;
-        this.scoringNumber = new ZeroVSpriteText() {
+        this.title = new ZeroVSpriteText {
+            Origin = Anchor.CentreLeft,
+            Anchor = Anchor.CentreLeft,
+            Y = -196,
+            X = 24,
+            FontSize = 96,
+        };
+        this.version = new ZeroVSpriteText {
+            Origin = Anchor.CentreLeft,
+            Anchor = Anchor.CentreLeft,
+            Y = -130,
+            X = 24,
+            FontSize = 64,
+        };
+        this.difficulty = new ZeroVSpriteText {
+            Origin = Anchor.CentreLeft,
+            Anchor = Anchor.CentreLeft,
+            Y = -84,
+            X = 24,
+            FontSize = 64,
+        };
+        this.scoringNumber = new ZeroVSpriteText {
             Origin = Anchor.CentreRight,
             Anchor = Anchor.CentreRight,
             Y = 64,
@@ -70,6 +94,9 @@ public partial class ResultOverlay : OverlayContainer {
                 Colour = Colour4.Black,
                 Alpha = background_alpha,
             },
+            this.title,
+            this.version,
+            this.difficulty,
             this.scoringNumber,
             this.quitButton,
             this.retryButton,
@@ -86,11 +113,15 @@ public partial class ResultOverlay : OverlayContainer {
             IsAllPerfect = scoringCalculator.IsAllPerfect,
             IsFullCombo = scoringCalculator.IsFullCombo,
             Scoring = scoringCalculator.Scoring,
+            FinishTime = DateTime.Now,
         };
         List<ResultInfo> infoList = this.resultInfoProvider.Get() ?? [];
         infoList.Add(result);
         this.resultInfoProvider.Set(infoList);
 
+        this.title.Text = this.screen.TrackInfo.Title;
+        this.version.Text = this.screen.TrackInfo.GameVersion.ToString();
+        this.difficulty.Text = this.screen.MapInfo.Difficulty.ToString("#.##");
         this.scoringNumber.Text = scoringCalculator.DisplayScoring.ToString(new String('0', 7), CultureInfo.InvariantCulture);
         this.scoringNumber.Colour = result switch {
             { IsAllPerfect: true } and { IsAllDone: true } => Colour4.Gold,

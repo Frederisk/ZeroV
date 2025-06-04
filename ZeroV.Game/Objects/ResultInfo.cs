@@ -19,4 +19,6 @@ public record ResultInfo {
     public required Boolean IsAllPerfect { get; init; }
 
     public required Boolean IsAllDone { get; init; }
+
+    public required DateTime FinishTime { get; init; }
 }
