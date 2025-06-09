@@ -16,7 +16,7 @@ using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Utils;
 
-namespace ZeroV.Game.Screens;
+namespace ZeroV.Game.Screens.Preference;
 
 public partial class DirectorySelectorScreen : BaseUserInterfaceScreen {
     private Bindable<String> currentStoragePath = null!;
@@ -52,7 +52,8 @@ public partial class DirectorySelectorScreen : BaseUserInterfaceScreen {
                             Text = "OK",
                             Action = ()=>{
                                 if (FileManager.MoveFolder(new DirectoryInfo(this.currentStoragePath.Value), this.directorySelector.CurrentPath.Value)){
-                                //this.currentStoragePath.Value = this.directorySelector.CurrentPath.Value.FullName;
+                                    // FIXME: Apply currentStoragePath change.
+                                    //this.currentStoragePath.Value = this.directorySelector.CurrentPath.Value.FullName;
                                 }
                             },
                         },

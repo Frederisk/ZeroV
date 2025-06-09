@@ -16,11 +16,11 @@ public partial class ResultInfoListItem : CompositeDrawable {
 
     public ResultInfoListItem(ResultInfo result) {
         this.result = result;
-        this.Margin = new MarginPadding(3);
     }
 
     [BackgroundDependencyLoader]
     private void load() {
+        this.Margin = new MarginPadding(3);
         this.RelativeSizeAxes = Axes.X;
         this.AutoSizeAxes = Axes.Y;
         this.InternalChildren = [

@@ -28,8 +28,8 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     private FillFlowContainer<TrackInfoListItem> container = null!;
     private TextureLoader? textureLoader;
 
-    private BasicScrollContainer<FillFlowContainer<ResultInfoListItem>> scroingRankListScroller;
-    private FillFlowContainer<ResultInfoListItem> scroingRankList;
+    private BasicScrollContainer<FillFlowContainer<ResultInfoListItem>> scoringRankListScroller = null!;
+    private FillFlowContainer<ResultInfoListItem> scoringRankList = null!;
     //private Container miniInfoDisplay = null!;
 
     [Resolved]
@@ -62,16 +62,16 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                 this.container.Add(new TrackInfoListItem(trackInfo));
             });
 
-        this.scroingRankList = new() {
+        this.scoringRankList = new() {
             AutoSizeAxes = Axes.Y,
             RelativeSizeAxes = Axes.X,
         };
-        this.scroingRankListScroller = new() {
+        this.scoringRankListScroller = new() {
             Anchor = Anchor.BottomCentre,
             Origin = Anchor.BottomCentre,
             RelativeSizeAxes = Axes.Both,
             Size = new(0.95f, 0.45f),
-            Child = this.scroingRankList,
+            Child = this.scoringRankList,
         };
 
         this.InternalChildren = [
@@ -95,11 +95,16 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                 Width = 0.5f,
                 Padding = new MarginPadding(32),
                 Children = [
-                    this.scroingRankListScroller,
+                    this.scoringRankListScroller,
                     // TODO: add a bulletin board.
                 ],
             },
         ];
+    }
+
+    public override void OnResuming(ScreenTransitionEvent e) {
+        base.OnResuming(e);
+        this.updateInfoDisplay();
     }
 
     private TrackInfoListItem? expandedItem;
@@ -115,11 +120,11 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     }
 
     private void updateInfoDisplay() {
-        TrackInfo trackInfo = this.expandedItem!.TrackInfo;
-        MapInfo mapInfo = this.selectedItem!.MapInfo;
-        //if (trackInfo is null || mapInfo is null) {
-        //    return;
-        //}
+        TrackInfo? trackInfo = this.expandedItem?.TrackInfo;
+        MapInfo? mapInfo = this.selectedItem?.MapInfo;
+        if (trackInfo is null || mapInfo is null) {
+            return;
+        }
 
         IReadOnlyList<ResultInfo> resultList = this.resultInfoProvider.Get() ?? [];
         IOrderedEnumerable<ResultInfo> orderedResultList =
@@ -130,9 +135,9 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             orderby result.Scoring descending
             select result;
 
-        this.scroingRankList.Clear();
+        this.scoringRankList.Clear();
         foreach (ResultInfo resultInfo in orderedResultList.Take(10)) {
-            this.scroingRankList.Add(new ResultInfoListItem(resultInfo));
+            this.scoringRankList.Add(new ResultInfoListItem(resultInfo));
         }
     }
 

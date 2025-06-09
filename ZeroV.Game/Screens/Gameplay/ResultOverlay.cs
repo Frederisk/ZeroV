@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -58,7 +57,7 @@ public partial class ResultOverlay : OverlayContainer {
             Anchor = Anchor.CentreLeft,
             Y = -84,
             X = 24,
-            FontSize = 64,
+            FontSize = 32,
         };
         this.scoringNumber = new ZeroVSpriteText {
             Origin = Anchor.CentreRight,
@@ -121,13 +120,10 @@ public partial class ResultOverlay : OverlayContainer {
 
         this.title.Text = this.screen.TrackInfo.Title;
         this.version.Text = this.screen.TrackInfo.GameVersion.ToString();
-        this.difficulty.Text = this.screen.MapInfo.Difficulty.ToString("#.##");
+        this.difficulty.Text = "difficulty: " + this.screen.MapInfo.Difficulty.ToString("#.##");
         this.scoringNumber.Text = scoringCalculator.Scoring.ToDisplayScoring();
         this.scoringNumber.Colour = result.ToResultColour();
 
-        //String formatString = new ('0', 7);
-        //LocalisableString formattedCount = this.ScoringCalculator.DisplayScoring.ToLocalisableString(formatString);
-        //this.scoringNumber.Text = formattedCount;
         this.FadeIn(TRANSITION_DURATION, Easing.In);
     }
 
