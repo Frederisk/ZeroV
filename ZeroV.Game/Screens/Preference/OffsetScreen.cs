@@ -18,7 +18,7 @@ using ZeroV.Game.Elements.Buttons;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 
-namespace ZeroV.Game.Screens;
+namespace ZeroV.Game.Screens.Preference;
 
 public partial class OffsetScreen : BaseUserInterfaceScreen {
     private Bindable<Double> offset = null!;

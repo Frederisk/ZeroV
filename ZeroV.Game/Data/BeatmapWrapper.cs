@@ -154,7 +154,7 @@ public class BeatmapWrapper {
     /// </returns>
     /// <exception cref="InvalidOperationException">Thrown when the track file and it's folder layout is invalid.</exception>
     public TrackInfo GetTrackInfo() {
-        DirectoryInfo? directory = this.BeatmapFile.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
+        DirectoryInfo directory = this.BeatmapFile.Directory ?? throw new InvalidOperationException("The beatmap file is not in a valid directory.");
         // TODO: Need a better way to match music file
         FileInfo[] backgrounds = directory.GetFiles(ZeroVPath.TRACK_FILE_BACKGROUND_IMAGE_PATTERN);
         FileInfo? backgroud = backgrounds.Length >= 1 && backgrounds[0].Exists ? backgrounds[0] : null;

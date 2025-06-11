@@ -5,8 +5,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
 
-using osuTK;
-
 namespace ZeroV.Game.Graphics.Shapes.Orbit;
 
 public partial class TouchHighlight : Box {
@@ -24,7 +22,7 @@ public partial class TouchHighlight : Box {
             HighlightPosition.Middle => "OrbitSelfLuminous",
             HighlightPosition.Right => "OrbitSelfLuminousRight",
             HighlightPosition.Left => "OrbitSelfLuminousLeft",
-            _ => throw new ArgumentOutOfRangeException(nameof(this.position), this.position, null),
+            _ => throw new InvalidOperationException($"Unknown highlight position: {this.position}"),
         };
         this.TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, fragment);
     }

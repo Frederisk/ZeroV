@@ -50,7 +50,7 @@ public partial class DirectorySelectorScreen : BaseUserInterfaceScreen {
                         new BasicButton {
                             Size = new Vector2(180, 64),
                             Text = "OK",
-                            Action = ()=>{
+                            Action = () => {
                                 if (FileManager.MoveFolder(new DirectoryInfo(this.currentStoragePath.Value), this.directorySelector.CurrentPath.Value)){
                                     // FIXME: Apply currentStoragePath change.
                                     //this.currentStoragePath.Value = this.directorySelector.CurrentPath.Value.FullName;
