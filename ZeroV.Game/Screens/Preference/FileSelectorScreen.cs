@@ -3,7 +3,6 @@ using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.UserInterface;
 
 using osuTK;
 
@@ -18,13 +17,18 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
 
     [BackgroundDependencyLoader]
     private void load() {
-        var defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        String defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         this.fileSelector = new ZeroVFileSelector(defaultPath, [".0vm"]) {
             RelativeSizeAxes = Axes.Both,
         };
         this.fileSelector.CurrentFile.ValueChanged += (value) => {
+            if (value.NewValue is null) {
+                return;
+            }
+
 
         };
+        //this.fileSelector.
         this.InternalChild = new FillFlowContainer {
             Direction = FillDirection.Vertical,
             RelativeSizeAxes = Axes.X,
@@ -37,17 +41,17 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
                     Height = 660,
                     Child = this.fileSelector,
                 },
-                new BasicButton {
-                    Anchor = Anchor.TopRight,
-                    Origin = Anchor.TopRight,
-                    Size = new Vector2(180, 64),
-                    Text = "Import",
-                    Action = () => {
-                        //if (this.fileSelector.CurrentFile.Value is null) {
-                        //    throw new Exception();
-                        //}
-                    }
-                }
+                //new BasicButton {
+                //    Anchor = Anchor.TopRight,
+                //    Origin = Anchor.TopRight,
+                //    Size = new Vector2(180, 64),
+                //    Text = "Import",
+                //    Action = () => {
+                //        //if (this.fileSelector.CurrentFile.Value is null) {
+                //        //    throw new Exception();
+                //        //}
+                //    }
+                //}
             ],
         };
     }
