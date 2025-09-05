@@ -22,11 +22,12 @@ public static class ArchiveProcessor {
     /// <see langword="true" /> if the extraction was successful;
     /// otherwise, <see langword="false" />.
     /// </returns>
-    public static Boolean ExtractZeroVFile(String archiveFilePath, String storagePath) {
+    public static Boolean ExtractZeroVFile(FileInfo archiveFileInfo, DirectoryInfo storageDirectoryInfo) {
         try {
+            // String archiveFilePath, String storagePath
             // Prepare the archive object and the target directory.
-            FileInfo archiveFileInfo = new FileInfo(archiveFilePath);
-            DirectoryInfo storageDirectoryInfo = new DirectoryInfo(storagePath);
+            //FileInfo archiveFileInfo = new FileInfo(archiveFilePath);
+            //DirectoryInfo storageDirectoryInfo = new DirectoryInfo(storagePath);
             if (!archiveFileInfo.Exists) {
                 return false;
             }

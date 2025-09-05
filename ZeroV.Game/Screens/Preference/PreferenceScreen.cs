@@ -53,7 +53,7 @@ public partial class PreferenceScreen : Screen {
                                 Setting = ZeroVSetting.BeatmapStoragePath,
                                 LabelText = "Storage Path",
                                 Action = () => this.Push(new DirectorySelectorScreen()),
-                                FormattingDisplayText = value => "Config",
+                                FormattingDisplayText = _ => "Config",
                             },
                             new CheckBoxListItem<ExecutionMode, FrameworkSetting> {
                                 ConfigManager= frameworkConfigManager,
@@ -62,6 +62,13 @@ public partial class PreferenceScreen : Screen {
                                 InverseValueConverter = v => v ? ExecutionMode.MultiThreaded : ExecutionMode.SingleThread,
                                 LabelText = "Enable Multi-Threaded Execution",
                             },
+                            new ButtonListItem<Object, ZeroVSetting> {
+                                ConfigManager = null,
+                                Setting = default,
+                                LabelText = "Import Beatmap",
+                                Action = () => this.Push(new FileSelectorScreen()),
+                                FormattingDisplayText = _ => "Import",
+                            }
                         ],
                     },
                 },
