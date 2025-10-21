@@ -19,4 +19,6 @@ public static class ZeroVPath {
     public const String TRACK_INFO_JSON_FILE = "TrackInfoList"; // JsonKeyValueStorage/TrackInfoList.json
 
     public const String RESULT_INFO_JSON_FILE = "ResultInfoList"; // JsonKeyValueStorage/ResultInfoList.json
+
+    public static readonly String[] VALID_BEATMAP_FILE_EXTENSIONS = [".0vm", ".0v"]; //validFileExtensions
 }

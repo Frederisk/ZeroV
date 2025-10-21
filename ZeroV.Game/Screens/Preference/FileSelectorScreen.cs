@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -22,8 +24,8 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
 
     [BackgroundDependencyLoader]
     private void load(ZeroVConfigManager configManager) {
-        String defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-        this.fileSelector = new ZeroVFileSelector(defaultPath, [".0vm", ".0v"]) {
+        // String defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        this.fileSelector = new ZeroVFileSelector(null, ZeroVPath.VALID_BEATMAP_FILE_EXTENSIONS) {
             RelativeSizeAxes = Axes.Both,
         };
 
@@ -34,6 +36,7 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
             // TODO: Display file info.
         };
 
+        DirectoryInfo beatmapStorageDirInfo = new(configManager.Get<String>(ZeroVSetting.BeatmapStoragePath));
         this.InternalChild = new FillFlowContainer {
             Direction = FillDirection.Vertical,
             RelativeSizeAxes = Axes.X,
@@ -52,18 +55,42 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
                     Size = new Vector2(180, 64),
                     Text = "Import",
                     Action = () => {
-                        if (this.fileSelector.CurrentFile.Value is null
-                        || !this.fileSelector.CurrentFile.Value.Exists) {
+                        FileInfo archiveFile = this.fileSelector.CurrentFile.Value;
+                        if (archiveFile is null
+                        || !archiveFile.Exists) {
                             return;
                         }
                         try {
-                            DirectoryInfo storagePath = new (configManager.Get<String>(ZeroVSetting.BeatmapStoragePath));
-                            ArchiveProcessor.ExtractZeroVFile(this.fileSelector.CurrentFile.Value, storagePath);
+                            ArchiveProcessor.ExtractZeroVFile(archiveFile, beatmapStorageDirInfo);
                         } catch (Exception ex) {
                             Logger.Error(ex, "An unexpected exception was encountered while extracting the beatmap archive.");
                         }
                     }
-                }
+                },
+                new BasicButton {
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    Size = new Vector2(360, 64),
+                    Text = "Import all in current folder",
+                    Action = () => {
+                        DirectoryInfo archiveDirInfo = this.fileSelector.CurrentPath.Value;
+                        if (archiveDirInfo is null
+                        || !archiveDirInfo.Exists) {
+                            return;
+                        }
+                        DirectoryInfo storageInfo = new DirectoryInfo(configManager.Get<String>(ZeroVSetting.BeatmapStoragePath));
+                        IEnumerable<FileInfo> archiveFiles = archiveDirInfo.GetFiles().Where(file =>
+                            ZeroVPath.VALID_BEATMAP_FILE_EXTENSIONS.Contains(file.Extension)
+                            );
+                        foreach (FileInfo archiveFile in archiveFiles) {
+                            try {
+                                ArchiveProcessor.ExtractZeroVFile(archiveFile, storageInfo);
+                            } catch (Exception ex) {
+                                Logger.Error(ex, $"An unexpected exception was encountered while extracting the beatmap archive: {archiveFile.FullName}");
+                            }
+                        }
+                    }
+                },
             ],
         };
     }
