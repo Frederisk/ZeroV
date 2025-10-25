@@ -9,6 +9,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -98,6 +99,15 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                     this.scoringRankListScroller,
                     // TODO: add a bulletin board.
                 ],
+            },
+            new BasicButton() {
+                Anchor = Anchor.BottomLeft,
+                Origin = Anchor.BottomLeft,
+                AutoSizeAxes = Axes.Both,
+                Padding = new MarginPadding(32),
+                Text = "More Action...",
+                Action = () => {
+                },
             },
         ];
     }
