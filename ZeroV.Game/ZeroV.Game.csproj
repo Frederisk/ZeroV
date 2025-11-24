@@ -25,7 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.3" />-->
-    <PackageReference Include="ppy.osu.Framework" Version="2025.129.1" />
-    <PackageReference Include="Svg.Skia" Version="2.0.0.4" />
+    <PackageReference Include="ppy.osu.Framework" Version="2025.1121.1" />
+    <PackageReference Include="Svg.Skia" Version="3.2.1" />
   </ItemGroup>
 </Project>

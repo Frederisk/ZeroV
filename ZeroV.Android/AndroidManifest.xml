@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ZeroV.Android" android:installLocation="auto">
-  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" />
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35" />
 	<application android:label="ZeroV" />
   <!-- for editor usage -->
   <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -13,4 +13,5 @@
 		Care needs to be taken to ensure runtime permission checks target the correct permission for the API level.
 	-->
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+  <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 </manifest>

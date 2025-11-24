@@ -12,9 +12,11 @@ using osu.Framework.Logging;
 using osuTK;
 
 using ZeroV.Game.Configs;
+using ZeroV.Game.Data;
 using ZeroV.Game.Data.IO;
 using ZeroV.Game.Elements;
 using ZeroV.Game.Elements.Buttons;
+using ZeroV.Game.Objects;
 using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.Preference;
@@ -23,11 +25,20 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
     private ZeroVFileSelector fileSelector = null!;
 
     [BackgroundDependencyLoader]
-    private void load(ZeroVConfigManager configManager) {
+    private void load(ZeroVConfigManager configManager, TrackInfoProvider trackInfoProvider) {
         // String defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         this.fileSelector = new ZeroVFileSelector(null, ZeroVPath.VALID_BEATMAP_FILE_EXTENSIONS) {
             RelativeSizeAxes = Axes.Both,
         };
+
+        // FIXME: This method is duplicated.
+        void refreshAllBeapmaps() {
+            String beatmapStoragePath = configManager.Get<String>(ZeroVSetting.BeatmapStoragePath);
+            List<FileInfo> beatmapInfoFileList = BeatmapReader.GetAllMapFile(beatmapStoragePath);
+            List<BeatmapWrapper> beatmapWrapperList = beatmapInfoFileList.ConvertAll(BeatmapWrapper.Create);
+            IReadOnlyList<TrackInfo>? trackInfoList = beatmapWrapperList.ConvertAll(i => i.GetTrackInfo());
+            trackInfoProvider.Set(trackInfoList);
+        }
 
         this.fileSelector.CurrentFile.ValueChanged += (value) => {
             if (value.NewValue is null) {
@@ -46,7 +57,7 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
                 new DrawSizePreservingFillContainer() {
                     TargetDrawSize = new Vector2(ZeroVMath.SCREEN_DRAWABLE_X / 2, ZeroVMath.SCREEN_DRAWABLE_Y / 2),
                     RelativeSizeAxes = Axes.X,
-                    Height = 660,
+                    Height = 540,
                     Child = this.fileSelector,
                 },
                 new BasicButton {
@@ -65,6 +76,8 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
                         } catch (Exception ex) {
                             Logger.Error(ex, "An unexpected exception was encountered while extracting the beatmap archive.");
                         }
+
+                        refreshAllBeapmaps();
                     }
                 },
                 new BasicButton {
@@ -89,6 +102,8 @@ public partial class FileSelectorScreen : BaseUserInterfaceScreen {
                                 Logger.Error(ex, $"An unexpected exception was encountered while extracting the beatmap archive: {archiveFile.FullName}");
                             }
                         }
+
+                        refreshAllBeapmaps();
                     }
                 },
             ],
