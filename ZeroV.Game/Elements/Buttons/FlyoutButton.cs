@@ -11,27 +11,80 @@ using osu.Framework.Localisation;
 using osuTK;
 
 namespace ZeroV.Game.Elements.Buttons;
-public partial class FlyoutButton: CompositeDrawable {
+
+public partial class FlyoutButton : CompositeDrawable {
     public enum FlyoutDirection {
         Up, Down, Left, Right,
     }
+
     public enum FlyoutAlignment {
         Start, Center, End,
     }
 
-    public LocalisableString Text {
-        get => this.button.Text;
-        set => this.button.Text = value;
+    /// <summary>
+    /// The displayed text of the button.
+    /// </summary>
+    public required LocalisableString Text {
+        get => this.text;
+        set {
+            this.text = value;
+            if (this.button is not null) {
+                this.button.Text = value;
+            }
+        }
     }
 
-    public FlyoutDirection Direction { get; set; } = FlyoutDirection.Down;
+    private LocalisableString text;
 
-    public FlyoutAlignment Alignment { get; set; } = FlyoutAlignment.Start;
+    /// <summary>
+    /// Gets or sets the direction in which the flyout appears relative to its target element.
+    /// The default value is <see cref="FlyoutDirection.Down"/>
+    /// </summary>
+    /// <remarks>
+    /// The direction determines the placement of the flyout when it is displayed.
+    /// </remarks>
+    public FlyoutDirection Direction {
+        get => this.direction;
+        set {
+            if (this.direction == value) { return; }
+            this.direction = value;
+            if (this.menu is not null) { this.updateMenuLayout(); }
+        }
+    }
 
+    private FlyoutDirection direction = FlyoutDirection.Down;
+
+    /// <summary>
+    /// The alignment of the flyout content relative to its target element.
+    /// The default value is <see cref="FlyoutAlignment.Start"/>
+    /// </summary>
+    /// <remarks>
+    /// Alignment refers to which edge of the flying-out object aligns with which edge of the button.
+    /// For vertically flying-out elements, the start point is the left;
+    /// for horizontally flying-out elements, the start point is the top.
+    /// </remarks>
+    public FlyoutAlignment Alignment {
+        get => this.alignment;
+        set {
+            if (this.alignment == value) { return; }
+            this.alignment = value;
+            if (this.menu is not null) { this.updateMenuLayout(); }
+        }
+    }
+
+    private FlyoutAlignment alignment = FlyoutAlignment.Start;
+
+    /// <summary>
+    /// Duration (ms) of the show/hide transition.
+    /// </summary>
     public Int32 TransitionDuration { get; set; } = 250;
 
+    /// <summary>
+    /// Container that will be used as the menu content.
+    /// </summary>
     public required FillFlowContainer MenuItemsContainer { get; init; }
-    private BasicButton button  = null!;
+
+    private BasicButton button = null!;
     private FlyoutMenuContainer menu = null!;
 
     public FlyoutButton() {
@@ -43,6 +96,7 @@ public partial class FlyoutButton: CompositeDrawable {
         this.button = new BasicButton {
             AutoSizeAxes = Axes.Both,
             Action = () => this.menu.ToggleVisibility(),
+            Text = this.Text,
         };
         this.menu = new FlyoutMenuContainer(this) {
             Child = this.MenuItemsContainer,
@@ -84,8 +138,8 @@ public partial class FlyoutButton: CompositeDrawable {
         };
     }
 
-    private partial class FlyoutMenuContainer: VisibilityContainer {
-        private FlyoutButton parent;
+    private partial class FlyoutMenuContainer : VisibilityContainer {
+        private readonly FlyoutButton parent;
         public FlyoutMenuContainer(FlyoutButton parent) {
             this.parent = parent;
             this.AutoSizeAxes = Axes.Both;
@@ -117,7 +171,7 @@ public partial class FlyoutButton: CompositeDrawable {
                     this.MoveToY(-this.DrawSize.Y / 2, duration, Easing.InSine);
                     break;
                 case FlyoutDirection.Left:
-                    this.MoveToX(this.DrawSize.X/ 2, duration, Easing.InSine);
+                    this.MoveToX(this.DrawSize.X / 2, duration, Easing.InSine);
                     break;
                 case FlyoutDirection.Right:
                     this.MoveToX(-this.DrawSize.X / 2, duration, Easing.InSine);

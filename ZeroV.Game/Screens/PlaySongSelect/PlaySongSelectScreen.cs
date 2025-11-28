@@ -100,14 +100,34 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                     // TODO: add a bulletin board.
                 ],
             },
-            new BasicButton() {
+            new FlyoutButton() {
                 Anchor = Anchor.BottomLeft,
                 Origin = Anchor.BottomLeft,
-                AutoSizeAxes = Axes.Both,
-                Padding = new MarginPadding(32),
+                //AutoSizeAxes = Axes.Both,
+                //Padding = new MarginPadding(32),
                 Text = "More Action...",
-                Action = () => {
+                Direction = FlyoutButton.FlyoutDirection.Up,
+                MenuItemsContainer = new FillFlowContainer() {
+                    AutoSizeAxes = Axes.Both,
+                    Direction = FillDirection.Vertical,
+                    Spacing = new Vector2(0, 8),
+                    Children = [
+                        new BasicButton() {
+                            AutoSizeAxes = Axes.Both,
+                            Text = "Open Song Folder",
+                            //Action = () => {
+                            //},
+                        },
+                        new BasicButton() {
+                            AutoSizeAxes = Axes.Both,
+                            Text = "View Online",
+                            //Action = () => {
+                            //},
+                        },
+                    ],
                 },
+                //Action = () => {
+                //},
             },
         ];
     }
