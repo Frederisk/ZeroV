@@ -36,8 +36,11 @@ float atan2(float y, float x){
 }
 
 float fadeOutEdge(float x, float width) {
-    if (abs(x) > width) return 0.0;
-    return (width - x) * (width + x) / (width * width);
+    float d = abs(x) / width;
+    if (d > 1.0) return 0.0;
+    float k = 4.0;
+    float limit = exp(-k);
+    return max(0.0, (exp(-k * d * d) - limit) / (1.0 - limit));
 }
 
 void main(void)
@@ -62,11 +65,15 @@ void main(void)
         effect = fadeOutEdge(distance(temp, vec2(sizeRatio, 0)), borderRatio);
     }
 
+    vec4 finalColour;
     if (hsvaColour.x < 0.0) {
-        o_Colour = getRoundedColor(hsv2rgb(vec4(roundRad, hsvaColour.yz, hsvaColour.w * effect)), v_TexCoord);
+        finalColour = getRoundedColor(hsv2rgb(vec4(roundRad, hsvaColour.yz, hsvaColour.w * effect)), v_TexCoord);
     } else {
-        o_Colour = getRoundedColor(hsv2rgb(vec4(hsvaColour.xyz , hsvaColour.w * effect)), v_TexCoord);
+        finalColour = getRoundedColor(hsv2rgb(vec4(hsvaColour.xyz , hsvaColour.w * effect)), v_TexCoord);
     }
+
+    finalColour.rgb *= finalColour.a;
+    o_Colour = getRoundedColor(finalColour, v_TexCoord);
 }
 
 #endif

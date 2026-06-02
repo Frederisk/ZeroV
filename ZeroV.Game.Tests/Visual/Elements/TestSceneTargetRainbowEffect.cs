@@ -9,6 +9,7 @@ using NUnit.Framework;
 using ZeroV.Game.Elements;
 using osu.Framework.Allocation;
 using ZeroV.Game.Graphics;
+using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Tests.Visual.Elements;
 
@@ -33,12 +34,24 @@ public partial class TestSceneTargetRainbowEffect : ZeroVTestScene {
         this.Children = [this.rainbowPool, this.text, this.container];
     }
 
+    private void addEffect(TargetResult result) {
+        TargetSpinEffect target = this.rainbowPool.Get(t => t.SetUpTargetColour(result));
+        this.container.Add(target);
+        this.text.Text = this.container.Count.ToString();
+    }
+
     [Test]
     public void TestRainbowEffect() {
-        this.AddStep("Add one effect", () => {
-            TargetSpinEffect target = this.rainbowPool.Get(t => t.SetUpTargetColour(Game.Scoring.TargetResult.PerfectEarly));
-            this.container.Add(target);
-            this.text.Text = this.container.Count.ToString();
+        this.AddStep("Add MaxPerfect effect", () => {
+            this.addEffect(TargetResult.MaxPerfect);
+        });
+        this.AddWaitStep("Wait for effect", 1);
+        this.AddStep("Add Perfect effect", () => {
+            this.addEffect(TargetResult.Perfect);
+        });
+        this.AddWaitStep("Wait for effect", 1);
+        this.AddStep("Add Normal effect", () => {
+            this.addEffect(TargetResult.Normal);
         });
     }
 }

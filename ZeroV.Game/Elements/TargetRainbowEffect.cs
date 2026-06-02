@@ -23,7 +23,7 @@ public partial class TargetSpinEffect : PoolableDrawable {
     public TargetSpinEffect() {
         this.Origin = Anchor.Centre;
         this.Anchor = Anchor.Centre;
-        this.Size = new Vector2(256);
+        this.Size = new Vector2(384);
     }
 
     [BackgroundDependencyLoader]
@@ -33,8 +33,9 @@ public partial class TargetSpinEffect : PoolableDrawable {
             Anchor = Anchor.Centre,
             RelativeSizeAxes = Axes.Both,
             // HsvaColour = new Vector4(-1, 0.5f, 1, 0.7f),
+            Blending = BlendingParameters.Additive,
             SizeRatio = 0,
-            BorderRatio = 0.04f,
+            BorderRatio = 0.08f,
         };
         this.earlyTriangle = new Triangle {
             Origin = Anchor.BottomCentre,
@@ -69,9 +70,9 @@ public partial class TargetSpinEffect : PoolableDrawable {
     public void SetUpTargetColour(TargetResult result) {
         this.result = result;
         this.rainbowDiamond.HsvaColour = this.result switch {
-            TargetResult.MaxPerfect => new Vector4(-1, 0.5f, 1, 0.7f),
-            _ when result.HasFlagFast(TargetResult.Perfect) => new Vector4(0.123f, 0.65f, 1, 0.7f),
-            _ when result.HasFlagFast(TargetResult.Normal) => new Vector4(0.517f, 0.5f, 1, 0.7f),
+            TargetResult.MaxPerfect => new Vector4(-1, 0.75f, 1, 0.7f),
+            _ when result.HasFlagFast(TargetResult.Perfect) => new Vector4(0.123f, 0.75f, 1, 0.7f),
+            _ when result.HasFlagFast(TargetResult.Normal) => new Vector4(0.517f, 0.6f, 1, 0.7f),
             _ => throw new InvalidOperationException(),
         };
     }
@@ -81,7 +82,7 @@ public partial class TargetSpinEffect : PoolableDrawable {
 
         this.rainbowDiamond.TransformTo<RainbowDiamond, Single>(nameof(this.rainbowDiamond.SizeRatio), 1, 500, Easing.Out);
         this.rainbowDiamond.RotateTo(180, 500, Easing.Out);
-        this.rainbowDiamond.Delay(400).Then().FadeOut(100);
+        this.rainbowDiamond.Delay(400).Then().FadeOut(200);
 
         if (this.result is TargetResult.MaxPerfect) {
             // Do nothing.
