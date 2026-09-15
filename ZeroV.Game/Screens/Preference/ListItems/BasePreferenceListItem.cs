@@ -8,7 +8,10 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Localisation;
 
+using osuTK;
+
 using ZeroV.Game.Graphics;
+using ZeroV.Game.Graphics.Shapes;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
@@ -45,22 +48,34 @@ public abstract partial class BasePreferenceListItem<TValue, TSetting> : Composi
         this.InternalChild = new Container {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
+            Masking = true,
+            CornerRadius = 8,
+            BorderThickness = 1,
+            BorderColour = Colour4.FromHex("00d2d3").Opacity(0.25f),
             Children = [
                 new Box {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.DarkGray,
+                    Colour = Colour4.FromHex("141824").Opacity(0.85f),
+                },
+                new Diamond {
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreLeft,
+                    Size = new Vector2(10),
+                    X = 20,
+                    Colour = Colour4.FromHex("00d2d3"),
                 },
                 new ZeroVSpriteText {
-                    Padding = new(24),
+                    Padding = new MarginPadding { Left = 44, Top = 20, Bottom = 20, Right = 16 },
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
                     Text = this.LabelText,
-                    FontSize = 30,
+                    FontSize = 24,
+                    Colour = Colour4.White,
                 },
                 new Container {
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
-                    Padding = new(24),
+                    Padding = new MarginPadding { Right = 20, Top = 12, Bottom = 12 },
                     Child = this.LoadInputController(),
                 },
             ],

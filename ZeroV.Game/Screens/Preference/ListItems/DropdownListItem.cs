@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.UserInterface;
+
+using ZeroV.Game.Elements;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
@@ -12,12 +13,12 @@ public partial class DropdownListItem<TValue, TSetting> : BasePreferenceListItem
 
     public IEnumerable<TValue>? Items { get; init; }
 
-    public Single DropdownWidth { get; init; } = 250;
+    public Single DropdownWidth { get; init; } = 280;
 
-    private BasicDropdown<TValue> dropdown = null!;
+    private ZeroVDropdown<TValue> dropdown = null!;
 
     protected override Drawable LoadInputController() {
-        this.dropdown = new BasicDropdown<TValue> {
+        this.dropdown = new ZeroVDropdown<TValue> {
             Anchor = Anchor.CentreRight,
             Origin = Anchor.CentreRight,
             Width = this.DropdownWidth,

@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 
 using osu.Framework.Allocation;
-using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 
 using osuTK;
 
@@ -21,28 +21,30 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
 
     [BackgroundDependencyLoader]
     private void load() {
-        this.Masking = true;
-        this.BorderColour = Colour4.White;
         this.RelativeSizeAxes = Axes.X;
         this.AutoSizeAxes = Axes.Y;
 
         this.container = new FillFlowContainer<MapInfoListItem>() {
             RelativeSizeAxes = Axes.X,
             Height = 0,
+            Alpha = 0,
             Direction = FillDirection.Vertical,
-            Spacing = new Vector2(0, 0),
-            Margin = new MarginPadding(0) {
-                Left = 100
-            }
+            Spacing = new Vector2(0, 4),
+            Margin = new MarginPadding {
+                Left = 24,
+                Top = 6,
+                Bottom = 4,
+            },
         };
 
         this.AddInternal(new FillFlowContainer() {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
+            Direction = FillDirection.Vertical,
             Children = [
                 this.header = new TrackInfoListItemHeader(),
-                this.container
-            ]
+                this.container,
+            ],
         });
 
         foreach (MapInfo mapInfo in trackInfo.MapInfos) {
@@ -56,12 +58,6 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
         }
 
         if (this.container.Children.Count > 0) {
-            // This method is called only when the item is exoanded for the first time.
-            // foreach(MapInfoListItem item in this.container.Children) {
-            //     if (item.IsSelected) {
-            //         return;
-            //     }
-            // }
             this.container.Children[0].OnSelect();
         }
     }
@@ -70,11 +66,14 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
         get => this.isExpanded;
         set {
             this.isExpanded = value;
+            this.header.UpdateExpandedState(value);
 
             if (value) {
                 this.container.AutoSizeAxes = Axes.Y;
+                this.container.FadeIn(200, Easing.OutQuint);
                 this.header.TryBeginLongTitleScroll();
             } else {
+                this.container.FadeOut(150, Easing.InSine);
                 this.container.AutoSizeAxes = Axes.None;
                 this.container.Height = 0;
                 this.header.TryEndLongTitleScroll();

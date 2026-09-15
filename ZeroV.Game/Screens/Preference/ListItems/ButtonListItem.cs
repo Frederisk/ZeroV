@@ -21,7 +21,14 @@ public partial class ButtonListItem<TValue, TSetting> : BasePreferenceListItem<T
         this.button = new BasicButton {
             Anchor = Anchor.CentreRight,
             Origin = Anchor.CentreRight,
-            Size = new Vector2(100, 37),
+            Size = new Vector2(130, 40),
+            Masking = true,
+            CornerRadius = 6,
+            BorderThickness = 1.5f,
+            BorderColour = Colour4.FromHex("00d2d3").Opacity(0.5f),
+            BackgroundColour = Colour4.FromHex("121622").Opacity(0.9f),
+            HoverColour = Colour4.FromHex("00d2d3").Opacity(0.35f),
+            FlashColour = Colour4.FromHex("00d2d3"),
             Text = this.FormattingDisplayText(this.current.Value),
             Action = this.Action,
         };

@@ -6,8 +6,10 @@ using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
@@ -16,6 +18,8 @@ using osuTK;
 
 using ZeroV.Game.Data;
 using ZeroV.Game.Elements.Buttons;
+using ZeroV.Game.Graphics;
+using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
 using ZeroV.Game.Screens.PlaySongSelect.ListItems;
@@ -26,12 +30,14 @@ namespace ZeroV.Game.Screens.PlaySongSelect;
 [Cached]
 public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     private Sprite background = null!;
+    private Box defaultBackgroundBox = null!;
     private FillFlowContainer<TrackInfoListItem> container = null!;
     private TextureLoader? textureLoader;
 
     private BasicScrollContainer<FillFlowContainer<ResultInfoListItem>> scoringRankListScroller = null!;
     private FillFlowContainer<ResultInfoListItem> scoringRankList = null!;
-    //private Container miniInfoDisplay = null!;
+    private Container emptyLeaderboardPlaceholder = null!;
+    private SongDetailPreviewCard detailCard = null!;
 
     [Resolved]
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
@@ -45,92 +51,328 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     [BackgroundDependencyLoader]
     private void load() {
         this.RelativeSizeAxes = Axes.Both;
-        this.background = new Sprite() {
+
+        this.background = new Sprite {
             RelativeSizeAxes = Axes.Both,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
-            FillMode = FillMode.Fill
+            FillMode = FillMode.Fill,
         };
-        this.container = new FillFlowContainer<TrackInfoListItem>() {
+
+        this.container = new FillFlowContainer<TrackInfoListItem> {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
-            Spacing = new Vector2(0, 10),
+            Spacing = new Vector2(0, 8),
         };
-        this.beatmapWrapperProvider.Get()?
-            .OrderBy(i => i.Title)
-            .ForEach(trackInfo => {
-                this.container.Add(new TrackInfoListItem(trackInfo));
-            });
 
-        this.scoringRankList = new() {
+        var trackList = this.beatmapWrapperProvider.Get()?.OrderBy(i => i.Title).ToList() ?? [];
+        foreach (TrackInfo trackInfo in trackList) {
+            this.container.Add(new TrackInfoListItem(trackInfo));
+        }
+
+        this.scoringRankList = new FillFlowContainer<ResultInfoListItem> {
             AutoSizeAxes = Axes.Y,
             RelativeSizeAxes = Axes.X,
+            Direction = FillDirection.Vertical,
+            Spacing = new Vector2(0, 2),
         };
-        this.scoringRankListScroller = new() {
-            Anchor = Anchor.BottomCentre,
-            Origin = Anchor.BottomCentre,
+
+        this.scoringRankListScroller = new BasicScrollContainer<FillFlowContainer<ResultInfoListItem>> {
+            Anchor = Anchor.TopLeft,
+            Origin = Anchor.TopLeft,
             RelativeSizeAxes = Axes.Both,
-            Size = new(0.95f, 0.45f),
             Child = this.scoringRankList,
         };
 
         this.InternalChildren = [
+            // Background Layer
+            this.defaultBackgroundBox = new Box {
+                RelativeSizeAxes = Axes.Both,
+                Colour = Colour4.FromHex("0a0d14"),
+            },
             this.background,
-            new BackButton(this) {
+            // Backdrop Gradient & Vignette Overlay
+            new Box {
+                RelativeSizeAxes = Axes.Both,
+                Colour = ColourInfo.GradientHorizontal(
+                    Colour4.FromHex("060910").Opacity(0.88f),
+                    Colour4.FromHex("060910").Opacity(0.60f)
+                ),
+            },
+            new Box {
+                RelativeSizeAxes = Axes.Both,
+                Colour = ColourInfo.GradientVertical(
+                    Colour4.FromHex("000000").Opacity(0.40f),
+                    Colour4.FromHex("000000").Opacity(0.65f)
+                ),
+            },
+
+            // Top Header Bar
+            new Container {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
-            },
-            new BasicScrollContainer<FillFlowContainer<TrackInfoListItem>>(Direction.Vertical) {
-                Anchor = Anchor.CentreRight,
-                Origin = Anchor.CentreRight,
-                RelativeSizeAxes = Axes.Both,
-                Width = 0.5f,
-                Padding = new MarginPadding(32),
-                Child = this.container,
-            },
-            new Container{
-                Anchor = Anchor.CentreLeft,
-                Origin = Anchor.CentreLeft,
-                RelativeSizeAxes = Axes.Both,
-                Width = 0.5f,
-                Padding = new MarginPadding(32),
+                RelativeSizeAxes = Axes.X,
+                Height = 80,
                 Children = [
-                    this.scoringRankListScroller,
-                    // TODO: add a bulletin board.
+                    new BackButton(this) {
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        Margin = new MarginPadding { Left = 32 },
+                    },
+                    new FillFlowContainer {
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        AutoSizeAxes = Axes.Both,
+                        Direction = FillDirection.Horizontal,
+                        Spacing = new Vector2(12, 0),
+                        Margin = new MarginPadding { Left = 200 },
+                        Children = [
+                            new Diamond {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Size = new Vector2(14),
+                                Colour = Colour4.FromHex("00d2d3"),
+                            },
+                            new FillFlowContainer {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                AutoSizeAxes = Axes.Both,
+                                Direction = FillDirection.Vertical,
+                                Spacing = new Vector2(0, 2),
+                                Children = [
+                                    new ZeroVSpriteText {
+                                        Text = "MUSIC SELECT",
+                                        Colour = Colour4.White,
+                                        FontSize = 24,
+                                        Font = FontUsage.Default.With(weight: "Bold"),
+                                    },
+                                    new ZeroVSpriteText {
+                                        Text = "CHOOSE A TRACK TO PLAY",
+                                        Colour = Colour4.FromHex("64748b"),
+                                        FontSize = 12,
+                                        Font = FontUsage.Default.With(weight: "Bold"),
+                                    },
+                                ],
+                            },
+                        ],
+                    },
                 ],
             },
-            new FlyoutButton() {
+
+            // Main Content Area
+            new Container {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                RelativeSizeAxes = Axes.Both,
+                Padding = new MarginPadding { Top = 80, Bottom = 60, Left = 32, Right = 32 },
+                Children = [
+                    // Left Column: Song Details & Leaderboard
+                    new Container {
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        RelativeSizeAxes = Axes.Both,
+                        Width = 0.48f,
+                        Children = [
+                            // Top: Detail Preview Card
+                            this.detailCard = new SongDetailPreviewCard {
+                                Anchor = Anchor.TopCentre,
+                                Origin = Anchor.TopCentre,
+                                RelativeSizeAxes = Axes.X,
+                                Height = 220,
+                            },
+                            // Bottom: Leaderboard Panel
+                            new Container {
+                                Anchor = Anchor.BottomCentre,
+                                Origin = Anchor.BottomCentre,
+                                RelativeSizeAxes = Axes.X,
+                                Height = 320,
+                                Masking = true,
+                                CornerRadius = 8,
+                                BorderThickness = 1,
+                                BorderColour = Colour4.FromHex("00d2d3").Opacity(0.25f),
+                                Children = [
+                                    new Box {
+                                        RelativeSizeAxes = Axes.Both,
+                                        Colour = Colour4.FromHex("0d111a").Opacity(0.85f),
+                                    },
+                                    new FillFlowContainer {
+                                        RelativeSizeAxes = Axes.Both,
+                                        Direction = FillDirection.Vertical,
+                                        Padding = new MarginPadding(16),
+                                        Spacing = new Vector2(0, 10),
+                                        Children = [
+                                            // Leaderboard Header
+                                            new FillFlowContainer {
+                                                RelativeSizeAxes = Axes.X,
+                                                AutoSizeAxes = Axes.Y,
+                                                Direction = FillDirection.Horizontal,
+                                                Spacing = new Vector2(8, 0),
+                                                Children = [
+                                                    new Diamond {
+                                                        Anchor = Anchor.CentreLeft,
+                                                        Origin = Anchor.CentreLeft,
+                                                        Size = new Vector2(10),
+                                                        Colour = Colour4.FromHex("00d2d3"),
+                                                    },
+                                                    new ZeroVSpriteText {
+                                                        Anchor = Anchor.CentreLeft,
+                                                        Origin = Anchor.CentreLeft,
+                                                        Text = "TOP RECORDS",
+                                                        Colour = Colour4.White,
+                                                        FontSize = 15,
+                                                        Font = FontUsage.Default.With(weight: "Bold"),
+                                                    },
+                                                ],
+                                            },
+                                            // Divider
+                                            new Box {
+                                                RelativeSizeAxes = Axes.X,
+                                                Height = 1,
+                                                Colour = Colour4.FromHex("00d2d3").Opacity(0.2f),
+                                            },
+                                            // List Scroll Container
+                                            new Container {
+                                                RelativeSizeAxes = Axes.Both,
+                                                Child = this.scoringRankListScroller,
+                                            },
+                                        ],
+                                    },
+                                    // Empty state placeholder
+                                    this.emptyLeaderboardPlaceholder = new Container {
+                                        RelativeSizeAxes = Axes.Both,
+                                        Children = [
+                                            new FillFlowContainer {
+                                                Anchor = Anchor.Centre,
+                                                Origin = Anchor.Centre,
+                                                AutoSizeAxes = Axes.Both,
+                                                Direction = FillDirection.Vertical,
+                                                Spacing = new Vector2(0, 8),
+                                                Children = [
+                                                    new Diamond {
+                                                        Anchor = Anchor.TopCentre,
+                                                        Origin = Anchor.TopCentre,
+                                                        Size = new Vector2(16),
+                                                        Colour = Colour4.FromHex("64748b").Opacity(0.4f),
+                                                    },
+                                                    new ZeroVSpriteText {
+                                                        Anchor = Anchor.TopCentre,
+                                                        Origin = Anchor.TopCentre,
+                                                        Text = "NO RECORDS YET",
+                                                        Colour = Colour4.FromHex("64748b"),
+                                                        FontSize = 14,
+                                                        Font = FontUsage.Default.With(weight: "Bold"),
+                                                    },
+                                                    new ZeroVSpriteText {
+                                                        Anchor = Anchor.TopCentre,
+                                                        Origin = Anchor.TopCentre,
+                                                        Text = "Play this chart to set your high score!",
+                                                        Colour = Colour4.FromHex("475569"),
+                                                        FontSize = 12,
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+
+                    // Right Column: Track Collection List
+                    new Container {
+                        Anchor = Anchor.CentreRight,
+                        Origin = Anchor.CentreRight,
+                        RelativeSizeAxes = Axes.Both,
+                        Width = 0.50f,
+                        Children = [
+                            // Header Bar for Right Column
+                            new Container {
+                                Anchor = Anchor.TopLeft,
+                                Origin = Anchor.TopLeft,
+                                RelativeSizeAxes = Axes.X,
+                                Height = 36,
+                                Children = [
+                                    new FillFlowContainer {
+                                        Anchor = Anchor.CentreLeft,
+                                        Origin = Anchor.CentreLeft,
+                                        AutoSizeAxes = Axes.Both,
+                                        Direction = FillDirection.Horizontal,
+                                        Spacing = new Vector2(8, 0),
+                                        Children = [
+                                            new Diamond {
+                                                Anchor = Anchor.CentreLeft,
+                                                Origin = Anchor.CentreLeft,
+                                                Size = new Vector2(10),
+                                                Colour = Colour4.FromHex("00d2d3"),
+                                            },
+                                            new ZeroVSpriteText {
+                                                Anchor = Anchor.CentreLeft,
+                                                Origin = Anchor.CentreLeft,
+                                                Text = $"TRACK COLLECTION  ({trackList.Count})",
+                                                Colour = Colour4.White,
+                                                FontSize = 15,
+                                                Font = FontUsage.Default.With(weight: "Bold"),
+                                            },
+                                        ],
+                                    },
+                                    new Box {
+                                        Anchor = Anchor.BottomLeft,
+                                        Origin = Anchor.BottomLeft,
+                                        RelativeSizeAxes = Axes.X,
+                                        Height = 1,
+                                        Colour = Colour4.FromHex("00d2d3").Opacity(0.2f),
+                                    },
+                                ],
+                            },
+                            // Track List Scroller
+                            new BasicScrollContainer<FillFlowContainer<TrackInfoListItem>>(Direction.Vertical) {
+                                Anchor = Anchor.BottomLeft,
+                                Origin = Anchor.BottomLeft,
+                                RelativeSizeAxes = Axes.Both,
+                                Height = 0.93f,
+                                Child = this.container,
+                            },
+                        ],
+                    },
+                ],
+            },
+
+            // Bottom Left: Flyout Actions
+            new Container {
                 Anchor = Anchor.BottomLeft,
                 Origin = Anchor.BottomLeft,
-                //AutoSizeAxes = Axes.Both,
-                //Padding = new MarginPadding(32),
-                Text = "More Action...",
-                Direction = FlyoutButton.FlyoutDirection.Up,
-                MenuItemsContainer = new FillFlowContainer() {
-                    AutoSizeAxes = Axes.Both,
-                    Direction = FillDirection.Vertical,
-                    Spacing = new Vector2(0, 8),
-                    Children = [
-                        new BasicButton() {
-                            AutoSizeAxes = Axes.Both,
-                            Text = "Open Song Folder",
-                            //Action = () => {
-                            //},
-                        },
-                        new BasicButton() {
-                            AutoSizeAxes = Axes.Both,
-                            Text = "View Online",
-                            //Action = () => {
-                            //},
-                        },
-                    ],
+                AutoSizeAxes = Axes.Both,
+                Padding = new MarginPadding { Left = 32, Bottom = 16 },
+                Child = new FlyoutButton {
+                    Text = "⚙  MORE ACTIONS...",
+                    Direction = FlyoutButton.FlyoutDirection.Up,
+                    MenuItemsContainer = new FillFlowContainer {
+                        AutoSizeAxes = Axes.Both,
+                        Direction = FillDirection.Vertical,
+                        Spacing = new Vector2(0, 6),
+                        Children = [
+                            this.createActionButton("Open Song Folder"),
+                            this.createActionButton("View Online"),
+                        ],
+                    },
                 },
-                //Action = () => {
-                //},
             },
         ];
     }
+
+    private BasicButton createActionButton(String text, Action? action = null) => new() {
+        Size = new Vector2(180, 38),
+        Masking = true,
+        CornerRadius = 6,
+        BorderThickness = 1,
+        BorderColour = Colour4.FromHex("00d2d3").Opacity(0.4f),
+        BackgroundColour = Colour4.FromHex("121622").Opacity(0.95f),
+        HoverColour = Colour4.FromHex("00d2d3").Opacity(0.35f),
+        FlashColour = Colour4.FromHex("00d2d3"),
+        Text = text,
+        Action = action,
+    };
 
     public override void OnResuming(ScreenTransitionEvent e) {
         base.OnResuming(e);
@@ -153,8 +395,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
         TrackInfo? trackInfo = this.expandedItem?.TrackInfo;
         MapInfo? mapInfo = this.selectedItem?.MapInfo;
         if (trackInfo is null || mapInfo is null) {
+            this.detailCard.ClearDisplay();
+            this.emptyLeaderboardPlaceholder.FadeIn(150, Easing.OutQuint);
+            this.scoringRankList.Clear();
             return;
         }
+
+        this.detailCard.UpdateDisplay(trackInfo, mapInfo);
 
         IReadOnlyList<ResultInfo> resultList = this.resultInfoProvider.Get() ?? [];
         IOrderedEnumerable<ResultInfo> orderedResultList =
@@ -166,8 +413,15 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             select result;
 
         this.scoringRankList.Clear();
-        foreach (ResultInfo resultInfo in orderedResultList.Take(10)) {
-            this.scoringRankList.Add(new ResultInfoListItem(resultInfo));
+        Int32 rank = 1;
+        List<ResultInfo> topResults = orderedResultList.Take(10).ToList();
+        if (topResults.Count > 0) {
+            this.emptyLeaderboardPlaceholder.FadeOut(100, Easing.OutQuint);
+            foreach (ResultInfo resultInfo in topResults) {
+                this.scoringRankList.Add(new ResultInfoListItem(resultInfo, rank++));
+            }
+        } else {
+            this.emptyLeaderboardPlaceholder.FadeIn(150, Easing.OutQuint);
         }
     }
 
@@ -178,19 +432,19 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
         if (this.expandedItem is not null) {
             this.expandedItem.IsExpanded = false;
         }
-        // TODO: Load a simple icon instead of a background
+
         FileInfo? file = item.TrackInfo.BackgroundFile;
         if (file is not null) {
             TextureLoader? old = this.textureLoader;
             this.textureLoader = new(file, this.renderer);
             this.background.Texture = this.textureLoader.Texture;
+            this.background.FadeIn(300, Easing.OutQuint);
             old?.Dispose();
-        } else { // file is null
+        } else {
             this.background.Texture = null;
             this.textureLoader?.Dispose();
         }
         this.expandedItem = item;
-        // TODO: Which one to select?
         item.SelectFirst();
     }
 
@@ -207,5 +461,216 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
         if (disposing) {
             this.textureLoader?.Dispose();
         }
+    }
+
+    private partial class SongDetailPreviewCard : CompositeDrawable {
+        private ZeroVSpriteText titleText = null!;
+        private ZeroVSpriteText metaText = null!;
+        private ZeroVSpriteText authorText = null!;
+        private Container diffBadgeContainer = null!;
+        private ZeroVSpriteText diffText = null!;
+        private Diamond diffDiamond = null!;
+        private FillFlowContainer notesContainer = null!;
+        private Container emptyPlaceholder = null!;
+        private Container contentContainer = null!;
+
+        public SongDetailPreviewCard() {
+            this.Masking = true;
+            this.CornerRadius = 8;
+            this.BorderThickness = 1.5f;
+            this.BorderColour = Colour4.FromHex("00d2d3").Opacity(0.3f);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load() {
+            this.InternalChildren = [
+                new Box {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.FromHex("0e121a").Opacity(0.90f),
+                },
+                this.contentContainer = new Container {
+                    RelativeSizeAxes = Axes.Both,
+                    Padding = new MarginPadding(20),
+                    Alpha = 0,
+                    Children = [
+                        new FillFlowContainer {
+                            RelativeSizeAxes = Axes.X,
+                            AutoSizeAxes = Axes.Y,
+                            Direction = FillDirection.Vertical,
+                            Spacing = new Vector2(0, 8),
+                            Children = [
+                                this.titleText = new ZeroVSpriteText {
+                                    Text = "Song Title",
+                                    Colour = Colour4.White,
+                                    FontSize = 26,
+                                    Font = FontUsage.Default.With(weight: "Bold"),
+                                },
+                                this.metaText = new ZeroVSpriteText {
+                                    Text = "Artist • Album",
+                                    Colour = Colour4.FromHex("94a3b8"),
+                                    FontSize = 14,
+                                },
+                                this.authorText = new ZeroVSpriteText {
+                                    Text = "Chart by Author",
+                                    Colour = Colour4.FromHex("64748b"),
+                                    FontSize = 12,
+                                },
+                                new Box {
+                                    RelativeSizeAxes = Axes.X,
+                                    Height = 1,
+                                    Colour = Colour4.FromHex("00d2d3").Opacity(0.15f),
+                                    Margin = new MarginPadding { Top = 4, Bottom = 4 },
+                                },
+                                new FillFlowContainer {
+                                    RelativeSizeAxes = Axes.X,
+                                    AutoSizeAxes = Axes.Y,
+                                    Direction = FillDirection.Horizontal,
+                                    Spacing = new Vector2(16, 0),
+                                    Children = [
+                                        this.diffBadgeContainer = new Container {
+                                            Anchor = Anchor.CentreLeft,
+                                            Origin = Anchor.CentreLeft,
+                                            AutoSizeAxes = Axes.Both,
+                                            Masking = true,
+                                            CornerRadius = 4,
+                                            BorderThickness = 1,
+                                            BorderColour = Colour4.FromHex("00d2d3"),
+                                            Children = [
+                                                new Box {
+                                                    RelativeSizeAxes = Axes.Both,
+                                                    Colour = Colour4.FromHex("00d2d3").Opacity(0.2f),
+                                                },
+                                                new FillFlowContainer {
+                                                    AutoSizeAxes = Axes.Both,
+                                                    Direction = FillDirection.Horizontal,
+                                                    Spacing = new Vector2(6, 0),
+                                                    Padding = new MarginPadding { Left = 8, Right = 8, Top = 4, Bottom = 4 },
+                                                    Children = [
+                                                        this.diffDiamond = new Diamond {
+                                                            Anchor = Anchor.CentreLeft,
+                                                            Origin = Anchor.CentreLeft,
+                                                            Size = new Vector2(8),
+                                                            Colour = Colour4.FromHex("00d2d3"),
+                                                        },
+                                                        this.diffText = new ZeroVSpriteText {
+                                                            Anchor = Anchor.CentreLeft,
+                                                            Origin = Anchor.CentreLeft,
+                                                            Text = "LV. 1.0 EASY",
+                                                            Colour = Colour4.White,
+                                                            FontSize = 12,
+                                                            Font = FontUsage.Default.With(weight: "Bold"),
+                                                        },
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                        this.notesContainer = new FillFlowContainer {
+                                            Anchor = Anchor.CentreLeft,
+                                            Origin = Anchor.CentreLeft,
+                                            AutoSizeAxes = Axes.Both,
+                                            Direction = FillDirection.Horizontal,
+                                            Spacing = new Vector2(12, 0),
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                this.emptyPlaceholder = new Container {
+                    RelativeSizeAxes = Axes.Both,
+                    Children = [
+                        new FillFlowContainer {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            AutoSizeAxes = Axes.Both,
+                            Direction = FillDirection.Vertical,
+                            Spacing = new Vector2(0, 8),
+                            Children = [
+                                new Diamond {
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.TopCentre,
+                                    Size = new Vector2(20),
+                                    Colour = Colour4.FromHex("00d2d3").Opacity(0.5f),
+                                },
+                                new ZeroVSpriteText {
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.TopCentre,
+                                    Text = "SELECT A TRACK",
+                                    Colour = Colour4.FromHex("64748b"),
+                                    FontSize = 15,
+                                    Font = FontUsage.Default.With(weight: "Bold"),
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ];
+        }
+
+        public void ClearDisplay() {
+            this.contentContainer.FadeOut(150, Easing.OutQuint);
+            this.emptyPlaceholder.FadeIn(150, Easing.OutQuint);
+            this.BorderColour = Colour4.FromHex("00d2d3").Opacity(0.3f);
+        }
+
+        public void UpdateDisplay(TrackInfo trackInfo, MapInfo mapInfo) {
+            this.emptyPlaceholder.FadeOut(150, Easing.OutQuint);
+            this.contentContainer.FadeIn(200, Easing.OutQuint);
+
+            this.titleText.Text = trackInfo.Title;
+            String artist = trackInfo.Artists ?? "Unknown Artist";
+            String album = trackInfo.Album ?? "Unknown Album";
+            this.metaText.Text = $"{artist}  •  {album}";
+            this.authorText.Text = $"Mapped by: {trackInfo.GameAuthor}  |  v{trackInfo.GameVersion}";
+
+            Colour4 diffColour = mapInfo.Difficulty switch {
+                <= 3.0 => Colour4.FromHex("00d2d3"),
+                <= 7.0 => Colour4.FromHex("ff9f43"),
+                _ => Colour4.FromHex("ff4757"),
+            };
+            String tierName = mapInfo.Difficulty switch {
+                <= 3.0 => "EASY",
+                <= 7.0 => "HARD",
+                _ => "SPECIAL",
+            };
+
+            this.BorderColour = diffColour.Opacity(0.5f);
+            this.diffBadgeContainer.BorderColour = diffColour;
+            this.diffDiamond.Colour = diffColour;
+            this.diffText.Text = $"LV. {mapInfo.Difficulty:0.#}  {tierName}";
+
+            this.notesContainer.Clear();
+            this.notesContainer.AddRange([
+                this.createNoteTag("P", mapInfo.PressCount, Colour4.FromHex("00d2d3")),
+                this.createNoteTag("S", mapInfo.SlideCount, Colour4.FromHex("a55eea")),
+                this.createNoteTag("St", mapInfo.StrokeCount, Colour4.FromHex("feca57")),
+                this.createNoteTag("B", mapInfo.BlinkCount, Colour4.FromHex("ff6b81")),
+            ]);
+        }
+
+        private Drawable createNoteTag(String label, Int32 count, Colour4 colour) => new FillFlowContainer {
+            AutoSizeAxes = Axes.Both,
+            Direction = FillDirection.Horizontal,
+            Spacing = new Vector2(4, 0),
+            Children = [
+                new ZeroVSpriteText {
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreLeft,
+                    Text = label,
+                    Colour = colour,
+                    FontSize = 12,
+                    Font = FontUsage.Default.With(weight: "Bold"),
+                },
+                new ZeroVSpriteText {
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreLeft,
+                    Text = count.ToString(),
+                    Colour = Colour4.FromHex("cbd5e1"),
+                    FontSize = 13,
+                    Font = FontUsage.Default.With(weight: "Bold"),
+                },
+            ],
+        };
     }
 }
