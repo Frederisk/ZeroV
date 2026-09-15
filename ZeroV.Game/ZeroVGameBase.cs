@@ -41,8 +41,20 @@ public partial class ZeroVGameBase : osu.Framework.Game {
     }
 
     [BackgroundDependencyLoader]
-    private void load(Storage storage /*, FrameworkConfigManager frameworkConfigManager*/) {
+    private void load(Storage storage, FrameworkConfigManager frameworkConfigManager) {
         this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
+
+        var frameSync = frameworkConfigManager.GetBindable<FrameSync>(FrameworkSetting.FrameSync);
+        if (frameSync.IsDefault) {
+            frameSync.Value = FrameSync.Unlimited;
+            frameSync.SetDefault();
+        }
+
+        var executionMode = frameworkConfigManager.GetBindable<ExecutionMode>(FrameworkSetting.ExecutionMode);
+        if (executionMode.IsDefault) {
+            executionMode.Value = ExecutionMode.MultiThreaded;
+            executionMode.SetDefault();
+        }
 
         this.dependencies.CacheAs<ZeroVGameBase>(this);
         this.dependencies.CacheAs<ZeroVConfigManager>(new ZeroVConfigManager(storage));

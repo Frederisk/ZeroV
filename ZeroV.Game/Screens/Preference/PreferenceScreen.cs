@@ -55,6 +55,11 @@ public partial class PreferenceScreen : Screen {
                                 Action = () => this.Push(new DirectorySelectorScreen()),
                                 FormattingDisplayText = _ => "Config",
                             },
+                            new DropdownListItem<FrameSync, FrameworkSetting> {
+                                ConfigManager = frameworkConfigManager,
+                                Setting = FrameworkSetting.FrameSync,
+                                LabelText = "Frame Rate Limiter",
+                            },
                             new CheckBoxListItem<ExecutionMode, FrameworkSetting> {
                                 ConfigManager= frameworkConfigManager,
                                 Setting = FrameworkSetting.ExecutionMode,

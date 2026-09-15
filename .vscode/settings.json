@@ -9,5 +9,6 @@
         "Ruleset",
         "Rulesets",
         "VOEZ"
-    ]
+    ],
+    "dotnet.defaultSolution": "ZeroV.sln"
 }
