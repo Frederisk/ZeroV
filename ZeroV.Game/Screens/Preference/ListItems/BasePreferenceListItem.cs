@@ -51,7 +51,7 @@ public abstract partial class BasePreferenceListItem<TValue, TSetting> : Composi
                     Colour = Colour4.DarkGray,
                 },
                 new ZeroVSpriteText {
-                    Padding = new(24),
+                    Margin = new(24),
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
                     Text = this.LabelText,
@@ -60,7 +60,8 @@ public abstract partial class BasePreferenceListItem<TValue, TSetting> : Composi
                 new Container {
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
-                    Padding = new(24),
+                    AutoSizeAxes = Axes.Both,
+                    Margin = new MarginPadding{ Right = 24 },
                     Child = this.LoadInputController(),
                 },
             ],
