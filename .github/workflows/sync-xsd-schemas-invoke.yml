@@ -3,10 +3,12 @@ on:
   push:
     branches: [ main, master ]
     paths: ZeroV.Game/Data/Schema/ZeroVMap/ZeroVMapXml.xsd
+  workflow_dispatch:
 
 jobs:
   transfer:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,7 +20,7 @@ jobs:
           echo "schema_content=$CONTENT" >> $GITHUB_OUTPUT
 
       - name: Invoke the workflow
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@v4
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: Frederisk/ZeroV-Schemas

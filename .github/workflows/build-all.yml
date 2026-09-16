@@ -4,63 +4,93 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-for-windows:
-    name: Build for Desktop with Ubuntu
+  build-and-test-desktop:
+    name: Build & Test Desktop (Ubuntu)
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install .NET
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8
+          dotnet-version: |
+            8.0.x
+            9.0.x
 
-      - name: Install .NET workloads
-        run: dotnet workload install maui-windows
-
-      - name: Compile
+      - name: Build Desktop solution
         run: dotnet build ZeroV.Desktop.slnf --configuration Debug
 
-  build-for-ios:
-    name: Build for iOS with macOS
-    # macos-latest is now macos-12
-    # TODO: can be changed to `macos-latest` once `macos-13` becomes latest (currently in beta)
-    runs-on: macos-13
-    timeout-minutes: 60
+      - name: Run ZeroV.Game.Tests
+        run: dotnet test ZeroV.Desktop.slnf --configuration Debug --no-build --verbosity normal
+
+  build-and-test-ruleset:
+    name: Build & Test osu! Ruleset (Ubuntu)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install .NET
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8
+          dotnet-version: |
+            8.0.x
+            9.0.x
 
-      - name: Install .NET workloads
-        run: dotnet workload install maui-ios
+      - name: Build osu! Ruleset solution
+        run: dotnet build osu.Game.Rulesets.ZeroV.slnf --configuration Debug
 
-      - name: Compile
-        run: dotnet build ZeroV.iOS.slnf --configuration Debug
+      - name: Run osu.Game.Rulesets.ZeroV.Tests
+        run: dotnet test osu.Game.Rulesets.ZeroV.slnf --configuration Debug --no-build --verbosity normal
 
-  build-for-android:
-    name: Build for Android with Windows
-    runs-on: windows-latest
-    timeout-minutes: 60
+  build-android:
+    name: Build for Android (Ubuntu)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install .NET
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8
+          dotnet-version: |
+            8.0.x
+            9.0.x
 
-      - name: Install .NET workloads
-        run: dotnet workload install maui-android
+      - name: Install Android workload
+        run: dotnet workload install android
 
-      - name: Compile
+      - name: Compile Android solution
         run: dotnet build ZeroV.Android.slnf --configuration Debug
+
+  build-ios:
+    name: Build for iOS (macOS)
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Install iOS workload
+        run: dotnet workload install ios
+
+      - name: Compile iOS solution
+        run: dotnet build ZeroV.iOS.slnf --configuration Debug
