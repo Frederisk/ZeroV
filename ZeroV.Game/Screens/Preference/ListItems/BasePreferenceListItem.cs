@@ -12,6 +12,7 @@ using osuTK;
 
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
@@ -49,20 +50,20 @@ public abstract partial class BasePreferenceListItem<TValue, TSetting> : Composi
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Masking = true,
-            CornerRadius = 8,
+            CornerRadius = 0,
             BorderThickness = 1,
-            BorderColour = Colour4.FromHex("00d2d3").Opacity(0.25f),
+            BorderColour = ZeroVColour.BorderSubtle,
             Children = [
                 new Box {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.FromHex("141824").Opacity(0.85f),
+                    Colour = ZeroVColour.BgCard,
                 },
                 new Diamond {
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
                     Size = new Vector2(10),
                     X = 20,
-                    Colour = Colour4.FromHex("00d2d3"),
+                    Colour = ZeroVColour.Cyan,
                 },
                 new ZeroVSpriteText {
                     Padding = new MarginPadding { Left = 44, Top = 20, Bottom = 20, Right = 16 },
@@ -70,7 +71,7 @@ public abstract partial class BasePreferenceListItem<TValue, TSetting> : Composi
                     Origin = Anchor.CentreLeft,
                     Text = this.LabelText,
                     FontSize = 24,
-                    Colour = Colour4.White,
+                    Colour = ZeroVColour.TextDark,
                 },
                 new Container {
                     Anchor = Anchor.CentreRight,

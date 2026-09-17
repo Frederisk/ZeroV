@@ -13,6 +13,7 @@ using osuTK;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
 
@@ -39,9 +40,9 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
         this.RelativeSizeAxes = Axes.X;
         this.AutoSizeAxes = Axes.Y;
         this.Masking = true;
-        this.CornerRadius = 8;
+        this.CornerRadius = 0;
         this.BorderThickness = 1.5f;
-        this.BorderColour = Colour4.White.Opacity(0.15f);
+        this.BorderColour = ZeroVColour.BorderSubtle;
 
         TrackInfo trackInfo = this.listItem.TrackInfo;
         String artists = trackInfo.Artists ?? "Unknown Artist";
@@ -51,11 +52,11 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
         this.InternalChildren = [
             this.backgroundBox = new Box {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.FromHex("131722").Opacity(0.92f),
+                Colour = ZeroVColour.BgCard,
             },
             this.hoverOverlay = new Box {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.FromHex("00d2d3").Opacity(0.1f),
+                Colour = ZeroVColour.Cyan.Opacity(0.08f),
                 Alpha = 0,
             },
             this.leftAccentBar = new Box {
@@ -63,8 +64,8 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
                 Origin = Anchor.CentreLeft,
                 RelativeSizeAxes = Axes.Y,
                 Width = 4,
-                Colour = Colour4.FromHex("00d2d3"),
-                Alpha = 0.5f,
+                Colour = ZeroVColour.Cyan,
+                Alpha = 0.6f,
             },
             new Container {
                 RelativeSizeAxes = Axes.X,
@@ -83,7 +84,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,
                                 Size = new Vector2(10),
-                                Colour = Colour4.FromHex("00d2d3"),
+                                Colour = ZeroVColour.Cyan,
                             },
                             this.titleScrollContainer = new Container {
                                 Anchor = Anchor.CentreLeft,
@@ -102,14 +103,14 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
                                             Origin = Anchor.CentreLeft,
                                             Anchor = Anchor.CentreLeft,
                                             Text = trackInfo.Title,
-                                            Colour = Colour4.White,
+                                            Colour = ZeroVColour.TextDark,
                                             Font = FontUsage.Default.With(size: 22, weight: "Bold"),
                                         },
                                         this.subTitle = new ZeroVSpriteText {
                                             Origin = Anchor.CentreLeft,
                                             Anchor = Anchor.CentreLeft,
                                             Text = $"{artists}  •  {album}",
-                                            Colour = Colour4.FromHex("94a3b8"),
+                                            Colour = ZeroVColour.TextLight,
                                             FontSize = 14,
                                         },
                                     ],
@@ -129,18 +130,18 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
                                 Origin = Anchor.CentreLeft,
                                 AutoSizeAxes = Axes.Both,
                                 Masking = true,
-                                CornerRadius = 4,
+                                CornerRadius = 0,
                                 BorderThickness = 1,
-                                BorderColour = Colour4.FromHex("a55eea").Opacity(0.6f),
+                                BorderColour = ZeroVColour.Purple.Opacity(0.6f),
                                 Children = [
                                     new Box {
                                         RelativeSizeAxes = Axes.Both,
-                                        Colour = Colour4.FromHex("a55eea").Opacity(0.18f),
+                                        Colour = ZeroVColour.Purple.Opacity(0.12f),
                                     },
                                     new ZeroVSpriteText {
                                         Padding = new MarginPadding { Left = 8, Right = 8, Top = 4, Bottom = 4 },
                                         Text = $"{mapCount} MAP{(mapCount == 1 ? "" : "S")}",
-                                        Colour = Colour4.FromHex("d8b4fe"),
+                                        Colour = ZeroVColour.Purple,
                                         FontSize = 12,
                                         Font = FontUsage.Default.With(weight: "Bold"),
                                     },
@@ -150,7 +151,7 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,
                                 Size = new Vector2(12),
-                                Colour = Colour4.FromHex("00d2d3"),
+                                Colour = ZeroVColour.Cyan,
                             },
                         ],
                     },
@@ -161,17 +162,17 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
 
     public void UpdateExpandedState(Boolean expanded) {
         if (expanded) {
-            this.BorderColour = Colour4.FromHex("00d2d3");
+            this.BorderColour = ZeroVColour.Cyan;
             this.leftAccentBar.FadeTo(1f, 200, Easing.OutQuint);
             this.expandDiamond.RotateTo(45, 250, Easing.OutQuint);
-            this.expandDiamond.FadeColour(Colour4.FromHex("00f0ff"), 200);
-            this.backgroundBox.FadeColour(Colour4.FromHex("181f2f").Opacity(0.96f), 200, Easing.OutQuint);
+            this.expandDiamond.FadeColour(ZeroVColour.CyanBright, 200);
+            this.backgroundBox.FadeColour(ZeroVColour.BgCardSelected, 200, Easing.OutQuint);
         } else {
-            this.BorderColour = this.IsHovered ? Colour4.FromHex("00d2d3").Opacity(0.7f) : Colour4.White.Opacity(0.15f);
-            this.leftAccentBar.FadeTo(this.IsHovered ? 0.8f : 0.5f, 200, Easing.OutQuint);
+            this.BorderColour = this.IsHovered ? ZeroVColour.Cyan.Opacity(0.7f) : ZeroVColour.BorderSubtle;
+            this.leftAccentBar.FadeTo(this.IsHovered ? 0.8f : 0.6f, 200, Easing.OutQuint);
             this.expandDiamond.RotateTo(0, 250, Easing.OutQuint);
-            this.expandDiamond.FadeColour(Colour4.FromHex("00d2d3"), 200);
-            this.backgroundBox.FadeColour(Colour4.FromHex("131722").Opacity(0.92f), 200, Easing.OutQuint);
+            this.expandDiamond.FadeColour(ZeroVColour.Cyan, 200);
+            this.backgroundBox.FadeColour(ZeroVColour.BgCard, 200, Easing.OutQuint);
         }
     }
 

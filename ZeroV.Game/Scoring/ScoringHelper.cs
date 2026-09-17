@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using osu.Framework.Graphics;
 
 using ZeroV.Game.Objects;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Scoring;
 
@@ -19,9 +20,9 @@ public static class ScoringHelper {
     }
 
     public static Colour4 ToResultColour(this ResultInfo result) => result switch {
-        { IsAllPerfect: true } and { IsAllDone: true } => Colour4.Gold,
-        { IsFullCombo: true } and { IsAllDone: true } => Colour4.Blue,
-        { IsAllDone: false } => Colour4.Red,
-        _ => Colour4.Wheat,
+        { IsAllPerfect: true, IsAllDone: true } => ZeroVColour.AllPerfect,
+        { IsFullCombo: true, IsAllDone: true } => ZeroVColour.FullCombo,
+        { IsAllDone: false } => ZeroVColour.Failed,
+        _ => ZeroVColour.Clear,
     };
 }

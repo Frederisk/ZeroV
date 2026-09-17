@@ -23,6 +23,7 @@ using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Screens.Gameplay;
 using ZeroV.Game.Screens.PlaySongSelect.ListItems;
+using ZeroV.Game.Utils;
 using ZeroV.Game.Utils.ExternalLoader;
 
 namespace ZeroV.Game.Screens.PlaySongSelect;
@@ -63,7 +64,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             RelativeSizeAxes = Axes.X,
             AutoSizeAxes = Axes.Y,
             Direction = FillDirection.Vertical,
-            Spacing = new Vector2(0, 8),
+            Spacing = new Vector2(0, 6),
         };
 
         var trackList = this.beatmapWrapperProvider.Get()?.OrderBy(i => i.Title).ToList() ?? [];
@@ -86,25 +87,25 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
         };
 
         this.InternalChildren = [
-            // Background Layer
+            // Background Base Layer (VOEZ Bright Aesthetic)
             this.defaultBackgroundBox = new Box {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.FromHex("0a0d14"),
+                Colour = ZeroVColour.BgBase,
             },
             this.background,
-            // Backdrop Gradient & Vignette Overlay
+            // Bright Frosted Ambient Gradient Overlay
             new Box {
                 RelativeSizeAxes = Axes.Both,
                 Colour = ColourInfo.GradientHorizontal(
-                    Colour4.FromHex("060910").Opacity(0.88f),
-                    Colour4.FromHex("060910").Opacity(0.60f)
+                    ZeroVColour.BgLight.Opacity(0.85f),
+                    ZeroVColour.BgBase.Opacity(0.65f)
                 ),
             },
             new Box {
                 RelativeSizeAxes = Axes.Both,
                 Colour = ColourInfo.GradientVertical(
-                    Colour4.FromHex("000000").Opacity(0.40f),
-                    Colour4.FromHex("000000").Opacity(0.65f)
+                    Colour4.White.Opacity(0.30f),
+                    ZeroVColour.BgBase.Opacity(0.50f)
                 ),
             },
 
@@ -113,12 +114,23 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
                 RelativeSizeAxes = Axes.X,
-                Height = 80,
+                Height = 72,
                 Children = [
+                    new Box {
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = ZeroVColour.BgHeader,
+                    },
+                    new Box {
+                        Anchor = Anchor.BottomLeft,
+                        Origin = Anchor.BottomLeft,
+                        RelativeSizeAxes = Axes.X,
+                        Height = 2,
+                        Colour = ZeroVColour.Cyan.Opacity(0.6f),
+                    },
                     new BackButton(this) {
                         Anchor = Anchor.CentreLeft,
                         Origin = Anchor.CentreLeft,
-                        Margin = new MarginPadding { Left = 32 },
+                        Margin = new MarginPadding { Left = 24 },
                     },
                     new FillFlowContainer {
                         Anchor = Anchor.CentreLeft,
@@ -126,13 +138,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                         AutoSizeAxes = Axes.Both,
                         Direction = FillDirection.Horizontal,
                         Spacing = new Vector2(12, 0),
-                        Margin = new MarginPadding { Left = 200 },
+                        Margin = new MarginPadding { Left = 190 },
                         Children = [
                             new Diamond {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,
                                 Size = new Vector2(14),
-                                Colour = Colour4.FromHex("00d2d3"),
+                                Colour = ZeroVColour.Cyan,
                             },
                             new FillFlowContainer {
                                 Anchor = Anchor.CentreLeft,
@@ -143,14 +155,14 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                 Children = [
                                     new ZeroVSpriteText {
                                         Text = "MUSIC SELECT",
-                                        Colour = Colour4.White,
-                                        FontSize = 24,
+                                        Colour = ZeroVColour.TextDark,
+                                        FontSize = 22,
                                         Font = FontUsage.Default.With(weight: "Bold"),
                                     },
                                     new ZeroVSpriteText {
                                         Text = "CHOOSE A TRACK TO PLAY",
-                                        Colour = Colour4.FromHex("64748b"),
-                                        FontSize = 12,
+                                        Colour = ZeroVColour.TextLight,
+                                        FontSize = 11,
                                         Font = FontUsage.Default.With(weight: "Bold"),
                                     },
                                 ],
@@ -172,7 +184,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                         Anchor = Anchor.CentreLeft,
                         Origin = Anchor.CentreLeft,
                         RelativeSizeAxes = Axes.Both,
-                        Width = 0.48f,
+                        Width = 0.46f,
                         Children = [
                             // Top: Detail Preview Card
                             this.detailCard = new SongDetailPreviewCard {
@@ -188,13 +200,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                 RelativeSizeAxes = Axes.X,
                                 Height = 320,
                                 Masking = true,
-                                CornerRadius = 8,
-                                BorderThickness = 1,
-                                BorderColour = Colour4.FromHex("00d2d3").Opacity(0.25f),
+                                CornerRadius = 0,
+                                BorderThickness = 1.5f,
+                                BorderColour = ZeroVColour.Cyan.Opacity(0.5f),
                                 Children = [
                                     new Box {
                                         RelativeSizeAxes = Axes.Both,
-                                        Colour = Colour4.FromHex("0d111a").Opacity(0.85f),
+                                        Colour = ZeroVColour.BgPanel,
                                     },
                                     new FillFlowContainer {
                                         RelativeSizeAxes = Axes.Both,
@@ -213,13 +225,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                                         Anchor = Anchor.CentreLeft,
                                                         Origin = Anchor.CentreLeft,
                                                         Size = new Vector2(10),
-                                                        Colour = Colour4.FromHex("00d2d3"),
+                                                        Colour = ZeroVColour.Cyan,
                                                     },
                                                     new ZeroVSpriteText {
                                                         Anchor = Anchor.CentreLeft,
                                                         Origin = Anchor.CentreLeft,
                                                         Text = "TOP RECORDS",
-                                                        Colour = Colour4.White,
+                                                        Colour = ZeroVColour.TextDark,
                                                         FontSize = 15,
                                                         Font = FontUsage.Default.With(weight: "Bold"),
                                                     },
@@ -229,7 +241,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                             new Box {
                                                 RelativeSizeAxes = Axes.X,
                                                 Height = 1,
-                                                Colour = Colour4.FromHex("00d2d3").Opacity(0.2f),
+                                                Colour = ZeroVColour.BorderLight,
                                             },
                                             // List Scroll Container
                                             new Container {
@@ -253,13 +265,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                                         Anchor = Anchor.TopCentre,
                                                         Origin = Anchor.TopCentre,
                                                         Size = new Vector2(16),
-                                                        Colour = Colour4.FromHex("64748b").Opacity(0.4f),
+                                                        Colour = ZeroVColour.Cyan.Opacity(0.4f),
                                                     },
                                                     new ZeroVSpriteText {
                                                         Anchor = Anchor.TopCentre,
                                                         Origin = Anchor.TopCentre,
                                                         Text = "NO RECORDS YET",
-                                                        Colour = Colour4.FromHex("64748b"),
+                                                        Colour = ZeroVColour.TextMedium,
                                                         FontSize = 14,
                                                         Font = FontUsage.Default.With(weight: "Bold"),
                                                     },
@@ -267,7 +279,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                                         Anchor = Anchor.TopCentre,
                                                         Origin = Anchor.TopCentre,
                                                         Text = "Play this chart to set your high score!",
-                                                        Colour = Colour4.FromHex("475569"),
+                                                        Colour = ZeroVColour.TextLight,
                                                         FontSize = 12,
                                                     },
                                                 ],
@@ -284,7 +296,8 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.CentreRight,
                         RelativeSizeAxes = Axes.Both,
-                        Width = 0.50f,
+                        Width = 0.51f,
+                        Padding = new MarginPadding { Left = 16 },
                         Children = [
                             // Header Bar for Right Column
                             new Container {
@@ -304,13 +317,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                                 Anchor = Anchor.CentreLeft,
                                                 Origin = Anchor.CentreLeft,
                                                 Size = new Vector2(10),
-                                                Colour = Colour4.FromHex("00d2d3"),
+                                                Colour = ZeroVColour.Cyan,
                                             },
                                             new ZeroVSpriteText {
                                                 Anchor = Anchor.CentreLeft,
                                                 Origin = Anchor.CentreLeft,
                                                 Text = $"TRACK COLLECTION  ({trackList.Count})",
-                                                Colour = Colour4.White,
+                                                Colour = ZeroVColour.TextDark,
                                                 FontSize = 15,
                                                 Font = FontUsage.Default.With(weight: "Bold"),
                                             },
@@ -321,7 +334,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                         Origin = Anchor.BottomLeft,
                                         RelativeSizeAxes = Axes.X,
                                         Height = 1,
-                                        Colour = Colour4.FromHex("00d2d3").Opacity(0.2f),
+                                        Colour = ZeroVColour.BorderLight,
                                     },
                                 ],
                             },
@@ -364,12 +377,12 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     private BasicButton createActionButton(String text, Action? action = null) => new() {
         Size = new Vector2(180, 38),
         Masking = true,
-        CornerRadius = 6,
+        CornerRadius = 0,
         BorderThickness = 1,
-        BorderColour = Colour4.FromHex("00d2d3").Opacity(0.4f),
-        BackgroundColour = Colour4.FromHex("121622").Opacity(0.95f),
-        HoverColour = Colour4.FromHex("00d2d3").Opacity(0.35f),
-        FlashColour = Colour4.FromHex("00d2d3"),
+        BorderColour = ZeroVColour.Cyan.Opacity(0.5f),
+        BackgroundColour = ZeroVColour.BgCard,
+        HoverColour = ZeroVColour.Cyan.Opacity(0.2f),
+        FlashColour = ZeroVColour.CyanBright,
         Text = text,
         Action = action,
     };
@@ -476,9 +489,9 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
 
         public SongDetailPreviewCard() {
             this.Masking = true;
-            this.CornerRadius = 8;
+            this.CornerRadius = 0;
             this.BorderThickness = 1.5f;
-            this.BorderColour = Colour4.FromHex("00d2d3").Opacity(0.3f);
+            this.BorderColour = ZeroVColour.Cyan.Opacity(0.4f);
         }
 
         [BackgroundDependencyLoader]
@@ -486,7 +499,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             this.InternalChildren = [
                 new Box {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.FromHex("0e121a").Opacity(0.90f),
+                    Colour = ZeroVColour.BgCard,
                 },
                 this.contentContainer = new Container {
                     RelativeSizeAxes = Axes.Both,
@@ -501,24 +514,24 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                             Children = [
                                 this.titleText = new ZeroVSpriteText {
                                     Text = "Song Title",
-                                    Colour = Colour4.White,
-                                    FontSize = 26,
+                                    Colour = ZeroVColour.TextDark,
+                                    FontSize = 24,
                                     Font = FontUsage.Default.With(weight: "Bold"),
                                 },
                                 this.metaText = new ZeroVSpriteText {
                                     Text = "Artist • Album",
-                                    Colour = Colour4.FromHex("94a3b8"),
+                                    Colour = ZeroVColour.TextMedium,
                                     FontSize = 14,
                                 },
                                 this.authorText = new ZeroVSpriteText {
                                     Text = "Chart by Author",
-                                    Colour = Colour4.FromHex("64748b"),
+                                    Colour = ZeroVColour.TextLight,
                                     FontSize = 12,
                                 },
                                 new Box {
                                     RelativeSizeAxes = Axes.X,
                                     Height = 1,
-                                    Colour = Colour4.FromHex("00d2d3").Opacity(0.15f),
+                                    Colour = ZeroVColour.BorderLight,
                                     Margin = new MarginPadding { Top = 4, Bottom = 4 },
                                 },
                                 new FillFlowContainer {
@@ -532,13 +545,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                             Origin = Anchor.CentreLeft,
                                             AutoSizeAxes = Axes.Both,
                                             Masking = true,
-                                            CornerRadius = 4,
+                                            CornerRadius = 0,
                                             BorderThickness = 1,
-                                            BorderColour = Colour4.FromHex("00d2d3"),
+                                            BorderColour = ZeroVColour.Cyan,
                                             Children = [
                                                 new Box {
                                                     RelativeSizeAxes = Axes.Both,
-                                                    Colour = Colour4.FromHex("00d2d3").Opacity(0.2f),
+                                                    Colour = ZeroVColour.Cyan.Opacity(0.15f),
                                                 },
                                                 new FillFlowContainer {
                                                     AutoSizeAxes = Axes.Both,
@@ -550,13 +563,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                                             Anchor = Anchor.CentreLeft,
                                                             Origin = Anchor.CentreLeft,
                                                             Size = new Vector2(8),
-                                                            Colour = Colour4.FromHex("00d2d3"),
+                                                            Colour = ZeroVColour.Cyan,
                                                         },
                                                         this.diffText = new ZeroVSpriteText {
                                                             Anchor = Anchor.CentreLeft,
                                                             Origin = Anchor.CentreLeft,
                                                             Text = "LV. 1.0 EASY",
-                                                            Colour = Colour4.White,
+                                                            Colour = ZeroVColour.Cyan,
                                                             FontSize = 12,
                                                             Font = FontUsage.Default.With(weight: "Bold"),
                                                         },
@@ -591,13 +604,13 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.TopCentre,
                                     Size = new Vector2(20),
-                                    Colour = Colour4.FromHex("00d2d3").Opacity(0.5f),
+                                    Colour = ZeroVColour.Cyan.Opacity(0.4f),
                                 },
                                 new ZeroVSpriteText {
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.TopCentre,
                                     Text = "SELECT A TRACK",
-                                    Colour = Colour4.FromHex("64748b"),
+                                    Colour = ZeroVColour.TextMedium,
                                     FontSize = 15,
                                     Font = FontUsage.Default.With(weight: "Bold"),
                                 },
@@ -611,7 +624,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
         public void ClearDisplay() {
             this.contentContainer.FadeOut(150, Easing.OutQuint);
             this.emptyPlaceholder.FadeIn(150, Easing.OutQuint);
-            this.BorderColour = Colour4.FromHex("00d2d3").Opacity(0.3f);
+            this.BorderColour = ZeroVColour.Cyan.Opacity(0.4f);
         }
 
         public void UpdateDisplay(TrackInfo trackInfo, MapInfo mapInfo) {
@@ -624,28 +637,21 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             this.metaText.Text = $"{artist}  •  {album}";
             this.authorText.Text = $"Mapped by: {trackInfo.GameAuthor}  |  v{trackInfo.GameVersion}";
 
-            Colour4 diffColour = mapInfo.Difficulty switch {
-                <= 3.0 => Colour4.FromHex("00d2d3"),
-                <= 7.0 => Colour4.FromHex("ff9f43"),
-                _ => Colour4.FromHex("ff4757"),
-            };
-            String tierName = mapInfo.Difficulty switch {
-                <= 3.0 => "EASY",
-                <= 7.0 => "HARD",
-                _ => "SPECIAL",
-            };
+            Colour4 diffColour = ZeroVColour.ForDifficulty(mapInfo.Difficulty);
+            String tierName = ZeroVColour.DifficultyName(mapInfo.Difficulty);
 
-            this.BorderColour = diffColour.Opacity(0.5f);
+            this.BorderColour = diffColour.Opacity(0.6f);
             this.diffBadgeContainer.BorderColour = diffColour;
             this.diffDiamond.Colour = diffColour;
+            this.diffText.Colour = diffColour;
             this.diffText.Text = $"LV. {mapInfo.Difficulty:0.#}  {tierName}";
 
             this.notesContainer.Clear();
             this.notesContainer.AddRange([
-                this.createNoteTag("P", mapInfo.PressCount, Colour4.FromHex("00d2d3")),
-                this.createNoteTag("S", mapInfo.SlideCount, Colour4.FromHex("a55eea")),
-                this.createNoteTag("St", mapInfo.StrokeCount, Colour4.FromHex("feca57")),
-                this.createNoteTag("B", mapInfo.BlinkCount, Colour4.FromHex("ff6b81")),
+                this.createNoteTag("P", mapInfo.PressCount, ZeroVColour.NotePress),
+                this.createNoteTag("S", mapInfo.SlideCount, ZeroVColour.NoteSlide),
+                this.createNoteTag("St", mapInfo.StrokeCount, ZeroVColour.NoteStroke),
+                this.createNoteTag("B", mapInfo.BlinkCount, ZeroVColour.NoteBlink),
             ]);
         }
 
@@ -666,7 +672,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
                     Text = count.ToString(),
-                    Colour = Colour4.FromHex("cbd5e1"),
+                    Colour = ZeroVColour.TextDark,
                     FontSize = 13,
                     Font = FontUsage.Default.With(weight: "Bold"),
                 },

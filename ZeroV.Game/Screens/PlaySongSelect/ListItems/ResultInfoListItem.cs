@@ -13,6 +13,7 @@ using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
 
@@ -27,41 +28,34 @@ public partial class ResultInfoListItem : CompositeDrawable {
         this.rank = rank;
     }
 
-    private static Colour4 getRankColour(Int32 rank) => rank switch {
-        1 => Colour4.FromHex("ffd700"), // Gold
-        2 => Colour4.FromHex("e2e8f0"), // Silver
-        3 => Colour4.FromHex("f59e0b"), // Bronze
-        _ => Colour4.FromHex("64748b"), // Slate
-    };
-
     [BackgroundDependencyLoader]
     private void load() {
         Colour4 resultColour = this.result.ToResultColour();
-        Colour4 rankColour = getRankColour(this.rank);
+        Colour4 rankColour = ZeroVColour.ForRank(this.rank);
 
         (String statusText, Colour4 statusColour) = this.result switch {
-            { IsAllPerfect: true, IsAllDone: true } => ("ALL PERFECT", Colour4.FromHex("ffd700")),
-            { IsFullCombo: true, IsAllDone: true } => ("FULL COMBO", Colour4.FromHex("00d2d3")),
-            { IsAllDone: true } => ("CLEAR", Colour4.FromHex("2ed573")),
-            _ => ("FAILED", Colour4.FromHex("ff4757")),
+            { IsAllPerfect: true, IsAllDone: true } => ("ALL PERFECT", ZeroVColour.AllPerfect),
+            { IsFullCombo: true, IsAllDone: true } => ("FULL COMBO", ZeroVColour.FullCombo),
+            { IsAllDone: true } => ("CLEAR", ZeroVColour.Clear),
+            _ => ("FAILED", ZeroVColour.Failed),
         };
 
         this.RelativeSizeAxes = Axes.X;
         this.Height = 46;
-        this.Margin = new MarginPadding { Top = 3, Bottom = 3 };
+        this.Margin = new MarginPadding { Top = 2, Bottom = 2 };
         this.Masking = true;
-        this.CornerRadius = 6;
+        this.CornerRadius = 0;
         this.BorderThickness = 1;
-        this.BorderColour = Colour4.White.Opacity(0.12f);
+        this.BorderColour = ZeroVColour.BorderSubtle;
 
         this.InternalChildren = [
             new Box {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.FromHex("0e121a").Opacity(0.88f),
+                Colour = ZeroVColour.BgCard,
             },
             this.hoverOverlay = new Box {
                 RelativeSizeAxes = Axes.Both,
-                Colour = resultColour.Opacity(0.1f),
+                Colour = resultColour.Opacity(0.08f),
                 Alpha = 0,
             },
             new Box {
@@ -127,11 +121,13 @@ public partial class ResultInfoListItem : CompositeDrawable {
                                 Origin = Anchor.CentreRight,
                                 AutoSizeAxes = Axes.Both,
                                 Masking = true,
-                                CornerRadius = 3,
+                                CornerRadius = 0,
+                                BorderThickness = 1,
+                                BorderColour = statusColour.Opacity(0.5f),
                                 Children = [
                                     new Box {
                                         RelativeSizeAxes = Axes.Both,
-                                        Colour = statusColour.Opacity(0.18f),
+                                        Colour = statusColour.Opacity(0.15f),
                                     },
                                     new ZeroVSpriteText {
                                         Padding = new MarginPadding { Left = 6, Right = 6, Top = 2, Bottom = 2 },
@@ -146,7 +142,7 @@ public partial class ResultInfoListItem : CompositeDrawable {
                                 Anchor = Anchor.CentreRight,
                                 Origin = Anchor.CentreRight,
                                 Text = this.result.FinishTime.ToString("yyyy/MM/dd HH:mm"),
-                                Colour = Colour4.FromHex("64748b"),
+                                Colour = ZeroVColour.TextLight,
                                 FontSize = 11,
                             },
                         ],
@@ -164,7 +160,7 @@ public partial class ResultInfoListItem : CompositeDrawable {
 
     protected override void OnHoverLost(HoverLostEvent e) {
         this.hoverOverlay.FadeOut(120, Easing.InSine);
-        this.BorderColour = Colour4.White.Opacity(0.12f);
+        this.BorderColour = ZeroVColour.BorderSubtle;
         base.OnHoverLost(e);
     }
 }

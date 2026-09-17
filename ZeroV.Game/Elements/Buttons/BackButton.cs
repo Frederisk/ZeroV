@@ -4,6 +4,8 @@ using osu.Framework.Screens;
 
 using osuTK;
 
+using ZeroV.Game.Utils;
+
 namespace ZeroV.Game.Elements.Buttons;
 
 public partial class BackButton : BasicButton {
@@ -13,12 +15,12 @@ public partial class BackButton : BasicButton {
         this.Size = new Vector2(140, 44);
         this.Margin = new MarginPadding(24);
         this.Masking = true;
-        this.CornerRadius = 6;
+        this.CornerRadius = 0;
         this.BorderThickness = 1.5f;
-        this.BorderColour = Colour4.FromHex("00d2d3").Opacity(0.5f);
-        this.BackgroundColour = Colour4.FromHex("121622").Opacity(0.85f);
-        this.HoverColour = Colour4.FromHex("00d2d3").Opacity(0.35f);
-        this.FlashColour = Colour4.FromHex("00d2d3");
+        this.BorderColour = ZeroVColour.Cyan;
+        this.BackgroundColour = ZeroVColour.BgCard;
+        this.HoverColour = ZeroVColour.Cyan.Opacity(0.2f);
+        this.FlashColour = ZeroVColour.CyanBright;
         this.Action = screen.Exit;
     }
 }

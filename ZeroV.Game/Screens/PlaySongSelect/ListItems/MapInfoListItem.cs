@@ -12,6 +12,7 @@ using osuTK;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
 
@@ -30,32 +31,27 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
     private ZeroVSpriteText selectPrompt = null!;
     private Colour4 diffColour;
 
-    private static (Colour4 colour, String name) getDifficultyTheme(Double difficulty) => difficulty switch {
-        <= 3.0 => (Colour4.FromHex("00d2d3"), "EASY"),
-        <= 7.0 => (Colour4.FromHex("ff9f43"), "HARD"),
-        _ => (Colour4.FromHex("ff4757"), "SPECIAL"),
-    };
-
     [BackgroundDependencyLoader]
     private void load() {
-        (this.diffColour, String tierName) = getDifficultyTheme(mapInfo.Difficulty);
+        this.diffColour = ZeroVColour.ForDifficulty(mapInfo.Difficulty);
+        String tierName = ZeroVColour.DifficultyName(mapInfo.Difficulty);
 
         this.RelativeSizeAxes = Axes.X;
         this.Height = 54;
         this.Masking = true;
-        this.CornerRadius = 6;
+        this.CornerRadius = 0;
         this.BorderThickness = 1;
-        this.BorderColour = Colour4.White.Opacity(0.12f);
-        this.Margin = new MarginPadding { Top = 3, Bottom = 3 };
+        this.BorderColour = ZeroVColour.BorderSubtle;
+        this.Margin = new MarginPadding { Top = 2, Bottom = 2 };
 
         this.InternalChildren = [
             this.backgroundBox = new Box {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.FromHex("0e121a").Opacity(0.92f),
+                Colour = ZeroVColour.BgCard,
             },
             this.hoverOverlay = new Box {
                 RelativeSizeAxes = Axes.Both,
-                Colour = this.diffColour.Opacity(0.1f),
+                Colour = this.diffColour.Opacity(0.08f),
                 Alpha = 0,
             },
             this.leftAccentBar = new Box {
@@ -64,7 +60,7 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
                 RelativeSizeAxes = Axes.Y,
                 Width = 4,
                 Colour = this.diffColour,
-                Alpha = 0.6f,
+                Alpha = 0.7f,
             },
             new Container {
                 RelativeSizeAxes = Axes.Both,
@@ -96,11 +92,13 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
                                 Origin = Anchor.CentreLeft,
                                 AutoSizeAxes = Axes.Both,
                                 Masking = true,
-                                CornerRadius = 3,
+                                CornerRadius = 0,
+                                BorderThickness = 1,
+                                BorderColour = this.diffColour.Opacity(0.5f),
                                 Children = [
                                     new Box {
                                         RelativeSizeAxes = Axes.Both,
-                                        Colour = this.diffColour.Opacity(0.15f),
+                                        Colour = this.diffColour.Opacity(0.12f),
                                     },
                                     new ZeroVSpriteText {
                                         Padding = new MarginPadding { Left = 6, Right = 6, Top = 2, Bottom = 2 },
@@ -121,10 +119,10 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
                         Direction = FillDirection.Horizontal,
                         Spacing = new Vector2(14, 0),
                         Children = [
-                            this.createNoteCountChip("PRESS", mapInfo.PressCount, Colour4.FromHex("00d2d3")),
-                            this.createNoteCountChip("SLIDE", mapInfo.SlideCount, Colour4.FromHex("a55eea")),
-                            this.createNoteCountChip("STROKE", mapInfo.StrokeCount, Colour4.FromHex("feca57")),
-                            this.createNoteCountChip("BLINK", mapInfo.BlinkCount, Colour4.FromHex("ff6b81")),
+                            this.createNoteCountChip("PRESS", mapInfo.PressCount, ZeroVColour.NotePress),
+                            this.createNoteCountChip("SLIDE", mapInfo.SlideCount, ZeroVColour.NoteSlide),
+                            this.createNoteCountChip("STROKE", mapInfo.StrokeCount, ZeroVColour.NoteStroke),
+                            this.createNoteCountChip("BLINK", mapInfo.BlinkCount, ZeroVColour.NoteBlink),
                         ],
                     },
                     // Right: Play / Select button prompt
@@ -137,7 +135,7 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
                                 Anchor = Anchor.CentreRight,
                                 Origin = Anchor.CentreRight,
                                 Text = "SELECT",
-                                Colour = Colour4.FromHex("64748b"),
+                                Colour = ZeroVColour.TextLight,
                                 FontSize = 12,
                                 Font = FontUsage.Default.With(weight: "Bold"),
                             },
@@ -146,19 +144,19 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
                                 Origin = Anchor.CentreRight,
                                 AutoSizeAxes = Axes.Both,
                                 Masking = true,
-                                CornerRadius = 4,
+                                CornerRadius = 0,
                                 BorderThickness = 1,
                                 BorderColour = this.diffColour,
                                 Alpha = 0,
                                 Children = [
                                     new Box {
                                         RelativeSizeAxes = Axes.Both,
-                                        Colour = this.diffColour.Opacity(0.3f),
+                                        Colour = this.diffColour,
                                     },
                                     new ZeroVSpriteText {
                                         Padding = new MarginPadding { Left = 10, Right = 10, Top = 4, Bottom = 4 },
                                         Text = "▶  PLAY",
-                                        Colour = Colour4.White,
+                                        Colour = ZeroVColour.TextWhite,
                                         FontSize = 13,
                                         Font = FontUsage.Default.With(weight: "Bold"),
                                     },
@@ -180,7 +178,7 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
                 Anchor = Anchor.CentreLeft,
                 Origin = Anchor.CentreLeft,
                 Text = label,
-                Colour = colour.Opacity(0.7f),
+                Colour = colour,
                 FontSize = 10,
                 Font = FontUsage.Default.With(weight: "Bold"),
             },
@@ -188,7 +186,7 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
                 Anchor = Anchor.CentreLeft,
                 Origin = Anchor.CentreLeft,
                 Text = count.ToString(),
-                Colour = Colour4.FromHex("cbd5e1"),
+                Colour = ZeroVColour.TextDark,
                 FontSize = 12,
                 Font = FontUsage.Default.With(weight: "Bold"),
             },
@@ -203,7 +201,7 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
             this.BorderThickness = 2;
             this.BorderColour = this.diffColour;
             this.leftAccentBar.FadeTo(1f, 150, Easing.OutQuint);
-            this.backgroundBox.FadeColour(Colour4.FromHex("161c2b").Opacity(0.96f), 150, Easing.OutQuint);
+            this.backgroundBox.FadeColour(ZeroVColour.BgCardSelected, 150, Easing.OutQuint);
 
             this.selectPrompt.FadeOut(100, Easing.OutQuint);
             this.playBadge.FadeIn(150, Easing.OutQuint);
@@ -215,9 +213,9 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
     public void OnSelectCancel() {
         this.IsSelected = false;
         this.BorderThickness = 1;
-        this.BorderColour = this.IsHovered ? this.diffColour.Opacity(0.5f) : Colour4.White.Opacity(0.12f);
+        this.BorderColour = this.IsHovered ? this.diffColour.Opacity(0.5f) : ZeroVColour.BorderSubtle;
         this.leftAccentBar.FadeTo(this.IsHovered ? 0.8f : 0.6f, 150, Easing.OutQuint);
-        this.backgroundBox.FadeColour(Colour4.FromHex("0e121a").Opacity(0.92f), 150, Easing.OutQuint);
+        this.backgroundBox.FadeColour(ZeroVColour.BgCard, 150, Easing.OutQuint);
 
         this.selectPrompt.FadeIn(100, Easing.OutQuint);
         this.playBadge.FadeOut(100, Easing.OutQuint);
@@ -235,7 +233,7 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
     protected override void OnHoverLost(HoverLostEvent e) {
         this.hoverOverlay.FadeOut(120, Easing.InSine);
         if (!this.IsSelected) {
-            this.BorderColour = Colour4.White.Opacity(0.12f);
+            this.BorderColour = ZeroVColour.BorderSubtle;
             this.leftAccentBar.FadeTo(0.6f, 120, Easing.InSine);
         }
         base.OnHoverLost(e);

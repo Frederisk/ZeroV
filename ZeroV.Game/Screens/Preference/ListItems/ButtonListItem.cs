@@ -7,6 +7,8 @@ using osu.Framework.Localisation;
 
 using osuTK;
 
+using ZeroV.Game.Utils;
+
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
 public partial class ButtonListItem<TValue, TSetting> : BasePreferenceListItem<TValue, TSetting> where TSetting : struct, Enum {
@@ -23,12 +25,12 @@ public partial class ButtonListItem<TValue, TSetting> : BasePreferenceListItem<T
             Origin = Anchor.CentreRight,
             Size = new Vector2(130, 40),
             Masking = true,
-            CornerRadius = 6,
+            CornerRadius = 0,
             BorderThickness = 1.5f,
-            BorderColour = Colour4.FromHex("00d2d3").Opacity(0.5f),
-            BackgroundColour = Colour4.FromHex("121622").Opacity(0.9f),
-            HoverColour = Colour4.FromHex("00d2d3").Opacity(0.35f),
-            FlashColour = Colour4.FromHex("00d2d3"),
+            BorderColour = ZeroVColour.Cyan.Opacity(0.6f),
+            BackgroundColour = ZeroVColour.BgCard,
+            HoverColour = ZeroVColour.Cyan.Opacity(0.2f),
+            FlashColour = ZeroVColour.CyanBright,
             Text = this.FormattingDisplayText(this.current.Value),
             Action = this.Action,
         };

@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.UserInterface;
 
 using ZeroV.Game.Graphics;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.Preference.ListItems;
 
@@ -25,9 +26,9 @@ public partial class SliderBarListItem<TValue, TSetting> : BasePreferenceListIte
     protected override Drawable LoadInputController() {
         this.sliderBar = new BasicSliderBar<TValue> {
             Size = new osuTK.Vector2(220, 24),
-            SelectionColour = Colour4.FromHex("00d2d3"),
-            BackgroundColour = Colour4.FromHex("0e121a").Opacity(0.9f),
-            CornerRadius = 4,
+            SelectionColour = ZeroVColour.Cyan,
+            BackgroundColour = ZeroVColour.BgCardSelected,
+            CornerRadius = 0,
             Masking = true,
             Current = new BindableNumber<TValue>() {
                 MaxValue = this.MaxValue,
@@ -40,7 +41,7 @@ public partial class SliderBarListItem<TValue, TSetting> : BasePreferenceListIte
             Origin = Anchor.CentreLeft,
             Text = this.FormattingDisplayText(this.sliderBar.Current.Value),
             FontSize = 20,
-            Colour = Colour4.FromHex("00d2d3"),
+            Colour = ZeroVColour.Cyan,
         };
         this.sliderBar.Current.ValueChanged += this.OnUpdateSettingDisplay;
         return new FillFlowContainer {

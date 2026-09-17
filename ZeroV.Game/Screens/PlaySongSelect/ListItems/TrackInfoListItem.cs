@@ -30,8 +30,11 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
             Alpha = 0,
             Direction = FillDirection.Vertical,
             Spacing = new Vector2(0, 4),
+            Padding = new MarginPadding {
+                Left = 20,
+                Right = 0,
+            },
             Margin = new MarginPadding {
-                Left = 24,
                 Top = 6,
                 Bottom = 4,
             },
@@ -69,10 +72,12 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
             this.header.UpdateExpandedState(value);
 
             if (value) {
+                this.TransformTo(nameof(this.X), -32f, 250, Easing.OutQuint);
                 this.container.AutoSizeAxes = Axes.Y;
                 this.container.FadeIn(200, Easing.OutQuint);
                 this.header.TryBeginLongTitleScroll();
             } else {
+                this.TransformTo(nameof(this.X), 0f, 200, Easing.OutQuint);
                 this.container.FadeOut(150, Easing.InSine);
                 this.container.AutoSizeAxes = Axes.None;
                 this.container.Height = 0;
