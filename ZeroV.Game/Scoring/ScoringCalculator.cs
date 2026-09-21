@@ -54,6 +54,9 @@ public class ScoringCalculator {
     public Boolean IsFullCombo => this.CurrentCombo == this.JudgedCount;
     public Boolean IsAllPerfect => (this.PerfectCount + this.MaxPerfectCount) == this.JudgedCount;
 
+    /// <summary>
+    /// Have all the particles been judged.
+    /// </summary>
     public Boolean IsAllDone => this.JudgedCount == this.ParticleCount;
 
     public Action? ScoringChanged;
@@ -130,6 +133,8 @@ public class ScoringCalculator {
                 targetMultiplier = 1.0;
                 break;
 
+            case TargetResult.None:
+            case TargetResult.Early:
             default:
                 throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
         }

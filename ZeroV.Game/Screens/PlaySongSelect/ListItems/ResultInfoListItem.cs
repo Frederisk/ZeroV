@@ -10,12 +10,16 @@ using ZeroV.Game.Objects;
 using ZeroV.Game.Scoring;
 
 namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
+
 public partial class ResultInfoListItem : CompositeDrawable {
 
-    private ResultInfo result;
+    private readonly ResultInfo result;
 
-    public ResultInfoListItem(ResultInfo result) {
+    private readonly Int32 rank;
+
+    public ResultInfoListItem(ResultInfo result, Int32 rank) {
         this.result = result;
+        this.rank = rank;
     }
 
     [BackgroundDependencyLoader]
