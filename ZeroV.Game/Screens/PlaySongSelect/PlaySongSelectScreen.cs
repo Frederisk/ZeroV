@@ -182,11 +182,17 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                         Width = 0.46f,
                         Children = [
                             // Top: Detail Preview Card
-                            new Box {
-                                // TODO: Detail Preview Card
+                            //new Box {
+                            //    // TODO: Detail Preview Card
+                            //    Anchor = Anchor.TopCentre,
+                            //    Origin = Anchor.TopCentre,
+                            //    Colour = Colour4.Red,
+                            //    RelativeSizeAxes = Axes.X,
+                            //    Height = 300,
+                            //},
+                            new SongDetailPreviewCard {
                                 Anchor = Anchor.TopCentre,
                                 Origin = Anchor.TopCentre,
-                                Colour = Colour4.Red,
                                 RelativeSizeAxes = Axes.X,
                                 Height = 300,
                             },
