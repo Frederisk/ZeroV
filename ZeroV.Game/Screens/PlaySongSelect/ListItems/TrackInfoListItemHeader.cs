@@ -89,12 +89,14 @@ public partial class TrackInfoListItemHeader : CompositeDrawable {
     }
 
     public void TryEndLongTitleScroll() {
-        if (!this.IsHovered && !this.listItem.IsExpanded) {
-            this.title.ClearTransforms();
-            this.title.Margin = new MarginPadding(0);
-            this.subTitle.ClearTransforms();
-            this.subTitle.Margin = new MarginPadding(0);
+        if (this.IsHovered || this.listItem.IsExpanded) {
+            return;
         }
+
+        this.title.ClearTransforms();
+        this.title.Margin = new MarginPadding(0);
+        this.subTitle.ClearTransforms();
+        this.subTitle.Margin = new MarginPadding(0);
     }
 
     protected override Boolean OnClick(ClickEvent e) {

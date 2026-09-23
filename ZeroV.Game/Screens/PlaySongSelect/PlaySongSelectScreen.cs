@@ -36,9 +36,8 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
     private ScrollContainer<FillFlowContainer<ResultInfoListItem>> scoringRankListScroller = null!;
 
     private FillFlowContainer<ResultInfoListItem> scoringRankList = null!;
-    //private Container miniInfoDisplay = null!;
 
-    private Container emptyLeaderboardPlaceholder = null!;
+    private CardEmptyPlaceholder emptyLeaderboardPlaceholder = null!;
 
     [Resolved]
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
@@ -86,40 +85,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             Size = new Vector2(0.95f, 0.45f),
             Child = this.scoringRankList,
         };
-        this.emptyLeaderboardPlaceholder = new Container {
-            RelativeSizeAxes = Axes.Both,
-            Child = new FillFlowContainer {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                AutoSizeAxes = Axes.Both,
-                Direction = FillDirection.Vertical,
-                //Spacing = new Vector2(8),
-                Children = [
-                    new Diamond {
-                        Anchor = Anchor.TopCentre,
-                        Origin = Anchor.TopCentre,
-                        Size = new Vector2(16),
-                        Margin = new MarginPadding { Horizontal = 8 },
-                        Colour = Colour4.Cyan,
-                    },
-                    new ZeroVSpriteText {
-                        Anchor = Anchor.TopCentre,
-                        Origin = Anchor.TopCentre,
-                        Colour = Colour4.Black,
-                        FontSize = 14,
-                        Font = FontUsage.Default.With(weight: "Bold"),
-                        Text = "NO RECORDS YET",
-                    },
-                    new ZeroVSpriteText {
-                        Anchor = Anchor.TopCentre,
-                        Origin = Anchor.TopCentre,
-                        Colour = Colour4.Black,
-                        FontSize = 12,
-                        Text = "Play this chart to set your high score!",
-                    },
-                ],
-            },
-        };
+        this.emptyLeaderboardPlaceholder = new CardEmptyPlaceholder("NO RECORDS YET", "Play this chart to set your high score!");
 
         this.InternalChildren = [
             // Background Base Layer
@@ -172,7 +138,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both,
-                Padding = new MarginPadding { Top = 80, Bottom = 60, Left = 32, Right = 32 },
+                Padding = new MarginPadding { Top = 80, Bottom = 32, Left = 32, Right = 32 },
                 Children = [
                     // Left Column: Song Details & Leaderboard
                     new Container {
