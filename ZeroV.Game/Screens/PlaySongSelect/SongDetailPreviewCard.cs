@@ -22,7 +22,6 @@ public partial class SongDetailPreviewCard : CompositeDrawable {
     private ZeroVSpriteText metaSpriteText = null!;
     private ZeroVSpriteText authorSpriteText = null!;
     private DiffBadge diffBadgeContainer = null!;
-    
     private NoteTag pressNoteTag = null!;
     private NoteTag slideNoteTag = null!;
     private NoteTag strokeNoteTag = null!;
@@ -221,7 +220,7 @@ public partial class SongDetailPreviewCard : CompositeDrawable {
                 Origin = Anchor.CentreLeft,
                 Colour = Colour4.Cyan,
                 FontSize = 16,
-                Text = $"Lv. {1.0:##.0}", // + " " + "Easy",
+                Text = $"Lv. {1.0:0.0}", // + " " + "Easy",
             };
             this.InternalChildren = [
                 this.background,
@@ -240,7 +239,7 @@ public partial class SongDetailPreviewCard : CompositeDrawable {
         }
 
         public void UpdateDisplay(Double diff) {
-            this.diffSpriteText.Text = $"Lv. {diff: ##.0}";
+            this.diffSpriteText.Text = $"Lv. {diff: 0.0}";
             Colour4 diffColour = ZeroVColour.FromDifficulty(diff);
             this.diffSpriteText.Colour = diffColour;
             this.BorderColour = diffColour;

@@ -28,16 +28,12 @@ namespace ZeroV.Game.Screens.PlaySongSelect;
 
 [Cached]
 public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
+    private TextureLoader? textureLoader;
     private Box defaultBackground = null!;
     private Sprite background = null!;
     private FillFlowContainer<TrackInfoListItem> trackInfoListItemContainer = null!;
-    private TextureLoader? textureLoader;
-
-    private ScrollContainer<FillFlowContainer<ResultInfoListItem>> scoringRankListScroller = null!;
-
-    private FillFlowContainer<ResultInfoListItem> scoringRankList = null!;
-
-    private CardEmptyPlaceholder emptyLeaderboardPlaceholder = null!;
+    private SongDetailPreviewCard songDetailPreviewCard = null!;
+    private LeaderboardPanelCard leaderboardPanelCard = null!;
 
     [Resolved]
     private TrackInfoProvider beatmapWrapperProvider { get; set; } = null!;
@@ -72,20 +68,18 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             .ForEach(trackInfo => {
                 this.trackInfoListItemContainer.Add(new TrackInfoListItem(trackInfo));
             });
-        this.scoringRankList = new FillFlowContainer<ResultInfoListItem> {
-            AutoSizeAxes = Axes.Y,
+        this.leaderboardPanelCard = new LeaderboardPanelCard {
+            Anchor = Anchor.BottomCentre,
+            Origin = Anchor.BottomCentre,
             RelativeSizeAxes = Axes.X,
-            Direction = FillDirection.Vertical,
-            Spacing = new Vector2(0, 2),
+            Height = 300,
         };
-        this.scoringRankListScroller = new BasicScrollContainer<FillFlowContainer<ResultInfoListItem>> {
-            Anchor = Anchor.TopLeft,
-            Origin = Anchor.TopLeft,
-            RelativeSizeAxes = Axes.Both,
-            Size = new Vector2(0.95f, 0.45f),
-            Child = this.scoringRankList,
+        this.songDetailPreviewCard = new SongDetailPreviewCard {
+            Anchor = Anchor.TopCentre,
+            Origin = Anchor.TopCentre,
+            RelativeSizeAxes = Axes.X,
+            Height = 300,
         };
-        this.emptyLeaderboardPlaceholder = new CardEmptyPlaceholder("NO RECORDS YET", "Play this chart to set your high score!");
 
         this.InternalChildren = [
             // Background Base Layer
@@ -148,81 +142,9 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
                         Width = 0.46f,
                         Children = [
                             // Top: Detail Preview Card
-                            //new Box {
-                            //    // TODO: Detail Preview Card
-                            //    Anchor = Anchor.TopCentre,
-                            //    Origin = Anchor.TopCentre,
-                            //    Colour = Colour4.Red,
-                            //    RelativeSizeAxes = Axes.X,
-                            //    Height = 300,
-                            //},
-                            new SongDetailPreviewCard {
-                                Anchor = Anchor.TopCentre,
-                                Origin = Anchor.TopCentre,
-                                RelativeSizeAxes = Axes.X,
-                                Height = 300,
-                            },
-                            // Bottom: Leaderboard Panel
-                            new Container {
-                                Anchor = Anchor.BottomCentre,
-                                Origin = Anchor.BottomCentre,
-                                RelativeSizeAxes = Axes.X,
-                                Height = 300,
-                                Masking = true,
-                                BorderThickness = 1.5f,
-                                BorderColour = Colour4.Cyan,
-                                Children = [
-                                    new Box {
-                                        RelativeSizeAxes = Axes.Both,
-                                        Colour = Colour4.White,
-                                    },
-                                    new FillFlowContainer {
-                                        RelativeSizeAxes = Axes.Both,
-                                        Direction = FillDirection.Vertical,
-                                        Padding = new MarginPadding(16),
-                                        Spacing = new Vector2(0, 10),
-                                        // Leaderboard Header
-                                        Children = [
-                                            new FillFlowContainer {
-                                                RelativeSizeAxes = Axes.X,
-                                                AutoSizeAxes = Axes.Y,
-                                                Direction = FillDirection.Horizontal,
-                                                //Spacing = new Vector2(8, 0),
-                                                Children = [
-                                                    new Diamond {
-                                                        Anchor = Anchor.CentreLeft,
-                                                        Origin = Anchor.CentreLeft,
-                                                        Size = new Vector2(10),
-                                                        Colour = Colour4.Cyan,
-                                                        Margin = new MarginPadding { Horizontal = 8 },
-                                                    },
-                                                    new ZeroVSpriteText {
-                                                        Anchor = Anchor.CentreLeft,
-                                                        Origin = Anchor.CentreLeft,
-                                                        FontSize = 15,
-                                                        Font = FontUsage.Default.With(weight: "Bold"),
-                                                        Colour = Colour4.Black,
-                                                        Text = "TOP RECORDS",
-                                                    },
-                                                ],
-                                            },
-                                            // Divider
-                                            new Box {
-                                                RelativeSizeAxes = Axes.X,
-                                                Height = 1.5f,
-                                                Colour = Colour4.Cyan,
-                                            },
-                                            // List Scroll Container
-                                            new Container {
-                                                RelativeSizeAxes = Axes.Both,
-                                                Child = this.scoringRankListScroller,
-                                            },
-                                        ],
-                                    },
-                                    // Empty state placeholder
-                                    this.emptyLeaderboardPlaceholder,
-                                ],
-                            },
+                            this.songDetailPreviewCard,
+                            // Bottom: Leaderboard Panel Card
+                            this.leaderboardPanelCard,
                         ],
                     },
                     // Right Column: Track Collection List
@@ -339,12 +261,14 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
         MapInfo? mapInfo = this.selectedItem?.MapInfo;
 
         if (trackInfo is null || mapInfo is null) {
-            this.emptyLeaderboardPlaceholder.FadeIn(150, Easing.In);
-            this.scoringRankList.Clear();
+            this.leaderboardPanelCard.ClearDisplay();
+            this.songDetailPreviewCard.ClearDisplay();
             return;
         }
 
-        IReadOnlyList<ResultInfo> resultList = this.resultInfoProvider.Get() ?? [];
+        this.songDetailPreviewCard.UpdateDisplay(trackInfo, mapInfo);
+
+        IReadOnlyList <ResultInfo> resultList = this.resultInfoProvider.Get() ?? [];
         IOrderedEnumerable<ResultInfo> orderedResultList =
             from result in resultList
             where result.UUID == trackInfo.UUID
@@ -353,21 +277,20 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
             orderby result.Scoring descending
             select result;
 
-        this.scoringRankList.Clear();
         List<ResultInfo> topResultInfos = orderedResultList.Take(10).ToList();
+        this.leaderboardPanelCard.UpdateDisplay(topResultInfos);
+        //if (topResultInfos.Count > 0) {
+        //    this.emptyLeaderboardPlaceholder.FadeOut(100, Easing.Out);
 
-        if (topResultInfos.Count > 0) {
-            this.emptyLeaderboardPlaceholder.FadeOut(100, Easing.Out);
-
-            for (Int32 i = 0; i < topResultInfos.Count; i++) {
-                this.scoringRankList.Add(new ResultInfoListItem(topResultInfos[i], i + 1));
-            }
-            //foreach (ResultInfo resultInfo in topResultInfos) {
-            //    this.scoringRankList.Add(new ResultInfoListItem(resultInfo));
-            //}
-        } else {
-            this.emptyLeaderboardPlaceholder.FadeIn(150, Easing.In);
-        }
+        //    for (Int32 i = 0; i < topResultInfos.Count; i++) {
+        //        this.scoringRankList.Add(new ResultInfoListItem(topResultInfos[i], i + 1));
+        //    }
+        //    //foreach (ResultInfo resultInfo in topResultInfos) {
+        //    //    this.scoringRankList.Add(new ResultInfoListItem(resultInfo));
+        //    //}
+        //} else {
+        //    this.emptyLeaderboardPlaceholder.FadeIn(150, Easing.In);
+        //}
     }
 
     public void OnExpanded(TrackInfoListItem item) {
