@@ -39,8 +39,8 @@ public sealed partial class LeaderboardPanelCard : CompositeDrawable {
             Spacing = new Vector2(0, 2),
         };
         this.scoringRankListScroller = new BasicScrollContainer<FillFlowContainer<ResultInfoListItem>> {
-            Anchor = Anchor.TopLeft,
-            Origin = Anchor.TopLeft,
+            Anchor = Anchor.TopCentre,
+            Origin = Anchor.TopCentre,
             RelativeSizeAxes = Axes.Both,
             Size = new Vector2(0.95f, 0.85f),
             Child = this.scoringRankList,
