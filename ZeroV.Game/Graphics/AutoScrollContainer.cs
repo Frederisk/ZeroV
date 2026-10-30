@@ -10,20 +10,9 @@ public partial class AutoScrollContainer : Container {
     private Container contentContainer;
     protected override Container<Drawable> Content => this.contentContainer;
     private Single lastContainerWidth;
-    private Single lastContainerHeight;
+    //private Single lastContainerHeight;
     private Single lastContentWidth;
-    private Single lastContentHeight;
-
-    //private Boolean isPingPong = true;
-
-    //public Boolean IsPingPong {
-    //    get => this.isPingPong;
-    //    set {
-    //        if (this.isPingPong == value) { return; }
-    //        this.isPingPong = value;
-    //        this.ResetAndRestartAnimation();
-    //    }
-    //}
+    //private Single lastContentHeight;
 
     private AutoScrollMode mode = AutoScrollMode.LeftRightPingPong;
 
@@ -32,6 +21,17 @@ public partial class AutoScrollContainer : Container {
         set {
             if (this.mode == value) { return; }
             this.mode = value;
+            this.ResetAndRestartAnimation();
+        }
+    }
+
+    private AutoScrollStatus status = AutoScrollStatus.Start;
+
+    public AutoScrollStatus Status {
+        get => this.status;
+        set {
+            if (this.status == value) { return; }
+            this.status = value;
             this.ResetAndRestartAnimation();
         }
     }
@@ -104,6 +104,9 @@ public partial class AutoScrollContainer : Container {
 
         this.contentContainer.ClearTransforms();
         this.contentContainer.X = 0;
+
+        if (this.status is AutoScrollStatus.Stop) { return; }
+
         Single containerWidth = this.DrawWidth;
         Single contentWidth = this.contentContainer.DrawWidth;
 
@@ -149,6 +152,8 @@ public partial class AutoScrollContainer : Container {
                 throw new ArgumentOutOfRangeException();
         }
     }
+
+
 }
 
 public enum AutoScrollMode {
@@ -158,4 +163,11 @@ public enum AutoScrollMode {
     //RightLeftLoop,
     //UpDownPingPong,
     //UpDownLoop,
+}
+
+public enum AutoScrollStatus {
+    Stop,
+    Start,
+    //Pause,
+    //Resume,
 }

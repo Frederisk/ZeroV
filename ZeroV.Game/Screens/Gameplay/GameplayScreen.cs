@@ -143,7 +143,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
         #region Load track
 
-        this.trackLoader = new(this.TrackInfo.TrackFile, audioManager);
+        this.trackLoader = new TrackLoader(this.TrackInfo.TrackFile, audioManager);
 
         #endregion Load track
 

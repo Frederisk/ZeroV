@@ -268,7 +268,7 @@ public partial class PlaySongSelectScreen : BaseUserInterfaceScreen {
 
         this.songDetailPreviewCard.UpdateDisplay(trackInfo, mapInfo);
 
-        IReadOnlyList <ResultInfo> resultList = this.resultInfoProvider.Get() ?? [];
+        IReadOnlyList<ResultInfo> resultList = this.resultInfoProvider.Get() ?? [];
         IOrderedEnumerable<ResultInfo> orderedResultList =
             from result in resultList
             where result.UUID == trackInfo.UUID
