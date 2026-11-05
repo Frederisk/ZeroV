@@ -3,44 +3,119 @@ using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 
+using osuTK;
+
+using ZeroV.Game.Elements;
+using ZeroV.Game.Graphics;
+using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
+using ZeroV.Game.Utils;
 
 namespace ZeroV.Game.Screens.PlaySongSelect.ListItems;
 
-public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
+public sealed partial class MapInfoListItem : CompositeDrawable {
+    private readonly Colour4 defaultBorderColour;
+    private readonly Colour4 diffColour;
+    private Box hoverOverlay = null!;
+
     public Boolean IsSelected { get; private set; }
 
     //public Int32 Index => index;
-    public MapInfo MapInfo => mapInfo;
+    public MapInfo MapInfo { get; }
 
     [Resolved]
     private PlaySongSelectScreen songSelectScreen { get; set; } = null!;
 
+    public MapInfoListItem(MapInfo mapInfo) {
+        this.MapInfo = mapInfo;
+        this.RelativeSizeAxes = Axes.X;
+        this.AutoSizeAxes = Axes.Y;
+        this.Masking = true;
+        this.BorderThickness = 1;
+        this.defaultBorderColour = Colour4.LightPink;
+        this.BorderColour = this.defaultBorderColour;
+        this.Margin = new MarginPadding(4);
+        this.diffColour = ZeroVColour.FromDifficulty(mapInfo.Difficulty);
+    }
+
     [BackgroundDependencyLoader]
     private void load() {
-        this.Masking = true;
-        this.BorderColour = Colour4.White;
-        this.RelativeSizeAxes = Axes.X;
-        this.Height = 50;
-        this.Margin = new MarginPadding(0) {
-            Top = 5
-        };
-
-        this.AddInternal(new Box() {
+        this.hoverOverlay = new Box {
             RelativeSizeAxes = Axes.Both,
-            Colour = Colour4.Green
-        });
-        this.AddInternal(new SpriteText() {
-            Origin = Anchor.TopCentre,
-            Anchor = Anchor.TopCentre,
-            Text = $"Difficulty: {mapInfo.Difficulty}",
-            Colour = Colour4.Black,
-            Font = FontUsage.Default.With(size: 52)
-        });
+            Colour = this.diffColour.Opacity(0.1f),
+            Alpha = 0,
+        };
+        this.InternalChildren = [
+            // Background
+            new Box {
+                RelativeSizeAxes = Axes.Both,
+                Colour = Colour4.White,
+            },
+            this.hoverOverlay,
+            new Box {
+                Anchor = Anchor.CentreLeft,
+                Origin = Anchor.CentreLeft,
+                RelativeSizeAxes = Axes.Y,
+                Width = 4,
+                Colour = Colour4.Cyan,
+                //Alpha = 0.6f,
+            },
+            // Content
+            new Container {
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y,
+                Padding = new MarginPadding { Vertical = 16, Horizontal = 32 },
+                Children = [
+                    // Left
+                    new FillFlowContainer {
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        AutoSizeAxes = Axes.Both,
+                        Direction = FillDirection.Horizontal,
+                        Spacing = new Vector2(16, 0),
+                        Children = [
+                            new Diamond {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Size = new Vector2(12),
+                                Colour = this.diffColour,
+                            },
+                            new ZeroVSpriteText {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Colour = this.diffColour,
+                                FontSize = 32,
+                                Text = $"Lv. {this.MapInfo.Difficulty: 0.0}",
+                            },
+                            new NoteTag("Press", ZeroVColour.NOTE_PRESS) {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                NoteCount = this.MapInfo.PressCount,
+                            },
+                            new NoteTag("Slide", ZeroVColour.NOTE_SLIDE) {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                NoteCount = this.MapInfo.SlideCount,
+                            },
+                            new NoteTag("Stroke", ZeroVColour.NOTE_STROKE) {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                NoteCount = this.MapInfo.StrokeCount,
+                            },
+                            new NoteTag("Blink", ZeroVColour.NOTE_BLINK) {
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                NoteCount = this.MapInfo.BlinkCount,
+                            },
+                        ],
+                    },
+                    // Right
+                ],
+            }
+        ];
     }
 
     public void OnSelect() {
@@ -49,6 +124,9 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
 
             this.IsSelected = true;
             this.BorderThickness = 3;
+            this.BorderColour = this.diffColour;
+
+            // this.playBadge.FadeIn(150, Easing.OutQuint);
         } else {
             this.songSelectScreen.ConfirmSelect();
         }
@@ -56,7 +134,20 @@ public partial class MapInfoListItem(MapInfo mapInfo) : CompositeDrawable {
 
     public void OnSelectCancel() {
         this.IsSelected = false;
-        this.BorderThickness = 0;
+        this.BorderThickness = 1;
+        this.BorderColour = this.defaultBorderColour;
+
+        // this.playBadge.FadeOut(100, Easing.OutQuint);
+    }
+
+    protected override Boolean OnHover(HoverEvent e) {
+        this.hoverOverlay.FadeIn(120, Easing.OutQuint);
+        return base.OnHover(e);
+    }
+
+    protected override void OnHoverLost(HoverLostEvent e) {
+        this.hoverOverlay.FadeOut(120, Easing.InSine);
+        base.OnHoverLost(e);
     }
 
     protected override Boolean OnClick(ClickEvent e) {

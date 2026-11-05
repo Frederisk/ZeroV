@@ -12,6 +12,11 @@ public static class ZeroVColour {
     public static readonly Colour4 CLEAR = Colour4.LightGreen;
     public static readonly Colour4 FAILED = Colour4.DarkRed;
 
+    public static readonly Colour4 NOTE_PRESS = Colour4.Pink;
+    public static readonly Colour4 NOTE_SLIDE = Colour4.GreenYellow;
+    public static readonly Colour4 NOTE_STROKE = Colour4.Gold;
+    public static readonly Colour4 NOTE_BLINK = Colour4.Red;
+
     public static Colour4 FromDifficulty(Double difficulty) => difficulty switch {
         <= 0 => Colour4.Gray,
         > 0 and <= 2 => Colour4.Cyan,

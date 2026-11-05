@@ -20,7 +20,6 @@ public sealed partial class TrackInfoListItemHeader : CompositeDrawable {
     private AutoScrollContainer subtitleScrollContainer = null!;
     private Box hoverOverlay = null!;
 
-
     [Resolved]
     private PlaySongSelectScreen songSelectScreen { get; set; } = null!;
 

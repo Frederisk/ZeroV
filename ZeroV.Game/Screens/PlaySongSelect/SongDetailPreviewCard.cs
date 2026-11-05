@@ -2,13 +2,13 @@ using System;
 
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 
 using osuTK;
 
+using ZeroV.Game.Elements;
 using ZeroV.Game.Graphics;
 using ZeroV.Game.Graphics.Shapes;
 using ZeroV.Game.Objects;
@@ -56,19 +56,19 @@ public partial class SongDetailPreviewCard : CompositeDrawable {
             Anchor = Anchor.CentreLeft,
             Origin = Anchor.CentreLeft,
         };
-        this.pressNoteTag = new NoteTag("P", Colour4.Pink) {
+        this.pressNoteTag = new NoteTag("P", ZeroVColour.NOTE_PRESS) {
             Anchor = Anchor.CentreLeft,
             Origin = Anchor.CentreLeft,
         };
-        this.slideNoteTag = new NoteTag("S", Colour4.GreenYellow) {
+        this.slideNoteTag = new NoteTag("S", ZeroVColour.NOTE_SLIDE) {
             Anchor = Anchor.CentreLeft,
             Origin = Anchor.CentreLeft,
         };
-        this.strokeNoteTag = new NoteTag("St", Colour4.Gold) {
+        this.strokeNoteTag = new NoteTag("St", ZeroVColour.NOTE_STROKE) {
             Anchor = Anchor.CentreLeft,
             Origin = Anchor.CentreLeft,
         };
-        this.blinkNoteTag = new NoteTag("B", Colour4.Red) {
+        this.blinkNoteTag = new NoteTag("B", ZeroVColour.NOTE_BLINK) {
             Anchor = Anchor.CentreLeft,
             Origin = Anchor.CentreLeft,
         };
@@ -138,56 +138,10 @@ public partial class SongDetailPreviewCard : CompositeDrawable {
         this.authorSpriteText.Text = $"Mapped by: {trackInfo.GameAuthor}  |  (v{trackInfo.GameVersion})";
         this.BorderColour = ZeroVColour.FromDifficulty(mapInfo.Difficulty);
         this.diffBadgeContainer.UpdateDisplay(mapInfo.Difficulty);
-        this.pressNoteTag.UpdateCount(mapInfo.PressCount);
-        this.slideNoteTag.UpdateCount(mapInfo.SlideCount);
-        this.strokeNoteTag.UpdateCount(mapInfo.StrokeCount);
-        this.blinkNoteTag.UpdateCount(mapInfo.BlinkCount);
-    }
-
-    private sealed partial class NoteTag : CompositeDrawable {
-        private readonly string label;
-        private readonly ColourInfo colourInfo;
-
-        private ZeroVSpriteText countSpriteText = null!;
-
-        public NoteTag(String label, ColourInfo colourInfo) {
-            this.label = label;
-            //this.count = count;
-            this.colourInfo = colourInfo;
-            this.AutoSizeAxes = Axes.Both;
-        }
-
-        public void UpdateCount(Int32 count) {
-            this.countSpriteText.Text = count.ToString();
-        }
-
-        [BackgroundDependencyLoader]
-        private void load() {
-            this.countSpriteText = new ZeroVSpriteText {
-                Anchor = Anchor.CentreLeft,
-                Origin = Anchor.CentreLeft,
-                Colour = Colour4.Black,
-                FontSize = 14,
-                Text = "0",
-            };
-
-            this.InternalChild = new FillFlowContainer {
-                AutoSizeAxes = Axes.Both,
-                Direction = FillDirection.Horizontal,
-                Spacing = new Vector2(4, 0),
-                Children = [
-                    new ZeroVSpriteText {
-                        Anchor = Anchor.CentreLeft,
-                        Origin = Anchor.CentreLeft,
-                        Colour = this.colourInfo,
-                        FontSize = 12,
-                        Font = FontUsage.Default.With(weight: "Bold"),
-                        Text = this.label,
-                    },
-                    this.countSpriteText,
-                ],
-            };
-        }
+        this.pressNoteTag.NoteCount = mapInfo.PressCount;
+        this.slideNoteTag.NoteCount = mapInfo.SlideCount;
+        this.strokeNoteTag.NoteCount = mapInfo.StrokeCount;
+        this.blinkNoteTag.NoteCount = mapInfo.BlinkCount;
     }
 
     private sealed partial class DiffBadge : CompositeDrawable {
