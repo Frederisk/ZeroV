@@ -14,7 +14,7 @@ public class TextureLoader : IDisposable {
     private Boolean disposedValue = false;
     private Image<Rgba32>? image;
     private TextureUpload? upload;
-    public Texture? Texture { get; private set; }
+    public readonly Texture? Texture;
 
     public TextureLoader(FileInfo? file, IRenderer renderer) {
         try {
@@ -36,7 +36,7 @@ public class TextureLoader : IDisposable {
         GC.SuppressFinalize(this);
     }
 
-    public void Dispose(Boolean disposing) {
+    protected void Dispose(Boolean disposing) {
         if (!this.disposedValue) {
             if (disposing) {
                 this.Texture?.Dispose();

@@ -70,14 +70,12 @@ public partial class TrackInfoListItem(TrackInfo trackInfo) : CompositeDrawable 
         get => this.isExpanded;
         set {
             this.isExpanded = value;
-
+            this.header.UpdateExpandedStatus(value);
             if (value) {
                 this.container.AutoSizeAxes = Axes.Y;
-                this.header.TryBeginLongTitleScroll();
             } else {
                 this.container.AutoSizeAxes = Axes.None;
                 this.container.Height = 0;
-                this.header.TryEndLongTitleScroll();
             }
         }
     }
