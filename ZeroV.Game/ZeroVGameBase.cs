@@ -1,6 +1,7 @@
 using System;
 
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -44,13 +45,13 @@ public partial class ZeroVGameBase : osu.Framework.Game {
     private void load(Storage storage, FrameworkConfigManager frameworkConfigManager) {
         this.Resources.AddStore(new DllResourceStore(ZeroVResources.ResourceAssembly));
 
-        var frameSync = frameworkConfigManager.GetBindable<FrameSync>(FrameworkSetting.FrameSync);
+        Bindable<FrameSync> frameSync = frameworkConfigManager.GetBindable<FrameSync>(FrameworkSetting.FrameSync);
         if (frameSync.IsDefault) {
             frameSync.Value = FrameSync.Unlimited;
             frameSync.SetDefault();
         }
 
-        var executionMode = frameworkConfigManager.GetBindable<ExecutionMode>(FrameworkSetting.ExecutionMode);
+        Bindable<ExecutionMode> executionMode = frameworkConfigManager.GetBindable<ExecutionMode>(FrameworkSetting.ExecutionMode);
         if (executionMode.IsDefault) {
             executionMode.Value = ExecutionMode.MultiThreaded;
             executionMode.SetDefault();

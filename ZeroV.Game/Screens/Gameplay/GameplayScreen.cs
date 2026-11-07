@@ -14,7 +14,6 @@ using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using osu.Framework.Screens;
 
 using osuTK;
@@ -109,7 +108,6 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
         entry.Drawable.Source = entry.Source;
 
         this.orbits.Add(entry.Drawable);
-        Logger.Log("Orbit added.");
     }
 
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
@@ -117,7 +115,6 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
         if (this.orbits.Remove(entry.Drawable!, false)) {
             // entry.Drawable = null;
-            Logger.Log("Orbit removed.");
         }
     }
 
@@ -297,7 +294,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     public IReadOnlyDictionary<TouchSource, Vector2> TouchPositions => this.touchPositions;
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        this.touchPositions.Add(e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        this.touchPositions[e.Touch.Source] = e.ScreenSpaceTouchDownPosition;
         this.TouchUpdate?.Invoke(e.Touch.Source, true);
         return false;
     }

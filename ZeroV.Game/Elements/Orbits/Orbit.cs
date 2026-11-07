@@ -10,7 +10,6 @@ using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using osu.Framework.Utils;
 
 using osuTK;
@@ -188,7 +187,9 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
         };
-        this.container = new BufferedContainer {
+        // The framebuffer is cached and only re-rendered when the contents actually change (see Update()).
+        // The default (non-cached) buffered container re-renders its entire contents every single frame.
+        this.container = new BufferedContainer(cachedFrameBuffer: true) {
             RelativeSizeAxes = Axes.Both,
             Origin = Anchor.BottomCentre,
             Anchor = Anchor.BottomCentre,
@@ -267,24 +268,46 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     private List<OrbitSource.KeyFrame> keyFrames = null!;
 
+    /// <summary>
+    /// Index of the active key frame pair in <see cref="keyFrames"/>. Used instead of slicing the list to avoid per-key frame allocations.
+    /// </summary>
+    private Int32 keyFrameIndex;
+
+    /// <summary>
+    /// Invalidation ID of <see cref="container"/> captured during the previous update.
+    /// Used to detect changes inside the cached framebuffer that still invalidate the container itself.
+    /// </summary>
+    private Int64 lastContainerInvalidationId;
+
     protected override void Update() {
         base.Update();
         var currTime = this.currentTime;
-        while (this.keyFrames.Count > 1) {
-            var nextTime = this.keyFrames[1].Time;
+
+        // The buffered container is cached, so it must be manually re-rendered whenever its contents change.
+        // Some changes (e.g. size) invalidate the container itself, while others (colour or child position changes)
+        // do not propagate this far and are tracked below.
+        Boolean needsRedraw = this.container.InvalidationID != this.lastContainerInvalidationId;
+        this.lastContainerInvalidationId = this.container.InvalidationID;
+
+        while (this.keyFrameIndex + 1 < this.keyFrames.Count) {
+            var nextTime = this.keyFrames[this.keyFrameIndex + 1].Time;
             if (currTime < nextTime) {
                 break;
             }
-            this.keyFrames = this.keyFrames[1..];
+            this.keyFrameIndex++;
         }
 
-        if (this.keyFrames.Count > 1) {
-            OrbitSource.KeyFrame currKeyFrame = this.keyFrames[0];
-            OrbitSource.KeyFrame nextKeyFrame = this.keyFrames[1];
+        if (this.keyFrameIndex + 1 < this.keyFrames.Count) {
+            OrbitSource.KeyFrame currKeyFrame = this.keyFrames[this.keyFrameIndex];
+            OrbitSource.KeyFrame nextKeyFrame = this.keyFrames[this.keyFrameIndex + 1];
 
-            this.orbitColour.Colour = Interpolation.ValueAt(currTime,
+            Colour4 nextColour = Interpolation.ValueAt(currTime,
                 currKeyFrame.Colour, nextKeyFrame.Colour,
                 currKeyFrame.Time, nextKeyFrame.Time);
+            if (!this.orbitColour.Colour.Equals((ColourInfo)nextColour)) {
+                this.orbitColour.Colour = nextColour;
+                needsRedraw = true;
+            }
 
             var nextX = Interpolation.ValueAt(currTime,
                 currKeyFrame.XPosition, nextKeyFrame.XPosition,
@@ -314,9 +337,13 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
             if (currTime < item.Source!.EndTime || item.IsHidden) {
                 var startTime = item.Source!.StartTime - this.particleFallingTime;
 
-                item.Y = Interpolation.ValueAt(currTime,
-                visual_orbit_out_of_top, visual_orbit_offset,
-                startTime, item.Source.StartTime);
+                Single nextY = Interpolation.ValueAt(currTime,
+                    visual_orbit_out_of_top, visual_orbit_offset,
+                    startTime, item.Source.StartTime);
+                if (item.Y != nextY) {
+                    item.Y = nextY;
+                    needsRedraw = true;
+                }
             // Timed out and not been hidden.
             } else {
                 var fadingStartTime = item.Source.EndTime;
@@ -327,25 +354,54 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
                     startOffset += press.Height;
                     endOffset += press.Height;
 
-                    item.Y = Interpolation.ValueAt(currTime,
+                    Single nextY = Interpolation.ValueAt(currTime,
                         startOffset, endOffset,
                         fadingStartTime, fadingEndTime);
-                    item.Alpha = Interpolation.ValueAt(currTime,
+                    if (item.Y != nextY) {
+                        item.Y = nextY;
+                        needsRedraw = true;
+                    }
+                    Single nextAlpha = Interpolation.ValueAt(currTime,
                         0.5f, 0f,
                         fadingStartTime, fadingEndTime);
+                    if (item.Alpha != nextAlpha) {
+                        item.Alpha = nextAlpha;
+                        needsRedraw = true;
+                    }
                 } else {
-                    item.Y = Interpolation.ValueAt(currTime,
+                    Single nextY = Interpolation.ValueAt(currTime,
                         startOffset, endOffset,
                         fadingStartTime, fadingEndTime);
-                    item.Alpha = Interpolation.ValueAt(currTime,
+                    if (item.Y != nextY) {
+                        item.Y = nextY;
+                        needsRedraw = true;
+                    }
+                    Single nextAlpha = Interpolation.ValueAt(currTime,
                         1f, 0f,
                         fadingStartTime, fadingEndTime);
+                    if (item.Alpha != nextAlpha) {
+                        item.Alpha = nextAlpha;
+                        needsRedraw = true;
+                    }
                 }
             }
         }
 
         TargetResult? result = this.particles.PeekOrDefault()?.JudgeUpdate(this.currentTime, this.HasTouches);
         this.processTarget(result);
+
+        // The touch highlight fades out via a transform whose alpha changes do not invalidate the container.
+        if (this.touchHighlight.Alpha is > 0 and < 1) {
+            needsRedraw = true;
+        }
+        // A held press particle grows its pillar every frame without invalidating the container.
+        if (this.HasTouches && this.particles.PeekOrDefault() is PressParticle) {
+            needsRedraw = true;
+        }
+
+        if (needsRedraw) {
+            this.container.ForceRedraw();
+        }
     }
 
     #region Poolable
@@ -372,6 +428,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         set {
             if (value is not null) {
                 this.keyFrames = value.KeyFrames;
+                this.keyFrameIndex = 0;
 
                 this.lifetimeEntryManager.ClearEntries();
                 foreach (ParticleSource item in value.HitObjects) {
@@ -399,7 +456,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         entry.Drawable.Source = entry.Source;
         this.particles.Enqueue(entry.Drawable);
-        Logger.Log($"{entry.Drawable.GetType()} added.");
+        this.container?.ForceRedraw();
     }
 
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
@@ -407,7 +464,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         if (this.particles.Remove(entry.Drawable!, false)) {
             // entry.Drawable = null;
-            Logger.Log("Particle removed.");
+            this.container?.ForceRedraw();
         }
     }
 
@@ -493,6 +550,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         if (result is not null and not TargetResult.None) {
             this.gameplayScreen.ScoringCalculator.AddTarget(result.Value);
             this.particles.DequeueInJudgeOnly(result.Value);
+            this.container?.ForceRedraw();
 
             if (result.Value is TargetResult.PerfectEarly or TargetResult.PerfectLate
                 or TargetResult.NormalEarly or TargetResult.NormalLate or TargetResult.MaxPerfect
