@@ -26,6 +26,12 @@
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.3" />-->
     <PackageReference Include="ppy.osu.Framework" Version="2026.1030.0" />
+    <!--
+      Pinned to the version osu.Framework/osu.Game are compiled against.
+      ImageSharp 3.2.0+ adds a build-time license check that fails Release builds without a
+      Six Labors license, so the known advisories are suppressed in Directory.Build.props instead.
+    -->
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageReference Include="Svg.Skia" Version="5.2.3" />
   </ItemGroup>
 </Project>

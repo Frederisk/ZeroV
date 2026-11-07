@@ -11,5 +11,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ppy.osu.Game" Version="2026.1026.0" />
+    <!-- Pinned like osu.Game itself; see Directory.Build.props for the suppressed advisories. -->
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
+    <!--
+      AutoMapper cannot be upgraded past 13.0.1: 15.0.0 changed the MapperConfiguration constructor
+      (now requires an ILoggerFactory) and osu.Game is compiled against the old signature, so a newer
+      AutoMapper would fail at runtime with MissingMethodException. 15.0.0 also moved away from MIT.
+    -->
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 </Project>
