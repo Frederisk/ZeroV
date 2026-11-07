@@ -1,0 +1,30 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="iPhone" />
+    <Platform Name="iPhoneSimulator" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="ZeroV.Android.props" />
+    <File Path="ZeroV.sln.DotSettings" />
+  </Folder>
+  <Project Path="osu.Game.Rulesets.ZeroV.Tests/osu.Game.Rulesets.ZeroV.Tests.csproj" />
+  <Project Path="osu.Game.Rulesets.ZeroV/osu.Game.Rulesets.ZeroV.csproj" />
+  <Project Path="ZeroV.Android/ZeroV.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="ZeroV.Desktop/ZeroV.Desktop.csproj" />
+  <Project Path="ZeroV.Game.Tests/ZeroV.Game.Tests.csproj" />
+  <Project Path="ZeroV.Game/ZeroV.Game.csproj" />
+  <Project Path="ZeroV.iOS/ZeroV.iOS.csproj">
+    <Platform Solution="*|iPhone" Project="iPhone" />
+    <Platform Solution="*|iPhoneSimulator" Project="iPhoneSimulator" />
+    <Platform Solution="Debug|Any CPU" Project="iPhoneSimulator" />
+    <Platform Solution="Release|Any CPU" Project="iPhone" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="ZeroV.Resources/ZeroV.Resources.csproj" />
+</Solution>

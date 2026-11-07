@@ -30,6 +30,7 @@
       Pinned to the version osu.Framework/osu.Game are compiled against.
       ImageSharp 3.2.0+ adds a build-time license check that fails Release builds without a
       Six Labors license, so the known advisories are suppressed in Directory.Build.props instead.
+      See: https://github.com/ppy/osu-framework/issues/6839
     -->
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageReference Include="Svg.Skia" Version="5.2.3" />
