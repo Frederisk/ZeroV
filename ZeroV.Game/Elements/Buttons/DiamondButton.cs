@@ -97,7 +97,8 @@ public partial class DiamondButton : ClickableContainer {
             Blending = BlendingParametersExtensions.TransparentAlphaAddWithColour,
         };
         this.Children = [
-            new BufferedContainer {
+            // The buffered container is cached since its contents never change after construction.
+            new BufferedContainer(cachedFrameBuffer: true) {
                 RelativeSizeAxes = Axes.Both,
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,

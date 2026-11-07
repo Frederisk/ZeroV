@@ -294,7 +294,7 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
     public IReadOnlyDictionary<TouchSource, Vector2> TouchPositions => this.touchPositions;
 
     protected override Boolean OnTouchDown(TouchDownEvent e) {
-        this.touchPositions.Add(e.Touch.Source, e.ScreenSpaceTouchDownPosition);
+        this.touchPositions[e.Touch.Source] = e.ScreenSpaceTouchDownPosition;
         this.TouchUpdate?.Invoke(e.Touch.Source, true);
         return false;
     }
