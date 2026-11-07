@@ -86,15 +86,15 @@ public partial class ZeroVPlayfield : ScrollingPlayfield {
 
         private partial class Lane : CompositeDrawable {
             public Lane() {
-                this.InternalChildren = new Drawable[] {
+                this.InternalChildren = [
                     new Box {
                         Colour = Color4.White,
                         RelativeSizeAxes = Axes.Both,
                         Anchor = Anchor.CentreLeft,
                         Origin = Anchor.CentreLeft,
                         Height = 0.95f,
-                    },
-                };
+                    }
+                ];
             }
         }
 

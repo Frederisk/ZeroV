@@ -117,7 +117,7 @@ public partial class SongDetailPreviewCard : CompositeDrawable {
     }
 
     private sealed partial class NoteTag : CompositeDrawable {
-        private readonly string label;
+        private readonly String label;
         private readonly ColourInfo colourInfo;
 
         private ZeroVSpriteText countSpriteText = null!;
