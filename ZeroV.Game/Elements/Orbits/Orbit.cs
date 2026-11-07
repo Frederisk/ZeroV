@@ -10,7 +10,6 @@ using osu.Framework.Graphics.Pooling;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using osu.Framework.Utils;
 
 using osuTK;
@@ -267,20 +266,25 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
     /// </remarks>
     private List<OrbitSource.KeyFrame> keyFrames = null!;
 
+    /// <summary>
+    /// Index of the active key frame pair in <see cref="keyFrames"/>. Used instead of slicing the list to avoid per-key frame allocations.
+    /// </summary>
+    private Int32 keyFrameIndex;
+
     protected override void Update() {
         base.Update();
         var currTime = this.currentTime;
-        while (this.keyFrames.Count > 1) {
-            var nextTime = this.keyFrames[1].Time;
+        while (this.keyFrameIndex + 1 < this.keyFrames.Count) {
+            var nextTime = this.keyFrames[this.keyFrameIndex + 1].Time;
             if (currTime < nextTime) {
                 break;
             }
-            this.keyFrames = this.keyFrames[1..];
+            this.keyFrameIndex++;
         }
 
-        if (this.keyFrames.Count > 1) {
-            OrbitSource.KeyFrame currKeyFrame = this.keyFrames[0];
-            OrbitSource.KeyFrame nextKeyFrame = this.keyFrames[1];
+        if (this.keyFrameIndex + 1 < this.keyFrames.Count) {
+            OrbitSource.KeyFrame currKeyFrame = this.keyFrames[this.keyFrameIndex];
+            OrbitSource.KeyFrame nextKeyFrame = this.keyFrames[this.keyFrameIndex + 1];
 
             this.orbitColour.Colour = Interpolation.ValueAt(currTime,
                 currKeyFrame.Colour, nextKeyFrame.Colour,
@@ -372,6 +376,7 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
         set {
             if (value is not null) {
                 this.keyFrames = value.KeyFrames;
+                this.keyFrameIndex = 0;
 
                 this.lifetimeEntryManager.ClearEntries();
                 foreach (ParticleSource item in value.HitObjects) {
@@ -399,7 +404,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         entry.Drawable.Source = entry.Source;
         this.particles.Enqueue(entry.Drawable);
-        Logger.Log($"{entry.Drawable.GetType()} added.");
     }
 
     private void lifetimeEntryManager_EntryBecameDead(LifetimeEntry obj) {
@@ -407,7 +411,6 @@ public partial class Orbit : ZeroVPoolableDrawable<OrbitSource> {
 
         if (this.particles.Remove(entry.Drawable!, false)) {
             // entry.Drawable = null;
-            Logger.Log("Particle removed.");
         }
     }
 

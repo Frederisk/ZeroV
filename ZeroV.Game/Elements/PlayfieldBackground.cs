@@ -3,10 +3,11 @@ using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
+
+using osuTK;
 
 namespace ZeroV.Game.Elements;
 
@@ -32,17 +33,22 @@ internal partial class PlayfieldBackground : Container {
                 this.foreSprite,
             ];
         } else {
-            this.backSprite = new Sprite {
+            // Use a cached framebuffer so the full-screen gaussian blur is rendered only once (or on resize).
+            // The default (non-cached) BufferedContainer re-renders and re-applies the blur every single frame,
+            // which is prohibitively expensive on mobile GPUs.
+            this.backSprite = new BufferedContainer(cachedFrameBuffer: true) {
                 Origin = Anchor.Centre,
                 Anchor = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both,
-                Texture = this.texture,
-                FillMode = FillMode.Fill,
-            }.WithEffect(new BlurEffect {
-                Strength = 1f,
-                //Rotation = 45,
-                Sigma = new (10),
-            });
+                BlurSigma = new Vector2(10),
+                Child = new Sprite {
+                    Origin = Anchor.Centre,
+                    Anchor = Anchor.Centre,
+                    RelativeSizeAxes = Axes.Both,
+                    Texture = this.texture,
+                    FillMode = FillMode.Fill,
+                },
+            };
             this.foreSprite = new Sprite {
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.BottomCentre,
