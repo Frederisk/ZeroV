@@ -23,8 +23,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            8.0.x
-            9.0.x
+            10.0.x
 
       - name: Build Desktop solution
         run: dotnet build ZeroV.Desktop.slnf --configuration Debug
@@ -44,8 +43,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            8.0.x
-            9.0.x
+            10.0.x
 
       - name: Build osu! Ruleset solution
         run: dotnet build osu.Game.Rulesets.ZeroV.slnf --configuration Debug
@@ -65,8 +63,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            8.0.x
-            9.0.x
+            10.0.x
 
       - name: Install Android workload
         run: dotnet workload install android
@@ -86,8 +83,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            8.0.x
-            9.0.x
+            10.0.x
 
       - name: Install iOS workload
         run: dotnet workload install ios

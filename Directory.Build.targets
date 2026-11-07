@@ -1,0 +1,31 @@
+<!--
+  Imported after NuGet package targets (see Microsoft.Common.targets), so targets defined here can
+  override targets shipped by packages.
+-->
+<Project>
+  <!--
+    ppy.osu.Framework.iOS strips AOT-incompatible assemblies out of the iOS linker output folder
+    (`obj/<configuration>/<tfm>/<rid>/linked`). That folder is only produced once the native iOS
+    linker has run (i.e. on macOS), so on other platforms the package's own Exec task fails with
+    "the working directory does not exist". This override mirrors the package target, but only runs
+    the stripping step when the linker output is actually available.
+  -->
+  <Target Name="OsuFrameworkIOSStripAssemblies" AfterTargets="ILLink" BeforeTargets="_AOTCompile" Condition="'$(MSBuildProjectName)' == 'ZeroV.iOS'">
+    <PropertyGroup>
+      <OsuFrameworkIOSPackageVersion>@(PackageReference-&gt;WithMetadataValue('Identity', 'ppy.osu.Framework.iOS')-&gt;'%(Version)')</OsuFrameworkIOSPackageVersion>
+      <AssemblyStripper>$(NuGetPackageRoot)ppy.osu.framework.ios/$(OsuFrameworkIOSPackageVersion)/build/tools/AssemblyStripper.cs</AssemblyStripper>
+      <LinkedOutputFolder>$(IntermediateOutputPath)linked\</LinkedOutputFolder>
+    </PropertyGroup>
+    <ItemGroup>
+      <AssembliesToStrip Include="SharpGen.Runtime.dll" />
+      <AssembliesToStrip Include="SharpGen.Runtime.COM.dll" />
+      <AssembliesToStrip Include="Vortice.D3DCompiler.dll" />
+      <AssembliesToStrip Include="Vortice.Direct3D11.dll" />
+      <AssembliesToStrip Include="Vortice.DirectX.dll" />
+      <AssembliesToStrip Include="Vortice.DXGI.dll" />
+    </ItemGroup>
+    <Exec WorkingDirectory="$(LinkedOutputFolder)"
+          Command="dotnet &quot;$(AssemblyStripper)&quot; -- @(AssembliesToStrip, ' ')"
+          Condition="Exists('$(LinkedOutputFolder)')" />
+  </Target>
+</Project>

@@ -4,6 +4,7 @@ using System.IO;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Localisation;
 
 namespace ZeroV.Game.Elements;
 
@@ -15,7 +16,7 @@ public partial class ZeroVDirectorySelector : DirectorySelector {
 
     protected override DirectorySelectorBreadcrumbDisplay CreateBreadcrumb() => new BasicDirectorySelectorBreadcrumbDisplay();
 
-    protected override DirectorySelectorDirectory CreateDirectoryItem(DirectoryInfo directory, String? displayName = null) => new BasicDirectorySelectorDirectory(directory, displayName);
+    protected override DirectorySelectorDirectory CreateDirectoryItem(DirectoryInfo directory, LocalisableString? displayName = null) => new BasicDirectorySelectorDirectory(directory, displayName);
 
     protected override DirectorySelectorDirectory CreateParentDirectoryItem(DirectoryInfo directory) => new BasicDirectorySelectorParentDirectory(directory);
 

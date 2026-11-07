@@ -43,7 +43,7 @@ public partial class DrawableZeroVHitObject : DrawableHitObject<ZeroVHitObject> 
 
     protected override void CheckForResult(Boolean userTriggered, Double timeOffset) {
         if (timeOffset >= 0) {
-            this.ApplyResult(r => r.Type = this.currentLane.Value == this.HitObject.Lane ? HitResult.Perfect : HitResult.Miss);
+            this.ApplyResult(this.currentLane.Value == this.HitObject.Lane ? HitResult.Perfect : HitResult.Miss);
         }
     }
 
