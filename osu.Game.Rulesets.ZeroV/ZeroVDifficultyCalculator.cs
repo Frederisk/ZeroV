@@ -15,11 +15,11 @@ public class ZeroVDifficultyCalculator : DifficultyCalculator {
         : base(ruleset, beatmap) {
     }
 
-    protected override DifficultyAttributes CreateDifficultyAttributes(IBeatmap beatmap, Mod[] mods, Skill[] skills, Double clockRate) {
+    protected override DifficultyAttributes CreateDifficultyAttributes(IBeatmap beatmap, Mod[] mods, Skill[] skills) {
         return new DifficultyAttributes(mods, 0);
     }
 
-    protected override IEnumerable<DifficultyHitObject> CreateDifficultyHitObjects(IBeatmap beatmap, Double clockRate) => Enumerable.Empty<DifficultyHitObject>();
+    protected override IEnumerable<DifficultyHitObject> CreateDifficultyHitObjects(IBeatmap beatmap, Mod[] mods) => Enumerable.Empty<DifficultyHitObject>();
 
-    protected override Skill[] CreateSkills(IBeatmap beatmap, Mod[] mods, Double clockRate) => Array.Empty<Skill>();
+    protected override Skill[] CreateSkills(IBeatmap beatmap, Mod[] mods) => Array.Empty<Skill>();
 }

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableTrimAnalyzer>True</EnableTrimAnalyzer>
@@ -25,7 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.3" />-->
-    <PackageReference Include="ppy.osu.Framework" Version="2025.1121.1" />
-    <PackageReference Include="Svg.Skia" Version="3.2.1" />
+    <PackageReference Include="ppy.osu.Framework" Version="2026.1030.0" />
+    <PackageReference Include="Svg.Skia" Version="5.2.3" />
   </ItemGroup>
 </Project>
