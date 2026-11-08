@@ -4,7 +4,6 @@ using System.Diagnostics;
 namespace ZeroV.Game.Scoring;
 
 public class ScoringCalculator {
-
     /// <summary>
     /// The total number of particles in a beatmap.
     /// </summary>
@@ -14,6 +13,8 @@ public class ScoringCalculator {
     /// The maximum scoring value.
     /// </summary>
     public const Double MAX_SCORING = 1_000_000;
+
+    public const UInt32 COMBO_RAMP = 40;
 
     /// <summary>
     /// The current score for display.
@@ -61,15 +62,21 @@ public class ScoringCalculator {
 
     public Action? ScoringChanged;
 
-    private Double comboMultiplier => this.CurrentCombo switch {
-        0 => 0, // throw new InvalidOperationException("CurrentCombo is 0"),
-        1 or 2 or 3 => 1.0,
-        4 or 5 => 1.1,
-        6 => 1.2,
-        7 => 1.3,
-        8 => 1.5,
-        9 => 1.7,
-        _ => 2
+    //private Double comboMultiplier => this.CurrentCombo switch {
+    //    0 => 0, // throw new InvalidOperationException("CurrentCombo is 0"),
+    //    1 or 2 or 3 => 1.0,
+    //    4 or 5 => 1.1,
+    //    6 => 1.2,
+    //    7 => 1.3,
+    //    8 => 1.5,
+    //    9 => 1.7,
+    //    _ => 2
+    //};
+
+    private Double getComboMultiplier(UInt32 combo) => combo switch {
+        0 => 0,
+        <= COMBO_RAMP => 1 + Math.Sqrt((Double)combo / COMBO_RAMP),
+        > COMBO_RAMP => 2,
     };
 
     public ScoringCalculator(UInt32 particleNumber) {
@@ -83,14 +90,15 @@ public class ScoringCalculator {
     }
 
     private Double getBaseScoring() {
-        this.CurrentCombo = this.ParticleCount;
+        //this.CurrentCombo = this.ParticleCount;
         Double multiplierSum = 0;
-        for (var i = 0; i < this.ParticleCount; i++) {
-            multiplierSum += this.comboMultiplier;
-            this.CurrentCombo--;
+        for (UInt32 c = 1; c <= this.ParticleCount; c++) {
+            //multiplierSum += this.comboMultiplier;
+            multiplierSum += this.getComboMultiplier(c);
+            //this.CurrentCombo--;
         }
 
-        Debug.Assert(this.CurrentCombo is 0);
+        //Debug.Assert(this.CurrentCombo is 0);
         return MAX_SCORING / multiplierSum;
     }
 
@@ -120,12 +128,12 @@ public class ScoringCalculator {
 
             case TargetResult.PerfectEarly:
                 this.PerfectEarlyCount++;
-                targetMultiplier = 0.8;
+                targetMultiplier = 0.9;
                 break;
 
             case TargetResult.PerfectLate:
                 this.PerfectLateCount++;
-                targetMultiplier = 0.8;
+                targetMultiplier = 0.9;
                 break;
 
             case TargetResult.MaxPerfect:
@@ -139,8 +147,8 @@ public class ScoringCalculator {
                 throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
         }
         this.MaxCombo = Math.Max(this.MaxCombo, this.CurrentCombo);
-        // this.Scoring += this.BaseScoring * this.comboMultiplier * getTargetMultiplier(targeResult);
-        this.Scoring += this.BaseScoring * this.comboMultiplier * targetMultiplier;
+        // this.Scoring += this.BaseScoring * this.comboMultiplier * getTargetMultiplier(targetResult);
+        this.Scoring += this.BaseScoring * this.getComboMultiplier(this.CurrentCombo) * targetMultiplier;
         this.CurrentTarget = targetResult;
         this.ScoringChanged?.Invoke();
     }

@@ -38,12 +38,12 @@ public abstract partial class ParticleBase : ZeroVPoolableDrawable<ParticleSourc
         var offset = targetTime - currentTime;
 
         return offset switch {
-            var x when x is > +ZeroVMath.JUDGE_TIME_MILLISECONDS_NONE_OR_MISS => TargetResult.None,
-            var x when x is < -ZeroVMath.JUDGE_TIME_MILLISECONDS_NONE_OR_MISS => TargetResult.Miss,
-            var x when x is < -ZeroVMath.JUDGE_TIME_MILLISECONDS_NORMAL => TargetResult.NormalLate,
-            var x when x is > +ZeroVMath.JUDGE_TIME_MILLISECONDS_NORMAL => TargetResult.NormalEarly,
-            var x when x is < -ZeroVMath.JUDGE_TIME_MILLISECONDS_PERFECT => TargetResult.PerfectLate,
-            var x when x is > +ZeroVMath.JUDGE_TIME_MILLISECONDS_PERFECT => TargetResult.PerfectEarly,
+            > +ZeroVMath.JUDGE_TIME_MILLISECONDS_NONE_OR_MISS => TargetResult.None,
+            < -ZeroVMath.JUDGE_TIME_MILLISECONDS_NONE_OR_MISS => TargetResult.Miss,
+            < -ZeroVMath.JUDGE_TIME_MILLISECONDS_NORMAL => TargetResult.NormalLate,
+            > +ZeroVMath.JUDGE_TIME_MILLISECONDS_NORMAL => TargetResult.NormalEarly,
+            < -ZeroVMath.JUDGE_TIME_MILLISECONDS_PERFECT => TargetResult.PerfectLate,
+            > +ZeroVMath.JUDGE_TIME_MILLISECONDS_PERFECT => TargetResult.PerfectEarly,
             _ => TargetResult.MaxPerfect,
         };
     }
