@@ -21,7 +21,7 @@ using ZeroV.Game.Graphics.Shapes;
 namespace ZeroV.Game.Screens.Preference;
 
 public partial class OffsetScreen : BaseUserInterfaceScreen {
-    private Bindable<Double> offset = null!;
+    private Bindable<Double> globalSoundOffset = null!;
 
     private Track offsetBeatTrack = null!;
 
@@ -33,7 +33,7 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
 
     [BackgroundDependencyLoader]
     private void load(ITrackStore trackStore, ZeroVConfigManager configManager) {
-        this.offset = configManager.GetBindable<Double>(ZeroVSetting.GlobalSoundOffset);
+        this.globalSoundOffset = configManager.GetBindable<Double>(ZeroVSetting.GlobalSoundOffset);
 
         this.offsetBeatTrack = trackStore.Get("OffsetBeats.flac");
         //this.offsetBeatTrack = trackStore.GetVirtual();
@@ -53,18 +53,18 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
             RelativePositionAxes = Axes.Both,
             Y = 0.25f,
             FontSize = 64,
-            Text = this.offset.Value + " ms",
+            Text = this.globalSoundOffset.Value + " ms",
         };
 
         ArrowButton leftArrow = new(OrientedTriangle.Orientation.Left) {
             Y = 0.25f,
             X = -0.2f,
-            Action = () => this.offset.Value--,
+            Action = () => this.globalSoundOffset.Value--,
         };
         ArrowButton rightArrow = new(OrientedTriangle.Orientation.Right) {
             Y = 0.25f,
             X = +0.2f,
-            Action = () => this.offset.Value++,
+            Action = () => this.globalSoundOffset.Value++,
         };
 
         Drawable[] items = [
@@ -113,7 +113,7 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
     }
 
     protected override void LoadComplete() {
-        this.offset.ValueChanged += this.offsetChanged;
+        this.globalSoundOffset.ValueChanged += this.globalSoundOffsetChanged;
         base.LoadComplete();
     }
 
@@ -142,19 +142,26 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
     private const Double four_beats_bar = beat_length * 4; // 1875 ms
 
     /// <summary>
-    /// Track delay in milliseconds. This value indicates when the first beat of the entire track starts.
-    /// </summary>
-    private const Double track_delay = 0; // 0ms // 50; // 50 ms
-
-    /// <summary>
-    /// Real track beats time total.
+    /// The time of the first beat used as the beat-grid origin.
     /// </summary>
     /// <remarks>
-    /// track.time - offset - track_delay
+    /// This does not have to be zero. A track may have an intro or pickup before this beat.
     /// </remarks>
-    private Double time => this.offsetBeatTrack.CurrentTime - this.offset.Value - track_delay;
+    private const Double first_beat_time = 0; // 0ms // 50; // 50 ms
 
-    private Double timeSinceLastBeat => (this.time % four_beats_bar);
+    /// <summary>
+    /// Track time mapped onto the calibration beat grid.
+    /// </summary>
+    /// <remarks>
+    /// The subtraction is intentional. A beat whose base time is <see cref="first_beat_time"/>
+    /// appears at the centre when <c>CurrentTime == first_beat_time + GlobalSoundOffset</c>.
+    /// </remarks>
+    private Double calibrationTime =>
+        this.offsetBeatTrack.CurrentTime
+        - this.globalSoundOffset.Value
+        - first_beat_time;
+
+    private Double timeSinceLastBeat => (this.calibrationTime % four_beats_bar);
 
     /// <summary>
     /// Relative position of the movingLine.
@@ -172,7 +179,7 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
         this.movingLine.X = Convert.ToSingle(this.relativePosition < 0.5 ? this.relativePosition : this.relativePosition - 1);
     }
 
-    private void offsetChanged(ValueChangedEvent<Double> e) {
+    private void globalSoundOffsetChanged(ValueChangedEvent<Double> e) {
         this.offsetText.Text = e.NewValue + " ms";
     }
 
@@ -189,7 +196,7 @@ public partial class OffsetScreen : BaseUserInterfaceScreen {
 
     protected override void Dispose(Boolean isDisposing) {
         this.offsetBeatTrack.Dispose();
-        this.offset.ValueChanged -= this.offsetChanged;
+        this.globalSoundOffset.ValueChanged -= this.globalSoundOffsetChanged;
         base.Dispose(isDisposing);
     }
 

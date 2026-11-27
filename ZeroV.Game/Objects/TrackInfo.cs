@@ -24,6 +24,15 @@ public record TrackInfo {
 
     public required String? Artists { get; init; }
 
+    /// <summary>
+    /// The signed correction added to every beatmap timestamp.
+    /// Positive values move chart events later, while negative values move them earlier.
+    /// </summary>
+    /// <remarks>
+    /// This is a chart-time correction, not the audio track's physical position in an external editor.
+    /// If moving the audio later by <c>P</c> causes notes to be authored at later timestamps as well,
+    /// use <c>-P</c> as the correction.
+    /// </remarks>
     public required TimeSpan FileOffset { get; init; }
 
     public required String GameAuthor { get; init; }
