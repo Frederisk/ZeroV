@@ -28,8 +28,11 @@ public class OrbitSource : TimeSource {
     public required List<ParticleSource> HitObjects { get; init; }
 
     public void ApplyOffset(Double offset) {
-        foreach (KeyFrame keyFrame in this.KeyFrames) {
+        // KeyFrame is a value type, so mutating a foreach iteration variable would only update a copy.
+        for (Int32 i = 0; i < this.KeyFrames.Count; i++) {
+            KeyFrame keyFrame = this.KeyFrames[i];
             keyFrame.ApplyOffset(offset);
+            this.KeyFrames[i] = keyFrame;
         }
         foreach (ParticleSource particle in this.HitObjects) {
             particle.ApplyOffset(offset);

@@ -148,9 +148,11 @@ public partial class GameplayScreen : Screen, IGameplayInfo {
 
         var wrapper = BeatmapWrapper.Create(this.TrackInfo.BeatmapFile);
         Beatmap beatmap = wrapper.GetBeatmapByIndex(this.MapInfo.Index);
-        Double deviceOffset = configManager.Get<Double>(ZeroVSetting.GlobalSoundOffset);
-        Double trackOffset = this.TrackInfo.FileOffset.TotalMilliseconds;
-        beatmap.ApplyOffset(deviceOffset + trackOffset);
+        Double globalSoundOffset = configManager.Get<Double>(ZeroVSetting.GlobalSoundOffset);
+        Double fileOffset = this.TrackInfo.FileOffset.TotalMilliseconds;
+
+        // Both values use the same convention: positive moves every chart event later.
+        beatmap.ApplyOffset(fileOffset + globalSoundOffset);
 
         // TODO: Need a better way to calculate the count of hit objects.
         UInt32 count = (UInt32)beatmap.OrbitSources.Sum(orbit => orbit.HitObjects.Count);
